@@ -1,8 +1,8 @@
-# Copyright (C) 2020 Simple Comment Editing Options
-# This file is distributed under the same license as the Simple Comment Editing Options package.
+# Copyright (C) 2020 Comment Edit Pro
+# This file is distributed under the same license as the Comment Edit Pro package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple Comment Editing Options\n"
+"Project-Id-Version: Comment Edit Pro\n"
 "Report-Msgid-Bugs-To: https://github.com/ronalfy/simple-comment-editing-options\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,7 +54,7 @@ msgid "Simple Comment Editing"
 msgstr ""
 
 #: includes/class-sce-admin-menu-output.php:138
-msgid "Welcome to Simple Commment Editing! You can now edit the Simple Comment Editing Options to your satisfaction."
+msgid "Welcome to Simple Commment Editing! You can now edit the Comment Edit Pro to your satisfaction."
 msgstr ""
 
 #: includes/class-sce-admin-menu-output.php:148
@@ -364,7 +364,7 @@ msgid "Simple Comment Editing is required."
 msgstr ""
 
 #: simple-comment-editing-options.php:161
-msgid "The Simple Comment Editing plugin is required for Simple Comment Editing Options to function."
+msgid "The Simple Comment Editing plugin is required for Comment Edit Pro to function."
 msgstr ""
 
 #: templates/front-end-editing.php:25

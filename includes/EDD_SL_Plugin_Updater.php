@@ -1,6 +1,6 @@
 <?php // phpcs:ignorefile
 
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Functions as Functions;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;

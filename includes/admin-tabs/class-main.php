@@ -2,17 +2,17 @@
 /**
  * Output main SCE tab.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes\Admin_Tabs;
+namespace CommentEditPro\Includes\Admin_Tabs;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Output the main tab and content.
@@ -75,7 +75,7 @@ class Main {
 					$options = Options::get_options();
 					$options = wp_parse_args( $_POST['options'], $options ); // phpcs:ignore
 					Options::update_options( $options );
-					printf( '<div class="updated"><p><strong>%s</strong></p></div>', esc_html__( 'Your options have been saved.', 'simple-comment-editing-options' ) );
+					printf( '<div class="updated"><p><strong>%s</strong></p></div>', esc_html__( 'Your options have been saved.', 'comment-edit-pro' ) );
 				}
 				// Get options and defaults.
 				$options = Options::get_options();
@@ -84,30 +84,30 @@ class Main {
 					<div class="sce-panel-row">
 						<form action="" method="POST">
 							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Main Options', 'simple-comment-editing-options' ); ?></h2>
+							<h2><?php esc_html_e( 'Main Options', 'comment-edit-pro' ); ?></h2>
 							<?php
 							$version = get_site_option( 'sce_table_version', '0' );
-							if ( SCE_OPTIONS_TABLE_VERSION === $version && true === $options['allow_comment_logging'] ) {
+							if ( COMMENTEDITPRO_TABLE_VERSION === $version && true === $options['allow_comment_logging'] ) {
 								global $wpdb;
 								$tablename = $wpdb->base_prefix . 'sce_comments';
 								$blog_id   = get_current_blog_id();
 
 								$edit_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $tablename WHERE blog_id = %d", $blog_id ) ); // phpcs:ignore
 								?>
-								<p><?php esc_html_e( 'Your users have edited their comments', 'simple-comment-editing-options' ); ?> <?php echo number_format( $edit_count ); ?> <?php echo esc_html( _n( 'time', 'times', $edit_count, 'simple-comment-editing-options' ) ); ?>.</p>
+								<p><?php esc_html_e( 'Your users have edited their comments', 'comment-edit-pro' ); ?> <?php echo number_format( $edit_count ); ?> <?php echo esc_html( _n( 'time', 'times', $edit_count, 'comment-edit-pro' ) ); ?>.</p>
 								<?php
 							}
 							?>
 							<table class="form-table">
 								<tbody>
 									<tr>
-										<th scope="row"><label for="sce-timer"><?php esc_html_e( 'Edit Timer in Minutes', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-timer"><?php esc_html_e( 'Edit Timer in Minutes', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input id="sce-timer" class="regular-text" type="number" value="<?php echo esc_attr( absint( $options['timer'] ) ); ?>" name="options[timer]" />
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><label for="allow-comment-logging"><?php esc_html_e( 'Allow Comment Logging and Stats', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="allow-comment-logging"><?php esc_html_e( 'Allow Comment Logging and Stats', 'comment-edit-pro' ); ?></label></th>
 										<td>
 										<input type="hidden" value="false" name="options[allow_comment_logging]" />
 										<div class="toggle-checkboxes">
@@ -118,11 +118,11 @@ class Main {
 													</div>
 												</div>
 											</div>
-											<p class="description"><?php esc_html_e( 'Enabling this will allow you to restore edited comments and view an edit history for comments.', 'simple-comment-editing-options' ); ?></p>
+											<p class="description"><?php esc_html_e( 'Enabling this will allow you to restore edited comments and view an edit history for comments.', 'comment-edit-pro' ); ?></p>
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><label for="sce-allow-front-end-editing"><?php esc_html_e( 'Enable Front End Editing for Admins', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-allow-front-end-editing"><?php esc_html_e( 'Enable Front End Editing for Admins', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[allow_front_end_editing]" />
 											<div class="toggle-checkboxes">
@@ -136,7 +136,7 @@ class Main {
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><label for="sce-unlimited-timer"><?php esc_html_e( 'Unlimited Timer for Logged-in Users', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-unlimited-timer"><?php esc_html_e( 'Unlimited Timer for Logged-in Users', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[allow_unlimited_editing]" />
 											<div class="toggle-checkboxes">
@@ -151,7 +151,7 @@ class Main {
 									</tr>
 									
 									<tr>
-										<th scope="row"><label for="sce-show-stop-timer"><?php esc_html_e( 'Allow Timer To Be Canceled by Users', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-show-stop-timer"><?php esc_html_e( 'Allow Timer To Be Canceled by Users', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[show_stop_timer]" />
 											<div class="toggle-checkboxes">
@@ -166,7 +166,7 @@ class Main {
 									</tr>
 									
 									<tr>
-										<th scope="row"><label for="sce-allow-deletion"><?php esc_html_e( 'Allow Comment Deletion for Users', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-allow-deletion"><?php esc_html_e( 'Allow Comment Deletion for Users', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[allow_delete]" />
 											<div class="toggle-checkboxes">
@@ -180,7 +180,7 @@ class Main {
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><label for="sce-allow-deletion-only"><?php esc_html_e( 'Allow Comment Deletion Only', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-allow-deletion-only"><?php esc_html_e( 'Allow Comment Deletion Only', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[delete_only]" />
 											<div class="toggle-checkboxes">
@@ -194,7 +194,7 @@ class Main {
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><label for="sce-allow-deletion-confirmation"><?php esc_html_e( 'Allow Comment Deletion Confirmation', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-allow-deletion-confirmation"><?php esc_html_e( 'Allow Comment Deletion Confirmation', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input type="hidden" value="false" name="options[allow_delete_confirmation]" />
 											<div class="toggle-checkboxes">
@@ -210,7 +210,7 @@ class Main {
 								</tbody>
 							</table>
 
-							<?php submit_button( __( 'Save Options', 'simple-comment-editing-options' ) ); ?>
+							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
 						</form>
 					</div>
 				</div>
@@ -218,31 +218,31 @@ class Main {
 					<div class="sce-panel-row">
 						<form action="" method="POST">
 							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Email Settings', 'simple-comment-editing-options' ); ?></h2>
+							<h2><?php esc_html_e( 'Email Settings', 'comment-edit-pro' ); ?></h2>
 							<table class="form-table">
 								<tbody>
 									<tr>
-										<th scope="row"><?php esc_html_e( 'Email Notifications', 'simple-comment-editing-options' ); ?></th>
+										<th scope="row"><?php esc_html_e( 'Email Notifications', 'comment-edit-pro' ); ?></th>
 										<td>
-											<p><?php esc_html_e( 'Receive an email notification each time a user edits or deletes their comment.', 'simple-comment-editing-options' ); ?></p>
+											<p><?php esc_html_e( 'Receive an email notification each time a user edits or deletes their comment.', 'comment-edit-pro' ); ?></p>
 											<br />
 											<input type="hidden" value="false" name="options[allow_edit_notification]" />
-											<input id="sce-allow-email-notifications" type="checkbox" value="true" name="options[allow_edit_notification]" <?php checked( true, $options['allow_edit_notification'] ); ?> /> <label for="sce-allow-email-notifications"><?php esc_html_e( 'Allow email notifications.', 'simple-comment-editing-options' ); ?></label>
+											<input id="sce-allow-email-notifications" type="checkbox" value="true" name="options[allow_edit_notification]" <?php checked( true, $options['allow_edit_notification'] ); ?> /> <label for="sce-allow-email-notifications"><?php esc_html_e( 'Allow email notifications.', 'comment-edit-pro' ); ?></label>
 											<br /><br />
-											<label for="sce-email-notifications_to"><?php esc_html_e( 'To Email Address', 'simple-comment-editing-options' ); ?></label><br />
+											<label for="sce-email-notifications_to"><?php esc_html_e( 'To Email Address', 'comment-edit-pro' ); ?></label><br />
 												<input id="sce-email-notifications_to" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_to'] ); ?>" name="options[edit_notification_to]" />
 											<br /><br />
-											<label for="sce-email-notifications-from"><?php esc_html_e( 'From Email Address', 'simple-comment-editing-options' ); ?></label><br />
+											<label for="sce-email-notifications-from"><?php esc_html_e( 'From Email Address', 'comment-edit-pro' ); ?></label><br />
 												<input id="sce-email-notifications-from" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_from'] ); ?>" name="options[edit_notification_from]" />
 											<br /><br />
-											<label for="sce-email-notifications-subject"><?php esc_html_e( 'Email Subject', 'simple-comment-editing-options' ); ?></label><br />
+											<label for="sce-email-notifications-subject"><?php esc_html_e( 'Email Subject', 'comment-edit-pro' ); ?></label><br />
 												<input id="sce-email-notifications-subject" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_subject'] ); ?>" name="options[edit_notification_subject]" />
 										</td>
 									</tr>
 								</tbody>
 							</table>
 
-							<?php submit_button( __( 'Save Email Settings', 'simple-comment-editing-options' ) ); ?>
+							<?php submit_button( __( 'Save Email Settings', 'comment-edit-pro' ) ); ?>
 						</form>
 					</div>
 				</div>
@@ -250,34 +250,34 @@ class Main {
 					<div class="sce-panel-row">
 						<form action="" method="POST">
 							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Comment Character Control', 'simple-comment-editing-options' ); ?></h2>
-							<p class="description"><?php esc_html_e( 'Enabling Comment Character Control will set a minimum and maximum length for comments.', 'simple-comment-editing-options' ); ?></p>
+							<h2><?php esc_html_e( 'Comment Character Control', 'comment-edit-pro' ); ?></h2>
+							<p class="description"><?php esc_html_e( 'Enabling Comment Character Control will set a minimum and maximum length for comments.', 'comment-edit-pro' ); ?></p>
 							<table class="form-table">
 								<tbody>
 									<tr>
-										<th scope="row"><?php esc_html_e( 'Comment Length', 'simple-comment-editing-options' ); ?></th>
+										<th scope="row"><?php esc_html_e( 'Comment Length', 'comment-edit-pro' ); ?></th>
 										<td>
-											<p><?php esc_html_e( 'Allow front-end comment character control', 'simple-comment-editing-options' ); ?></p>
+											<p><?php esc_html_e( 'Allow front-end comment character control', 'comment-edit-pro' ); ?></p>
 											<br />
-											<input type="radio" value="false" name="options[allow_front_end_character_limit]" id="disable-ccc" <?php checked( false, $options['allow_front_end_character_limit'] ); ?> /> <label for="disable-ccc"><?php esc_html_e( 'Disable Comment Character Control', 'simple-comment-editing-options' ); ?></label><br />
-											<input type="radio" value="true" name="options[allow_front_end_character_limit]" id="enable-ccc" <?php checked( true, $options['allow_front_end_character_limit'] ); ?> /> <label for="enable-ccc"><?php esc_html_e( 'Enable Comment Character Control', 'simple-comment-editing-options' ); ?></label><br /><br /><br />
+											<input type="radio" value="false" name="options[allow_front_end_character_limit]" id="disable-ccc" <?php checked( false, $options['allow_front_end_character_limit'] ); ?> /> <label for="disable-ccc"><?php esc_html_e( 'Disable Comment Character Control', 'comment-edit-pro' ); ?></label><br />
+											<input type="radio" value="true" name="options[allow_front_end_character_limit]" id="enable-ccc" <?php checked( true, $options['allow_front_end_character_limit'] ); ?> /> <label for="enable-ccc"><?php esc_html_e( 'Enable Comment Character Control', 'comment-edit-pro' ); ?></label><br /><br /><br />
 											<input type="hidden" value="false" name="options[require_comment_length]" />
-											<input id="sce-allow-comment-length" type="checkbox" value="true" name="options[require_comment_length]" <?php checked( true, $options['require_comment_length'] ); ?> /> <label for="sce-allow-comment-length"><?php esc_html_e( 'Ensure an edited comment has a minimum length in characters.', 'simple-comment-editing-options' ); ?></label>
+											<input id="sce-allow-comment-length" type="checkbox" value="true" name="options[require_comment_length]" <?php checked( true, $options['require_comment_length'] ); ?> /> <label for="sce-allow-comment-length"><?php esc_html_e( 'Ensure an edited comment has a minimum length in characters.', 'comment-edit-pro' ); ?></label>
 											<br /><br />
-											<label for="sce-comment-length"><?php esc_html_e( 'Minimum Comment Length', 'simple-comment-editing-options' ); ?></label><br />
+											<label for="sce-comment-length"><?php esc_html_e( 'Minimum Comment Length', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-comment-length" class="regular-text" type="number" value="<?php echo esc_attr( $options['min_comment_length'] ); ?>" name="options[min_comment_length]" />
 											<br /><br />
 											<input type="hidden" value="false" name="options[require_comment_length_max]" />
-											<input id="sce-allow-comment-length-max" type="checkbox" value="true" name="options[require_comment_length_max]" <?php checked( true, $options['require_comment_length_max'] ); ?> /> <label for="sce-allow-comment-length-max"><?php esc_html_e( 'Ensure an edited comment has a maximum length in characters.', 'simple-comment-editing-options' ); ?></label>
+											<input id="sce-allow-comment-length-max" type="checkbox" value="true" name="options[require_comment_length_max]" <?php checked( true, $options['require_comment_length_max'] ); ?> /> <label for="sce-allow-comment-length-max"><?php esc_html_e( 'Ensure an edited comment has a maximum length in characters.', 'comment-edit-pro' ); ?></label>
 											<br /><br />
-											<label for="sce-comment-length-max"><?php esc_html_e( 'Maximum Comment Length', 'simple-comment-editing-options' ); ?></label><br />
+											<label for="sce-comment-length-max"><?php esc_html_e( 'Maximum Comment Length', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-comment-length-max" class="regular-text" type="number" value="<?php echo esc_attr( $options['max_comment_length'] ); ?>" name="options[max_comment_length]" />
 										</td>
 									</tr>
 								</tbody>
 							</table>
 
-							<?php submit_button( __( 'Save Options', 'simple-comment-editing-options' ) ); ?>
+							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
 						</form>
 					</div>
 				</div>

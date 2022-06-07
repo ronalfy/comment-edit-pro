@@ -5,7 +5,7 @@
  * @package ultimate-auto-updates
  */
 
-namespace SCEOptions\Includes\Admin_Tabs;
+namespace CommentEditPro\Includes\Admin_Tabs;
 
 /**
  * Init all the classes and sub-tabs.

@@ -2,7 +2,7 @@
 /**
  * Plugin Autoloader
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
 /**
@@ -18,7 +18,7 @@ spl_autoload_register(
 		$class_trait = preg_match( '/Trait$/', $class ) ? 'trait-' : 'class-';
 
 		// If we're not in the plugin's namespace then just return.
-		if ( 'SCEOptions' !== $root ) {
+		if ( 'CommentEditPro' !== $root ) {
 			return;
 		}
 

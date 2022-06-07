@@ -1,11 +1,11 @@
 <?php
 /**
- * Create table for SCEOptions.
+ * Create table for CommentEditPro.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
@@ -28,7 +28,7 @@ class Table {
 		$tablename = $wpdb->base_prefix . 'sce_comments';
 
 		$version = get_site_option( 'sce_table_version', '0' );
-		if ( version_compare( $version, SCE_OPTIONS_TABLE_VERSION ) < 0 ) {
+		if ( version_compare( $version, COMMENTEDITPRO_TABLE_VERSION ) < 0 ) {
 			$charset_collate = '';
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
@@ -48,7 +48,7 @@ class Table {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
-			update_site_option( 'sce_table_version', SCE_OPTIONS_TABLE_VERSION );
+			update_site_option( 'sce_table_version', COMMENTEDITPRO_TABLE_VERSION );
 		}
 	}
 

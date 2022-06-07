@@ -1,6 +1,6 @@
 jQuery( document ).ready( function( $ ) {
 	if( 'compact' === sce_options.timer_appearance ) {
-		sce_hooks.addFilter( 'sce.comment.timer.text', 'simple-comment-editing-options', function( timer_text, days_text, hours_text, minutes_text, seconds_text, days, hours, minutes, seconds ) {
+		sce_hooks.addFilter( 'sce.comment.timer.text', 'comment-edit-pro', function( timer_text, days_text, hours_text, minutes_text, seconds_text, days, hours, minutes, seconds ) {
 			timer_text = '';
 			if( days > 0 ) {
 				if( days < 10 ) {

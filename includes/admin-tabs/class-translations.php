@@ -2,17 +2,17 @@
 /**
  * Output licenses tab.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes\Admin_Tabs;
+namespace CommentEditPro\Includes\Admin_Tabs;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Output the appearance tab and content.
@@ -82,51 +82,51 @@ class Translations {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<h2><?php esc_html_e( 'Translations', 'simple-comment-editing-options' ); ?></h2>
-						<p class="description"><?php esc_html_e( 'Edit the text for Simple Comment Editing below.', 'simple-comment-editing-options' ); ?></p>
+						<h2><?php esc_html_e( 'Translations', 'comment-edit-pro' ); ?></h2>
+						<p class="description"><?php esc_html_e( 'Edit the text for Simple Comment Editing below.', 'comment-edit-pro' ); ?></p>
 						<form action="" method="POST">
 							<?php wp_nonce_field( 'save_sce_options' ); ?>
 							<table class="form-table">
 								<tbody>
 									<tr>
-										<th scope="row"><?php esc_html_e( 'Button Text', 'simple-comment-editing-options' ); ?></th>
+										<th scope="row"><?php esc_html_e( 'Button Text', 'comment-edit-pro' ); ?></th>
 										<td>
-										<label for="sce-save-text"><?php esc_html_e( 'Save Button Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-save-text"><?php esc_html_e( 'Save Button Text', 'comment-edit-pro' ); ?></label><br />
 										<input id="sce-save-text" class="regular-text" type="text" value="<?php echo esc_attr( $options['save_text'] ); ?>" name="options[save_text]" />
 										<br /><br />
-										<label for="sce-cancel-text"><?php esc_html_e( 'Cancel Button Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-cancel-text"><?php esc_html_e( 'Cancel Button Text', 'comment-edit-pro' ); ?></label><br />
 										<input id="sce-cancel-text" class="regular-text" type="text" value="<?php echo esc_attr( $options['cancel_text'] ); ?>" name="options[cancel_text]" />
 										<br /><br />
-										<label for="sce-delete-text"><?php esc_html_e( 'Delete Button Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-delete-text"><?php esc_html_e( 'Delete Button Text', 'comment-edit-pro' ); ?></label><br />
 										<input id="sce-delete-text" class="regular-text" type="text" value="<?php echo esc_attr( $options['delete_text'] ); ?>" name="options[delete_text]" />
 										<br /><br />
-										<label for="sce-comment-stop-timer"><?php esc_html_e( 'Stop Timer Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-comment-stop-timer"><?php esc_html_e( 'Stop Timer Text', 'comment-edit-pro' ); ?></label><br />
 										<input id="sce-comment-stop-timer" class="regular-text" type="text" value="<?php echo esc_attr( $options['stop_timer_text'] ); ?>" name="options[stop_timer_text]" />
 										</td>
 									</tr>
 									<tr>
-										<th scope="row"><?php esc_html_e( 'Messages', 'simple-comment-editing-options' ); ?></th>
+										<th scope="row"><?php esc_html_e( 'Messages', 'comment-edit-pro' ); ?></th>
 										<td>
-										<label for="sce-edit-text"><?php esc_html_e( 'Edit Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-edit-text"><?php esc_html_e( 'Edit Text', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-edit-text" class="regular-text" type="text" value="<?php echo esc_attr( $options['click_to_edit_text'] ); ?>" name="options[click_to_edit_text]" />
 										<br /><br />
-										<label for="sce-confirm-delete"><?php esc_html_e( 'Comment Deletion Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-confirm-delete"><?php esc_html_e( 'Comment Deletion Text', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-confirm-delete" class="regular-text" type="text" value="<?php echo esc_attr( $options['confirm_delete'] ); ?>" name="options[confirm_delete]" />
 										<br /><br />
-										<label for="sce-comment-deleted"><?php esc_html_e( 'Comment Deleted Text', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-comment-deleted"><?php esc_html_e( 'Comment Deleted Text', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-comment-deleted" class="regular-text" type="text" value="<?php echo esc_attr( $options['comment_deleted'] ); ?>" name="options[comment_deleted]" />
 										<br /><br />
-										<label for="sce-comment-deleted-error"><?php esc_html_e( 'Comment Deleted Error', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-comment-deleted-error"><?php esc_html_e( 'Comment Deleted Error', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-comment-deleted-error" class="regular-text" type="text" value="<?php echo esc_attr( $options['comment_deleted_error'] ); ?>" name="options[comment_deleted_error]" />
 										<br /><br />
-										<label for="sce-comment-empty-error"><?php esc_html_e( 'Comment Empty Error', 'simple-comment-editing-options' ); ?></label><br />
+										<label for="sce-comment-empty-error"><?php esc_html_e( 'Comment Empty Error', 'comment-edit-pro' ); ?></label><br />
 											<input id="sce-comment-empty-error" class="regular-text" type="text" value="<?php echo esc_attr( $options['comment_empty_error'] ); ?>" name="options[comment_empty_error]" />
 										</td>
 									</tr>
 								</tbody>
 							</table>
 
-							<?php submit_button( __( 'Save Options', 'simple-comment-editing-options' ) ); ?>
+							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
 						</form>
 					</div>
 				</div>

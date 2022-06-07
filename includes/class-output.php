@@ -2,17 +2,17 @@
 /**
  * Register SCE Options and defaults, and filters/actions.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Output SCE's interface and hooks.
@@ -163,9 +163,9 @@ class Output {
 		$query   = $wpdb->prepare( $query, $comment_id, $blog_id ); // phpcs:ignore
 		$results = $wpdb->get_results( $query ); // phpcs:ignore
 		if ( empty( $results ) ) {
-			echo sprintf( '<p>%s</p>', esc_html__( 'No edits have occurred on this comment.', 'simple-comment-editing-options' ) );
+			echo sprintf( '<p>%s</p>', esc_html__( 'No edits have occurred on this comment.', 'comment-edit-pro' ) );
 		}
-		wp_enqueue_script( 'sce-options-restore', plugins_url( '/js/simple-comment-editing-options-restore.js', dirname( __FILE__ ) ), array( 'jquery' ), SCE_OPTIONS_VERSION, true );
+		wp_enqueue_script( 'sce-options-restore', plugins_url( '/js/simple-comment-editing-options-restore.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
 
 		// Display Comments.
 		?>
@@ -189,7 +189,7 @@ class Output {
 						echo wp_kses_post( $comment_text );
 						?>
 					</td>
-					<td><a class="sce-restore-comment" href="<?php echo esc_attr( admin_url( 'admin-ajax.php' ) ); ?>" data-comment-id="<?php echo absint( $comment_id ); ?>" data-id="<?php echo absint( $result->id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'restore-comment-' . absint( $comment_id ) ) ); ?>"><?php esc_html_e( 'Restore this comment', 'simple-comment-editing-options' ); ?></td>
+					<td><a class="sce-restore-comment" href="<?php echo esc_attr( admin_url( 'admin-ajax.php' ) ); ?>" data-comment-id="<?php echo absint( $comment_id ); ?>" data-id="<?php echo absint( $result->id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'restore-comment-' . absint( $comment_id ) ) ); ?>"><?php esc_html_e( 'Restore this comment', 'comment-edit-pro' ); ?></td>
 				</tr>
 					<?php
 				endforeach;
@@ -305,7 +305,7 @@ class Output {
 			}
 
 			/* Translators: %s is the site name */
-			$subject = sprintf( __( 'A user has deleted a comment from %s', 'simple-comment-editing-options' ), $sitename );
+			$subject = sprintf( __( 'A user has deleted a comment from %s', 'comment-edit-pro' ), $sitename );
 
 			// Get comment.
 			$comment = get_comment( $comment_id, ARRAY_A );
@@ -315,13 +315,13 @@ class Output {
 			$headers[] = sprintf( 'From: %s <%s>', esc_html( $sitename ), $from );
 
 			// Get comment message.
-			$message  = __( 'A user has deleted a comment on your site.', 'simple-comment-editing-options' ) . "\r\n\r\n";
-			$message .= __( 'The original comment is:', 'simple-comment-editing-options' ) . "\r\n";
+			$message  = __( 'A user has deleted a comment on your site.', 'comment-edit-pro' ) . "\r\n\r\n";
+			$message .= __( 'The original comment is:', 'comment-edit-pro' ) . "\r\n";
 			$message .= $comment['comment_content'] . "\r\n\r\n";
 
 			// Get comment trash URL.
 			$comment_trash_url = esc_url_raw( add_query_arg( array( 'comment_status' => 'trash' ), admin_url( 'edit-comments.php' ) ) );
-			$message          .= __( 'To permanently delete or restore this comment, follow this link:', 'simple-comment-editing-options' ) . ' ' . $comment_trash_url;
+			$message          .= __( 'To permanently delete or restore this comment, follow this link:', 'comment-edit-pro' ) . ' ' . $comment_trash_url;
 
 			// Send email.
 			wp_mail( $to, $subject, $message, $headers );
@@ -407,10 +407,10 @@ class Output {
 			$headers[] = sprintf( 'From: %s <%s>', esc_html( $sitename ), $from );
 
 			// Get comment message.
-			$message  = __( 'A user has edited a comment on your site.', 'simple-comment-editing-options' ) . "\r\n\r\n";
-			$message .= __( 'The original comment is:', 'simple-comment-editing-options' ) . "\r\n";
+			$message  = __( 'A user has edited a comment on your site.', 'comment-edit-pro' ) . "\r\n\r\n";
+			$message .= __( 'The original comment is:', 'comment-edit-pro' ) . "\r\n";
 			$message .= $original_comment['comment_content'] . "\r\n\r\n";
-			$message .= __( 'The edited comment is:', 'simple-comment-editing-options' ) . "\r\n";
+			$message .= __( 'The edited comment is:', 'comment-edit-pro' ) . "\r\n";
 			$message .= $saved_comment['comment_content'] . "\r\n\r\n";
 
 			// Get comment edit URL.
@@ -423,7 +423,7 @@ class Output {
 					admin_url( 'comment.php' )
 				)
 			);
-			$message    .= __( 'To edit or view this comment, follow this link:', 'simple-comment-editing-options' ) . ' ' . $comment_url;
+			$message    .= __( 'To edit or view this comment, follow this link:', 'comment-edit-pro' ) . ' ' . $comment_url;
 
 			// Send email.
 			wp_mail( $to, $subject, $message, $headers );
@@ -441,7 +441,7 @@ class Output {
 	 * @param string $message The message to display.
 	 */
 	public function output_styles( $message ) {
-		wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), SCE_OPTIONS_VERSION, 'all' );
+		wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), COMMENTEDITPRO_VERSION, 'all' );
 	}
 
 	/**
@@ -474,7 +474,7 @@ class Output {
 		$comment_length  = strlen( $comment_content );
 		if ( $comment_length < $minimum_char_length ) {
 			/* Translators: %d is the minimum number of characters for a comment. */
-			return sprintf( __( 'Comment must be at least %d characters.', 'simple-comment-editing-options' ), absint( $minimum_char_length ) );
+			return sprintf( __( 'Comment must be at least %d characters.', 'comment-edit-pro' ), absint( $minimum_char_length ) );
 		}
 		return $errors;
 	}
@@ -509,7 +509,7 @@ class Output {
 		$comment_length  = strlen( $comment_content );
 		if ( $comment_length > $maximum_char_length ) {
 			/* Translators: %d is the maximum number of characters for a comment. */
-			return sprintf( __( 'Comment cannot exceed %d characters.', 'simple-comment-editing-options' ), absint( $maximum_char_length ) );
+			return sprintf( __( 'Comment cannot exceed %d characters.', 'comment-edit-pro' ), absint( $maximum_char_length ) );
 		}
 		return $errors;
 	}

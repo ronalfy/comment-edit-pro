@@ -5,7 +5,7 @@
  * @package SCE
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
 /**
  * Class functions
@@ -80,7 +80,7 @@ class Functions {
 	 * @return string plugin slug.
 	 */
 	public static function get_plugin_slug() {
-		return dirname( plugin_basename( SCE_OPTIONS_FILE ) );
+		return dirname( plugin_basename( COMMENTEDITPRO_FILE ) );
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Functions {
 	 * @return string plugin path.
 	 */
 	public static function get_plugin_path() {
-		return plugin_basename( SCE_OPTIONS_FILE );
+		return plugin_basename( COMMENTEDITPRO_FILE );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Functions {
 	 * @return string base file for the plugin.
 	 */
 	public static function get_plugin_file() {
-		return plugin_basename( SCE_OPTIONS_FILE );
+		return plugin_basename( COMMENTEDITPRO_FILE );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Functions {
 	 * @return float version for the plugin.
 	 */
 	public static function get_plugin_version() {
-		return SCE_OPTIONS_VERSION;
+		return COMMENTEDITPRO_VERSION;
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Functions {
 		 *
 		 * @param string Plugin name.
 		 */
-		return apply_filters( 'sce_options_plugin_name', __( 'Simple Comment Editing Options', 'simple-comment-editing-options' ) );
+		return apply_filters( 'sce_options_plugin_name', __( 'Comment Edit Pro', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -209,7 +209,7 @@ class Functions {
 		 *
 		 * @param string Plugin description.
 		 */
-		return apply_filters( 'sce_options_plugin_description', __( 'Allow your users to edit comments.', 'simple-comment-editing-options' ) );
+		return apply_filters( 'sce_options_plugin_description', __( 'Allow your users to edit comments.', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Functions {
 		 *
 		 * @param string Plugin Menu Name.
 		 */
-		return apply_filters( 'sce_options_plugin_menu_name', __( 'Simple Comment Editing', 'simple-comment-editing-options' ) );
+		return apply_filters( 'sce_options_plugin_menu_name', __( 'Simple Comment Editing', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -316,7 +316,7 @@ class Functions {
 	 * @return string The new path.
 	 */
 	public static function get_plugin_dir( $path = '' ) {
-		$dir = rtrim( plugin_dir_path( SCE_OPTIONS_FILE ), '/' );
+		$dir = rtrim( plugin_dir_path( COMMENTEDITPRO_FILE ), '/' );
 		if ( ! empty( $path ) && is_string( $path ) ) {
 			$dir .= '/' . ltrim( $path, '/' );
 		}
@@ -331,7 +331,7 @@ class Functions {
 	 * @return string URL to to the file.
 	 */
 	public static function get_plugin_url( $path = '' ) {
-		$dir = rtrim( plugin_dir_url( SCE_OPTIONS_FILE ), '/' );
+		$dir = rtrim( plugin_dir_url( COMMENTEDITPRO_FILE ), '/' );
 		if ( ! empty( $path ) && is_string( $path ) ) {
 			$dir .= '/' . ltrim( $path, '/' );
 		}

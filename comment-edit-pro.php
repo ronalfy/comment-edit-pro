@@ -1,42 +1,42 @@
 <?php // phpcs:ignore
 /* phpcs:ignore
-Plugin Name: Simple Comment Editing Options
-Plugin URI: https://mediaron.com/simple-comment-editing-options
-Description: Options for Simple Comment Editing.
+Plugin Name: Comment Edit Pro
+Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
+Description: Take comment editing to new heights.
 Author: Ronald Huereca
 Version: 2.0.4
 Requires at least: 5.0
-Author URI: https://mediaron.com
-Contributors: ronalfy
-Text Domain: simple-comment-editing-options
+Author URI: https://dlxplugins.com
+Contributors: DLX Plugins
+Text Domain: comment-edit-pro
 Domain Path: /languages
 */
 
-namespace SCEOptions;
+namespace CommentEditPro;
 
 require_once 'autoloader.php';
 
-use SCEOptions\Includes\Functions as Functions;
-use SCEOptions\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'SCE_OPTIONS_VERSION', '2.0.4' );
-define( 'SCE_OPTIONS_TABLE_VERSION', '1.0.0' );
-define( 'SCE_OPTIONS_SLUG', plugin_basename( __FILE__ ) );
-define( 'SCE_OPTIONS_FILE', __FILE__ );
+define( 'COMMENTEDITPRO_VERSION', '2.0.4' );
+define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
+define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
+define( 'COMMENTEDITPRO_FILE', __FILE__ );
 define( 'SCE_MIN_VERSION', '2.4.5' );
 
 /**
- * Main SCE Options Class.
+ * Main Class.
  */
-class SCE_Options {
+class Comment_Edit_Pro {
 
 	/**
-	 * SCE options class instance.
+	 * Comment_Edit_Pro class instance.
 	 *
-	 * @var SCE_Options Class instance.
+	 * @var Comment_Edit_Pro Class instance.
 	 */
 	private static $instance = null;
 
@@ -49,7 +49,7 @@ class SCE_Options {
 	/**
 	 * Get an instance of the class.
 	 *
-	 * @return SCE_Options class.
+	 * @return Comment_Edit_Pro class.
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -104,9 +104,9 @@ class SCE_Options {
 	 */
 	public function admin_notice_insufficient_php() {
 		$this->show_admin_warning(
-			__( 'Higher PHP version required', 'simple-comment-editing-options' ),
+			__( 'Higher PHP version required', 'comment-edit-pro' ),
 			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'simple-comment-editing-options' ), 'Simple Comment Editing Options', 'PHP', self::PHP_REQUIRED, PHP_VERSION ),
+			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'PHP', self::PHP_REQUIRED, PHP_VERSION ),
 			'notice-error'
 		);
 	}
@@ -122,9 +122,9 @@ class SCE_Options {
 	public function admin_notice_insufficient_wp() {
 		include ABSPATH . WPINC . '/version.php';
 		$this->show_admin_warning(
-			__( 'Higher WordPress version required', 'simple-comment-editing-options' ),
+			__( 'Higher WordPress version required', 'comment-edit-pro' ),
 			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'simple-comment-editing-options' ), 'Simple Comment Editing Options', 'WordPress', self::WP_REQUIRED, $wp_version ),
+			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'WordPress', self::WP_REQUIRED, $wp_version ),
 			'notice-error'
 		);
 	}
@@ -139,9 +139,9 @@ class SCE_Options {
 	 */
 	public function admin_notice_insufficient_sce() {
 		$this->show_admin_warning(
-			__( 'Higher Simple Comment Editing version required', 'simple-comment-editing-options' ),
+			__( 'Higher Simple Comment Editing version required', 'comment-edit-pro' ),
 			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'simple-comment-editing-options' ), 'Simple Comment Editing Options', 'Simple Comment Editing', SCE_MIN_VERSION, SCE_VERSION ),
+			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'Simple Comment Editing', SCE_MIN_VERSION, SCE_VERSION ),
 			'notice-error'
 		);
 	}
@@ -156,8 +156,24 @@ class SCE_Options {
 	 */
 	public function admin_notice_sce_not_installed() {
 		$this->show_admin_warning(
-			__( 'Simple Comment Editing is required.', 'simple-comment-editing-options' ),
-			__( 'The Simple Comment Editing plugin is required for Simple Comment Editing Options to function.', 'simple-comment-editing-options' ),
+			__( 'Simple Comment Editing is required.', 'comment-edit-pro' ),
+			__( 'The Simple Comment Editing plugin is required for Comment Edit Pro to function.', 'comment-edit-pro' ),
+			'notice-error'
+		);
+	}
+
+	/**
+	 * Checks for SCE Options is installed.
+	 *
+	 * Checks for SCE Options is installed.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
+	public function admin_notice_sce_options_installed() {
+		$this->show_admin_warning(
+			__( 'Simple Comment Editing Options is already installed.', 'comment-edit-pro' ),
+			__( 'The Simple Comment Editing Options plugin needs to be disabled for Comment Edit Pro to run.', 'comment-edit-pro' ),
 			'notice-error'
 		);
 	}
@@ -195,7 +211,7 @@ class SCE_Options {
 	 * @access public
 	 */
 	public function add_scripts() {
-		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing' ), SCE_OPTIONS_VERSION, true );
+		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing' ), COMMENTEDITPRO_VERSION, true );
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', false );
 		} else {
@@ -203,7 +219,7 @@ class SCE_Options {
 		}
 
 		$show_stop_timer  = isset( $options['show_stop_timer'] ) ? $options['show_stop_timer'] : false;
-		$stop_timer_text  = isset( $options['stop_timer_text'] ) ? $options['stop_timer_text'] : __( 'Cancel Timer', 'simple-comment-editing-options' );
+		$stop_timer_text  = isset( $options['stop_timer_text'] ) ? $options['stop_timer_text'] : __( 'Cancel Timer', 'comment-edit-pro' );
 		$timer_appearance = isset( $options['timer_appearance'] ) ? $options['timer_appearance'] : 'words';
 		wp_localize_script(
 			'sce-options',
@@ -229,8 +245,8 @@ class SCE_Options {
 		$min_comment_option = filter_var( $options['require_comment_length'], FILTER_VALIDATE_BOOLEAN );
 		$max_comment_option = filter_var( $options['require_comment_length_max'], FILTER_VALIDATE_BOOLEAN );
 		if ( $min_comment_option && $max_comment_option ) {
-			wp_enqueue_style( 'sce-ccc', plugins_url( '/dist/sce-ccc-progress-bar.css', __FILE__ ), array(), SCE_OPTIONS_VERSION, 'all' );
-			wp_enqueue_script( 'sce-ccc', plugins_url( '/js/comment-character-control.js', __FILE__ ), array(), SCE_OPTIONS_VERSION, true );
+			wp_enqueue_style( 'sce-ccc', plugins_url( '/dist/sce-ccc-progress-bar.css', __FILE__ ), array(), COMMENTEDITPRO_VERSION, 'all' );
+			wp_enqueue_script( 'sce-ccc', plugins_url( '/js/comment-character-control.js', __FILE__ ), array(), COMMENTEDITPRO_VERSION, true );
 			wp_localize_script(
 				'sce-ccc',
 				'sce_ccc',
@@ -253,7 +269,7 @@ class SCE_Options {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
-		if ( is_multisite() && is_plugin_active_for_network( SCE_OPTIONS_SLUG ) && is_plugin_active_for_network( SCE_SLUG ) ) {
+		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) && is_plugin_active_for_network( SCE_SLUG ) ) {
 			return true;
 		}
 		return false;
@@ -273,11 +289,26 @@ class SCE_Options {
 		}
 		if ( self::is_plugin_activated_multisite() ) {
 			return true;
-		} elseif ( is_network_admin() && is_plugin_active_for_network( SCE_OPTIONS_SLUG ) && ! is_plugin_active_for_network( SCE_SLUG ) ) {
+		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'simple-comment-editing' ) ) {
 			return false;
 		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
 			return true;
 		} elseif ( ! is_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks for Simple Comment Editing.
+	 *
+	 * Checks if SCE is installed
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	private function is_sce_options_enabled() {
+		if ( class_exists( 'SCE_Options' ) ) {
 			return true;
 		}
 		return false;
@@ -304,6 +335,17 @@ class SCE_Options {
 			}
 			return;
 		}
+
+		// Check if SCE Options is installed.
+		if ( $this->is_sce_options_enabled() ) {
+			add_action( 'admin_notices', array( $this, 'admin_notice_sce_options_installed' ) );
+			if ( is_multisite() ) {
+				add_action( 'network_admin_notices', array( $this, 'admin_notice_sce_options_installed' ) );
+			}
+			return;
+		}
+
+		
 		// Check to see SCE Minimum is installed.
 		if ( version_compare( SCE_VERSION, SCE_MIN_VERSION, '<' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
@@ -313,10 +355,10 @@ class SCE_Options {
 			return;
 		}
 		if ( is_admin() ) {
-			$this->admin = new \SCEOptions\Includes\Admin();
+			$this->admin = new \CommentEditPro\Includes\Admin();
 		}
-		$this->output           = new \SCEOptions\Includes\Output();
-		$this->frontend_editing = new \SCEOptions\Includes\Frontend_Editing();
+		$this->output           = new \CommentEditPro\Includes\Output();
+		$this->frontend_editing = new \CommentEditPro\Includes\Frontend_Editing();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 
@@ -333,7 +375,7 @@ class SCE_Options {
 		add_action( 'admin_init', array( $this, 'sce_plugin_updater' ), 0 );
 
 		// Load text domain.
-		load_plugin_textdomain( 'simple-comment-editing-options', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'comment-edit-pro', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -359,7 +401,7 @@ class SCE_Options {
 				'https://mediaron.com',
 				__FILE__,
 				array(
-					'version' => SCE_OPTIONS_VERSION,
+					'version' => COMMENTEDITPRO_VERSION,
 					'license' => $options['license'],
 					'item_id' => 797,
 					'author'  => 'Ronald Huereca',
@@ -431,9 +473,9 @@ class SCE_Options {
 /**
  * Initializes plugin and returns main class instance
  *
- * @return SCE_Options
+ * @return Comment_Edit_Pro
  */
-function simple_comment_editing_options() {
-	return SCE_Options::get_instance();
+function comment_edit_pro() {
+	return Comment_Edit_Pro::get_instance();
 }
-simple_comment_editing_options();
+comment_edit_pro();

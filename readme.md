@@ -1,4 +1,4 @@
-# Simple Comment Editing Options
+# Comment Edit Pro
 
 [![Build Status](https://travis-ci.org/ronalfy/simple-comment-editing-options.svg?branch=master)](https://travis-ci.org/ronalfy/simple-comment-editing-options)
 

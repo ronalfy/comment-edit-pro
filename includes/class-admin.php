@@ -2,18 +2,18 @@
 /**
  * Register the admin menu and settings.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
-use SCEOptions\Includes\Admin_Menu_Output as Admin_Menu_Output;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Admin_Menu_Output as Admin_Menu_Output;
 
 /**
  * Admin class for SCE Options.
@@ -52,11 +52,11 @@ class Admin {
 	public function admin_scripts() {
 		$screen = get_current_screen();
 		if ( isset( $screen->base ) && 'settings_page_sce' === $screen->base ) {
-			wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), SCE_OPTIONS_VERSION, 'all' );
-			wp_enqueue_style( 'sce-styles-admin', Functions::get_plugin_url( 'dist/admin.css' ), array( 'sce-styles' ), SCE_OPTIONS_VERSION, 'all' );
+			wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), COMMENTEDITPRO_VERSION, 'all' );
+			wp_enqueue_style( 'sce-styles-admin', Functions::get_plugin_url( 'dist/admin.css' ), array( 'sce-styles' ), COMMENTEDITPRO_VERSION, 'all' );
 
-			wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), SCE_OPTIONS_VERSION, true );
-			wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), SCE_OPTIONS_VERSION, 'all' );
+			wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
+			wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), COMMENTEDITPRO_VERSION, 'all' );
 		}
 	}
 
@@ -71,7 +71,7 @@ class Admin {
 
 		// Add settings link.
 		$prefix = Functions::is_multisite() ? 'network_admin_' : '';
-		add_action( $prefix . 'plugin_action_links_' . SCE_OPTIONS_SLUG, array( $this, 'plugin_settings_link' ) );
+		add_action( $prefix . 'plugin_action_links_' . COMMENTEDITPRO_SLUG, array( $this, 'plugin_settings_link' ) );
 		// Init admin menu.
 		if ( Functions::is_multisite() ) {
 			add_action( 'network_admin_menu', array( $this, 'register_sub_menu' ) );
@@ -92,23 +92,23 @@ class Admin {
 		if ( Functions::is_multisite() ) {
 			$hook = add_submenu_page(
 				'settings.php',
-				__( 'Simple Comment Editing', 'simple-comment-editing-options' ),
-				__( 'Simple Comment Editing', 'simple-comment-editing-options' ),
+				__( 'Simple Comment Editing', 'comment-edit-pro' ),
+				__( 'Simple Comment Editing', 'comment-edit-pro' ),
 				'manage_network',
 				'sce',
-				array( '\SCEOptions\Includes\Admin_Settings', 'settings_page' )
+				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
 			);
 		} else {
 			$hook = add_submenu_page(
 				'options-general.php',
-				__( 'Simple Comment Editing', 'simple-comment-editing-options' ),
-				__( 'Simple Comment Editing', 'simple-comment-editing-options' ),
+				__( 'Simple Comment Editing', 'comment-edit-pro' ),
+				__( 'Simple Comment Editing', 'comment-edit-pro' ),
 				'manage_options',
 				'sce',
-				array( '\SCEOptions\Includes\Admin_Settings', 'settings_page' )
+				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
 			);
 		}
-		add_action( 'in_admin_header', array( '\SCEOptions\Includes\Admin_Settings', 'get_admin_header' ) );
+		add_action( 'in_admin_header', array( '\CommentEditPro\Includes\Admin_Settings', 'get_admin_header' ) );
 	}
 
 	/**

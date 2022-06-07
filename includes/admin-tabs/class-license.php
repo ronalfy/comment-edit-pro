@@ -2,17 +2,17 @@
 /**
  * Output licenses tab.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes\Admin_Tabs;
+namespace CommentEditPro\Includes\Admin_Tabs;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Output the main tab and content.
@@ -82,7 +82,7 @@ class License {
 					$api_params = array(
 						'edd_action' => 'activate_license',
 						'license'    => sanitize_text_field( $_POST['options']['license'] ), // phpcs:ignore
-						'item_name'  => urlencode( 'Simple Comment Editing Options' ), // phpcs:ignore
+						'item_name'  => urlencode( 'Comment Edit Pro' ), // phpcs:ignore
 						'url'        => home_url(),
 					);
 					// Call the custom API.
@@ -101,7 +101,7 @@ class License {
 						if ( is_wp_error( $response ) ) {
 							$license_message = $response->get_error_message();
 						} else {
-							$license_message = __( 'An error occurred, please try again.', 'simple-comment-editing-options' );
+							$license_message = __( 'An error occurred, please try again.', 'comment-edit-pro' );
 						}
 					} else {
 
@@ -114,36 +114,36 @@ class License {
 								case 'expired':
 									$license_message = sprintf(
 										/* translators: %s is a date of license expiration */
-										__( 'Your license key expired on %s.', 'simple-comment-editing-options' ),
+										__( 'Your license key expired on %s.', 'comment-edit-pro' ),
 										date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) ) // phpcs:ignore
 									);
 									break;
 
 								case 'disabled':
 								case 'revoked':
-									$license_message = __( 'Your license key has been disabled.', 'simple-comment-editing-options' );
+									$license_message = __( 'Your license key has been disabled.', 'comment-edit-pro' );
 									break;
 
 								case 'missing':
-									$license_message = __( 'Invalid license.', 'simple-comment-editing-options' );
+									$license_message = __( 'Invalid license.', 'comment-edit-pro' );
 									break;
 
 								case 'invalid':
 								case 'site_inactive':
-									$license_message = __( 'Your license is not active for this URL.', 'simple-comment-editing-options' );
+									$license_message = __( 'Your license is not active for this URL.', 'comment-edit-pro' );
 									break;
 
 								case 'item_name_mismatch':
 									/* Translators: %s is the plugin name. */
-									$license_message = sprintf( __( 'This appears to be an invalid license key for %s.', 'simple-comment-editing-options' ), 'Simple Comment Editing Options' );
+									$license_message = sprintf( __( 'This appears to be an invalid license key for %s.', 'comment-edit-pro' ), 'Comment Edit Pro' );
 									break;
 
 								case 'no_activations_left':
-									$license_message = __( 'Your license key has reached its activation limit.', 'simple-comment-editing-options' );
+									$license_message = __( 'Your license key has reached its activation limit.', 'comment-edit-pro' );
 									break;
 
 								default:
-									$license_message = __( 'An error occurred, please try again.', 'simple-comment-editing-options' );
+									$license_message = __( 'An error occurred, please try again.', 'comment-edit-pro' );
 									break;
 							}
 						}
@@ -157,22 +157,22 @@ class License {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<h2><?php esc_html_e( 'Please enter your license below', 'simple-comment-editing-options' ); ?></h2>
-						<p class="description"><?php esc_html_e( 'A license will ensure you are alerted to any updates.', 'simple-comment-editing-options' ); ?></p>
+						<h2><?php esc_html_e( 'Please enter your license below', 'comment-edit-pro' ); ?></h2>
+						<p class="description"><?php esc_html_e( 'A license will ensure you are alerted to any updates.', 'comment-edit-pro' ); ?></p>
 						<form action="" method="POST">
 							<?php wp_nonce_field( 'save_sce_options' ); ?>
 							<table class="form-table">
 								<tbody>
 								<tr>
-										<th scope="row"><label for="sce-license"><?php esc_html_e( 'Enter Your License', 'simple-comment-editing-options' ); ?></label></th>
+										<th scope="row"><label for="sce-license"><?php esc_html_e( 'Enter Your License', 'comment-edit-pro' ); ?></label></th>
 										<td>
 											<input id="sce-license" class="regular-text" type="text" value="<?php echo esc_attr( $options['license'] ); ?>" name="options[license]" /><br />
 											<?php
 											$license_status = get_site_option( 'sce_license_status', false );
 											if ( false === $license_status ) {
-												printf( '<p>%s</p>', esc_html__( 'Please enter your licence key.', 'simple-comment-editing-options' ) );
+												printf( '<p>%s</p>', esc_html__( 'Please enter your licence key.', 'comment-edit-pro' ) );
 											} else {
-												printf( '<p>%s</p>', esc_html__( 'Your license is valid and you will now receive update notifications.', 'simple-comment-editing-options' ) );
+												printf( '<p>%s</p>', esc_html__( 'Your license is valid and you will now receive update notifications.', 'comment-edit-pro' ) );
 											}
 											?>
 											<?php
@@ -185,7 +185,7 @@ class License {
 								</tbody>
 							</table>
 
-							<?php submit_button( __( 'Save Options', 'simple-comment-editing-options' ) ); ?>
+							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
 						</form>
 					</div>
 				</div>

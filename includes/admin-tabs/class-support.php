@@ -2,17 +2,17 @@
 /**
  * Output support tab.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes\Admin_Tabs;
+namespace CommentEditPro\Includes\Admin_Tabs;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Output the main tab and content.
@@ -73,11 +73,11 @@ class Support {
 				?>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'Get Support On the WordPress Plugin Directory', 'simple-comment-editing-options' ); ?>
+						<?php esc_html_e( 'Get Support On the WordPress Plugin Directory', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'The best way to receive support is via our contact form.', 'simple-comment-editing-options' ); ?>
+							<?php esc_html_e( 'The best way to receive support is via our contact form.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
@@ -97,68 +97,68 @@ class Support {
 								'email'     => $user->data->user_email,
 								'license'   => $options['license'],
 								'product'   => 'Simple Comment Editing',
-								'subject'   => 'Simple Comment Editing Options support',
+								'subject'   => 'Comment Edit Pro support',
 								'support'   => 'Yes',
 							),
 							'https://mediaron.com/contact/'
 						);
 						?>
-						<a class="sce-button sce-button-info" href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank"><svg class="sce-icon"><use xlink:href="#hands-helping"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Get Support', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank"><svg class="sce-icon"><use xlink:href="#hands-helping"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Get Support', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'File a GitHub Issue', 'simple-comment-editing-options' ); ?>
+						<?php esc_html_e( 'File a GitHub Issue', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'Feature requests or modifications to existing behavior can be opened on GitHub.', 'simple-comment-editing-options' ); ?>
+							<?php esc_html_e( 'Feature requests or modifications to existing behavior can be opened on GitHub.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://github.com/MediaRon/simple-comment-editing-options/issues" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-github-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Open a GitHub Issue', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://github.com/MediaRon/simple-comment-editing-options/issues" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-github-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Open a GitHub Issue', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'Show Your Support', 'simple-comment-editing-options' ); ?>
+						<?php esc_html_e( 'Show Your Support', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'Please consider upgrading your license if you are on the free plan. A paid license will ensure that SCE and SCEOptions can survive in the long-haul.', 'simple-comment-editing-options' ); ?>
+							<?php esc_html_e( 'Please consider upgrading your license if you are on the free plan. A paid license will ensure that SCE and CommentEditPro can survive in the long-haul.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-heart-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Support This Plugin', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-heart-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Support This Plugin', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'Documentation', 'simple-comment-editing-options' ); ?>
+						<?php esc_html_e( 'Documentation', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'The documentation for the plugin displays its capabilities.', 'simple-comment-editing-options' ); ?>
+							<?php esc_html_e( 'The documentation for the plugin displays its capabilities.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'comment-edit-pro' ); ?></a>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing Options', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Comment Edit Pro', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'Help Rate This Plugin', 'simple-comment-editing-options' ); ?>
+						<?php esc_html_e( 'Help Rate This Plugin', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'If you find this plugin useful, please consider leaving a star rating on WordPress.org.', 'simple-comment-editing-options' ); ?>
+							<?php esc_html_e( 'If you find this plugin useful, please consider leaving a star rating on WordPress.org.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://wordpress.org/support/plugin/simple-comment-editing/reviews/#new-post" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-star-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Help Rate This Plugin', 'simple-comment-editing-options' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://wordpress.org/support/plugin/simple-comment-editing/reviews/#new-post" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-star-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Help Rate This Plugin', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<?php

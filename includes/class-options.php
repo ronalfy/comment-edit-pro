@@ -2,12 +2,12 @@
 /**
  * Register SCE Options and defaults.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Functions as Functions;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
@@ -127,7 +127,7 @@ class Options {
 				'admin_email'
 			),
 			/* Translators: %s is the site name a user has left a comment on */
-			'edit_notification_subject'       => sprintf( __( 'A user has edited a comment on %s', 'simple-comment-editing-options' ), Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
+			'edit_notification_subject'       => sprintf( __( 'A user has edited a comment on %s', 'comment-edit-pro' ), Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
 			'edit_text'                       => __( 'Click to Edit', 'simple-comment-editing' ),
 			'confirm_delete'                  => __( 'Do you want to delete this comment?', 'simple-comment-editing' ),
 			'comment_deleted'                 => __( 'Your comment has been removed.', 'simple-comment-editing' ),
@@ -139,7 +139,7 @@ class Options {
 			'max_comment_length'              => 2000,
 			'allow_comment_logging'           => false,
 			'show_stop_timer'                 => false,
-			'stop_timer_text'                 => __( 'Cancel Timer', 'simple-comment-editing-options' ),
+			'stop_timer_text'                 => __( 'Cancel Timer', 'comment-edit-pro' ),
 			'timer_appearance'                => 'words',
 			'license'                         => '',
 			'allow_unlimited_editing'         => false,

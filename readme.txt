@@ -1,4 +1,4 @@
-=== Simple Comment Editing Options ===
+=== Comment Edit Pro ===
 Tags: ajax, comments,edit comments, edit, comment, admin
 Requires at least: 5.0
 Tested up to: 5.9
@@ -10,9 +10,9 @@ Simple Comment Editing options for your website.
 
 == Description ==
 
-Simple Comment Editing Options provides an options panel for Simple Comment Editing with a myriad of optios including adjusting the timer, selecting a theme, and edit logging.
+Comment Edit Pro provides an options panel for Simple Comment Editing with a myriad of optios including adjusting the timer, selecting a theme, and edit logging.
 
-Simple Comment Editing Options features:
+Comment Edit Pro features:
 <ol>
 <li>Set the timer to a custom value and even hide it</li>
 <li>Select a theme</li>

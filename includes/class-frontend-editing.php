@@ -2,17 +2,17 @@
 /**
  * Register SCE Options for front-end editing.
  *
- * @package SCEOptions
+ * @package CommentEditPro
  */
 
-namespace SCEOptions\Includes;
+namespace CommentEditPro\Includes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use SCEOptions\Includes\Options as Options;
-use SCEOptions\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions as Functions;
 
 /**
  * Main class for front-end editing.
@@ -130,8 +130,8 @@ class Frontend_Editing {
 		if ( ! is_singular() ) {
 			return;
 		}
-		wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), SCE_OPTIONS_VERSION, true );
-		wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), SCE_OPTIONS_VERSION, 'all' );
+		wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
+		wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), COMMENTEDITPRO_VERSION, 'all' );
 	}
 
 	/**
@@ -161,7 +161,7 @@ class Frontend_Editing {
 		}
 
 		$comment_id = absint( $comment->comment_ID );
-		$edit_text  = apply_filters( 'sce_frontend_text_edit', __( 'Click to inline edit', 'simple-comment-editing-options' ) );
+		$edit_text  = apply_filters( 'sce_frontend_text_edit', __( 'Click to inline edit', 'comment-edit-pro' ) );
 
 		// Build link.
 		$link = add_query_arg(
@@ -273,7 +273,7 @@ class Frontend_Editing {
 		$html  = sprintf(
 			'<a data-fancybox data-type="iframe" data-src="%s" href="javascript:;">%s</a>',
 			esc_url( $url ),
-			__( 'Edit', 'simple-comment-editing-options' )
+			__( 'Edit', 'comment-edit-pro' )
 		);
 		return $html;
 	}
