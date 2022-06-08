@@ -123,7 +123,7 @@ class Functions {
 		 *
 		 * @param string URL to the plugin logo.
 		 */
-		return apply_filters( 'comment_edit_pro_plugin_logo_full', self::get_plugin_url( '/images/logo.png' ) );
+		return apply_filters( 'comment_edit_pro_plugin_logo_full', self::get_plugin_url( '/images/comment-edit-base.png' ) );
 	}
 
 	/**
@@ -173,7 +173,7 @@ class Functions {
 		 *
 		 * @param string URL to the plugin icon.
 		 */
-		return apply_filters( 'comment_edit_pro_plugin_icon', self::get_plugin_url( '/images/logo.png' ) );
+		return apply_filters( 'comment_edit_pro_plugin_icon', self::get_plugin_url( '/images/comment-edit-base.png' ) );
 	}
 
 	/**

@@ -73,7 +73,7 @@ class Support {
 				?>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'Get Support On the WordPress Plugin Directory', 'comment-edit-pro' ); ?>
+						<?php esc_html_e( 'Get Support Via Our Contact Form', 'comment-edit-pro' ); ?>
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
@@ -96,27 +96,14 @@ class Support {
 								'site'      => $website,
 								'email'     => $user->data->user_email,
 								'license'   => $options['license'],
-								'product'   => 'Simple Comment Editing',
+								'product'   => 'Comment Edit Pro',
 								'subject'   => 'Comment Edit Pro support',
 								'support'   => 'Yes',
 							),
-							'https://mediaron.com/contact/'
+							'https://dlxplugins.com/support/'
 						);
 						?>
 						<a class="sce-button sce-button-info" href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank"><svg class="sce-icon"><use xlink:href="#hands-helping"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Get Support', 'comment-edit-pro' ); ?></a>
-					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<h3 class="sce-panel-heading">
-						<?php esc_html_e( 'File a GitHub Issue', 'comment-edit-pro' ); ?>
-					</h3>
-					<div class="sce-panel-row">
-						<p class="description">
-							<?php esc_html_e( 'Feature requests or modifications to existing behavior can be opened on GitHub.', 'comment-edit-pro' ); ?>
-						</p>
-					</div>
-					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://github.com/MediaRon/simple-comment-editing-options/issues" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-github-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Open a GitHub Issue', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
@@ -125,11 +112,11 @@ class Support {
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'Please consider upgrading your license if you are on the free plan. A paid license will ensure that SCE and CommentEditPro can survive in the long-haul.', 'comment-edit-pro' ); ?>
+							<?php esc_html_e( 'Please consider upgrading your license if you are on the free plan. A paid license will ensure that Simple Comment Editing and Comment Edit Pro can survive in the long-haul.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-heart-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Support This Plugin', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/comment-edit-pro" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-heart-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Support This Plugin', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
@@ -142,10 +129,10 @@ class Support {
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/simple-comment-editing" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'comment-edit-pro' ); ?></a>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://mediaron.com/simple-comment-editing-options/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Comment Edit Pro', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/comment-edit-pro" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Comment Edit Pro', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
@@ -154,11 +141,11 @@ class Support {
 					</h3>
 					<div class="sce-panel-row">
 						<p class="description">
-							<?php esc_html_e( 'If you find this plugin useful, please consider leaving a star rating on WordPress.org.', 'comment-edit-pro' ); ?>
+							<?php esc_html_e( 'If you find Simple Comment Editing useful, please consider leaving a star rating on WordPress.org.', 'comment-edit-pro' ); ?>
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://wordpress.org/support/plugin/simple-comment-editing/reviews/#new-post" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-star-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Help Rate This Plugin', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://wordpress.org/support/plugin/simple-comment-editing/reviews/#new-post" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-star-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Help Rate the Free Plugin', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<?php
