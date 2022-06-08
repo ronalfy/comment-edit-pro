@@ -139,7 +139,7 @@ class Functions {
 		 *
 		 * @param string Plugin Author name.
 		 */
-		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author', 'MediaRon LLC' );
+		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author', 'DLX Plugins' );
 		return $plugin_author;
 	}
 
@@ -156,7 +156,7 @@ class Functions {
 		 *
 		 * @param string Plugin Author URI.
 		 */
-		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author_uri', 'https://mediaron.com' );
+		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author_uri', 'https://dlxplugins.com' );
 		return $plugin_author;
 	}
 
@@ -225,7 +225,7 @@ class Functions {
 		 *
 		 * @param string Plugin URI.
 		 */
-		return apply_filters( 'comment_edit_pro_plugin_uri', 'https://mediaron.com/simple-comment-editing-options/' );
+		return apply_filters( 'comment_edit_pro_plugin_uri', 'https://dlxplugins.com/plugins/comment-edit-pro' );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Functions {
 		 *
 		 * @param string Plugin Menu Name.
 		 */
-		return apply_filters( 'comment_edit_pro_plugin_menu_name', __( 'Simple Comment Editing', 'comment-edit-pro' ) );
+		return apply_filters( 'comment_edit_pro_plugin_menu_name', __( 'Comment Edit Pro', 'comment-edit-pro' ) );
 	}
 
 	/**
