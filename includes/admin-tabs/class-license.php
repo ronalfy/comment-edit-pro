@@ -78,7 +78,7 @@ class License {
 					Options::update_options( $options );
 
 					// Check for valid license.
-					$store_url  = 'https://mediaron.com';
+					$store_url  = 'https://dlxplugins.com';
 					$api_params = array(
 						'edd_action' => 'activate_license',
 						'license'    => sanitize_text_field( $_POST['options']['license'] ), // phpcs:ignore
@@ -108,7 +108,7 @@ class License {
 						$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
 						if ( false === $license_data->success ) {
-							delete_site_option( 'sce_license_status' );
+							delete_site_option( 'comment_edit_pro_license_status' );
 							switch ( $license_data->error ) {
 
 								case 'expired':
@@ -148,7 +148,7 @@ class License {
 							}
 						}
 						if ( empty( $license_message ) ) {
-							update_site_option( 'sce_license_status', $license_data->license );
+							update_site_option( 'comment_edit_pro_license_status', $license_data->license );
 						}
 					}
 				}
@@ -168,7 +168,7 @@ class License {
 										<td>
 											<input id="sce-license" class="regular-text" type="text" value="<?php echo esc_attr( $options['license'] ); ?>" name="options[license]" /><br />
 											<?php
-											$license_status = get_site_option( 'sce_license_status', false );
+											$license_status = get_site_option( 'comment_edit_pro_license_status', false );
 											if ( false === $license_status ) {
 												printf( '<p>%s</p>', esc_html__( 'Please enter your licence key.', 'comment-edit-pro' ) );
 											} else {

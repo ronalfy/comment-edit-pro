@@ -394,16 +394,16 @@ class Comment_Edit_Pro {
 			$options = get_option( 'sce_options' );
 		}
 
-		$license_status = get_site_option( 'sce_license_status', false );
+		$license_status = get_site_option( 'comment_edit_pro_license_status', false );
 		if ( isset( $options['license'] ) && false !== $license_status ) {
 			// setup the updater.
 			$edd_updater = new \EDD_SL_Plugin_Updater(
-				'https://mediaron.com',
+				'https://dlxplugins.com',
 				__FILE__,
 				array(
 					'version' => COMMENTEDITPRO_VERSION,
 					'license' => $options['license'],
-					'item_id' => 797,
+					'item_id' => 882,
 					'author'  => 'Ronald Huereca',
 					'beta'    => false,
 					'url'     => home_url(),
