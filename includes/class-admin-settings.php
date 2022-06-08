@@ -50,7 +50,7 @@ class Admin_Settings {
 			<h1>
 				<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Simple Comment Editing" /></a>
 			</h1>
-			<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section by allowing your users to edit their comments.', 'simple-comment-editing' ); ?></p>
+			<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section by allowing your users to edit their comments.', 'comment-edit-pro' ); ?></p>
 		<?php
 	}
 
