@@ -22,9 +22,9 @@ class Support {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_filter( 'sceo_admin_tabs', array( $this, 'add_main_tab' ), 1, 9 );
-		add_filter( 'sceo_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
-		add_filter( 'sceo_output_support', array( $this, 'output_main_content' ), 1, 3 );
+		add_filter( 'comment_edit_pro_admin_tabs', array( $this, 'add_main_tab' ), 1, 9 );
+		add_filter( 'comment_edit_pro_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
+		add_filter( 'comment_edit_pro_output_support', array( $this, 'output_main_content' ), 1, 3 );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Support {
 	public function add_main_tab( $tabs ) {
 		$tabs[] = array(
 			'get'    => 'support',
-			'action' => 'sceo_output_support',
+			'action' => 'comment_edit_pro_output_support',
 			'url'    => Functions::get_settings_url( 'support' ),
 			'label'  => _x( 'Support', 'Tab label as Support', 'ultimate-auto-updates' ),
 			'icon'   => 'hands-helping',

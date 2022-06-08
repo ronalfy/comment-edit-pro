@@ -22,9 +22,9 @@ class License {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_filter( 'sceo_admin_tabs', array( $this, 'add_main_tab' ), 1, 9 );
-		add_filter( 'sceo_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
-		add_filter( 'sceo_output_license', array( $this, 'output_main_content' ), 1, 3 );
+		add_filter( 'comment_edit_pro_admin_tabs', array( $this, 'add_main_tab' ), 1, 9 );
+		add_filter( 'comment_edit_pro_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
+		add_filter( 'comment_edit_pro_output_license', array( $this, 'output_main_content' ), 1, 3 );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class License {
 	public function add_main_tab( $tabs ) {
 		$tabs[] = array(
 			'get'    => 'license',
-			'action' => 'sceo_output_license',
+			'action' => 'comment_edit_pro_output_license',
 			'url'    => Functions::get_settings_url( 'license' ),
 			'label'  => _x( 'License', 'Tab label as License', 'ultimate-auto-updates' ),
 			'icon'   => 'file-certificate',

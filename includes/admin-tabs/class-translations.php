@@ -22,9 +22,9 @@ class Translations {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_filter( 'sceo_admin_tabs', array( $this, 'add_main_tab' ), 1, 7 );
-		add_filter( 'sceo_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
-		add_filter( 'sceo_output_translations', array( $this, 'output_main_content' ), 1, 3 );
+		add_filter( 'comment_edit_pro_admin_tabs', array( $this, 'add_main_tab' ), 1, 7 );
+		add_filter( 'comment_edit_pro_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
+		add_filter( 'comment_edit_pro_output_translations', array( $this, 'output_main_content' ), 1, 3 );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Translations {
 	public function add_main_tab( $tabs ) {
 		$tabs[] = array(
 			'get'    => 'translations',
-			'action' => 'sceo_output_translations',
+			'action' => 'comment_edit_pro_output_translations',
 			'url'    => Functions::get_settings_url( 'translations' ),
 			'label'  => _x( 'Translations', 'Tab label as Translations', 'ultimate-auto-updates' ),
 			'icon'   => 'language',
