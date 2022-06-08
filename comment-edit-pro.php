@@ -170,7 +170,7 @@ class Comment_Edit_Pro {
 	 * @since 1.0.0
 	 * @access public
 	 */
-	public function admin_notice_sce_options_installed() {
+	public function admin_notice_comment_edit_pro_installed() {
 		$this->show_admin_warning(
 			__( 'Simple Comment Editing Options is already installed.', 'comment-edit-pro' ),
 			__( 'The Simple Comment Editing Options plugin needs to be disabled for Comment Edit Pro to run.', 'comment-edit-pro' ),
@@ -307,7 +307,7 @@ class Comment_Edit_Pro {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	private function is_sce_options_enabled() {
+	private function is_comment_edit_pro_enabled() {
 		if ( class_exists( 'SCE_Options' ) ) {
 			return true;
 		}
@@ -337,10 +337,10 @@ class Comment_Edit_Pro {
 		}
 
 		// Check if SCE Options is installed.
-		if ( $this->is_sce_options_enabled() ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_sce_options_installed' ) );
+		if ( $this->is_comment_edit_pro_enabled() ) {
+			add_action( 'admin_notices', array( $this, 'admin_notice_comment_edit_pro_installed' ) );
 			if ( is_multisite() ) {
-				add_action( 'network_admin_notices', array( $this, 'admin_notice_sce_options_installed' ) );
+				add_action( 'network_admin_notices', array( $this, 'admin_notice_comment_edit_pro_installed' ) );
 			}
 			return;
 		}

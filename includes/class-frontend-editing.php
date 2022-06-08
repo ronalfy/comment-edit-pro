@@ -41,7 +41,7 @@ class Frontend_Editing {
 				add_filter( 'sce_can_edit', '__return_false' );
 				add_filter( 'edit_comment_link', array( $this, 'modify_edit_link' ), 10, 3 );
 				add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_and_styles' ) );
-				add_action( 'wp_ajax_sce_options_get_frontend_comment', array( $this, 'ajax_fancybox_interface' ) );
+				add_action( 'wp_ajax_comment_edit_pro_get_frontend_comment', array( $this, 'ajax_fancybox_interface' ) );
 				add_action( 'wp_ajax_sce_frontend_save_comment', array( $this, 'ajax_save_frontend_comment' ) );
 				add_action( 'wp_ajax_sce_frontend_delete_comment', array( $this, 'ajax_delete_frontend_comment' ) );
 			}
@@ -264,7 +264,7 @@ class Frontend_Editing {
 		$nonce = wp_create_nonce( 'edit-comment-' . $comment_id );
 		$url   = add_query_arg(
 			array(
-				'action' => 'sce_options_get_frontend_comment',
+				'action' => 'comment_edit_pro_get_frontend_comment',
 				'nonce'  => $nonce,
 				'cid'    => $comment_id,
 			),

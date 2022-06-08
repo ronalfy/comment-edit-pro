@@ -32,9 +32,9 @@ class Functions {
 	 */
 	public static function get_settings_url( $tab = '', $sub_tab = '' ) {
 		if ( self::is_multisite() ) {
-			$options_url = network_admin_url( 'settings.php?page=sce' );
+			$options_url = network_admin_url( 'settings.php?page=comment-edit-pro' );
 		} else {
-			$options_url = admin_url( 'options-general.php?page=sce' );
+			$options_url = admin_url( 'options-general.php?page=comment-edit-pro' );
 		}
 		if ( ! empty( $tab ) ) {
 			$options_url = add_query_arg( array( 'tab' => sanitize_title( $tab ) ), $options_url );
@@ -123,7 +123,7 @@ class Functions {
 		 *
 		 * @param string URL to the plugin logo.
 		 */
-		return apply_filters( 'sce_options_plugin_logo_full', self::get_plugin_url( '/images/logo.png' ) );
+		return apply_filters( 'comment_edit_pro_plugin_logo_full', self::get_plugin_url( '/images/logo.png' ) );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Functions {
 		 *
 		 * @param string Plugin Author name.
 		 */
-		$plugin_author = apply_filters( 'sce_options_plugin_author', 'MediaRon LLC' );
+		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author', 'MediaRon LLC' );
 		return $plugin_author;
 	}
 
@@ -156,7 +156,7 @@ class Functions {
 		 *
 		 * @param string Plugin Author URI.
 		 */
-		$plugin_author = apply_filters( 'sce_options_plugin_author_uri', 'https://mediaron.com' );
+		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author_uri', 'https://mediaron.com' );
 		return $plugin_author;
 	}
 
@@ -173,7 +173,7 @@ class Functions {
 		 *
 		 * @param string URL to the plugin icon.
 		 */
-		return apply_filters( 'sce_options_plugin_icon', self::get_plugin_url( '/images/logo.png' ) );
+		return apply_filters( 'comment_edit_pro_plugin_icon', self::get_plugin_url( '/images/logo.png' ) );
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Functions {
 		 *
 		 * @param string Plugin name.
 		 */
-		return apply_filters( 'sce_options_plugin_name', __( 'Comment Edit Pro', 'comment-edit-pro' ) );
+		return apply_filters( 'comment_edit_pro_plugin_name', __( 'Comment Edit Pro', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -209,7 +209,7 @@ class Functions {
 		 *
 		 * @param string Plugin description.
 		 */
-		return apply_filters( 'sce_options_plugin_description', __( 'Allow your users to edit comments.', 'comment-edit-pro' ) );
+		return apply_filters( 'comment_edit_pro_plugin_description', __( 'Allow your users to edit comments.', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -225,7 +225,7 @@ class Functions {
 		 *
 		 * @param string Plugin URI.
 		 */
-		return apply_filters( 'sce_options_plugin_uri', 'https://mediaron.com/simple-comment-editing-options/' );
+		return apply_filters( 'comment_edit_pro_plugin_uri', 'https://mediaron.com/simple-comment-editing-options/' );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Functions {
 		 *
 		 * @param string Plugin Menu Name.
 		 */
-		return apply_filters( 'sce_options_plugin_menu_name', __( 'Simple Comment Editing', 'comment-edit-pro' ) );
+		return apply_filters( 'comment_edit_pro_plugin_menu_name', __( 'Simple Comment Editing', 'comment-edit-pro' ) );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class Functions {
 		 *
 		 * @param string Plugin Menu Name.
 		 */
-		return apply_filters( 'sce_options_plugin_menu_title', self::get_plugin_name() );
+		return apply_filters( 'comment_edit_pro_plugin_menu_title', self::get_plugin_name() );
 	}
 
 	/**

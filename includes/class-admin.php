@@ -92,19 +92,19 @@ class Admin {
 		if ( Functions::is_multisite() ) {
 			$hook = add_submenu_page(
 				'settings.php',
-				__( 'Simple Comment Editing', 'comment-edit-pro' ),
-				__( 'Simple Comment Editing', 'comment-edit-pro' ),
+				__( 'Comment Edit Pro', 'comment-edit-pro' ),
+				__( 'Comment Edit Pro', 'comment-edit-pro' ),
 				'manage_network',
-				'sce',
+				'comment-edit-pro',
 				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
 			);
 		} else {
 			$hook = add_submenu_page(
 				'options-general.php',
-				__( 'Simple Comment Editing', 'comment-edit-pro' ),
-				__( 'Simple Comment Editing', 'comment-edit-pro' ),
+				__( 'Comment Edit Pro', 'comment-edit-pro' ),
+				__( 'Comment Edit Pro', 'comment-edit-pro' ),
 				'manage_options',
-				'sce',
+				'comment-edit-pro',
 				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
 			);
 		}
@@ -121,7 +121,7 @@ class Admin {
 	 * @return array Array of settings
 	 */
 	public function plugin_settings_link( $settings ) {
-		$admin_anchor = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Settings', 'stops-core-theme-and-plugin-updates' ) );
+		$admin_anchor = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Settings', 'comment-edit-pro' ) );
 		if ( ! is_array( $settings ) ) {
 			return array( $admin_anchor );
 		} else {
