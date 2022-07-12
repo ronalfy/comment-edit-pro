@@ -1,4 +1,5 @@
 $base_color: #58a0db;
+$admin_light_purple: #9c68b0;
 $admin_color_panel_background: #fff;
 $border_color_light: #ddd;
 $admin_logo_color: #b01b1b;
@@ -40,6 +41,45 @@ $delete_button_color_text: #fff;
 $danger_button_color: #721c24;
 $danger_button_color_text: #fff;
 
+#wpcontent {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	position: relative;
+
+	#comment-edit-pro-header {
+		margin: 0;
+	}
+
+	header {
+		background: $admin_color_panel_background;
+		padding: 1.1rem;
+		overflow: hidden;
+		margin: 0 !important;
+		border-bottom: 2px solid $admin_light_purple;
+	}
+	.sce-settings-tabs {
+		padding: 1.1rem;
+	}
+
+	.nav-tab-wrapper .sce-icon-tab {
+		color: lighten( $admin_light_purple, 15% );
+	}
+	.nav-tab-wrapper .nav-tab-active .sce-icon-tab {
+		color: $admin_light_purple;
+	}
+
+	.sce-panel-row h2 {
+		font-size: 24px;
+		color: $admin_light_purple;
+	}
+	.sce-main-help, .sce-edit-count {
+		font-size: 14px;
+	}
+}
+
+#wpfooter {
+	display: none;
+}
 
 
 /* Button Options */
@@ -144,10 +184,14 @@ h3.sce-panel-heading {
 	
 	img {
 		width: 100%;
-		max-width: 350px;
+		max-width: 450px;
 		display: inline-block;
 		
 	}
+}
+.sce-info-text {
+	font-weight: 500;
+	font-size: 18px;
 }
 
 #sce-options-logo {

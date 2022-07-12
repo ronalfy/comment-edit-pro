@@ -31,8 +31,9 @@ Comment Edit Pro features:
 == Changelog ==
 
 = 2.0.4 =
-* Released 2021-06-16
-* Fixing saving bug with Comment Character Control.
+* Released 2022-06-08
+* Renaming to Comment Edit Pro.
+* Testing with WordPress 6.0.
 
 = 2.0.3 =
 * Released 2021-06-15

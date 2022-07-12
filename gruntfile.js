@@ -3,10 +3,10 @@ module.exports = function (grunt) {
 		compress: {
 			main: {
 			  options: {
-				archive: 'simple-comment-editing-options.zip'
+				archive: 'comment-edit-pro.zip'
 			  },
 			  files: [
-				{src: ['simple-comment-editing-options.php'], dest: '/', filter: 'isFile'}, // includes files in path
+				{src: ['comment-edit-pro.php'], dest: '/', filter: 'isFile'}, // includes files in path
 				{src: ['uninstall.php'], dest: '/', filter: 'isFile'}, // includes files in path
 				{src: ['autoloader.php'], dest: '/', filter: 'isFile'}, // includes files in path
 				{src: ['dist/**'], dest: '/'}, // includes files in path and its subdirs

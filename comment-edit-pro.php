@@ -211,7 +211,7 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function add_scripts() {
-		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'comment-edit-pro' ), COMMENTEDITPRO_VERSION, true );
+		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing' ), COMMENTEDITPRO_VERSION, true );
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', false );
 		} else {

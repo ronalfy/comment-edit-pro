@@ -18,6 +18,7 @@ class Init_Tabs {
 		new Main();
 		new Appearance();
 		new Translations();
+		new Integrations();
 		new License();
 		new Support();
 	}

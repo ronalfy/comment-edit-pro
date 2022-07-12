@@ -94,7 +94,32 @@ class Main {
 
 								$edit_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $tablename WHERE blog_id = %d", $blog_id ) ); // phpcs:ignore
 								?>
-								<p><?php esc_html_e( 'Your users have edited their comments', 'comment-edit-pro' ); ?> <?php echo number_format( $edit_count ); ?> <?php echo esc_html( _n( 'time', 'times', $edit_count, 'comment-edit-pro' ) ); ?>.</p>
+								<p class="sce-edit-count"><?php esc_html_e( 'Your users have edited their comments', 'comment-edit-pro' ); ?> <?php echo number_format( $edit_count ); ?> <?php echo esc_html( _n( 'time', 'times', $edit_count, 'comment-edit-pro' ) ); ?>.</p>
+								<div class="sce-main-help">
+									<?php
+									$options   = Options::get_options();
+									$user      = wp_get_current_user();
+									$user_id   = $user->ID;
+									$firstname = get_user_meta( $user_id, 'first_name', true );
+									$lastname  = get_user_meta( $user_id, 'last_name', true );
+									$website   = home_url();
+			
+									$support_url = add_query_arg(
+										array(
+											'firstname' => $firstname,
+											'lastname'  => $lastname,
+											'site'      => $website,
+											'email'     => $user->data->user_email,
+											'license'   => $options['license'],
+											'product'   => 'Comment Edit Pro',
+											'subject'   => 'Comment Edit Pro support',
+											'support'   => 'Yes',
+										),
+										'https://dlxplugins.com/support/'
+									);
+									?>
+									Need help? Please <a href="https://commenteditpro.dlxplugins.com/">visit our thorough documentation</a> and/or <a href="<?php echo esc_url_raw( $support_url ); ?>">reach out for support</a>.
+								</div>
 								<?php
 							}
 							?>
