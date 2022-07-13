@@ -19,6 +19,106 @@ class Avatars {
 		// User Avatar override.
 		add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
 		add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
+
+		// Add avatar to comments field.
+		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
+	}
+
+	/**
+	 * Add an avatar function to the comment field.
+	 *
+	 * @param array $comment_fields Comment fields to display.
+	 *
+	 * @return array updated comment fields.
+	 */
+	public function add_avatar_comment_field( $comment_fields ) {
+		$avatar_field = array(
+			'sce-avatar' => sprintf(
+				'<p class="comment-form-sce-avatar">%s %s</p>',
+				sprintf(
+					'<label for="sce-avatar">%s</label>',
+					__( 'Website' )
+				),
+				sprintf(
+					'<input id="sce-avatar" name="sce_avatar" %s value="%s" size="30" maxlength="200" />',
+					'type="text"',
+					esc_attr( 'test' )
+				)
+			),
+		);
+		return $avatar_field + $comment_fields;
+	}
+
+	/**
+	 * Retrieve an avatar based on past data.
+	 *
+	 * @param int $comment_id The comment ID to retrieve data from.
+	 * @param int $user_id    The user ID to retrieve the avatar from.
+	 *
+	 * @return string Avatar HTML.
+	 */
+	private function get_avatar( $comment_id = 0, $user_id = null ) {
+		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
+		$avatar         = null;
+		if ( null !== $user_id ) {
+			// Try to get stored avatar.
+			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true ); // Stored as relative path in DB (e.g., images/avatars/circle-flat-icons-mystery.png ).
+			if ( $avatar_url ) {
+				$avatar = Functions::get_plugin_url( $avatar_url );
+			}
+		}
+
+		// Check if a user is not logged in and no comment ID has been passed.
+		if ( ! is_user_logged_in() && 0 !== $comment_id ) {
+			$comment_avatar_url = get_comment_meta( $comment_id, 'sce-avatar-location', true );
+			if ( $comment_avatar_url ) {
+				$avatar = Functions::get_plugin_url( $avatar_url );
+			}
+		}
+
+		if ( null !== $avatar ) {
+			$avatar_html = $this->get_avatar_image_html( $avatar );
+			return $avatar_html;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Return avatar image html.
+	 *
+	 * @param string $src    The full URL to the asset.
+	 * @param int    $width  The width of the avatar (default 50px).
+	 * @param int    $height The height of the avatar (default 50px).
+	 *
+	 * @return unescaped image HTML.
+	 */
+	private function get_avatar_image_html( $src, $width = 50, $height = 50 ) {
+		/**
+		 * Add ability to change width/height of image.
+		 */
+		$avatar_dimensions = apply_filters(
+			'sce_avatar_size_args',
+			array(
+				'width'  => $width,
+				'height' => $height,
+			)
+		);
+		$classes        = array(
+			'avatar',
+			sprintf( 'avatar-%s', esc_attr( $width ) ),
+			'photo',
+			'sce-avatar',
+		);
+
+		$avatar_html = sprintf(
+			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
+			esc_attr( implode( ' ', $classes ) ),
+			esc_url( $src ),
+			esc_attr( $avatar_dimensions['width'] ),
+			esc_attr( $avatar_dimensions['height'] )
+		);
+		return $avatar_html;
 	}
 
 	/**
@@ -36,48 +136,13 @@ class Avatars {
 	 * @return string Avatar.
 	 */
 	public function avatar_override( $avatar, $id_or_email, $size, $default, $alt, $args = array() ) {
-		global $pagenow;
+		global $pagenow, $comment, $post;
 		if ( 'options-discussion.php' === $pagenow ) {
 			return $avatar; // Stop overriding gravatars on options-discussion page.
 		}
 
-		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
-		$classes        = array(
-			'avatar',
-			sprintf( 'avatar-%s', esc_attr( $size ) ),
-			'photo',
-			'sce-avatar',
-		);
-		if ( isset( $args['class'] ) ) {
-			if ( is_array( $args['class'] ) ) {
-				$classes = array_merge( $classes, $args['class'] );
-			} else {
-				$args['class'] = explode( ' ', $args['class'] );
-				$classes       = array_merge( $classes, $args['class'] );
-			}
-		}
-
-		// Get custom filter classes.
-		$classes = (array) apply_filters( 'sce_avatar_classes', $classes );
-
-		// Todo - Create option for this.
-		$avatar_size_args = array(
-			'width'  => 50,
-			'height' => 50,
-		);
-		/**
-		 * Add ability to change width/height of image.
-		 */
-		$avatar_dimensions = apply_filters( 'sce_avatar_size_args', $avatar_size_args );
-
-		$default_avatar = sprintf(
-			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
-			esc_attr( implode( ' ', $classes ) ),
-			esc_url( $default_avatar ),
-			esc_attr( $avatar_dimensions['width'] ),
-			esc_attr( $avatar_dimensions['height'] )
-		);
 		// Get user data.
+		$user = null;
 		if ( is_numeric( $id_or_email ) ) {
 			$user = get_user_by( 'id', (int) $id_or_email );
 		} elseif ( is_object( $id_or_email ) ) {
@@ -87,45 +152,18 @@ class Avatars {
 			} else {
 				$user = get_user_by( 'email', $comment->comment_author_email );
 			}
-			if ( ! $user ) {
-				return $default_avatar;
-			}
 		} elseif ( is_string( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
-		} else {
-			return $default_avatar;
 		}
 
-		if ( ! $user ) {
-			$avatar = $default_avatar;
-		}
-		// $user_id = $user->ID;
-
-		// // Determine if user has an avatar override.
-		// $avatar_override = get_user_option( 'metronet_avatar_override', $user_id );
-		// if ( ! $avatar_override || 'on' !== $avatar_override ) {
-		// return $avatar;
-		// }
-
-		// Build classes array based on passed in args, else set defaults - see get_avatar in /wp-includes/pluggable.php.
-
-		// // Determine if the user has a profile image.
-		// $custom_avatar = mt_profile_img(
-		// $user_id,
-		// array(
-		// 'size' => array( $size, $size ),
-		// 'attr' => array(
-		// 'alt'   => $alt,
-		// 'class' => implode( ' ', $classes ),
-		// ),
-		// 'echo' => false,
-		// )
-		// );
-
-		if ( ! $default_avatar ) {
+		// Now get the user ID if it exists.
+		$user_id = $user->ID ?? null;
+		$avatar  = $this->get_avatar( $comment->ID, $user_id );
+		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
 
+		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		return $default_avatar;
 	}
 
