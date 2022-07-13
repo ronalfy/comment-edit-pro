@@ -40,7 +40,7 @@ class Integrations {
 			'action' => 'comment_edit_pro_output_integrations',
 			'url'    => Functions::get_settings_url( 'integrations' ),
 			'label'  => _x( 'Integrations', 'Tab label as Main', 'ultimate-auto-updates' ),
-			'icon'   => 'integrations',
+			'icon'   => 'gear-alt',
 		);
 		return $tabs;
 	}

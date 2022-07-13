@@ -345,7 +345,6 @@ class Comment_Edit_Pro {
 			return;
 		}
 
-		
 		// Check to see SCE Minimum is installed.
 		if ( version_compare( SCE_VERSION, SCE_MIN_VERSION, '<' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
@@ -359,6 +358,8 @@ class Comment_Edit_Pro {
 		}
 		$this->output           = new \CommentEditPro\Includes\Output();
 		$this->frontend_editing = new \CommentEditPro\Includes\Frontend_Editing();
+		$this->comment_actions =  new \CommentEditPro\Includes\Comment_Actions();
+		$this->comment_actions->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 
