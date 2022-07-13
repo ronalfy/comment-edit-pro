@@ -358,6 +358,8 @@ class Comment_Edit_Pro {
 		}
 		$this->output           = new \CommentEditPro\Includes\Output();
 		$this->frontend_editing = new \CommentEditPro\Includes\Frontend_Editing();
+		$this->avatars =  new \CommentEditPro\Includes\Avatars();
+		$this->avatars->run();
 		$this->comment_actions =  new \CommentEditPro\Includes\Comment_Actions();
 		$this->comment_actions->run();
 
