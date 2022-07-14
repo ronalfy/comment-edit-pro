@@ -23,21 +23,40 @@ class Avatars {
 		// Add avatar to comments field.
 		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
 		add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
+
+		// Add pngs to the footer to prevent render blocking.
+		add_filter( 'wp_footer', array( $this, 'add_png_images_footer' ) );
+		
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
+	}
+
+	/**
+	 * Add avatar scripts/styles.
+	 */
+	public function add_scripts_styles() {
+		if ( comments_open() ) {
+			wp_enqueue_script(
+				'sce-avatars',
+				Functions::get_plugin_url( 'dist/avatars.js' ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
+		}
 	}
 
 	/**
 	 * Add an avatar option below the comment textarea and above the submit button.
 	 *
-	 * @param array Array of defaults for the form field. 
+	 * @param array $defaults Array of defaults for the form field.
 	 */
 	public function add_avatar_textarea_field( $defaults ) {
 		if ( ! is_user_logged_in() ) {
 			return $defaults;
 		}
 
-		$avatar_array = $this->get_avatar_comment_field_array();
-		$avatar_markup = $avatar_array['sce-avatar'] ?? '';
-		
+		$avatar_array               = $this->get_avatar_comment_field_array();
+		$avatar_markup              = $avatar_array['sce-avatar'] ?? '';
 		$defaults['comment_field'] .= $avatar_markup;
 		return $defaults + $avatar_array;
 	}
@@ -50,13 +69,17 @@ class Avatars {
 	 * @return array updated comment fields.
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
-		// 
-		$avatar_field = $this->get_avatar_comment_field_array();
+				$avatar_field = $this->get_avatar_comment_field_array();
 		return $avatar_field + $comment_fields;
 	}
 
+	/**
+	 * Retrieve the HTML for the avatar wrapper on the front-end.
+	 *
+	 * @return array Return the avatar field as an array.
+	 */
 	private function get_avatar_comment_field_array() {
-		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
 			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="avatar-heading"><strong>Your Avatar</strong></div><div class="sce-avatar">' . $avatar_html . '</div></section>',
 		);
@@ -118,7 +141,7 @@ class Avatars {
 				'height' => $height,
 			)
 		);
-		$classes        = array(
+		$classes           = array(
 			'avatar',
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
@@ -171,9 +194,9 @@ class Avatars {
 		}
 
 		// Now get the user ID if it exists.
-		$user_id = $user->ID ?? null;
+		$user_id    = $user->ID ?? null;
 		$comment_id = $comment->comment_id ?? null;
-		$avatar  = $this->get_avatar( $comment_id, $user_id );
+		$avatar     = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
@@ -228,6 +251,23 @@ class Avatars {
 	public static function get_avatar_filenames() {
 		// Original file can be found im /images/avatars.
 		$json = '["circle-flat-icons-01","circle-flat-icons-02","circle-flat-icons-03","circle-flat-icons-04","circle-flat-icons-05","circle-flat-icons-06","circle-flat-icons-07","circle-flat-icons-08","circle-flat-icons-09","circle-flat-icons-10","circle-flat-icons-11","circle-flat-icons-12","circle-flat-icons-13","circle-flat-icons-14","circle-flat-icons-15","circle-flat-icons-16","circle-flat-icons-17","circle-flat-icons-18","circle-flat-icons-19","circle-flat-icons-20","circle-flat-icons-21","circle-flat-icons-22","circle-flat-icons-23","circle-flat-icons-24","circle-flat-icons-25","circle-flat-icons-26","circle-flat-icons-27","circle-flat-icons-28","circle-flat-icons-29","circle-flat-icons-30","circle-flat-icons-31","circle-flat-icons-32","circle-flat-icons-33","circle-flat-icons-34","circle-flat-icons-35","circle-flat-icons-36","circle-flat-icons-37","circle-flat-icons-38","circle-flat-icons-39","circle-flat-icons-40","circle-flat-icons-41","circle-flat-icons-42","circle-flat-icons-43","circle-flat-icons-44","circle-flat-icons-45"]';
-		return json_decode( $json );
+		return json_decode( $json, true );
+	}
+
+	/**
+	 * Add the png files to the footer.
+	 */
+	public function add_png_images_footer() {
+		if ( is_admin() || ! comments_open() ) {
+			return;
+		}
+		$avatars = $this->get_avatar_filenames();
+		?>
+		<div width="0" height="0" class="hidden" aria-hidden="true" style="display: none;">
+			<?php
+			?>
+		</div
+		</div>
+		<?php
 	}
 }

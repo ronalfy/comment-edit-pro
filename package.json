@@ -4,9 +4,9 @@
   "description": "Options for Simple Comment Editing",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack --watch",
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "start": "webpack --watch --env mode=development",
+    "dev": "webpack --mode development --env mode=development",
+    "build": "webpack --mode production --env mode=production"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,16 @@
   },
   "homepage": "https://github.com/ronalfy/simple-comment-editing-options#readme",
   "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/eslint-parser": "^7.18.2",
+    "@babel/plugin-proposal-class-properties": "^7.17.12",
+    "@babel/plugin-transform-arrow-functions": "^7.17.12",
+    "@babel/preset-env": "^7.18.2",
+    "babel-loader": "^8.2.5",
     "css-loader": "^5.2.4",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "grunt": "^1.5.3",
     "grunt-cli": "^1.4.2",
     "grunt-contrib-compress": "^2.0.0",
