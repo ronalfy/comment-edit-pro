@@ -23,11 +23,12 @@ class Avatars {
 		// Add avatar to comments field.
 		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
 		add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
-
-		// Add pngs to the footer to prevent render blocking.
-		add_filter( 'wp_footer', array( $this, 'add_png_images_footer' ) );
 		
+		// Add an avatar script to preload images.
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
+
+		// Load the pngs for use in the popover.
+		add_action( 'wp_footer', array( $this, 'add_footer_html' ) );
 	}
 
 	/**
@@ -41,6 +42,19 @@ class Avatars {
 				array(),
 				Functions::get_plugin_version(),
 				true
+			);
+
+			// Retrieve avatar URL slugs.
+			$avatars = $this->get_avatar_filenames();
+
+			// Populate avatars with plugin folder/file location.
+			foreach ( $avatars as &$avatar_file_name ) {
+				$avatar_file_name = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_file_name . '.png' ) );
+			}
+			wp_localize_script(
+				'sce-avatars',
+				'sceAvatars',
+				array( 'avatars' => $avatars )
 			);
 		}
 	}
@@ -255,19 +269,12 @@ class Avatars {
 	}
 
 	/**
-	 * Add the png files to the footer.
+	 * Output pngs to use for JS.
 	 */
-	public function add_png_images_footer() {
-		if ( is_admin() || ! comments_open() ) {
-			return;
-		}
-		$avatars = $this->get_avatar_filenames();
+	public function add_footer_html() {
+		// Images are populated using JS. See /src/js/avatars.js.
 		?>
-		<div width="0" height="0" class="hidden" aria-hidden="true" style="display: none;">
-			<?php
-			?>
-		</div
-		</div>
+		<div id="sce-avatars" width="0" height="0" class="hidden" style="display: none;"></div>
 		<?php
 	}
 }
