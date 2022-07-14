@@ -185,7 +185,7 @@ class Comment_Edit_Pro {
 	 * @param string $message Warning message in detail.
 	 * @param string $class   Style class name for warning.
 	 */
-	private function show_admin_warning( $title = '', $message, $class = 'notice-error' ) {
+	private function show_admin_warning( $title = '', $message = '', $class = 'notice-error' ) {
 		?>
 		<div class="notice is-dismissible <?php echo esc_attr( $class ); ?>">
 			<p>

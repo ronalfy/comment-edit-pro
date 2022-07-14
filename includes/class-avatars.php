@@ -32,19 +32,10 @@ class Avatars {
 	 * @return array updated comment fields.
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
+		// 
+		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
-			'sce-avatar' => sprintf(
-				'<p class="comment-form-sce-avatar">%s %s</p>',
-				sprintf(
-					'<label for="sce-avatar">%s</label>',
-					__( 'Website' )
-				),
-				sprintf(
-					'<input id="sce-avatar" name="sce_avatar" %s value="%s" size="30" maxlength="200" />',
-					'type="text"',
-					esc_attr( 'test' )
-				)
-			),
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="avatar-heading"><strong>Your Avatar</strong></div><div class="sce-avatar">' . $avatar_html . '</div></section>',
 		);
 		return $avatar_field + $comment_fields;
 	}
@@ -158,7 +149,8 @@ class Avatars {
 
 		// Now get the user ID if it exists.
 		$user_id = $user->ID ?? null;
-		$avatar  = $this->get_avatar( $comment->ID, $user_id );
+		$comment_id = $comment->comment_id ?? null;
+		$avatar  = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
