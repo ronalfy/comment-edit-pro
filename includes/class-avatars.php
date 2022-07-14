@@ -274,7 +274,7 @@ class Avatars {
 	public function add_footer_html() {
 		// Images are populated using JS. See /src/js/avatars.js.
 		?>
-		<div id="sce-avatars" width="0" height="0" class="hidden" style="display: none;"></div>
+		<div id="sce-avatars" width="0" height="0" class="hidden" style="display: none;" aria-hidden="true"></div>
 		<?php
 	}
 }
