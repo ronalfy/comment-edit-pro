@@ -22,6 +22,24 @@ class Avatars {
 
 		// Add avatar to comments field.
 		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
+		add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
+	}
+
+	/**
+	 * Add an avatar option below the comment textarea and above the submit button.
+	 *
+	 * @param array Array of defaults for the form field. 
+	 */
+	public function add_avatar_textarea_field( $defaults ) {
+		if ( ! is_user_logged_in() ) {
+			return $defaults;
+		}
+
+		$avatar_array = $this->get_avatar_comment_field_array();
+		$avatar_markup = $avatar_array['sce-avatar'] ?? '';
+		
+		$defaults['comment_field'] .= $avatar_markup;
+		return $defaults + $avatar_array;
 	}
 
 	/**
@@ -33,11 +51,16 @@ class Avatars {
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
 		// 
+		$avatar_field = $this->get_avatar_comment_field_array();
+		return $avatar_field + $comment_fields;
+	}
+
+	private function get_avatar_comment_field_array() {
 		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
 			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="avatar-heading"><strong>Your Avatar</strong></div><div class="sce-avatar">' . $avatar_html . '</div></section>',
 		);
-		return $avatar_field + $comment_fields;
+		return $avatar_field;
 	}
 
 	/**
