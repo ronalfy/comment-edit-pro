@@ -1,10 +1,9 @@
 // Pre-load all the avatar images.
 window.addEventListener('load', function (event) {
-
+	let imageHtml = '';
 	// Todo: Offload to new file.
 	const avatars = sceAvatars.avatars;
 	function preload() {
-		let imageHtml = '';
 		avatars.forEach( ( avatarData, index ) => {
 			const image = new Image();
 			image.src = avatarData.avatar_url;
@@ -13,6 +12,7 @@ window.addEventListener('load', function (event) {
 			image.height = 128;
 			image['data-key'] = avatarData.avatar_key;
 
+			// Set scoped imageHtml string with all images.
 			imageHtml += `<img class="sce-inline-avatar" src="${image.src}" alt="${image.alt}" width="${image.width}" height="${image.height}" data-key="${image['data-key']}" />`;
 		} );
 		
@@ -24,7 +24,8 @@ window.addEventListener('load', function (event) {
 	// Avatar click arguments.
 	const avatarWrapper = document.querySelector( '.comment-form-sce-avatar .sce-avatar img' );
 	avatarWrapper.addEventListener( 'click', ( e ) => {
-		const avatarsModal = document.querySelector( '#sce-avatar-modal' );
+		const avatarsModal = document.querySelector( '#sce-avatar-form-modal' );
+		avatarsModal.classList.remove( 'sce-comment-form-hidden' );
 		if ( avatarsModal.classList.contains( 'sce-avatar-open' ) ) {
 			avatarsModal.classList.remove( 'sce-avatar-open' );
 			avatarsModal.classList.add( 'sce-avatar-closed' );
@@ -36,7 +37,12 @@ window.addEventListener('load', function (event) {
 
 	// Avatar modal - Todo = offload to new file.
 	// Credit: https://codepen.io/rebelchris/pen/MWyyLXR
-	const modalWrapper = document.querySelector( '#sce-avatar-modal-wrapper' );
+	const modalWrapper = document.querySelector( '#sce-avatar-form-modal' );
+	modalWrapper.setAttribute( 'height', '0' );
+	modalWrapper.setAttribute( 'height', '0' );
+	modalWrapper.classList.add( 'sce-comment-form-hidden' );
+	modalWrapper.setAttribute( 'aria-hidden', 'true' );
+	modalWrapper.innerHTML = imageHtml;
 	modalWrapper.querySelectorAll(".sce-inline-avatar").forEach(avatar => { 
 		avatar.addEventListener( 'click', ( e ) => {
 			const filename = e.target.getAttribute( 'data-key' );

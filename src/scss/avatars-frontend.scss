@@ -3,9 +3,8 @@
 	100% {opacity: 1; height: 220px}
   }
   @keyframes sce_avatar_slideup {
-	0%   {opacity: 1; height: 220px; padding: 20px; border: 1px solid #DDD;}
-	65%   {opacity: 0; height: 220px; padding: 20px; border: 1px solid #DDD;}
-	100% {opacity: 0.0; height: 0; padding: 0; overflow: hidden; border: 1px solid transparent;overflow: hidden;}
+	0%   {opacity: 1; height: 220px; visibility: visible !important;}
+	100%   {opacity: 1; height: 0;}
   }
 
 .comment-form-sce-avatar {
@@ -34,7 +33,7 @@
 .comment-form-sce-avatar {
 	margin-bottom: 10px;
 }
-#sce-avatar-modal {
+#sce-avatar-form-modal {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-column-gap: 20px;
@@ -62,7 +61,7 @@
 		}
 	}
   }
-  #sce-avatar-modal {
+  #sce-avatar-form-modal {
 	overflow: hidden;
 	box-sizing: border-box;
 	height: 0;
@@ -79,6 +78,8 @@
 		height: 210px;
 		padding: 20px;
 		border: 1px solid #DDD;
+		visibility: visible !important;
+		
 	}
 	&.sce-avatar-closed {
 		padding: 20px;
@@ -86,11 +87,10 @@
 		animation-duration: 0.6s;
 		opacity: 0;
 		height: 0px;
-		padding: 0;
 		overflow: hidden;
+		visibility: hidden;
 	}
   }
-  
   /* 
   .comment-form-sce-avatar {
 	margin-top: 1em;

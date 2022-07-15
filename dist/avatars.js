@@ -5,18 +5,19 @@ var __webpack_exports__ = {};
   \***************************/
 // Pre-load all the avatar images.
 window.addEventListener('load', function (event) {
-  // Todo: Offload to new file.
+  var imageHtml = ''; // Todo: Offload to new file.
+
   var avatars = sceAvatars.avatars;
 
   function preload() {
-    var imageHtml = '';
     avatars.forEach(function (avatarData, index) {
       var image = new Image();
       image.src = avatarData.avatar_url;
       image.alt = 'Avatar';
       image.width = 128;
       image.height = 128;
-      image['data-key'] = avatarData.avatar_key;
+      image['data-key'] = avatarData.avatar_key; // Set scoped imageHtml string with all images.
+
       imageHtml += "<img class=\"sce-inline-avatar\" src=\"".concat(image.src, "\" alt=\"").concat(image.alt, "\" width=\"").concat(image.width, "\" height=\"").concat(image.height, "\" data-key=\"").concat(image['data-key'], "\" />");
     });
     var sceAvatarPlaceholder = document.getElementById('sce-avatars');
@@ -27,7 +28,8 @@ window.addEventListener('load', function (event) {
 
   var avatarWrapper = document.querySelector('.comment-form-sce-avatar .sce-avatar img');
   avatarWrapper.addEventListener('click', function (e) {
-    var avatarsModal = document.querySelector('#sce-avatar-modal');
+    var avatarsModal = document.querySelector('#sce-avatar-form-modal');
+    avatarsModal.classList.remove('sce-comment-form-hidden');
 
     if (avatarsModal.classList.contains('sce-avatar-open')) {
       avatarsModal.classList.remove('sce-avatar-open');
@@ -40,7 +42,12 @@ window.addEventListener('load', function (event) {
   }); // Avatar modal - Todo = offload to new file.
   // Credit: https://codepen.io/rebelchris/pen/MWyyLXR
 
-  var modalWrapper = document.querySelector('#sce-avatar-modal-wrapper');
+  var modalWrapper = document.querySelector('#sce-avatar-form-modal');
+  modalWrapper.setAttribute('height', '0');
+  modalWrapper.setAttribute('height', '0');
+  modalWrapper.classList.add('sce-comment-form-hidden');
+  modalWrapper.setAttribute('aria-hidden', 'true');
+  modalWrapper.innerHTML = imageHtml;
   modalWrapper.querySelectorAll(".sce-inline-avatar").forEach(function (avatar) {
     avatar.addEventListener('click', function (e) {
       var filename = e.target.getAttribute('data-key');

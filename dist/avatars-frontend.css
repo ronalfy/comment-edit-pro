@@ -2,10 +2,12 @@
   0% {
     opacity: 1;
     height: 0px;
+    display: none !important;
   }
   100% {
     opacity: 1;
     height: 220px;
+    display: block !important;
   }
 }
 @keyframes sce_avatar_slideup {
@@ -13,21 +15,15 @@
     opacity: 1;
     height: 220px;
     padding: 20px;
-    border: 1px solid #DDD;
-  }
-  65% {
-    opacity: 0;
-    height: 220px;
-    padding: 20px;
-    border: 1px solid #DDD;
+    margin: 20px 0;
+    display: grid !important;
   }
   100% {
-    opacity: 0;
+    opacity: 1;
     height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 1px solid transparent;
-    overflow: hidden;
+    padding: 0 20px;
+    margin: 0;
+    display: grid !important;
   }
 }
 .comment-form-sce-avatar {
@@ -56,7 +52,7 @@
   margin-bottom: 10px;
 }
 
-#sce-avatar-modal {
+#sce-avatar-form-modal {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 20px;
@@ -72,43 +68,47 @@
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid #DDD;
 }
-#sce-avatar-modal img {
+#sce-avatar-form-modal img {
   max-width: 75px;
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 100%;
 }
-#sce-avatar-modal img:hover {
+#sce-avatar-form-modal img:hover {
   filter: saturate(110%);
   border: 1px solid #BBB;
 }
 
-#sce-avatar-modal {
+#sce-avatar-form-modal {
   overflow: hidden;
   box-sizing: border-box;
   height: 0;
   padding: 0;
   opacity: 0;
+  margin: 0;
   border: 1px solid transparent;
   transition: height 2s ease-in-out;
 }
-#sce-avatar-modal.sce-avatar-open {
+#sce-avatar-form-modal.sce-avatar-open {
   transition: height 5s ease-in-out;
   animation-name: sce_avatar_slidedown;
   animation-duration: 0.6s;
+  overflow-y: scroll;
   opacity: 1;
   height: 210px;
   padding: 20px;
   border: 1px solid #DDD;
+  display: grid !important;
 }
-#sce-avatar-modal.sce-avatar-closed {
-  padding: 20px;
+#sce-avatar-form-modal.sce-avatar-closed {
+  display: grid !important;
   animation-name: sce_avatar_slideup;
   animation-duration: 0.6s;
-  opacity: 0;
-  height: 0px;
-  padding: 0;
+  height: 0;
+  padding: 0px;
+  margin: 0;
   overflow: hidden;
+  display: none;
 }
 
 /* 
