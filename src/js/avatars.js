@@ -16,17 +16,17 @@ window.addEventListener('load', function (event) {
 			imageHtml += `<img class="sce-inline-avatar" src="${image.src}" alt="${image.alt}" width="${image.width}" height="${image.height}" data-key="${image['data-key']}" />`;
 		} );
 
-		const closeHtml = `<div class="sce-avatar-form-modal-close"><div class="sce-avatar-form-modal-close-x"></div><div class="sce-avatar-form-modal-close-x"></div></div>`;
+		imageHtml += `<div class="sce-avatar-form-modal-close"><div class="sce-avatar-form-modal-close-x"></div><div class="sce-avatar-form-modal-close-x"></div></div>`;
 		
 		const sceAvatarPlaceholder = document.getElementById( 'sce-avatars' );
-		sceAvatarPlaceholder.innerHTML = imageHtml + closeHtml;
+		sceAvatarPlaceholder.innerHTML = imageHtml;
 	}
 	preload(avatars);
 
 	// Avatar click arguments.
 	const avatarWrapper = document.querySelector( '.comment-form-sce-avatar .sce-avatar img' );
 	avatarWrapper.addEventListener( 'click', ( e ) => {
-		const avatarsModal = document.querySelector( '#sce-avatar-form-modal' );
+		const avatarsModal = document.querySelector( '#sce-avatar-form-modal-wrapper' );
 		avatarsModal.classList.remove( 'sce-comment-form-hidden' );
 		if ( avatarsModal.classList.contains( 'sce-avatar-open' ) ) {
 			avatarsModal.classList.remove( 'sce-avatar-open' );

@@ -113,7 +113,7 @@ class Avatars {
 	private function get_avatar_comment_field_array() {
 		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div></section><div id="sce-avatar-form-modal"></div>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
 		);
 		return $avatar_field;
 	}

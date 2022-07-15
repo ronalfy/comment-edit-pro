@@ -20,16 +20,16 @@ window.addEventListener('load', function (event) {
 
       imageHtml += "<img class=\"sce-inline-avatar\" src=\"".concat(image.src, "\" alt=\"").concat(image.alt, "\" width=\"").concat(image.width, "\" height=\"").concat(image.height, "\" data-key=\"").concat(image['data-key'], "\" />");
     });
-    var closeHtml = "<div class=\"sce-avatar-form-modal-close\"><div class=\"sce-avatar-form-modal-close-x\"></div><div class=\"sce-avatar-form-modal-close-x\"></div></div>";
+    imageHtml += "<div class=\"sce-avatar-form-modal-close\"><div class=\"sce-avatar-form-modal-close-x\"></div><div class=\"sce-avatar-form-modal-close-x\"></div></div>";
     var sceAvatarPlaceholder = document.getElementById('sce-avatars');
-    sceAvatarPlaceholder.innerHTML = imageHtml + closeHtml;
+    sceAvatarPlaceholder.innerHTML = imageHtml;
   }
 
   preload(avatars); // Avatar click arguments.
 
   var avatarWrapper = document.querySelector('.comment-form-sce-avatar .sce-avatar img');
   avatarWrapper.addEventListener('click', function (e) {
-    var avatarsModal = document.querySelector('#sce-avatar-form-modal');
+    var avatarsModal = document.querySelector('#sce-avatar-form-modal-wrapper');
     avatarsModal.classList.remove('sce-comment-form-hidden');
 
     if (avatarsModal.classList.contains('sce-avatar-open')) {

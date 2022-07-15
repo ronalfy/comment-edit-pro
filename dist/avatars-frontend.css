@@ -18,6 +18,28 @@
     height: 0;
   }
 }
+@keyframes sce_avatar_modal_close_fade_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes sce_avatar_close_modal_wrapper {
+  0% {
+    opacity: 1;
+    display: inline-block;
+  }
+  80% {
+    opacity: 0;
+    display: inline-block;
+  }
+  100% {
+    opacity: 0;
+    display: block;
+  }
+}
 .comment-form-sce-avatar {
   position: relative;
   display: flex;
@@ -45,7 +67,6 @@
 }
 
 #sce-avatar-form-modal {
-  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 20px;
@@ -72,7 +93,12 @@
   border: 1px solid #BBB;
 }
 
-#sce-avatar-form-modal {
+#sce-avatar-form-modal-wrapper {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+#sce-avatar-form-modal-wrapper > div#sce-avatar-form-modal {
   overflow: hidden;
   box-sizing: border-box;
   height: 0;
@@ -80,10 +106,12 @@
   opacity: 0;
   margin: 0;
   border: 1px solid transparent;
-  transition: height 2s ease-in-out;
 }
-#sce-avatar-form-modal.sce-avatar-open {
-  transition: height 5s ease-in-out;
+#sce-avatar-form-modal-wrapper.sce-avatar-open {
+  display: inline-block;
+  overflow: unset;
+}
+#sce-avatar-form-modal-wrapper.sce-avatar-open > div#sce-avatar-form-modal {
   animation-name: sce_avatar_slidedown;
   animation-duration: 0.6s;
   overflow-y: scroll;
@@ -93,16 +121,52 @@
   border: 1px solid #DDD;
   visibility: visible !important;
 }
-#sce-avatar-form-modal.sce-avatar-closed {
+#sce-avatar-form-modal-wrapper.sce-avatar-closed {
+  display: block;
+  overflow: hidden;
+}
+#sce-avatar-form-modal-wrapper.sce-avatar-closed .sce-avatar-form-modal-close {
+  opacity: 0;
+}
+#sce-avatar-form-modal-wrapper.sce-avatar-closed > div#sce-avatar-form-modal {
   padding: 20px;
+  overflow: unset;
   animation-name: sce_avatar_slideup;
   animation-duration: 0.6s;
+  animation-delay: 0s;
   opacity: 0;
   height: 0px;
   margin: 0;
   border: 1px solid #DDD;
   padding: 0 20px;
   overflow: hidden;
+}
+
+/* From: https://codepen.io/sawmon_and_natalie/pen/oNjwrRb */
+.sce-avatar-form-modal-close {
+  position: absolute;
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  top: -20px;
+  right: -20px;
+  background: #F1E0D0;
+  opacity: 1;
+}
+.sce-avatar-form-modal-close .sce-avatar-form-modal-close-x {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+  background: #F0BE8E;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.sce-avatar-form-modal-close .sce-avatar-form-modal-close-x:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 /* 
