@@ -1,0 +1,1 @@
+{"version":3,"file":"avatars.css","mappings":"AAAA;EACC;EACA;EACA;EACA;AACD,C","sources":["webpack://simple-comment-editing-options/./src/scss/avatars.scss"],"sourcesContent":[".comment-form-sce-avatar {\n\tposition: relative;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: flex-start;\n}"],"names":[],"sourceRoot":""}

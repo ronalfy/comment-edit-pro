@@ -23,7 +23,7 @@ class Avatars {
 		// Add avatar to comments field.
 		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
 		add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
-		
+
 		// Add an avatar script to preload images.
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
 
@@ -47,6 +47,16 @@ class Avatars {
 			// Retrieve avatar URL slugs.
 			$avatars = $this->get_avatar_filenames();
 
+			// Get avatar data from filenames.
+			$avatar_data = array();
+			foreach ( $avatars as $avatar_filename ) {
+				$avatar_url    = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_filename . '.png' ) );
+				$avatar_data[] = array(
+					'avatar_url' => $avatar_url,
+					'avatar_key' => $avatar_filename,
+				);
+			}
+
 			// Populate avatars with plugin folder/file location.
 			foreach ( $avatars as &$avatar_file_name ) {
 				$avatar_file_name = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_file_name . '.png' ) );
@@ -54,7 +64,15 @@ class Avatars {
 			wp_localize_script(
 				'sce-avatars',
 				'sceAvatars',
-				array( 'avatars' => $avatars )
+				array( 'avatars' => $avatar_data )
+			);
+
+			wp_enqueue_style(
+				'sce-avatars',
+				Functions::get_plugin_url( 'dist/avatars-frontend.css' ),
+				array(),
+				Functions::get_plugin_version(),
+				'all'
 			);
 		}
 	}
@@ -95,7 +113,7 @@ class Avatars {
 	private function get_avatar_comment_field_array() {
 		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="avatar-heading"><strong>Your Avatar</strong></div><div class="sce-avatar">' . $avatar_html . '</div></section>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div></section><div id="sce-avatar-modal"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-01.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-01"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-02.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-02"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-03.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-03"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-04.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-04"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-05.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-05"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-06.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-06"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-07.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-07"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-08.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-08"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-09.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-09"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-10.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-10"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-11.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-11"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-12.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-12"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-13.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-13"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-14.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-14"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-15.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-15"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-16.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-16"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-17.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-17"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-18.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-18"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-19.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-19"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-20.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-20"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-21.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-21"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-22.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-22"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-23.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-23"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-24.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-24"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-25.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-25"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-26.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-26"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-27.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-27"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-28.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-28"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-29.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-29"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-30.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-30"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-31.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-31"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-32.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-32"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-33.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-33"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-34.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-34"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-35.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-35"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-36.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-36"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-37.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-37"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-38.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-38"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-39.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-39"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-40.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-40"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-41.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-41"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-42.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-42"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-43.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-43"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-44.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-44"><img class="sce-inline-avatar" src="https://beaverbuilder.local/wp-content/plugins/comment-edit-pro/images/avatars/circle-flat-icons-45.png" alt="Avatar" width="128" height="128" data-key="circle-flat-icons-45"></div>',
 		);
 		return $avatar_field;
 	}
@@ -159,7 +177,6 @@ class Avatars {
 			'avatar',
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
-			'sce-avatar',
 		);
 
 		$avatar_html = sprintf(
