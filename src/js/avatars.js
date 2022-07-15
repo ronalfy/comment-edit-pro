@@ -15,9 +15,11 @@ window.addEventListener('load', function (event) {
 			// Set scoped imageHtml string with all images.
 			imageHtml += `<img class="sce-inline-avatar" src="${image.src}" alt="${image.alt}" width="${image.width}" height="${image.height}" data-key="${image['data-key']}" />`;
 		} );
+
+		const closeHtml = `<div class="sce-avatar-form-modal-close"><div class="sce-avatar-form-modal-close-x"></div><div class="sce-avatar-form-modal-close-x"></div></div>`;
 		
 		const sceAvatarPlaceholder = document.getElementById( 'sce-avatars' );
-		sceAvatarPlaceholder.innerHTML = imageHtml;
+		sceAvatarPlaceholder.innerHTML = imageHtml + closeHtml;
 	}
 	preload(avatars);
 

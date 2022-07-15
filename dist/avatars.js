@@ -20,8 +20,9 @@ window.addEventListener('load', function (event) {
 
       imageHtml += "<img class=\"sce-inline-avatar\" src=\"".concat(image.src, "\" alt=\"").concat(image.alt, "\" width=\"").concat(image.width, "\" height=\"").concat(image.height, "\" data-key=\"").concat(image['data-key'], "\" />");
     });
+    var closeHtml = "<div class=\"sce-avatar-form-modal-close\"><div class=\"sce-avatar-form-modal-close-x\"></div><div class=\"sce-avatar-form-modal-close-x\"></div></div>";
     var sceAvatarPlaceholder = document.getElementById('sce-avatars');
-    sceAvatarPlaceholder.innerHTML = imageHtml;
+    sceAvatarPlaceholder.innerHTML = imageHtml + closeHtml;
   }
 
   preload(avatars); // Avatar click arguments.
