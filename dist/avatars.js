@@ -25,10 +25,9 @@ window.addEventListener('load', function (event) {
     sceAvatarPlaceholder.innerHTML = imageHtml;
   }
 
-  preload(avatars); // Avatar click arguments.
+  preload(avatars); // Function for toggling interface.
 
-  var avatarWrapper = document.querySelector('.comment-form-sce-avatar .sce-avatar img');
-  avatarWrapper.addEventListener('click', function (e) {
+  var toggleModalState = function toggleModalState() {
     var avatarsModal = document.querySelector('#sce-avatar-form-modal-wrapper');
     avatarsModal.classList.remove('sce-comment-form-hidden');
 
@@ -40,6 +39,12 @@ window.addEventListener('load', function (event) {
 
     avatarsModal.classList.remove('sce-avatar-closed');
     avatarsModal.classList.add('sce-avatar-open');
+  }; // Avatar click arguments.
+
+
+  var avatarWrapper = document.querySelector('.comment-form-sce-avatar .sce-avatar img');
+  avatarWrapper.addEventListener('click', function (e) {
+    toggleModalState();
   }); // Avatar modal - Todo = offload to new file.
   // Credit: https://codepen.io/rebelchris/pen/MWyyLXR
 
@@ -57,6 +62,11 @@ window.addEventListener('load', function (event) {
       var currentAvatar = document.querySelector('.comment-form-sce-avatar img.avatar');
       currentAvatar.setAttribute('src', imgUrl);
     });
+  }); // Close button.
+
+  var closeButton = modalWrapper.querySelector('.sce-avatar-form-modal-close');
+  closeButton.addEventListener('click', function (e) {
+    toggleModalState();
   }); // avatarWrapper.querySelector( '.sce-avatar' ).addEventListener( 'click', ( event ) => {
   // 	event.preventDefault();
   // 	console.log( 'test' );
