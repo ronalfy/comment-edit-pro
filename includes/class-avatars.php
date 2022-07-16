@@ -29,6 +29,9 @@ class Avatars {
 
 		// Load the pngs for use in the popover.
 		add_action( 'wp_footer', array( $this, 'add_footer_html' ) );
+
+		// When a new comment has been added.
+		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
 	}
 
 	/**
@@ -111,9 +114,10 @@ class Avatars {
 	 * @return array Return the avatar field as an array.
 	 */
 	private function get_avatar_comment_field_array() {
+		// Todo - Read in saved avatar.
 		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="0" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
 		);
 		return $avatar_field;
 	}
@@ -141,7 +145,7 @@ class Avatars {
 		if ( ! is_user_logged_in() && 0 !== $comment_id ) {
 			$comment_avatar_url = get_comment_meta( $comment_id, 'sce-avatar-location', true );
 			if ( $comment_avatar_url ) {
-				$avatar = Functions::get_plugin_url( $avatar_url );
+				$avatar = Functions::get_plugin_url( 'images/avatars/' . $comment_avatar_url . '.png' );
 			}
 		}
 
@@ -226,7 +230,7 @@ class Avatars {
 
 		// Now get the user ID if it exists.
 		$user_id    = $user->ID ?? null;
-		$comment_id = $comment->comment_id ?? null;
+		$comment_id = $comment->comment_ID ?? null;
 		$avatar     = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
@@ -293,5 +297,19 @@ class Avatars {
 		?>
 		<div id="sce-avatars" width="0" height="0" class="hidden" style="display: none;" aria-hidden="true"></div>
 		<?php
+	}
+
+	/**
+	 * Save avatar meta when a comment has been posted.
+	 *
+	 * @param int $comment_id Comment ID that has been submitted.
+	 */
+	public function comment_posted( $comment_id, $maybe_comment_approved ) {
+		$avatar = sanitize_text_field( filter_input( INPUT_POST, 'sce-comment-form-avatar', FILTER_DEFAULT ) );
+
+		// An approved or moderated comment is okay. Spam, skip.
+		if ( 'spam' !== $maybe_comment_approved ) {
+			update_comment_meta( $comment_id, 'sce-avatar-location', $avatar );
+		}
 	}
 }
