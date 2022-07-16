@@ -126,7 +126,7 @@
   overflow: hidden;
 }
 #sce-avatar-form-modal-wrapper.sce-avatar-closed .sce-avatar-form-modal-close {
-  opacity: 0;
+  opacity: 1;
 }
 #sce-avatar-form-modal-wrapper.sce-avatar-closed > div#sce-avatar-form-modal {
   padding: 20px;
@@ -146,27 +146,38 @@
 .sce-avatar-form-modal-close {
   position: absolute;
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 26px;
+  height: 26px;
   border-radius: 20px;
-  top: -20px;
-  right: -20px;
+  top: -13px;
+  right: -13px;
   background: #F1E0D0;
   opacity: 1;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 }
 .sce-avatar-form-modal-close .sce-avatar-form-modal-close-x {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px;
+  width: 13px;
   height: 4px;
   border-radius: 2px;
   background: #F0BE8E;
   transform-origin: center;
   transform: translate(-50%, -50%) rotate(45deg);
+  transition: all 0.5s ease-in-out;
 }
 .sce-avatar-form-modal-close .sce-avatar-form-modal-close-x:nth-child(2) {
   transform: translate(-50%, -50%) rotate(-45deg);
+}
+.sce-avatar-form-modal-close:hover {
+  background: #F0BE8E;
+  transition: all 0.5s ease-in-out;
+}
+.sce-avatar-form-modal-close:hover .sce-avatar-form-modal-close-x {
+  background: #FFF;
+  transition: all 0.5s ease-in-out;
 }
 
 /* 
