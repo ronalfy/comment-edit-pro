@@ -133,22 +133,30 @@ class Avatars {
 	private function get_avatar( $comment_id = 0, $user_id = null ) {
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 		$avatar         = null;
+
+		// Try to get the comment avatar from logged-in user data.
 		if ( null !== $user_id ) {
 			// Try to get stored avatar.
 			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true ); // Stored as relative path in DB (e.g., images/avatars/circle-flat-icons-mystery.png ).
 			if ( $avatar_url ) {
-				$avatar = Functions::get_plugin_url( $avatar_url );
+				$avatar = Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' );
 			}
 		}
 
-		// Check if a user is not logged in and no comment ID has been passed.
-		if ( ! is_user_logged_in() && 0 !== $comment_id ) {
+		// If avatar is still null, try to get from comment meta.
+		if ( null === $avatar && 0 !== $comment_id ) {
 			$comment_avatar_url = get_comment_meta( $comment_id, 'sce-avatar-location', true );
 			if ( $comment_avatar_url ) {
 				$avatar = Functions::get_plugin_url( 'images/avatars/' . $comment_avatar_url . '.png' );
 			}
 		}
 
+		// If avatar is still null, return default.
+		if ( null === $avatar ) {
+			$avatar = $default_avatar;
+		}
+
+		// Return avatar html or blank if avatar is still null.
 		if ( null !== $avatar ) {
 			$avatar_html = $this->get_avatar_image_html( $avatar );
 			return $avatar_html;
@@ -309,7 +317,13 @@ class Avatars {
 
 		// An approved or moderated comment is okay. Spam, skip.
 		if ( 'spam' !== $maybe_comment_approved ) {
+			// Store as comment meta and user meta (if logged in).
 			update_comment_meta( $comment_id, 'sce-avatar-location', $avatar );
+
+			if ( is_user_logged_in() ) {
+				global $current_user;
+				update_user_meta( $current_user->ID, 'sce-avatar-location', $avatar );
+			}
 		}
 	}
 }
