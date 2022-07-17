@@ -89,7 +89,7 @@ class Avatars {
 
 		// Assume person can edit now. Let's check if we're saving comment meta or user meta.
 		if ( $comment_user_id === $current_user_id ) {
-			update_user_meta( $comment_id, 'sce-avatar-location', $key );
+			update_user_meta( $current_user_id, 'sce-avatar-location', $key );
 		} else {
 			// This is not our comment.
 			update_comment_meta( $comment_id, 'sce-avatar-location', $key );
@@ -357,22 +357,18 @@ class Avatars {
 
 		// Get user data.
 		$user = null;
-		if ( is_numeric( $id_or_email ) ) {
+		$comment_id = 0;
+		if ( is_a( $id_or_email, 'WP_Comment' ) ) {
+			$comment_id = $id_or_email->comment_ID;
+			$user = get_user_by( 'id', $id_or_email->user_id );
+		} elseif ( is_numeric( $id_or_email ) ) {
 			$user = get_user_by( 'id', (int) $id_or_email );
-		} elseif ( is_object( $id_or_email ) ) {
-			$comment = $id_or_email;
-			if ( empty( $comment->user_id ) ) {
-				$user = get_user_by( 'id', (int) $id_or_email );
-			} else {
-				$user = get_user_by( 'email', $id_or_email );
-			}
-		} elseif ( is_string( $id_or_email ) ) {
+		} elseif ( is_email( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
-		}
+		};
 
 		// Now get the user ID if it exists.
 		$user_id    = $user->ID ?? null;
-		$comment_id = $comment->comment_ID ?? null;
 		$avatar     = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
