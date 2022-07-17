@@ -104,7 +104,7 @@ class Avatars {
 	 * @return array updated comment fields.
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
-				$avatar_field = $this->get_avatar_comment_field_array();
+		$avatar_field = $this->get_avatar_comment_field_array();
 		return $avatar_field + $comment_fields;
 	}
 
@@ -158,7 +158,7 @@ class Avatars {
 
 		// Return avatar html or blank if avatar is still null.
 		if ( null !== $avatar ) {
-			$avatar_html = $this->get_avatar_image_html( $avatar );
+			$avatar_html = $this->get_avatar_image_html( $avatar, $comment_id, $user_id );
 			return $avatar_html;
 		}
 
@@ -174,7 +174,18 @@ class Avatars {
 	 *
 	 * @return unescaped image HTML.
 	 */
-	private function get_avatar_image_html( $src, $width = 50, $height = 50 ) {
+	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0 ) {
+		global $post, $comment;
+
+		// Todo - move width/height to option.
+		/**
+		 * Filter: sce_avatar_size
+		 *
+		 * @param int $size (for both width/height).
+		 */
+		$width  = apply_filters( 'sce_avatar_size', 50 );
+		$height = apply_filters( 'sce_avatar_size', 50 );
+
 		/**
 		 * Add ability to change width/height of image.
 		 */
@@ -185,18 +196,72 @@ class Avatars {
 				'height' => $height,
 			)
 		);
+
+		// See if user can edit comment.
+		$sce = \Simple_Comment_Editing::get_instance();
+		$post_id = $post->ID ?? 0;
+		$can_edit = false;
+		if ( $comment_id && $post_id ) {
+			// See if current user can moderate comments (yes to editing).
+			if ( current_user_can( 'moderate_comments' ) ) {
+				$can_edit = true;
+			}
+
+			// Check to see if the user is the comment author.
+			if ( ! $can_edit ) {
+				// Check to see if the current user is the comment author.
+				global $current_user;
+				$user_id = $current_user->ID ?? 0;
+				$comment_user_id = $comment->user_id ?? 0;
+				if ( is_user_logged_in() && $user_id === $comment_user_id && 0 !== $user_id ) {
+					$can_edit = true;
+				}
+			}
+
+			// Can edit is still false. Check cookie values.
+			if ( ! $can_edit ) {
+				$can_edit = $sce->can_edit( $comment_id, $post_id );
+			}
+			
+		}
+		
+		// Build JS if user can edit.
+		$can_edit_js = '';
+		if ( $can_edit ) {
+			$nonce_field = wp_create_nonce( 'sce-edit-avatar-' . $comment_id . $post_id );
+			$can_edit_js = sprintf(
+				'onClick="window.sceAvatars( event, %d, %d, %d, \'%s\' );"',
+				esc_js( $comment_id ),
+				esc_js( $user_id ),
+				esc_js( $post_id ),
+				esc_js( $nonce_field )
+			);
+		}
+
 		$classes           = array(
 			'avatar',
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
+			'sce-custom-avatar',
 		);
+		if ( $can_edit ) {
+			$classes[] = 'sce-can-edit';
+		}
+
+		/**
+		 * Filter: sce_avatar_classes
+		 *
+		 * @param array $classes Array of classes for the Avatar output.
+		 */
+		$classes = apply_filters( 'sce_avatar_classes', $classes );
 
 		$avatar_html = sprintf(
-			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
+			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" %s />',
 			esc_attr( implode( ' ', $classes ) ),
 			esc_url( $src ),
 			esc_attr( $avatar_dimensions['width'] ),
-			esc_attr( $avatar_dimensions['height'] )
+			esc_attr( $avatar_dimensions['height'] ),
+			$can_edit_js
 		);
 		return $avatar_html;
 	}
@@ -244,7 +309,7 @@ class Avatars {
 			return $avatar;
 		}
 
-		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ), $comment_id, $user_id );
 		return $default_avatar;
 	}
 

@@ -85,4 +85,47 @@ window.addEventListener( 'load', function( event ) {
 	closeButton.addEventListener( 'click', ( e ) => {
 		toggleModalState();
 	} );
+
+	window.sceAvatars = ( event, commentId, userId, postId, nonce ) => {
+
+		// From: https://stackoverflow.com/a/28222246
+		const getOffset = ( el ) => {
+			const rect = el.getBoundingClientRect();
+			return {
+			  left: rect.left + window.scrollX,
+			  top: rect.top + window.scrollY
+			};
+		}
+		
+		// Get wrapper for avatar container.
+		const avatarsContainer = document.getElementById( 'sce-avatars' );
+		const avatarsClone = avatarsContainer.cloneNode( true );
+		avatarsClone.id = 'sce-avatars-' + commentId;
+
+		// Get x,y height position.
+		const wrapper_x = getOffset( event.target ).left + 60; // Need an option for this.
+		const wrapper_y = getOffset( event.target ).top;
+
+		// Add avatars clone styles..
+		avatarsClone.style.left = wrapper_x + 'px';
+		avatarsClone.style.top = wrapper_y + 'px';
+		avatarsClone.style.position = 'absolute';
+		avatarsClone.style.display = 'block';
+
+		// Append to the avatars contianer.
+		avatarsContainer.after( avatarsClone );
+
+		// var wrapper_x = e.pageX - Math.floor( jQuery( '.highlight-and-share-wrapper:visible' ).width() / 2 );
+		// if( wrapper_x < 0 ) {
+		// 	wrapper_x = 20;
+		// } else if ( ( wrapper_x + jQuery( '.highlight-and-share-wrapper:visible' ).width() ) > jQuery( 'body' ).width() ) {
+		// 	wrapper_x = jQuery( 'body' ).width() - jQuery( '.highlight-and-share-wrapper:visible' ).width();
+		// }
+		// var wrapper_y = e.pageY - jQuery( '.highlight-and-share-wrapper:visible' ).height() - 20;
+		// wrapper_clone.css( {
+		// 	left: wrapper_x,
+		// 	top: wrapper_y
+		// });
+
+	};
 } );
