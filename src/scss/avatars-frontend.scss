@@ -67,7 +67,8 @@
 .comment-form-sce-avatar {
 	margin-bottom: 10px;
 }
-#sce-avatar-form-modal {
+#sce-avatar-form-modal,
+.sce-avatars-popover {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-column-gap: 20px;
@@ -80,7 +81,7 @@
 	align-items: center;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-	background: rgba(255, 255, 255, 0.8);
+	background: #FFFFFF;
 	border: 1px solid #ddd;
 
 	img {
@@ -195,5 +196,11 @@
 	&:hover {
 		filter: saturate(125%);
 		border: 1px solid #bbb;
+	}
+}
+
+.sce-avatar-popover-wrapper {
+	.sce-avatar-popover-inner {
+		position: relative;
 	}
 }

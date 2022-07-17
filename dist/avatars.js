@@ -86,33 +86,44 @@ window.addEventListener('load', function (event) {
         left: rect.left + window.scrollX,
         top: rect.top + window.scrollY
       };
-    }; // Get wrapper for avatar container.
+    }; // Remove all existing popovers.
+
+
+    var avatarPopovers = document.querySelectorAll('.sce-avatars-popover');
+
+    if (null !== avatarPopovers) {
+      avatarPopovers.forEach(function (popover) {
+        popover.remove();
+      });
+    } // Get wrapper for avatar container.
 
 
     var avatarsContainer = document.getElementById('sce-avatars');
     var avatarsClone = avatarsContainer.cloneNode(true);
-    avatarsClone.id = 'sce-avatars-' + commentId; // Get x,y height position.
+    avatarsClone.id = 'sce-avatars-' + commentId;
+    avatarsClone.classList.add('sce-avatars-popover');
+    avatarsClone.style.display = ''; // Get x,y height position.
 
     var wrapper_x = getOffset(event.target).left + 60; // Need an option for this.
 
-    var wrapper_y = getOffset(event.target).top; // Add avatars clone styles..
+    var wrapper_y = getOffset(event.target).top; // Need an option for this.
+    // Add avatars clone styles..
+    // Append to the avatars contianer.
 
-    avatarsClone.style.left = wrapper_x + 'px';
-    avatarsClone.style.top = wrapper_y + 'px';
-    avatarsClone.style.position = 'absolute';
-    avatarsClone.style.display = 'block'; // Append to the avatars contianer.
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('sce-avatar-popover-wrapper');
+    wrapper.style.left = wrapper_x + 'px';
+    wrapper.style.top = wrapper_y + 'px';
+    wrapper.style.position = 'absolute'; // Append a wrapper inside the wrapper for relative positioning.
 
-    avatarsContainer.after(avatarsClone); // var wrapper_x = e.pageX - Math.floor( jQuery( '.highlight-and-share-wrapper:visible' ).width() / 2 );
-    // if( wrapper_x < 0 ) {
-    // 	wrapper_x = 20;
-    // } else if ( ( wrapper_x + jQuery( '.highlight-and-share-wrapper:visible' ).width() ) > jQuery( 'body' ).width() ) {
-    // 	wrapper_x = jQuery( 'body' ).width() - jQuery( '.highlight-and-share-wrapper:visible' ).width();
-    // }
-    // var wrapper_y = e.pageY - jQuery( '.highlight-and-share-wrapper:visible' ).height() - 20;
-    // wrapper_clone.css( {
-    // 	left: wrapper_x,
-    // 	top: wrapper_y
-    // });
+    var wrapperInner = document.createElement('div');
+    wrapperInner.classList.add('sce-avatar-popover-inner'); // Add interface inside inner wrapper.
+
+    wrapperInner.appendChild(avatarsClone); // Now append to the wrapper.
+
+    wrapper.appendChild(wrapperInner); // Finally, display to dom.
+
+    avatarsContainer.after(wrapper);
   };
 });
 /******/ })()

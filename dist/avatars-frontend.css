@@ -66,7 +66,8 @@
   margin-bottom: 10px;
 }
 
-#sce-avatar-form-modal {
+#sce-avatar-form-modal,
+.sce-avatars-popover {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 20px;
@@ -79,16 +80,18 @@
   align-items: center;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  background: rgba(255, 255, 255, 0.8);
+  background: #FFFFFF;
   border: 1px solid #ddd;
 }
-#sce-avatar-form-modal img {
+#sce-avatar-form-modal img,
+.sce-avatars-popover img {
   max-width: 75px;
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 100%;
 }
-#sce-avatar-form-modal img:hover {
+#sce-avatar-form-modal img:hover,
+.sce-avatars-popover img:hover {
   filter: saturate(110%);
   border: 1px solid #bbb;
 }
@@ -186,6 +189,10 @@
 .sce-can-edit:hover {
   filter: saturate(125%);
   border: 1px solid #bbb;
+}
+
+.sce-avatar-popover-wrapper .sce-avatar-popover-inner {
+  position: relative;
 }
 
 /*# sourceMappingURL=avatars-frontend.css.map*/

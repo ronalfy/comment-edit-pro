@@ -96,36 +96,47 @@ window.addEventListener( 'load', function( event ) {
 			  top: rect.top + window.scrollY
 			};
 		}
+
+		// Remove all existing popovers.
+		const avatarPopovers = document.querySelectorAll( '.sce-avatars-popover' );
+		if ( null !== avatarPopovers ) {
+			avatarPopovers.forEach( ( popover ) => {
+				popover.remove();
+			} );
+		}
 		
 		// Get wrapper for avatar container.
 		const avatarsContainer = document.getElementById( 'sce-avatars' );
 		const avatarsClone = avatarsContainer.cloneNode( true );
 		avatarsClone.id = 'sce-avatars-' + commentId;
+		avatarsClone.classList.add( 'sce-avatars-popover' );
+		avatarsClone.style.display = '';
 
 		// Get x,y height position.
 		const wrapper_x = getOffset( event.target ).left + 60; // Need an option for this.
-		const wrapper_y = getOffset( event.target ).top;
+		const wrapper_y = getOffset( event.target ).top; // Need an option for this.
 
 		// Add avatars clone styles..
-		avatarsClone.style.left = wrapper_x + 'px';
-		avatarsClone.style.top = wrapper_y + 'px';
-		avatarsClone.style.position = 'absolute';
-		avatarsClone.style.display = 'block';
+		
 
 		// Append to the avatars contianer.
-		avatarsContainer.after( avatarsClone );
+		const wrapper = document.createElement( 'div' );
+		wrapper.classList.add( 'sce-avatar-popover-wrapper' );
+		wrapper.style.left = wrapper_x + 'px';
+		wrapper.style.top = wrapper_y + 'px';
+		wrapper.style.position = 'absolute';
 
-		// var wrapper_x = e.pageX - Math.floor( jQuery( '.highlight-and-share-wrapper:visible' ).width() / 2 );
-		// if( wrapper_x < 0 ) {
-		// 	wrapper_x = 20;
-		// } else if ( ( wrapper_x + jQuery( '.highlight-and-share-wrapper:visible' ).width() ) > jQuery( 'body' ).width() ) {
-		// 	wrapper_x = jQuery( 'body' ).width() - jQuery( '.highlight-and-share-wrapper:visible' ).width();
-		// }
-		// var wrapper_y = e.pageY - jQuery( '.highlight-and-share-wrapper:visible' ).height() - 20;
-		// wrapper_clone.css( {
-		// 	left: wrapper_x,
-		// 	top: wrapper_y
-		// });
+		// Append a wrapper inside the wrapper for relative positioning.
+		const wrapperInner = document.createElement( 'div' );
+		wrapperInner.classList.add( 'sce-avatar-popover-inner' );
 
+		// Add interface inside inner wrapper.
+		wrapperInner.appendChild( avatarsClone );
+
+		// Now append to the wrapper.
+		wrapper.appendChild( wrapperInner );
+
+		// Finally, display to dom.
+		avatarsContainer.after( wrapper );
 	};
 } );
