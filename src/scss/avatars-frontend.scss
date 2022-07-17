@@ -26,6 +26,17 @@
 		opacity: 0;
 	}
 }
+@keyframes sce_avatar_modal_close_fade_in {
+	0% {
+		opacity: 0;
+	}
+	80% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 1;
+	}
+}
 @keyframes sce_avatar_close_modal_wrapper {
 	0% {
 		opacity: 1;
@@ -191,6 +202,8 @@
 	}
 }
 
+/* Inline comment editing and avatars */
+
 .sce-can-edit {
 	cursor: pointer;
 	&:hover {
@@ -200,6 +213,11 @@
 }
 
 .sce-avatar-popover-wrapper {
+	opacity: 0;
+	animation-name: sce_avatar_modal_close_fade_in;
+	animation-duration: 0.4s;
+	opacity: 1;
+
 	.sce-avatar-popover-inner {
 		position: relative;
 	}
