@@ -32,6 +32,71 @@ class Avatars {
 
 		// When a new comment has been added.
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+
+		// Save avatar via ajax.
+		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+	}
+
+	/**
+	 * Save a user's avatar via Ajax.
+	 */
+	public function ajax_save_user_avatar() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$user_id = absint( filter_input( INPUT_POST, 'user_id', FILTER_VALIDATE_INT ) );
+		$comment_id =  absint( filter_input( INPUT_POST, 'comment_id', FILTER_VALIDATE_INT ) );
+		$post_id =absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
+		$key = sanitize_text_field( filter_input( INPUT_POST, 'key', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-edit-avatar-' . $comment_id . $post_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get the current comment.
+		$comment = get_comment( $comment_id );
+
+		// Get user ID.
+		global $current_user;
+		$current_user_id = $current_user->ID ?? false;
+	
+		// Now check if person can edit comment.
+		$can_edit = false;
+		if ( current_user_can( 'moderate_comments' ) ) {
+			$can_edit = true;
+		} else {
+			// Now check if the user is the comment author (begin conditional hell).
+			if ( $current_user_id === $user_id ) {
+				if ( $comment && $comment->user_id === $current_user_id ) {
+					$can_edit = true;
+				}
+			}
+		}
+
+		// If person can't edit, exit.
+		if ( ! $can_edit ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Can not edit comment', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		$comment_user_id = absint( $comment->user_id );
+
+		// Assume person can edit now. Let's check if we're saving comment meta or user meta.
+		if ( $comment_user_id === $current_user_id ) {
+			update_user_meta( $comment_id, 'sce-avatar-location', $key );
+		} else {
+			// This is not our comment.
+			update_comment_meta( $comment_id, 'sce-avatar-location', $key );
+		}
+
+		// Exit gracefully.
+		wp_send_json_success( array() );
 	}
 
 	/**
@@ -67,7 +132,10 @@ class Avatars {
 			wp_localize_script(
 				'sce-avatars',
 				'sceAvatars',
-				array( 'avatars' => $avatar_data )
+				array(
+					'avatars' => $avatar_data,
+					'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				)
 			);
 
 			wp_enqueue_style(
@@ -144,7 +212,7 @@ class Avatars {
 		}
 
 		// If avatar is still null, try to get from comment meta.
-		if ( null === $avatar && 0 !== $comment_id ) {
+		if ( null === $avatar ) {
 			$comment_avatar_url = get_comment_meta( $comment_id, 'sce-avatar-location', true );
 			if ( $comment_avatar_url ) {
 				$avatar = Functions::get_plugin_url( 'images/avatars/' . $comment_avatar_url . '.png' );
@@ -230,7 +298,7 @@ class Avatars {
 		if ( $can_edit ) {
 			$nonce_field = wp_create_nonce( 'sce-edit-avatar-' . $comment_id . $post_id );
 			$can_edit_js = sprintf(
-				'onClick="window.sceAvatars( event, %d, %d, %d, \'%s\' );"',
+				'onClick="window.sce_avatars( event, %d, %d, %d, \'%s\' );"',
 				esc_js( $comment_id ),
 				esc_js( $user_id ),
 				esc_js( $post_id ),
@@ -294,9 +362,9 @@ class Avatars {
 		} elseif ( is_object( $id_or_email ) ) {
 			$comment = $id_or_email;
 			if ( empty( $comment->user_id ) ) {
-				$user = get_user_by( 'id', $comment->user_id );
+				$user = get_user_by( 'id', (int) $id_or_email );
 			} else {
-				$user = get_user_by( 'email', $comment->comment_author_email );
+				$user = get_user_by( 'email', $id_or_email );
 			}
 		} elseif ( is_string( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );

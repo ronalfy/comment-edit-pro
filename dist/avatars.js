@@ -2503,7 +2503,7 @@ function sendCommand(action, data) {
 
   var options = {
     method: 'post',
-    url: ajaxurl,
+    url: sceAvatars.ajaxurl,
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {
@@ -4870,7 +4870,7 @@ window.addEventListener('load', function (event) {
     toggleModalState();
   }); // This global function is executed when someone clicks on their avatar.
 
-  window.sceAvatars = function (event, commentId, userId, postId, nonce) {
+  window.sce_avatars = function (event, commentId, userId, postId, nonce) {
     // From: https://stackoverflow.com/a/28222246
     var getOffset = function getOffset(el) {
       var rect = el.getBoundingClientRect();
@@ -4953,11 +4953,8 @@ window.addEventListener('load', function (event) {
           var commentAvatar = document.querySelector('.sce-popover-comment-id-' + dataCommentId);
 
           if (null !== commentAvatar) {
-            var imgUrl = popoverAvatar.getAttribute('src'); // Set the comment avatar image src.
-            // todo - Replace with loading image.
-            // todo - Do ajax request.
-            // todo - Change avatar.
-            // Hide the avatar.
+            var imgUrl = popoverAvatar.getAttribute('src');
+            var imgKey = popoverAvatar.getAttribute('data-key'); // Hide the existig avatar.
 
             commentAvatar.classList.add('sce-popover-avatar-hidden'); // Replace with loading SVG.
 
@@ -4969,10 +4966,26 @@ window.addEventListener('load', function (event) {
 
             loadingContainer.style.height = '50px';
             loadingContainer.innerHTML = '<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M320 96C320 113.7 305.7 128 288 128C270.3 128 256 113.7 256 96V32C256 14.33 270.3 0 288 0C305.7 0 320 14.33 320 32V96zM320 480C320 497.7 305.7 512 288 512C270.3 512 256 497.7 256 480V416C256 398.3 270.3 384 288 384C305.7 384 320 398.3 320 416V480zM32 256C32 238.3 46.33 224 64 224H128C145.7 224 160 238.3 160 256C160 273.7 145.7 288 128 288H64C46.33 288 32 273.7 32 256zM512 224C529.7 224 544 238.3 544 256C544 273.7 529.7 288 512 288H448C430.3 288 416 273.7 416 256C416 238.3 430.3 224 448 224H512zM106.1 74.98C119.5 62.49 139.7 62.49 152.2 74.98L197.5 120.2C209.1 132.7 209.1 152.1 197.5 165.5C184.1 177.1 164.7 177.1 152.2 165.5L106.1 120.2C94.48 107.7 94.48 87.48 106.1 74.98zM469 391.8C481.5 404.3 481.5 424.5 469 437C456.5 449.5 436.3 449.5 423.8 437L378.5 391.8C366 379.3 366 359 378.5 346.5C391 334 411.3 334 423.8 346.5L469 391.8zM106.1 437C94.48 424.5 94.48 404.3 106.1 391.8L152.2 346.5C164.7 334 184.1 334 197.5 346.5C209.1 359 209.1 379.3 197.5 391.8L152.2 437C139.7 449.5 119.5 449.5 106.1 437zM423.8 74.98C436.3 62.48 456.5 62.48 469 74.98C481.5 87.47 481.5 107.7 469 120.2L423.8 165.5C411.3 177.1 391 177.1 378.5 165.5C366 152.1 366 132.7 378.5 120.2L423.8 74.98z"/></svg>';
-            commentAvatar.parentNode.prepend(loadingContainer);
+            commentAvatar.parentNode.prepend(loadingContainer); // Do ajax request.
+
+            (0,_SendCommand__WEBPACK_IMPORTED_MODULE_0__["default"])('sce_save_user_avatar', {
+              comment_id: commentId,
+              post_id: postId,
+              user_id: userId,
+              nonce: nonce,
+              key: imgKey
+            }).then(function (ajaxResponse) {
+              var ajaxData = ajaxResponse.data.data;
+              var ajaxSuccess = ajaxResponse.data.success;
+              console.log(ajaxData);
+
+              if (ajaxSuccess) {} else {// Error stuff.
+              }
+            })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {}); // Simulated loading.
 
             _this.setTimeout(function () {
-              loadingContainer.remove();
+              loadingContainer.remove(); // Set the comment avatar image src.
+
               commentAvatar.setAttribute('src', imgUrl);
               commentAvatar.classList.remove('sce-popover-avatar-hidden');
             }, 500); //commentAvatar.setAttribute( 'src', imgUrl );

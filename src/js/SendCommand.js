@@ -25,7 +25,7 @@ export default function sendCommand( action, data ) {
 
 	const options = {
 		method: 'post',
-		url: ajaxurl,
+		url: sceAvatars.ajaxurl,
 		params,
 		paramsSerializer( jsparams ) {
 			return qs.stringify( jsparams, { arrayFormat: 'brackets' } );
