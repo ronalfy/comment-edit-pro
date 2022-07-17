@@ -51,6 +51,11 @@
     display: block;
   }
 }
+@keyframes sce-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .comment-form-sce-avatar {
   position: relative;
   display: flex;
@@ -219,6 +224,18 @@
   animation-name: sce_avatar_modal_close_fade_out;
   animation-duration: 0.6s;
   opacity: 0;
+}
+
+/* Spinner for popover when avatar is selected */
+.sce-popover-avatar-hidden {
+  display: none;
+}
+
+.sce-popover-spinner svg {
+  animation: sce-rotate 4s linear infinite;
+}
+.sce-popover-spinner svg path {
+  fill: #D78C67;
 }
 
 /*# sourceMappingURL=avatars-frontend.css.map*/
