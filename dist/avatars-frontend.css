@@ -213,4 +213,12 @@
   position: relative;
 }
 
+/* Close button for popover */
+.sce-avatar-popover-wrapper.sce-avatar-closed {
+  opacity: 1;
+  animation-name: sce_avatar_modal_close_fade_out;
+  animation-duration: 0.6s;
+  opacity: 0;
+}
+
 /*# sourceMappingURL=avatars-frontend.css.map*/

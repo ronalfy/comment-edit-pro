@@ -243,6 +243,7 @@ class Avatars {
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
 			'sce-custom-avatar',
+			'sce-popover-comment-id-' . $comment_id,
 		);
 		if ( $can_edit ) {
 			$classes[] = 'sce-can-edit';

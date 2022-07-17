@@ -97,6 +97,16 @@ window.addEventListener( 'load', function( event ) {
 			};
 		}
 
+		// Check to see if wrapper is already visible.
+		const maybeWrapper = document.querySelector( '.sce-avatar-popover-wrapper' );
+		if ( null !== maybeWrapper ) {
+			maybeWrapper.classList.add( 'sce-avatar-closed' );
+			setTimeout( () => {
+				maybeWrapper.remove(); // CSS delay is 0.4s. Let's remove the node after.
+			}, 600 );
+			return;
+		}
+
 		// Remove all existing popovers.
 		const avatarPopovers = document.querySelectorAll( '.sce-avatars-popover' );
 		if ( null !== avatarPopovers ) {
@@ -116,10 +126,7 @@ window.addEventListener( 'load', function( event ) {
 		const wrapper_x = getOffset( event.target ).left + 60; // Need an option for this.
 		const wrapper_y = getOffset( event.target ).top; // Need an option for this.
 
-		// Add avatars clone styles..
-		
-
-		// Append to the avatars contianer.
+		// Append to the avatars container.
 		const wrapper = document.createElement( 'div' );
 		wrapper.classList.add( 'sce-avatar-popover-wrapper' );
 		wrapper.style.left = wrapper_x + 'px';
@@ -130,6 +137,10 @@ window.addEventListener( 'load', function( event ) {
 		const wrapperInner = document.createElement( 'div' );
 		wrapperInner.classList.add( 'sce-avatar-popover-inner' );
 
+		// Add comment ID to wrapper.
+		wrapper.setAttribute( 'data-comment-id', commentId );
+		//wrapper.attributes.
+
 		// Add interface inside inner wrapper.
 		wrapperInner.appendChild( avatarsClone );
 
@@ -138,5 +149,39 @@ window.addEventListener( 'load', function( event ) {
 
 		// Finally, display to dom.
 		avatarsContainer.after( wrapper );
+
+		// Add event for close button.
+		const popoverCloseButton = wrapper.querySelector( '.sce-avatar-form-modal-close' );
+		if ( null !== popoverCloseButton ) {
+			popoverCloseButton.addEventListener( 'click', ( e ) => {
+				wrapper.classList.add( 'sce-avatar-closed' );
+				this.setTimeout( () => {
+					wrapper.remove(); // CSS delay is 0.4s. Let's remove the node after.
+				}, 600 );
+			} );
+		}
+
+		// Add events for avatar selection.
+		const popoverAvatars = wrapper.querySelectorAll( '.sce-inline-avatar' );
+		if ( null !== popoverAvatars ) {
+			popoverAvatars.forEach( ( popoverAvatar ) => {
+				// Each time a popover avatar is clicked, change the source of the original avatar.
+				popoverAvatar.addEventListener( 'click', ( e ) => {
+					const dataCommentId = wrapper.getAttribute( 'data-comment-id' );
+					const commentAvatar = document.querySelector( '.sce-popover-comment-id-' + dataCommentId );
+					if ( null !== commentAvatar ) {
+						const imgUrl = popoverAvatar.getAttribute( 'src' );
+						commentAvatar.setAttribute( 'src', imgUrl );
+
+						// Hide popover as it's no longer needed.
+						// This hides the popover when an avatar is clicked within the popover.
+						wrapper.classList.add( 'sce-avatar-closed' );
+						this.setTimeout( () => {
+							wrapper.remove(); // CSS delay is 0.4s. Let's remove the node after.
+						}, 600 );
+					}
+				} );
+			} );
+		}
 	};
 } );
