@@ -32,6 +32,91 @@ class Avatars {
 
 		// When a new comment has been added.
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+
+		// Save avatar via ajax.
+		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+	}
+
+	/**
+	 * Save a user's avatar via Ajax.
+	 */
+	public function ajax_save_user_avatar() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$user_id    = absint( filter_input( INPUT_POST, 'user_id', FILTER_VALIDATE_INT ) );
+		$comment_id = absint( filter_input( INPUT_POST, 'comment_id', FILTER_VALIDATE_INT ) );
+		$post_id    = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
+		$key        = sanitize_text_field( filter_input( INPUT_POST, 'key', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-edit-avatar-' . $comment_id . $post_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get the current comment.
+		$comment = get_comment( $comment_id );
+
+		// Get user ID.
+		global $current_user;
+		$current_user_id = $current_user->ID ?? false;
+
+		// Now check if person can edit comment.
+		$can_edit = false;
+		if ( current_user_can( 'moderate_comments' ) ) {
+			$can_edit = true;
+		} else {
+			// Now check if the user is the comment author (begin conditional hell).
+			if ( $current_user_id === $user_id ) {
+				if ( $comment && $comment->user_id === $current_user_id ) {
+					$can_edit = true;
+				}
+			}
+		}
+
+		// One last try for editing privs.
+		if ( ! $can_edit ) {
+			$sce      = \Simple_Comment_Editing::get_instance();
+			$can_edit = $sce->can_edit( $comment_id, $post_id );
+		}
+
+		// If person can't edit, exit.
+		if ( ! $can_edit ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Can not edit comment', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		$comment_user_id = absint( $comment->user_id );
+
+		// Assume person can edit now. Let's check if we're saving comment meta or user meta.
+		if ( $comment_user_id === $current_user_id && 0 !== $current_user_id ) {
+			update_user_meta( $current_user_id, 'sce-avatar-location', $key );
+
+			// Get comments for user on the page so we can update all the avatars at once.
+			if ( current_user_can( 'moderate_comments' ) ) {
+				$comment_args = array(
+					'post_id' => $post_id,
+					'user_id' => $current_user_id,
+					'status'  => 1,
+					'fields'  => 'ids',
+				);
+				$comments     = new \WP_Comment_Query( $comment_args ); // This gets an object with property comments.
+				$comment_ids  = $comments->comments ?? array();
+				wp_send_json_success( $comment_ids );
+			}
+		} else {
+			// This is not our comment.
+			update_comment_meta( $comment_id, 'sce-avatar-location', $key );
+		}
+
+		// Exit gracefully.
+		wp_send_json_success( array() );
 	}
 
 	/**
@@ -67,7 +152,10 @@ class Avatars {
 			wp_localize_script(
 				'sce-avatars',
 				'sceAvatars',
-				array( 'avatars' => $avatar_data )
+				array(
+					'avatars' => $avatar_data,
+					'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				)
 			);
 
 			wp_enqueue_style(
@@ -104,7 +192,7 @@ class Avatars {
 	 * @return array updated comment fields.
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
-				$avatar_field = $this->get_avatar_comment_field_array();
+		$avatar_field = $this->get_avatar_comment_field_array();
 		return $avatar_field + $comment_fields;
 	}
 
@@ -133,24 +221,32 @@ class Avatars {
 	private function get_avatar( $comment_id = 0, $user_id = null ) {
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 		$avatar         = null;
+
+		// Try to get the comment avatar from logged-in user data.
 		if ( null !== $user_id ) {
 			// Try to get stored avatar.
 			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true ); // Stored as relative path in DB (e.g., images/avatars/circle-flat-icons-mystery.png ).
 			if ( $avatar_url ) {
-				$avatar = Functions::get_plugin_url( $avatar_url );
+				$avatar = Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' );
 			}
 		}
 
-		// Check if a user is not logged in and no comment ID has been passed.
-		if ( ! is_user_logged_in() && 0 !== $comment_id ) {
+		// If avatar is still null, try to get from comment meta.
+		if ( null === $avatar ) {
 			$comment_avatar_url = get_comment_meta( $comment_id, 'sce-avatar-location', true );
 			if ( $comment_avatar_url ) {
 				$avatar = Functions::get_plugin_url( 'images/avatars/' . $comment_avatar_url . '.png' );
 			}
 		}
 
+		// If avatar is still null, return default.
+		if ( null === $avatar ) {
+			$avatar = $default_avatar;
+		}
+
+		// Return avatar html or blank if avatar is still null.
 		if ( null !== $avatar ) {
-			$avatar_html = $this->get_avatar_image_html( $avatar );
+			$avatar_html = $this->get_avatar_image_html( $avatar, $comment_id, $user_id );
 			return $avatar_html;
 		}
 
@@ -160,13 +256,24 @@ class Avatars {
 	/**
 	 * Return avatar image html.
 	 *
-	 * @param string $src    The full URL to the asset.
-	 * @param int    $width  The width of the avatar (default 50px).
-	 * @param int    $height The height of the avatar (default 50px).
+	 * @param string $src        The full URL to the asset.
+	 * @param int    $comment_id The width of the avatar (default 50px).
+	 * @param int    $user_id    The height of the avatar (default 50px).
 	 *
 	 * @return unescaped image HTML.
 	 */
-	private function get_avatar_image_html( $src, $width = 50, $height = 50 ) {
+	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0 ) {
+		global $post, $comment;
+
+		// Todo - move width/height to option.
+		/**
+		 * Filter: sce_avatar_size
+		 *
+		 * @param int $size (for both width/height).
+		 */
+		$width  = apply_filters( 'sce_avatar_size', 50 );
+		$height = apply_filters( 'sce_avatar_size', 50 );
+
 		/**
 		 * Add ability to change width/height of image.
 		 */
@@ -177,18 +284,72 @@ class Avatars {
 				'height' => $height,
 			)
 		);
-		$classes           = array(
+
+		// See if user can edit comment.
+		$sce      = \Simple_Comment_Editing::get_instance();
+		$post_id  = $post->ID ?? 0;
+		$can_edit = false;
+		if ( $comment_id && $post_id ) {
+			// See if current user can moderate comments (yes to editing).
+			if ( current_user_can( 'moderate_comments' ) ) {
+				$can_edit = true;
+			}
+
+			// Check to see if the user is the comment author.
+			if ( ! $can_edit ) {
+				// Check to see if the current user is the comment author.
+				global $current_user;
+				$user_id         = $current_user->ID ?? 0;
+				$comment_user_id = $comment->user_id ?? 0;
+				if ( is_user_logged_in() && $user_id === $comment_user_id && 0 !== $user_id ) {
+					$can_edit = true;
+				}
+			}
+
+			// Can edit is still false. Check cookie values.
+			if ( ! $can_edit ) {
+				$can_edit = $sce->can_edit( $comment_id, $post_id );
+			}
+		}
+
+		// Build JS if user can edit.
+		$can_edit_js = '';
+		if ( $can_edit ) {
+			$nonce_field = wp_create_nonce( 'sce-edit-avatar-' . $comment_id . $post_id );
+			$can_edit_js = sprintf(
+				'onClick="window.sce_avatars( event, %d, %d, %d, \'%s\' );"',
+				esc_js( $comment_id ),
+				esc_js( $user_id ),
+				esc_js( $post_id ),
+				esc_js( $nonce_field )
+			);
+		}
+
+		$classes = array(
 			'avatar',
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
+			'sce-custom-avatar',
+			'sce-popover-comment-id-' . $comment_id,
 		);
+		if ( $can_edit ) {
+			$classes[] = 'sce-can-edit';
+		}
+
+		/**
+		 * Filter: sce_avatar_classes
+		 *
+		 * @param array $classes Array of classes for the Avatar output.
+		 */
+		$classes = apply_filters( 'sce_avatar_classes', $classes );
 
 		$avatar_html = sprintf(
-			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
+			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" %s />',
 			esc_attr( implode( ' ', $classes ) ),
 			esc_url( $src ),
 			esc_attr( $avatar_dimensions['width'] ),
-			esc_attr( $avatar_dimensions['height'] )
+			esc_attr( $avatar_dimensions['height'] ),
+			$can_edit_js
 		);
 		return $avatar_html;
 	}
@@ -214,29 +375,25 @@ class Avatars {
 		}
 
 		// Get user data.
-		$user = null;
-		if ( is_numeric( $id_or_email ) ) {
+		$user       = null;
+		$comment_id = 0;
+		if ( is_a( $id_or_email, 'WP_Comment' ) ) {
+			$comment_id = $id_or_email->comment_ID;
+			$user       = get_user_by( 'id', $id_or_email->user_id );
+		} elseif ( is_numeric( $id_or_email ) ) {
 			$user = get_user_by( 'id', (int) $id_or_email );
-		} elseif ( is_object( $id_or_email ) ) {
-			$comment = $id_or_email;
-			if ( empty( $comment->user_id ) ) {
-				$user = get_user_by( 'id', $comment->user_id );
-			} else {
-				$user = get_user_by( 'email', $comment->comment_author_email );
-			}
-		} elseif ( is_string( $id_or_email ) ) {
+		} elseif ( is_email( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
-		}
+		};
 
 		// Now get the user ID if it exists.
-		$user_id    = $user->ID ?? null;
-		$comment_id = $comment->comment_ID ?? null;
-		$avatar     = $this->get_avatar( $comment_id, $user_id );
+		$user_id = $user->ID ?? null;
+		$avatar  = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
 
-		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ), $comment_id, $user_id );
 		return $default_avatar;
 	}
 
@@ -309,7 +466,13 @@ class Avatars {
 
 		// An approved or moderated comment is okay. Spam, skip.
 		if ( 'spam' !== $maybe_comment_approved ) {
+			// Store as comment meta and user meta (if logged in).
 			update_comment_meta( $comment_id, 'sce-avatar-location', $avatar );
+
+			if ( is_user_logged_in() ) {
+				global $current_user;
+				update_user_meta( $current_user->ID, 'sce-avatar-location', $avatar );
+			}
 		}
 	}
 }

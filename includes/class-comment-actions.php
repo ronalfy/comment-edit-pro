@@ -23,6 +23,7 @@ class Comment_Actions {
 	 * Add the contextual menu for the comment.
 	 */
 	public function add_action_gear_icon( $content, $comment = false ) {
+		return $content;
 		ob_start();
 		?>
 		<div class="sce-actions-gear">
