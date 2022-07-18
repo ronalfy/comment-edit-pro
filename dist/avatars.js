@@ -4977,21 +4977,25 @@ window.addEventListener('load', function (event) {
             }).then(function (ajaxResponse) {
               var ajaxData = ajaxResponse.data.data;
               var ajaxSuccess = ajaxResponse.data.success;
-              console.log(ajaxData);
 
-              if (ajaxSuccess) {} else {// Error stuff.
+              if (ajaxSuccess) {
+                // Remove loading.
+                loadingContainer.remove(); // Set the comment avatar image src.
+
+                commentAvatar.setAttribute('src', imgUrl);
+                commentAvatar.classList.remove('sce-popover-avatar-hidden'); // Change all matching author comments to new image.
+
+                ajaxData.forEach(function (ajaxCommentId, index) {
+                  var commentAvatarToReplace = document.querySelector('img.sce-popover-comment-id-' + ajaxCommentId);
+
+                  if (null !== commentAvatarToReplace) {
+                    commentAvatarToReplace.setAttribute('src', imgUrl);
+                  }
+                });
+              } else {// Error stuff.
               }
-            })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {}); // Simulated loading.
-
-            _this.setTimeout(function () {
-              loadingContainer.remove(); // Set the comment avatar image src.
-
-              commentAvatar.setAttribute('src', imgUrl);
-              commentAvatar.classList.remove('sce-popover-avatar-hidden');
-            }, 500); //commentAvatar.setAttribute( 'src', imgUrl );
-            // Hide popover as it's no longer needed.
+            })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {}); // Hide popover as it's no longer needed.
             // This hides the popover when an avatar is clicked within the popover.
-
 
             wrapper.classList.add('sce-avatar-closed');
 

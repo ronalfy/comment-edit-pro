@@ -204,26 +204,27 @@ window.addEventListener( 'load', function( event ) {
 							.then( ( ajaxResponse ) => {
 								const ajaxData = ajaxResponse.data.data;
 								const ajaxSuccess = ajaxResponse.data.success;
-								console.log( ajaxData );
 								if ( ajaxSuccess ) {
-									
+									// Remove loading.
+									loadingContainer.remove();
+									// Set the comment avatar image src.
+									commentAvatar.setAttribute( 'src', imgUrl );
+									commentAvatar.classList.remove( 'sce-popover-avatar-hidden' );
+
+									// Change all matching author comments to new image.
+									ajaxData.forEach( ( ajaxCommentId, index ) => {
+										const commentAvatarToReplace = document.querySelector( 'img.sce-popover-comment-id-' + ajaxCommentId );
+										if ( null !== commentAvatarToReplace ) {
+											commentAvatarToReplace.setAttribute( 'src', imgUrl );
+										}
+									} );
 								} else {
 									// Error stuff.
 								}
 							} )
 							.catch( ( ajaxResponse ) => {} )
 							.then( ( ajaxResponse ) => {
-								
 							} );
-
-						// Simulated loading.
-						this.setTimeout( () => {
-							loadingContainer.remove();
-							// Set the comment avatar image src.
-							commentAvatar.setAttribute( 'src', imgUrl );
-							commentAvatar.classList.remove( 'sce-popover-avatar-hidden' );
-						}, 500 );
-						//commentAvatar.setAttribute( 'src', imgUrl );
 
 						// Hide popover as it's no longer needed.
 						// This hides the popover when an avatar is clicked within the popover.

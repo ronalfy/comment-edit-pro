@@ -41,11 +41,11 @@ class Avatars {
 	 * Save a user's avatar via Ajax.
 	 */
 	public function ajax_save_user_avatar() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-		$user_id = absint( filter_input( INPUT_POST, 'user_id', FILTER_VALIDATE_INT ) );
-		$comment_id =  absint( filter_input( INPUT_POST, 'comment_id', FILTER_VALIDATE_INT ) );
-		$post_id =absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
-		$key = sanitize_text_field( filter_input( INPUT_POST, 'key', FILTER_DEFAULT ) );
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$user_id    = absint( filter_input( INPUT_POST, 'user_id', FILTER_VALIDATE_INT ) );
+		$comment_id = absint( filter_input( INPUT_POST, 'comment_id', FILTER_VALIDATE_INT ) );
+		$post_id    = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
+		$key        = sanitize_text_field( filter_input( INPUT_POST, 'key', FILTER_DEFAULT ) );
 
 		// Security.
 		if ( ! wp_verify_nonce( $nonce, 'sce-edit-avatar-' . $comment_id . $post_id ) ) {
@@ -62,7 +62,7 @@ class Avatars {
 		// Get user ID.
 		global $current_user;
 		$current_user_id = $current_user->ID ?? false;
-	
+
 		// Now check if person can edit comment.
 		$can_edit = false;
 		if ( current_user_can( 'moderate_comments' ) ) {
@@ -90,6 +90,19 @@ class Avatars {
 		// Assume person can edit now. Let's check if we're saving comment meta or user meta.
 		if ( $comment_user_id === $current_user_id ) {
 			update_user_meta( $current_user_id, 'sce-avatar-location', $key );
+
+			// Get comments for user on the page so we can update all the avatars at once.
+			if ( current_user_can( 'moderate_comments' ) ) {
+				$comment_args = array(
+					'post_id' => $post_id,
+					'user_id' => $current_user_id,
+					'status'  => 1,
+					'fields'  => 'ids',
+				);
+				$comments = new \WP_Comment_Query( $comment_args ); // This gets an object with property comments.
+				$comment_ids = $comments->comments ?? array();
+				wp_send_json_success( $comment_ids );
+			}
 		} else {
 			// This is not our comment.
 			update_comment_meta( $comment_id, 'sce-avatar-location', $key );
@@ -266,8 +279,8 @@ class Avatars {
 		);
 
 		// See if user can edit comment.
-		$sce = \Simple_Comment_Editing::get_instance();
-		$post_id = $post->ID ?? 0;
+		$sce      = \Simple_Comment_Editing::get_instance();
+		$post_id  = $post->ID ?? 0;
 		$can_edit = false;
 		if ( $comment_id && $post_id ) {
 			// See if current user can moderate comments (yes to editing).
@@ -279,7 +292,7 @@ class Avatars {
 			if ( ! $can_edit ) {
 				// Check to see if the current user is the comment author.
 				global $current_user;
-				$user_id = $current_user->ID ?? 0;
+				$user_id         = $current_user->ID ?? 0;
 				$comment_user_id = $comment->user_id ?? 0;
 				if ( is_user_logged_in() && $user_id === $comment_user_id && 0 !== $user_id ) {
 					$can_edit = true;
@@ -290,9 +303,8 @@ class Avatars {
 			if ( ! $can_edit ) {
 				$can_edit = $sce->can_edit( $comment_id, $post_id );
 			}
-			
 		}
-		
+
 		// Build JS if user can edit.
 		$can_edit_js = '';
 		if ( $can_edit ) {
@@ -306,7 +318,7 @@ class Avatars {
 			);
 		}
 
-		$classes           = array(
+		$classes = array(
 			'avatar',
 			sprintf( 'avatar-%s', esc_attr( $width ) ),
 			'photo',
@@ -356,11 +368,11 @@ class Avatars {
 		}
 
 		// Get user data.
-		$user = null;
+		$user       = null;
 		$comment_id = 0;
 		if ( is_a( $id_or_email, 'WP_Comment' ) ) {
 			$comment_id = $id_or_email->comment_ID;
-			$user = get_user_by( 'id', $id_or_email->user_id );
+			$user       = get_user_by( 'id', $id_or_email->user_id );
 		} elseif ( is_numeric( $id_or_email ) ) {
 			$user = get_user_by( 'id', (int) $id_or_email );
 		} elseif ( is_email( $id_or_email ) ) {
@@ -368,8 +380,8 @@ class Avatars {
 		};
 
 		// Now get the user ID if it exists.
-		$user_id    = $user->ID ?? null;
-		$avatar     = $this->get_avatar( $comment_id, $user_id );
+		$user_id = $user->ID ?? null;
+		$avatar  = $this->get_avatar( $comment_id, $user_id );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
