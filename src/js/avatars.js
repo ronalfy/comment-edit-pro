@@ -21,7 +21,7 @@ window.addEventListener( 'load', function( event ) {
 			image[ 'data-key' ] = avatarData.avatar_key;
 
 			// Set scoped imageHtml string with all images.
-			imageHtml += `<img class="sce-inline-avatar" src="${ image.src }" alt="${ image.alt }" width="${ image.width }" height="${ image.height }" data-key="${ image[ 'data-key' ] }" />`;
+			imageHtml += `<a href="#" aria-label="Select an Avatar" onClick="window.sce_avatars_stop_propagation( event );"><img class="sce-inline-avatar" src="${ image.src }" alt="${ image.alt }" width="${ image.width }" height="${ image.height }" data-key="${ image[ 'data-key' ] }" /></a>`;
 		} );
 
 		// This is the close button for the avatar popup.
@@ -90,6 +90,20 @@ window.addEventListener( 'load', function( event ) {
 	closeButton.addEventListener( 'click', ( e ) => {
 		toggleModalState();
 	} );
+
+	// An anchor is shown around the avatar, so this stops the anchor event from triggering.
+	window.sce_avatars_stop_propagation = ( anchorEvent ) => {
+		anchorEvent.preventDefault();
+		anchorEvent.stopPropagation();
+
+		const parentAnchor = anchorEvent.target;
+		if ( null !== parentAnchor ) {
+			const childOfAnchor = parentAnchor.querySelector( 'img' );
+			if ( null !== childOfAnchor ) {
+				childOfAnchor.click();
+			}
+		}
+	};
 
 	// This global function is executed when someone clicks on their avatar.
 	window.sce_avatars = ( event, commentId, userId, postId, nonce ) => {
@@ -171,7 +185,10 @@ window.addEventListener( 'load', function( event ) {
 		// Add events for avatar selection.
 		const popoverAvatars = wrapper.querySelectorAll( '.sce-inline-avatar' );
 		if ( null !== popoverAvatars ) {
-			popoverAvatars.forEach( ( popoverAvatar ) => {
+			popoverAvatars.forEach( ( popoverAvatar, index ) => {
+				if ( 0 === index ) {
+					popoverAvatar.parentNode.focus();
+				}
 				// Each time a popover avatar is clicked, change the source of the original avatar.
 				popoverAvatar.addEventListener( 'click', ( e ) => {
 					const dataCommentId = wrapper.getAttribute( 'data-comment-id' );

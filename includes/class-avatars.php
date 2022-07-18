@@ -204,8 +204,16 @@ class Avatars {
 	private function get_avatar_comment_field_array() {
 		// Todo - Read in saved avatar.
 		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+
+		// Get nicename/nickname if logged in.
+		if ( is_user_logged_in() ) {
+			global $current_user;
+			$user_nickname = $current_user->data->display_name ?? '';
+		} else {
+			$user_nickname = __( 'Choose an Avatar', 'comment-edit-pro' );
+		}
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>Ronald Huereca</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="0" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="0" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
 		);
 		return $avatar_field;
 	}
@@ -351,6 +359,7 @@ class Avatars {
 			esc_attr( $avatar_dimensions['height'] ),
 			$can_edit_js
 		);
+		$avatar_html = '<a href="#" aria-label="' . esc_attr__( 'Choose an Avatar', 'comment-edit-pro' ) . '" onClick="window.sce_avatars_stop_propagation( event );">' . $avatar_html . '</a>';
 		return $avatar_html;
 	}
 
@@ -459,7 +468,8 @@ class Avatars {
 	/**
 	 * Save avatar meta when a comment has been posted.
 	 *
-	 * @param int $comment_id Comment ID that has been submitted.
+	 * @param int  $comment_id Comment ID that has been submitted.
+	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
 	 */
 	public function comment_posted( $comment_id, $maybe_comment_approved ) {
 		$avatar = sanitize_text_field( filter_input( INPUT_POST, 'sce-comment-form-avatar', FILTER_DEFAULT ) );
