@@ -4862,6 +4862,7 @@ window.addEventListener('load', function (event) {
       var commentFormInput = document.querySelector('#sce-comment-form-avatar');
       commentFormInput.setAttribute('value', filename);
       currentAvatar.setAttribute('src', imgUrl);
+      toggleModalState();
     });
   }); // Close button.
 

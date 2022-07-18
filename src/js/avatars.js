@@ -79,6 +79,7 @@ window.addEventListener( 'load', function( event ) {
 			);
 			commentFormInput.setAttribute( 'value', filename );
 			currentAvatar.setAttribute( 'src', imgUrl );
+			toggleModalState();
 		} );
 	} );
 
