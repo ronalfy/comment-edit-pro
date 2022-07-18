@@ -35,6 +35,7 @@ class Avatars {
 
 		// Save avatar via ajax.
 		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 	}
 
 	/**
@@ -76,6 +77,12 @@ class Avatars {
 			}
 		}
 
+		// One last try for editing privs.
+		if ( ! $can_edit ) {
+			$sce      = \Simple_Comment_Editing::get_instance();
+			$can_edit = $sce->can_edit( $comment_id, $post_id );
+		}
+
 		// If person can't edit, exit.
 		if ( ! $can_edit ) {
 			wp_send_json_error(
@@ -88,7 +95,7 @@ class Avatars {
 		$comment_user_id = absint( $comment->user_id );
 
 		// Assume person can edit now. Let's check if we're saving comment meta or user meta.
-		if ( $comment_user_id === $current_user_id ) {
+		if ( $comment_user_id === $current_user_id && 0 !== $current_user_id ) {
 			update_user_meta( $current_user_id, 'sce-avatar-location', $key );
 
 			// Get comments for user on the page so we can update all the avatars at once.
@@ -99,8 +106,8 @@ class Avatars {
 					'status'  => 1,
 					'fields'  => 'ids',
 				);
-				$comments = new \WP_Comment_Query( $comment_args ); // This gets an object with property comments.
-				$comment_ids = $comments->comments ?? array();
+				$comments     = new \WP_Comment_Query( $comment_args ); // This gets an object with property comments.
+				$comment_ids  = $comments->comments ?? array();
 				wp_send_json_success( $comment_ids );
 			}
 		} else {
@@ -249,9 +256,9 @@ class Avatars {
 	/**
 	 * Return avatar image html.
 	 *
-	 * @param string $src    The full URL to the asset.
-	 * @param int    $width  The width of the avatar (default 50px).
-	 * @param int    $height The height of the avatar (default 50px).
+	 * @param string $src        The full URL to the asset.
+	 * @param int    $comment_id The width of the avatar (default 50px).
+	 * @param int    $user_id    The height of the avatar (default 50px).
 	 *
 	 * @return unescaped image HTML.
 	 */
