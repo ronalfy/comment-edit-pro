@@ -4815,7 +4815,7 @@ window.addEventListener('load', function (event) {
       image.height = 128;
       image['data-key'] = avatarData.avatar_key; // Set scoped imageHtml string with all images.
 
-      imageHtml += "<img class=\"sce-inline-avatar\" src=\"".concat(image.src, "\" alt=\"").concat(image.alt, "\" width=\"").concat(image.width, "\" height=\"").concat(image.height, "\" data-key=\"").concat(image['data-key'], "\" />");
+      imageHtml += "<a href=\"#\" aria-label=\"Select an Avatar\" onClick=\"window.sce_avatars_stop_propagation( event );\"><img class=\"sce-inline-avatar\" src=\"".concat(image.src, "\" alt=\"").concat(image.alt, "\" width=\"").concat(image.width, "\" height=\"").concat(image.height, "\" data-key=\"").concat(image['data-key'], "\" /></a>");
     }); // This is the close button for the avatar popup.
 
     imageHtml += "<div class=\"sce-avatar-form-modal-close\"><div class=\"sce-avatar-form-modal-close-x\"></div><div class=\"sce-avatar-form-modal-close-x\"></div></div>";
@@ -4869,7 +4869,22 @@ window.addEventListener('load', function (event) {
   var closeButton = modalWrapper.querySelector('.sce-avatar-form-modal-close');
   closeButton.addEventListener('click', function (e) {
     toggleModalState();
-  }); // This global function is executed when someone clicks on their avatar.
+  }); // An anchor is shown around the avatar, so this stops the anchor event from triggering.
+
+  window.sce_avatars_stop_propagation = function (anchorEvent) {
+    anchorEvent.preventDefault();
+    anchorEvent.stopPropagation();
+    var parentAnchor = anchorEvent.target;
+
+    if (null !== parentAnchor) {
+      var childOfAnchor = parentAnchor.querySelector('img');
+
+      if (null !== childOfAnchor) {
+        childOfAnchor.click();
+      }
+    }
+  }; // This global function is executed when someone clicks on their avatar.
+
 
   window.sce_avatars = function (event, commentId, userId, postId, nonce) {
     // From: https://stackoverflow.com/a/28222246
@@ -4947,8 +4962,12 @@ window.addEventListener('load', function (event) {
     var popoverAvatars = wrapper.querySelectorAll('.sce-inline-avatar');
 
     if (null !== popoverAvatars) {
-      popoverAvatars.forEach(function (popoverAvatar) {
-        // Each time a popover avatar is clicked, change the source of the original avatar.
+      popoverAvatars.forEach(function (popoverAvatar, index) {
+        if (0 === index) {
+          popoverAvatar.parentNode.focus();
+        } // Each time a popover avatar is clicked, change the source of the original avatar.
+
+
         popoverAvatar.addEventListener('click', function (e) {
           var dataCommentId = wrapper.getAttribute('data-comment-id');
           var commentAvatar = document.querySelector('.sce-popover-comment-id-' + dataCommentId);
