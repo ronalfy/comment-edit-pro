@@ -7,8 +7,10 @@
 
 namespace CommentEditPro\Includes;
 
+use CommentEditPro\Includes\Functions as Functions;
+
 /**
- * Class functions
+ * Class Avatars
  */
 class Avatars {
 
@@ -36,6 +38,28 @@ class Avatars {
 		// Save avatar via ajax.
 		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+
+		// Load Avatar scripts.
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+	}
+
+	/**
+	 * Load scripts and styles in the admin.
+	 */
+	public function add_admin_scripts_styles() {
+		$current_tab = Functions::get_admin_tab();
+		if ( null === $current_tab ) {
+			return;
+		}
+		if ( 'avatars' === $current_tab ) {
+			wp_enqueue_script(
+				'sce-avatars',
+				Functions::get_plugin_url( 'dist/avatars-admin.js' ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
+		}
 	}
 
 	/**

@@ -74,15 +74,7 @@ class Avatars {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<?php
-						$avatar_filenames = Avatars_Helper::get_avatar_filenames();
-						foreach ( $avatar_filenames as $filename ) {
-							$avatar_url = Functions::get_plugin_url( 'images/avatars/' . $filename . '.png' );
-							?>
-								<img src="<?php echo esc_url( $avatar_url ); ?>" alt="Avatar" width="128" height="128" />
-							<?php
-						}
-						?>
+						<div id="sce-tab-avatars"></div>	
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
