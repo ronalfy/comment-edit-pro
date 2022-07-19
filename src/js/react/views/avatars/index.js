@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import Avatars from './Avatars';
+import GravatarProtection from './GravatarProtection.';
 
 const container = document.getElementById( 'sce-tab-avatars' );
 const root = createRoot( container );
@@ -13,6 +14,6 @@ const avatarProtectionContainer = document.getElementById( 'sce-tab-avatar-prote
 const avatarProtection = createRoot( avatarProtectionContainer );
 avatarProtection.render(
 	<React.StrictMode>
-		<Avatars />
+		<GravatarProtection />
 	</React.StrictMode>
 );
