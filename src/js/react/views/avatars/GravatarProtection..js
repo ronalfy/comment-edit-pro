@@ -57,7 +57,7 @@ const GravatarProtection = () => {
 										onChange( boolValue );
 									} }
 									help={ __(
-										'Enable privacy checkbox when a user fills out a comment. By default, an avatar is attached to the user email. If enabled, the Avatar for the user will be disabled.',
+										'Enable a privacy checkbox when a user fills out a comment. By default, an avatar is attached to the user email. If enabled, the Avatar for the user will be disabled.',
 										'comment-edit-pro'
 									) }
 								/>

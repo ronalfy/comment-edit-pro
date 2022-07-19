@@ -47620,7 +47620,7 @@ var GravatarProtection = function GravatarProtection() {
             //setShowButtonOptions( boolValue );
             _onChange(boolValue);
           },
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable privacy checkbox when a user fills out a comment. By default, an avatar is attached to the user email. If enabled, the Avatar for the user will be disabled.', 'comment-edit-pro')
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable a privacy checkbox when a user fills out a comment. By default, an avatar is attached to the user email. If enabled, the Avatar for the user will be disabled.', 'comment-edit-pro')
         }));
       }
     })));
