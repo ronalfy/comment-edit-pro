@@ -79,7 +79,7 @@ class Avatars {
 				</div>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						Recaptcha
+						<div id="sce-tab-avatar-protection"></div>
 					</div>
 				</div>
 				<?php

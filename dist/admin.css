@@ -177,12 +177,23 @@ h3.sce-panel-heading {
 }
 
 /* Toggle Control Component Styles - Styles from the Block Editor (roughly) */
+.sce-admin__toggle-control {
+  margin-bottom: 15px;
+}
+.sce-admin__toggle-control:last-child {
+  margin-bottom: 0;
+}
+
 .sce-admin__toggle-control.components-toggle-control .components-base-control__field {
   position: relative;
   display: flex;
   margin-bottom: 12px;
   line-height: initial;
   align-items: center;
+}
+.sce-admin__toggle-control.components-toggle-control .components-base-control__field .components-toggle-control__label {
+  font-size: 14px;
+  font-weight: 600;
 }
 .sce-admin__toggle-control.components-toggle-control .components-base-control__field .components-form-toggle {
   margin-right: 12px;
@@ -264,6 +275,21 @@ h3.sce-panel-heading {
   background-color: #FFF;
   border-width: 0;
   transform: translateX(18px);
+}
+
+.sce-admin__range-control {
+  max-width: 450px;
+}
+.sce-admin__range-control .components-base-control__label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.sce-admin__range-control .components-range-control__track {
+  color: #8019c4;
+}
+
+.sce-admin__avatar-preview {
+  margin-top: 15px;
 }
 
 /*# sourceMappingURL=admin.css.map*/

@@ -229,6 +229,13 @@ h3.sce-panel-heading {
 }
 
 /* Toggle Control Component Styles - Styles from the Block Editor (roughly) */
+.sce-admin__toggle-control {
+	margin-bottom: 15px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
 .sce-admin__toggle-control.components-toggle-control {
 	.components-base-control__field {
 		position: relative;
@@ -237,6 +244,10 @@ h3.sce-panel-heading {
 		line-height: initial;
 		align-items: center;
 
+		.components-toggle-control__label {
+			font-size: 14px;
+			font-weight: 600;
+		}
 		.components-form-toggle {
 			margin-right: 12px;
 
@@ -327,4 +338,19 @@ h3.sce-panel-heading {
 			}
 		}
 	}
+}
+
+.sce-admin__range-control {
+	max-width: 450px;
+	
+	.components-base-control__label {
+		font-size: 14px;
+		font-weight: 600;
+	}
+	.components-range-control__track {
+		color: #8019c4;
+	}
+}
+.sce-admin__avatar-preview {
+	margin-top: 15px;
 }

@@ -59,6 +59,13 @@ class Avatars {
 				Functions::get_plugin_version(),
 				true
 			);
+			wp_localize_script(
+				'sce-avatars',
+				'sceAvatars',
+				array(
+					'preview_avatar' => Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ),
+				)
+			);
 		}
 	}
 
