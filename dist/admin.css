@@ -1,3 +1,32 @@
+button.button-reset, button.button-reset:focus, button.button-reset:hover {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+}
+button.button-reset.show-cursor {
+  cursor: pointer;
+}
+
+.button-reset button,
+.button-reset:focus button,
+.button-reset:hover button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+}
+
+/* Responsive styles - In hindsight, should've used mobile-first */
+/* Mixin from: https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/ */
+/* It's only used here, so no external file for mixin? */
+/* Props: https://sass-lang.com/documentation/at-rules/mixin */
 #wpcontent {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -308,6 +337,113 @@ h3.sce-panel-heading {
   padding-right: 0;
   margin: 0 auto;
 }
+.sce-settings-tabs nav a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.4em;
+  border-radius: 3px;
+  color: #6f6f6f;
+  font-size: 16px;
+  line-height: normal;
+  padding: 0.6875rem 0.75rem;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.4s ease-in-out;
+  z-index: 1;
+}
+@media (min-width: 48em) {
+  .sce-settings-tabs nav a {
+    grid-template-columns: 26px 1fr 1fr;
+    grid-column-gap: 0.5em;
+    grid-row-gap: 0.4em;
+    padding: 0.6875rem 0.5rem 0.6875rem 1rem;
+  }
+}
+.sce-settings-tabs nav a:before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  transition: all 0.4s ease-in-out;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.sce-settings-tabs nav a:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  bottom: -2px;
+  left: 0;
+  transition: all 0.4s ease-in-out;
+  z-index: 3;
+}
+.sce-settings-tabs nav a:hover {
+  border-top: 0;
+}
+.sce-settings-tabs nav a:hover:before {
+  background: #8019c4;
+}
+.sce-settings-tabs nav a:hover {
+  transition: all 0.4s ease-in-out;
+  color: #393838;
+}
+.sce-settings-tabs nav a:hover:before, .sce-settings-tabs nav a:hover:after {
+  background: #8019c4;
+}
+.sce-settings-tabs nav a:hover svg use {
+  transition: all 0.4s ease-in-out;
+  fill: #a774c9;
+  color: #a774c9;
+}
+.sce-settings-tabs nav a.nav-tab-active {
+  background: #ffffff;
+  color: #393838;
+  box-shadow: 0 1px 4px rgba(18, 25, 97, 0.08);
+}
+.sce-settings-tabs nav a.nav-tab-active:before {
+  background: #393838;
+}
+.sce-settings-tabs nav a.nav-tab-active:hover:before, .sce-settings-tabs nav a.nav-tab-active:hover:after {
+  background: #8019c4;
+}
+.sce-settings-tabs nav a.nav-tab-active svg use {
+  transition: all 0.4s ease-in-out;
+  fill: #a774c9;
+  color: #a774c9;
+}
+.sce-settings-tabs nav a svg {
+  vertical-align: middle;
+  line-height: normal;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+.sce-settings-tabs nav a svg path {
+  transition: all 0.4s ease-in-out;
+  fill: #242748;
+  color: #242748;
+}
+.sce-settings-tabs nav a span {
+  display: none;
+}
+@media (min-width: 48em) {
+  .sce-settings-tabs nav a span {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    grid-column-start: 2;
+    grid-column-end: 4;
+  }
+  .sce-settings-tabs nav a span:hover {
+    color: #9949cf;
+  }
+}
 .sce-settings-tabs nav {
   order: 1;
 }
@@ -320,9 +456,8 @@ h3.sce-panel-heading {
   font-size: 16px;
   text-decoration: none;
   margin: 0;
-  background: #ffffff;
+  background: transparent;
   color: #393838;
-  box-shadow: 0 1px 4px rgba(18, 25, 97, 0.08);
 }
 .sce-settings-tabs nav a span {
   display: flex;

@@ -41,6 +41,10 @@ $delete_button_color_text: #fff;
 $danger_button_color: #721c24;
 $danger_button_color_text: #fff;
 
+@import 'button-resets.scss';
+@import 'breakpoints-mixin.scss';
+@import 'a11y-mixin.scss';
+
 #wpcontent {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
@@ -374,6 +378,130 @@ h3.sce-panel-heading {
 	margin: 0 auto;
 
 	nav {
+		a {
+			position: relative;
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-column-gap: 0.5em;
+			grid-row-gap: 0.4em;
+			border-radius: 3px;
+			color: #6f6f6f;
+			font-size: 16px;
+			line-height: normal;
+			padding: 0.6875rem 0.75rem;
+			text-decoration: none;
+			background: transparent;
+			transition: all 0.4s ease-in-out;
+			z-index: 1;
+
+			@include respond-to('medium') {
+				grid-template-columns: 26px 1fr 1fr;
+				grid-column-gap: 0.5em;
+				grid-row-gap: 0.4em;
+				padding: 0.6875rem 0.5rem 0.6875rem 1rem;
+			}
+
+			&:before {
+				position: absolute;
+				content: '';
+				width: 100%;
+				height: 2px;
+				background: transparent;
+				transition: all 0.4s ease-in-out;
+				left: 0;
+				top: 0;
+				z-index: 1;
+			}
+
+			&:after {
+				position: absolute;
+				content: '';
+				width: 100%;
+				height: 2px;
+				background: transparent;
+				bottom: -2px;
+				left: 0;
+				transition: all 0.4s ease-in-out;
+				z-index: 3;
+			}
+
+			&:hover {
+				border-top: 0;
+				&:before {
+					background: #8019c4;
+				}
+			}
+
+			&:hover {
+				&:before,
+				&:after {
+					background: #8019c4;
+				}
+				transition: all 0.4s ease-in-out;
+				color: #393838;
+				svg use {
+					transition: all 0.4s ease-in-out;
+					fill: #a774c9;
+					color: #a774c9;
+				}
+			}
+
+			&.nav-tab-active {
+				background: #ffffff;
+				color: #393838;
+				box-shadow: 0 1px 4px rgb(18 25 97 / 8%);
+
+				&:before {
+					background: #393838;
+				}
+
+				&:hover {
+					&:before,
+					&:after {
+						background: #8019c4;
+					}
+				}
+
+				svg use {
+					transition: all 0.4s ease-in-out;
+					fill: #a774c9;
+					color: #a774c9;
+				}
+			}
+
+			svg {
+				vertical-align: middle;
+				line-height: normal;
+				width: 24px;
+				height: 24px;
+				font-size: 24px;
+
+				path {
+					transition: all 0.4s ease-in-out;
+					fill: #242748;
+					color: #242748;
+				}
+			}
+
+			span {
+				display: none;
+
+				@include respond-to('medium') {
+					display: flex;
+					align-items: center;
+					vertical-align: middle;
+					grid-column-start: 2;
+					grid-column-end: 4;
+
+					&:hover {
+						color: #9949cf;
+					}
+				}
+			}
+		}
+	}
+
+	nav {
 		order: 1;
 
 		a {
@@ -385,9 +513,8 @@ h3.sce-panel-heading {
 			font-size: 16px;
 			text-decoration: none;
 			margin: 0;
-			background: #ffffff;
+			background: transparent;
 			color: #393838;
-			box-shadow: 0 1px 4px rgb(18 25 97 / 8%);
 
 			span {
 				display: flex;

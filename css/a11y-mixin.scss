@@ -1,0 +1,24 @@
+/* Props: https://sass-lang.com/documentation/at-rules/mixin */
+
+@mixin hide-a11y {
+	border: 0;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+@mixin show-a11y {
+	border: inherit;
+	clip: unset;
+	height: unset;
+	margin: unset;
+	overflow: unset;
+	padding: unset;
+	position: unset;
+	width: inherit;
+}
