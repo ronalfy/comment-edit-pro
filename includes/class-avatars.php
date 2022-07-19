@@ -383,8 +383,11 @@ class Avatars {
 			esc_attr( $avatar_dimensions['height'] ),
 			$can_edit_js
 		);
-		$avatar_html = '<a href="#" aria-label="' . esc_attr__( 'Choose an Avatar', 'comment-edit-pro' ) . '" onClick="window.sce_avatars_stop_propagation( event );">' . $avatar_html . '</a>';
-		return $avatar_html;
+		$return_html = '<a href="#" class="sce-avatar-select" aria-label="' . esc_attr__( 'Choose an Avatar', 'comment-edit-pro' ) . '" onClick="window.sce_avatars_stop_propagation( event );">' . $avatar_html . '</a>';
+		if ( is_admin() ) {
+			return $avatar_html;
+		}
+		return $return_html;
 	}
 
 	/**

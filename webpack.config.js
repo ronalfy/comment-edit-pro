@@ -1,9 +1,15 @@
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const FixStyleOnlyEntriesPlugin = require( 'webpack-fix-style-only-entries' );
+const path = require( 'path' );
 module.exports = ( env ) => {
 	return [
 		{
 			mode: env.mode,
+			resolve: {
+				alias: {
+					react: path.resolve( 'node_modules/react' ),
+				},
+			},
 			devtool: 'source-map',
 			entry: {
 				themes: [ './css/themes.scss' ],
