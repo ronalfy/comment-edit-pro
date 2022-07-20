@@ -27,6 +27,11 @@ button.button-reset.show-cursor {
 /* Mixin from: https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/ */
 /* It's only used here, so no external file for mixin? */
 /* Props: https://sass-lang.com/documentation/at-rules/mixin */
+@keyframes sce-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 #wpcontent {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -59,6 +64,7 @@ button.button-reset.show-cursor {
 #wpcontent .sce-panel-row h2 {
   font-size: 24px;
   color: #9c68b0;
+  margin-top: 0;
 }
 #wpcontent .sce-main-help, #wpcontent .sce-edit-count {
   font-size: 14px;
@@ -157,7 +163,10 @@ h3.sce-panel-heading {
   border: 1px solid #DDD;
   box-shadow: 1px 1px 7px 2px rgba(221, 221, 221, 0.6);
   padding: 20px;
-  margin-top: 25px;
+  margin-bottom: 2.2em;
+}
+.sce-admin-panel-area:last-child {
+  margin-bottom: 0;
 }
 
 .sce-panel-row {
@@ -321,6 +330,9 @@ h3.sce-panel-heading {
 .sce-admin__range-control .components-range-control__track {
   color: #8019c4;
 }
+.sce-admin__range-control .components-range-control__track ~ span {
+  background-color: #8019c4;
+}
 
 .sce-admin__avatar-preview {
   margin-top: 15px;
@@ -481,6 +493,70 @@ h3.sce-panel-heading {
   order: 2;
   background: #8019c4;
   border-radius: 5px;
+}
+
+/* Admin Buttons */
+.sce-admin-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sce-admin-buttons button {
+  background: #FFF;
+  color: #017e01;
+  border-style: solid;
+  border-color: #017e01;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.sce-admin-buttons button:hover {
+  border-radius: 5px;
+  background: #e9ece6;
+  color: #005200;
+  border-color: #006400;
+}
+.sce-admin-buttons button.has-error {
+  border: 1px solid #bc2b2c;
+}
+.sce-admin-buttons button.has-error:hover {
+  cursor: not-allowed;
+}
+.sce-admin-buttons button.qdlx__btn-danger {
+  background: #FFF;
+  color: #822700;
+  border-color: #822700;
+}
+.sce-admin-buttons button.qdlx__btn-danger:hover {
+  background: #ece6e6;
+  color: #822700;
+  border-color: #822700;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-saving {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-saving svg {
+  width: 24px;
+  height: 24px;
+  animation: sce-rotate 1s linear infinite;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-saving svg path {
+  fill: #017e01;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-resetting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-resetting svg {
+  width: 24px;
+  height: 24px;
+  animation: sce-rotate 1s linear infinite;
+}
+.sce-admin-buttons button.qdlx__btn--icon-right.is-resetting svg path {
+  fill: #822700;
 }
 
 /*# sourceMappingURL=admin.css.map*/

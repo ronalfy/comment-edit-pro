@@ -45,6 +45,12 @@ $danger_button_color_text: #fff;
 @import 'breakpoints-mixin.scss';
 @import 'a11y-mixin.scss';
 
+@keyframes sce-rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 #wpcontent {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
@@ -82,6 +88,7 @@ $danger_button_color_text: #fff;
 	.sce-panel-row h2 {
 		font-size: 24px;
 		color: $admin_light_purple;
+		margin-top: 0;
 	}
 	.sce-main-help, .sce-edit-count {
 		font-size: 14px;
@@ -181,7 +188,11 @@ h3.sce-panel-heading {
 	border: 1px solid #DDD;
 	box-shadow: 1px 1px 7px 2px rgba(221,221,221,0.6);
 	padding: 20px;
-	margin-top: 25px;
+	margin-bottom: 2.2em;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 .sce-panel-row {
 	margin-bottom: 15px;
@@ -360,6 +371,10 @@ h3.sce-panel-heading {
 	}
 	.components-range-control__track {
 		color: #8019c4;
+
+		& ~ span {
+			background-color: #8019c4;
+		}
 	}
 }
 .sce-admin__avatar-preview {
@@ -542,6 +557,78 @@ h3.sce-panel-heading {
 			order: 2;
 			background: #8019c4;
 			border-radius: 5px;
+		}
+	}
+}
+
+/* Admin Buttons */
+.sce-admin-buttons {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	button {
+		background: #FFF;
+		color: #017e01;
+		border-style: solid;
+		border-color: #017e01;
+		padding: 10px 20px;
+		cursor: pointer;
+		border-radius: 5px;
+
+		&:hover {
+			border-radius: 5px;
+			background: #e9ece6;
+			color: #005200;
+			border-color: #006400;
+		}
+
+		&.has-error {
+			border: 1px solid #bc2b2c;
+			&:hover {
+				cursor: not-allowed;
+			}
+		}
+
+		&.qdlx__btn-danger {
+			background: #FFF;
+			color: #822700;
+			border-color: #822700;
+
+			&:hover {
+				background: #ece6e6;
+				color: #822700;
+				border-color: #822700;
+			}
+		}
+
+		&.qdlx__btn--icon-right {
+			&.is-saving {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				svg {
+					width: 24px;
+					height: 24px;
+					animation: sce-rotate 1s linear infinite;
+					path {
+						fill: #017e01;
+					}
+				}
+			}
+			&.is-resetting {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				svg {
+					width: 24px;
+					height: 24px;
+					animation: sce-rotate 1s linear infinite;
+					path {
+						fill: #822700;
+					}
+				}
+			}
 		}
 	}
 }

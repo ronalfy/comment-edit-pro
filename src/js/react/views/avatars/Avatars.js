@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
+import classNames from 'classnames';
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	TextControl,
@@ -10,10 +11,13 @@ import {
 	RangeControl,
 	ToggleControl,
 } from '@wordpress/components';
+import Spinner from '../../components/icons/Spinner';
 
 const Avatars = () => {
 	const [ avatarsEnabled, setAvatarsEnabled ] = useState( false );
 	const [ avatarSize, setAvatarSize ] = useState( 90 );
+	const [ saving, setSaving ] = useState( false );
+	const [ isSaved, setIsSaved ] = useState( false );
 
 	const { register, control, handleSubmit, setValue, getValues, reset } =
 		useForm( {
@@ -31,8 +35,16 @@ const Avatars = () => {
 		control,
 	} );
 
+	const hasErrors = () => {
+		return Object.keys( errors ).length > 0;
+	};
+
 	const onSubmit = ( formData ) => {
-		console.log( formData );
+
+		setSaving( true );
+		setTimeout(() => {
+			setSaving( false );
+		}, 2000 );
 	};
 
 	const getAvatarWidth = () => {
@@ -68,6 +80,8 @@ const Avatars = () => {
 										'Set the Width of the Avatars.',
 										'comment-edit-pro'
 									) }
+									trackColor="#8019c4"
+									railColor="#dad4eb"
 								/>
 								<img className="sce-admin__avatar-preview" src={ sceAvatars.preview_avatar } width={ value } height={ value } alt={ __( 'Preview avatar', 'comment-edit-pro' ) } />
 							</>
@@ -179,6 +193,26 @@ const Avatars = () => {
 						{ getAvatarWidth() }
 					</tbody>
 				</table>
+				<div className="sce-admin-buttons">
+					<Button
+						className={ classNames(
+							'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
+							{ 'has-error': hasErrors() },
+							{ 'has-icon': saving },
+							{ 'is-saving': { saving } }
+						) }
+						type="submit"
+						text={
+							saving
+								? __( 'Saving…', 'quotes-dlx' )
+								: __( 'Save Defaults', 'quotes-dlx' )
+						}
+						icon={ saving ? Spinner : false }
+						iconSize="18"
+						iconPosition="right"
+						disabled={ saving }
+					/>
+				</div>
 			</form>
 		</>
 	);
