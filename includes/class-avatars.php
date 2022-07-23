@@ -457,6 +457,18 @@ class Avatars {
 			$size = 90;
 		}
 
+		// Now see if we're overriding avatar size options.
+		$custom_avatar_size = $options['enable_custom_avatar_size'] ?? false;
+		if ( $custom_avatar_size ) {
+			$custom_size = $options['avatar_size'] ?? false;
+			if ( $custom_size ) {
+				// Check for admin and if in comment loop.
+				if ( ! is_admin() && is_a( $comment, 'WP_Comment' ) ) {
+					$size = $custom_size;
+				}
+			}
+		}
+
 		/**
 		 * Filter: sce_avatar_size
 		 *
