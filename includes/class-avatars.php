@@ -32,6 +32,11 @@ class Avatars {
 
 		// Load Avatar scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+		// Load Avatar scripts.
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_avatar_scripts_styles' ) );
+
+		// Load the pngs for use in the popover.
+		add_action( 'admin_footer', array( $this, 'add_footer_html' ) );
 
 		/**
 		 * Misc Frontend Avatar Actions.
@@ -100,6 +105,17 @@ class Avatars {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Load scripts and styles to change avatars in discussion area.
+	 */
+	public function add_admin_avatar_scripts_styles() {
+		global $pagenow;
+		if ( 'edit-comments.php' !== $pagenow ) {
+			return;
+		}
+		$this->add_avatar_scripts_frontend_backend();
 	}
 
 	/**
@@ -272,51 +288,58 @@ class Avatars {
 	}
 
 	/**
+	 * Loads the avatar scripts needed for the front-end and back-end.
+	 */
+	private function add_avatar_scripts_frontend_backend() {
+		wp_enqueue_script(
+			'sce-avatars',
+			Functions::get_plugin_url( 'dist/avatars.js' ),
+			array(),
+			Functions::get_plugin_version(),
+			true
+		);
+
+		// Retrieve avatar URL slugs.
+		$avatars = $this->get_avatar_filenames();
+
+		// Get avatar data from filenames.
+		$avatar_data = array();
+		foreach ( $avatars as $avatar_filename ) {
+			$avatar_url    = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_filename . '.png' ) );
+			$avatar_data[] = array(
+				'avatar_url' => $avatar_url,
+				'avatar_key' => $avatar_filename,
+			);
+		}
+
+		// Populate avatars with plugin folder/file location.
+		foreach ( $avatars as &$avatar_file_name ) {
+			$avatar_file_name = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_file_name . '.png' ) );
+		}
+		wp_localize_script(
+			'sce-avatars',
+			'sceAvatars',
+			array(
+				'avatars' => $avatar_data,
+				'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
+			)
+		);
+
+		wp_enqueue_style(
+			'sce-avatars',
+			Functions::get_plugin_url( 'dist/avatars-frontend.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
+		);
+	}
+
+	/**
 	 * Add avatar scripts/styles.
 	 */
 	public function add_scripts_styles() {
 		if ( comments_open() ) {
-			wp_enqueue_script(
-				'sce-avatars',
-				Functions::get_plugin_url( 'dist/avatars.js' ),
-				array(),
-				Functions::get_plugin_version(),
-				true
-			);
-
-			// Retrieve avatar URL slugs.
-			$avatars = $this->get_avatar_filenames();
-
-			// Get avatar data from filenames.
-			$avatar_data = array();
-			foreach ( $avatars as $avatar_filename ) {
-				$avatar_url    = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_filename . '.png' ) );
-				$avatar_data[] = array(
-					'avatar_url' => $avatar_url,
-					'avatar_key' => $avatar_filename,
-				);
-			}
-
-			// Populate avatars with plugin folder/file location.
-			foreach ( $avatars as &$avatar_file_name ) {
-				$avatar_file_name = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_file_name . '.png' ) );
-			}
-			wp_localize_script(
-				'sce-avatars',
-				'sceAvatars',
-				array(
-					'avatars' => $avatar_data,
-					'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
-				)
-			);
-
-			wp_enqueue_style(
-				'sce-avatars',
-				Functions::get_plugin_url( 'dist/avatars-frontend.css' ),
-				array(),
-				Functions::get_plugin_version(),
-				'all'
-			);
+			$this->add_avatar_scripts_frontend_backend();
 		}
 	}
 
@@ -517,7 +540,7 @@ class Avatars {
 
 		// Build JS if user can edit.
 		$can_edit_js = '';
-		if ( $can_edit && ! is_admin() ) {
+		if ( $can_edit ) {
 			$nonce_field = wp_create_nonce( 'sce-edit-avatar-' . $comment_id . $post_id );
 			$can_edit_js = sprintf(
 				'onClick="window.sce_avatars( event, %d, %d, %d, \'%s\' );"',
