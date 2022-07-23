@@ -523,6 +523,17 @@ class Avatars {
 			$classes[] = 'sce-can-edit';
 		}
 
+		if ( ! $this->can_change_avatar() ) {
+			$avatar_html = sprintf(
+				'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
+				esc_attr( implode( ' ', $classes ) ),
+				esc_url( $src ),
+				esc_attr( $avatar_dimensions['width'] ),
+				esc_attr( $avatar_dimensions['height'] ),
+			);
+			return $avatar_html;
+		}
+
 		/**
 		 * Filter: sce_avatar_classes
 		 *
