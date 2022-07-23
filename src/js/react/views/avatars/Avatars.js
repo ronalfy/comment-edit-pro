@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
+import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
+import BeatLoader from 'react-spinners/BeatLoader';
+
 import {
 	TextControl,
 	Button,
@@ -12,20 +15,53 @@ import {
 	ToggleControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
+import ClipboardCheck from '../../components/icons/ClipboardCheck';
+import sendCommand from '../../../SendCommand';
 
-const Avatars = () => {
+const retrieveAvatarOptions = () => {
+	return sendCommand( 'sce_get_avatar_options', {
+		nonce: sceAvatars.get_nonce,
+	} );
+};
+
+const Avatars = ( props ) => {
+	const [ defaults, getDefaults ] = useAsyncResource( retrieveAvatarOptions, [] );
+	return (
+		<Suspense fallback={ (
+			<>
+				<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
+				<BeatLoader
+					color={ '#9c68b0' }
+					loading={ true }
+					cssOverride={ true }
+					size={ 25 }
+					speedMultiplier={ 0.65 }
+				/>
+			</>
+		) }>
+			<Interface defaults={ defaults } { ...props } />
+		</Suspense>
+	);
+};
+
+
+const Interface = ( props ) => {
 	const [ avatarsEnabled, setAvatarsEnabled ] = useState( false );
 	const [ avatarSize, setAvatarSize ] = useState( 90 );
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
 
+	const { defaults } = props;
+	const response = defaults();
+	const { data, success } = response.data;
+
 	const { register, control, handleSubmit, setValue, getValues, reset } =
 		useForm( {
 			defaultValues: {
-				enableAvatars: false,
-				avatarSize: 90,
-				enableAvatarsLoggedIn: true,
-				enableAvatarsAnonymous: true,
+				enableAvatars: data.enableAvatars,
+				avatarSize: data.avatarSize,
+				enableAvatarsLoggedIn: data.enableAvatarsLoggedIn,
+				enableAvatarsAnonymous: data.enableAvatarsAnonymous,
 			},
 		} );
 
@@ -40,11 +76,28 @@ const Avatars = () => {
 	};
 
 	const onSubmit = ( formData ) => {
-
 		setSaving( true );
-		setTimeout(() => {
-			setSaving( false );
-		}, 2000 );
+		sendCommand( 'sce_save_avatar_options', {
+			nonce: sceAvatars.save_nonce,
+			...formData
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+
+				if ( ajaxSuccess ) {
+					setIsSaved( true );
+					setTimeout( () => {
+						setIsSaved( false );
+					}, 3000 );
+				} else {
+					// Error stuff.
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setSaving( false );
+			} );
 	};
 
 	const getAvatarWidth = () => {
@@ -154,6 +207,26 @@ const Avatars = () => {
 		);
 	};
 
+	const getSaveIcon = () => {
+		if ( saving ) {
+			return ( Spinner );
+		}
+		if ( isSaved ) {
+			return ( ClipboardCheck );
+		}
+		return false;
+	};
+
+	const getSaveText = () => {
+		if ( saving ) {
+			return __( 'Saving…', 'quotes-dlx' );
+		}
+		if ( isSaved ) {
+			return __( 'Saved', 'quotes-dlx' );
+		}
+		return __( 'Save Avatar Options', 'quotes-dlx' );
+	};
+
 	return (
 		<>
 			<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
@@ -198,16 +271,13 @@ const Avatars = () => {
 						className={ classNames(
 							'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
 							{ 'has-error': hasErrors() },
-							{ 'has-icon': saving },
-							{ 'is-saving': { saving } }
+							{ 'has-icon': saving || isSaved },
+							{ 'is-saving': ( saving && ! isSaved ) },
+							{ 'is-saved': isSaved }
 						) }
 						type="submit"
-						text={
-							saving
-								? __( 'Saving…', 'quotes-dlx' )
-								: __( 'Save Defaults', 'quotes-dlx' )
-						}
-						icon={ saving ? Spinner : false }
+						text={getSaveText() }
+						icon={ getSaveIcon() }
 						iconSize="18"
 						iconPosition="right"
 						disabled={ saving }

@@ -8,6 +8,7 @@
 namespace CommentEditPro\Includes;
 
 use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
 
 /**
  * Class Avatars
@@ -39,6 +40,12 @@ class Avatars {
 		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 
+		// Save avatar settings in the admin.
+		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
+
+		// Retrieve avatar settings in the admin.
+		add_action( 'wp_ajax_sce_get_avatar_options', array( $this, 'ajax_get_avatar_options' ) );
+
 		// Load Avatar scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 	}
@@ -64,6 +71,9 @@ class Avatars {
 				'sceAvatars',
 				array(
 					'preview_avatar' => Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ),
+					'save_nonce'     => wp_create_nonce( 'sce-save-avatar-options' ),
+					'get_nonce'      => wp_create_nonce( 'sce-retrieve-avatar-options' ),
+					'ajaxurl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);
 		}
@@ -145,6 +155,62 @@ class Avatars {
 			// This is not our comment.
 			update_comment_meta( $comment_id, 'sce-avatar-location', $key );
 		}
+
+		// Exit gracefully.
+		wp_send_json_success( array() );
+	}
+
+	/**
+	 * Save avatar options.
+	 */
+	public function ajax_get_avatar_options() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		$avatar_options = Options::get_options();
+
+		$json_array = array(
+			'enableAvatars'          => $avatar_options['enable_avatars'],
+			'avatarSize'             => $avatar_options['avatar_size'],
+			'enableAvatarsLoggedIn'  => $avatar_options['enable_avatars_logged_in'],
+			'enableAvatarsAnonymous' => $avatar_options['enable_avatars_anonymous'],
+		);
+
+		// Exit gracefully.
+		wp_send_json_success( $json_array );
+	}
+
+	/**
+	 * Save avatar options.
+	 */
+	public function ajax_save_avatar_options() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		$options_to_save = array(
+			'enable_avatars'           => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
+			'avatar_size'              => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
+			'enable_avatars_logged_in' => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
+			'enable_avatars_anonymous' => filter_input( INPUT_POST, 'enableAvatarsAnonymous', FILTER_VALIDATE_BOOLEAN ),
+		);
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		Options::update_options( $options_to_save );
 
 		// Exit gracefully.
 		wp_send_json_success( array() );
@@ -234,7 +300,7 @@ class Avatars {
 	 */
 	private function get_avatar_comment_field_array() {
 		// Todo - Read in saved avatar.
-		$avatar_html  = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 
 		// Get nicename/nickname if logged in.
 		if ( is_user_logged_in() ) {

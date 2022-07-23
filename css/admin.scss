@@ -616,6 +616,19 @@ h3.sce-panel-heading {
 					}
 				}
 			}
+			&.is-saved {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				svg {
+					width: 24px;
+					height: 24px;
+					margin-left: 14px;
+					path {
+						fill: #017e01;
+					}
+				}
+			}
 			&.is-resetting {
 				display: flex;
 				justify-content: space-between;

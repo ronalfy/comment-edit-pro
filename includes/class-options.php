@@ -37,8 +37,7 @@ class Options {
 					$option = $timer;
 					break;
 				case 'min_comment_length':
-					$option = absint( $options[ $key ] );
-					break;
+				case 'avatar_size':
 				case 'max_comment_length':
 					$option = absint( $options[ $key ] );
 					break;
@@ -54,6 +53,9 @@ class Options {
 				case 'allow_unlimited_editing':
 				case 'allow_front_end_character_limit':
 				case 'allow_front_end_editing':
+				case 'enable_avatars':
+				case 'enable_avatars_logged_in':
+				case 'enable_avatars_anonymous':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -145,6 +147,10 @@ class Options {
 			'allow_unlimited_editing'         => false,
 			'allow_front_end_character_limit' => false,
 			'allow_front_end_editing'         => false,
+			'enable_avatars' => false,
+			'avatar_size' => 90,
+			'enable_avatars_logged_in' => true,
+			'enable_avatars_anonymous' => true,
 		);
 		return $defaults;
 	}
