@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, Suspense, useEffect } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
@@ -26,18 +27,20 @@ const retrieveAvatarOptions = () => {
 const Avatars = ( props ) => {
 	const [ defaults, getDefaults ] = useAsyncResource( retrieveAvatarOptions, [] );
 	return (
-		<Suspense fallback={ (
-			<>
-				<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
-				<BeatLoader
-					color={ '#9c68b0' }
-					loading={ true }
-					cssOverride={ true }
-					size={ 25 }
-					speedMultiplier={ 0.65 }
-				/>
-			</>
-		) }>
+		<Suspense
+			fallback={
+				<>
+					<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
+					<BeatLoader
+						color={ '#9c68b0' }
+						loading={ true }
+						cssOverride={ true }
+						size={ 25 }
+						speedMultiplier={ 0.65 }
+					/>
+				</>
+			}
+		>
 			<Interface defaults={ defaults } { ...props } />
 		</Suspense>
 	);
@@ -103,9 +106,7 @@ const Interface = ( props ) => {
 	const getAvatarWidth = () => {
 		return (
 			<tr>
-				<th scope="row">
-					{ __( 'Avatar Size', 'comment-edit-pro' ) }
-				</th>
+				<th scope="row">{ __( 'Avatar Size', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="enableCustomAvatarSize"
@@ -113,10 +114,7 @@ const Interface = ( props ) => {
 						render={ ( { field: { onChange, value } } ) => (
 							<>
 								<ToggleControl
-									label={ __(
-										'Enable Avatar Custom Sizes',
-										'comment-edit-pro'
-									) }
+									label={ __( 'Enable Avatar Custom Sizes', 'comment-edit-pro' ) }
 									className="sce-admin__toggle-control"
 									checked={ value }
 									onChange={ ( boolValue ) => {
@@ -130,51 +128,53 @@ const Interface = ( props ) => {
 							</>
 						) }
 					/>
-					<Controller
-						name="avatarSize"
-						control={ control }
-						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<RangeControl
-									label={ __(
-										'Set Avatar Size',
-										'comment-edit-pro'
-									) }
-									step={ 2 }
-									value={ value }
-									max={ 128 }
-									min={ 24 }
-									currentInput={ 50 }
-									initialPosition={ 50 }
-									allowReset={ true }
-									className="sce-admin__range-control"
-									onChange={ ( avatarSizeValue ) => {
-										setAvatarSize( avatarSizeValue );
-										onChange( avatarSizeValue );
-									} }
-									help={ __(
-										'Set the Size of the Avatars.',
-										'comment-edit-pro'
-									) }
-									trackColor="#8019c4"
-									railColor="#dad4eb"
-								/>
-								<img className="sce-admin__avatar-preview" src={ sceAvatars.preview_avatar } width={ value } height={ value } alt={ __( 'Preview avatar', 'comment-edit-pro' ) } />
-							</>
-						) }
-					/>
+					{ getValues( 'enableCustomAvatarSize' ) && (
+						<Controller
+							name="avatarSize"
+							control={ control }
+							render={ ( { field: { onChange, value } } ) => (
+								<>
+									<RangeControl
+										label={ __( 'Set Avatar Size', 'comment-edit-pro' ) }
+										step={ 2 }
+										value={ value }
+										max={ 128 }
+										min={ 24 }
+										currentInput={ 50 }
+										initialPosition={ 50 }
+										allowReset={ true }
+										className="sce-admin__range-control"
+										onChange={ ( avatarSizeValue ) => {
+											setAvatarSize( avatarSizeValue );
+											onChange( avatarSizeValue );
+										} }
+										help={ __(
+											'Set the Size of the Avatars.',
+											'comment-edit-pro'
+										) }
+										trackColor="#8019c4"
+										railColor="#dad4eb"
+									/>
+									<img
+										className="sce-admin__avatar-preview"
+										src={ sceAvatars.preview_avatar }
+										width={ value }
+										height={ value }
+										alt={ __( 'Preview avatar', 'comment-edit-pro' ) }
+									/>
+								</>
+							) }
+						/>
+					) }
 				</td>
 			</tr>
-
 		);
 	};
 
 	const getAvatarPermissions = () => {
 		return (
 			<tr>
-				<th scope="row">
-					{ __( 'Avatar Permissions', 'comment-edit-pro' ) }
-				</th>
+				<th scope="row">{ __( 'Avatar Permissions', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="enableAvatarsLoggedIn"
@@ -182,10 +182,7 @@ const Interface = ( props ) => {
 						render={ ( { field: { onChange, value } } ) => (
 							<>
 								<ToggleControl
-									label={ __(
-										'Logged-in Users',
-										'comment-edit-pro'
-									) }
+									label={ __( 'Logged-in Users', 'comment-edit-pro' ) }
 									className="sce-admin__toggle-control"
 									checked={ value }
 									onChange={ ( boolValue ) => {
@@ -206,10 +203,7 @@ const Interface = ( props ) => {
 						render={ ( { field: { onChange, value } } ) => (
 							<>
 								<ToggleControl
-									label={ __(
-										'Anonymous Users',
-										'comment-edit-pro'
-									) }
+									label={ __( 'Anonymous Users', 'comment-edit-pro' ) }
 									className="sce-admin__toggle-control"
 									checked={ value }
 									onChange={ ( boolValue ) => {
@@ -226,16 +220,13 @@ const Interface = ( props ) => {
 					/>
 				</td>
 			</tr>
-
 		);
 	};
 
 	const getAvatarLabel = () => {
 		return (
 			<tr>
-				<th scope="row">
-					{ __( 'Labels', 'comment-edit-pro' ) }
-				</th>
+				<th scope="row">{ __( 'Labels', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="chooseAvatarText"
@@ -245,15 +236,10 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Avatar Label', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames(
-									'qdlx-admin__text-control',
-									{
-										'has-error':
-											'required' ===
-											errors.chooseAvatarText?.type,
-										'is-required': true,
-									}
-								) }
+								className={ classNames( 'qdlx-admin__text-control', {
+									'has-error': 'required' === errors.chooseAvatarText?.type,
+									'is-required': true,
+								} ) }
 								placeholder="Choose an Avatar"
 								help={ __(
 									'When a user is not logged in, they will see this label before they submit their comment.',
@@ -265,9 +251,7 @@ const Interface = ( props ) => {
 					/>
 					{ 'required' === errors.chooseAvatarText?.type && (
 						<Notice
-							message={ __(
-								'This field is a required field.'
-							) }
+							message={ __( 'This field is a required field.' ) }
 							status="error"
 							politeness="assertive"
 							inline={ true }
@@ -276,16 +260,15 @@ const Interface = ( props ) => {
 					) }
 				</td>
 			</tr>
-
 		);
 	};
 
 	const getSaveIcon = () => {
 		if ( saving ) {
-			return ( Spinner );
+			return Spinner;
 		}
 		if ( isSaved ) {
-			return ( ClipboardCheck );
+			return ClipboardCheck;
 		}
 		return false;
 	};
@@ -307,19 +290,14 @@ const Interface = ( props ) => {
 				<table className="form-table">
 					<tbody>
 						<tr>
-							<th scope="row">
-								{ __( 'Avatars', 'comment-edit-pro' ) }
-							</th>
+							<th scope="row">{ __( 'Avatars', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
 									name="enableAvatars"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											label={ __(
-												'Enable Comment Avatars',
-												'comment-edit-pro'
-											) }
+											label={ __( 'Enable Comment Avatars', 'comment-edit-pro' ) }
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
@@ -335,9 +313,13 @@ const Interface = ( props ) => {
 								/>
 							</td>
 						</tr>
-						{ getAvatarPermissions() }
-						{ getAvatarLabel() }
-						{ getAvatarWidth() }
+						{ getValues( 'enableAvatars' ) && (
+							<>
+								{ getAvatarPermissions() }
+								{ getAvatarLabel() }
+								{ getAvatarWidth() }
+							</>
+						) }
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
@@ -346,7 +328,7 @@ const Interface = ( props ) => {
 							'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
 							{ 'has-error': hasErrors() },
 							{ 'has-icon': saving || isSaved },
-							{ 'is-saving': ( saving && ! isSaved ) },
+							{ 'is-saving': saving && ! isSaved },
 							{ 'is-saved': isSaved }
 						) }
 						type="submit"
@@ -360,7 +342,9 @@ const Interface = ( props ) => {
 				{ hasErrors() && (
 					<Notice
 						message={ __(
-							'There are form validation errors. Please correct them above.', 'comment-edit-pro' ) }
+							'There are form validation errors. Please correct them above.',
+							'comment-edit-pro'
+						) }
 						status="error"
 						politeness="polite"
 					/>
