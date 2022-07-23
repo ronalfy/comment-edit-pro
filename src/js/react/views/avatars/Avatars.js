@@ -130,7 +130,7 @@ const Interface = ( props ) => {
 										onChange( avatarSizeValue );
 									} }
 									help={ __(
-										'Set the Width of the Avatars.',
+										'Set the Size of the Avatars.',
 										'comment-edit-pro'
 									) }
 									trackColor="#8019c4"

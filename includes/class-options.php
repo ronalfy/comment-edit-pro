@@ -19,6 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Options {
 
 	/**
+	 * Array holding the options.
+	 *
+	 * @var [type]
+	 */
+	protected static $options = false;
+
+	/**
 	 * Update options via sanitization
 	 *
 	 * @since 1.0.0
@@ -76,14 +83,21 @@ class Options {
 		} else {
 			update_option( 'sce_options', $options );
 		}
+		self::$options = $options;
+		return $options;
 	}
 
 	/**
 	 * Return a list of options.
 	 *
+	 * @param bool $force Whether to get options from cache or not.
+	 *
 	 * @return array Array of options.
 	 */
-	public static function get_options() {
+	public static function get_options( $force = false) {
+		if ( is_array( self::$options ) && ! $force ) {
+			return self::$options;
+		}
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', array() );
 		} else {
@@ -94,6 +108,7 @@ class Options {
 		if ( count( $options ) < count( $defaults ) ) {
 			$options = wp_parse_args( $options, $defaults );
 		}
+		self::$options = $options;
 		return $options;
 	}
 

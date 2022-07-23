@@ -209,8 +209,13 @@
 }
 
 /* Inline comment editing and avatars */
-
-.sce-can-edit {
+.sce-avatar-select {
+	cursor: unset;
+}
+.sce-custom-avatar {
+	cursor: unset;
+}
+.sce-custom-avatar.sce-can-edit {
 	cursor: pointer;
 	&:hover {
 		filter: saturate(125%);

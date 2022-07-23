@@ -50139,7 +50139,7 @@ var Interface = function Interface(props) {
 
             _onChange(avatarSizeValue);
           },
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set the Width of the Avatars.', 'comment-edit-pro'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set the Size of the Avatars.', 'comment-edit-pro'),
           trackColor: "#8019c4",
           railColor: "#dad4eb"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {

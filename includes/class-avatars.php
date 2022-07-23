@@ -19,6 +19,30 @@ class Avatars {
 	 * Class runner.
 	 */
 	public function run() {
+
+		/**
+		 * Avatar admin panel actions.
+		 */
+
+		// Save avatar settings in the admin.
+		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
+
+		// Retrieve avatar settings in the admin.
+		add_action( 'wp_ajax_sce_get_avatar_options', array( $this, 'ajax_get_avatar_options' ) );
+
+		// Load Avatar scripts.
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+
+		/**
+		 * Misc Frontend Avatar Actions.
+		 */
+
+		// Exit quickly if avatars aren't enabled.
+		$options        = Options::get_options();
+		$enable_avatars = $options['enable_avatars'] ?? false;
+		if ( ! $enable_avatars ) {
+			return;
+		}
 		// User Avatar override.
 		add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
 		add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
@@ -39,15 +63,43 @@ class Avatars {
 		// Save avatar via ajax.
 		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+	}
 
-		// Save avatar settings in the admin.
-		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
+	/**
+	 * Pass go for if a user can change an avatar.
+	 *
+	 * @return bool true to change an avatar, false to not.
+	 */
+	private function can_change_avatar() {
 
-		// Retrieve avatar settings in the admin.
-		add_action( 'wp_ajax_sce_get_avatar_options', array( $this, 'ajax_get_avatar_options' ) );
+		// Shortcut. If user can moderate comments, user can change avatars.
+		if ( current_user_can( 'moderate_comments' ) ) {
+			return true;
+		}
 
-		// Load Avatar scripts.
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+		$options                  = Options::get_options();
+		$avatars_enabled          = $options['enable_avatars'] ?? false;
+		$enable_avatars_logged_in = $options['enable_avatars_logged_in'] ?? false;
+		$enable_avatars_anonymous = $options['enable_avatars_anonymous'] ?? false;
+
+		// If avatars are not enabled, user cannot edit/change avatars.
+		if ( ! $avatars_enabled ) {
+			return false;
+		}
+
+		// If anonymous, and avatars not enabled for anonymous.
+		if ( ! is_user_logged_in() && ! $enable_avatars_anonymous ) {
+			return false;
+		}
+
+		// If logged in and logged in avatars is off.
+		if ( is_user_logged_in() && ! $enable_avatars_logged_in ) {
+			if ( ! current_user_can( 'moderate_comments' ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -271,6 +323,9 @@ class Avatars {
 	 * @param array $defaults Array of defaults for the form field.
 	 */
 	public function add_avatar_textarea_field( $defaults ) {
+		if ( ! $this->can_change_avatar() ) {
+			return $defaults;
+		}
 		if ( ! is_user_logged_in() ) {
 			return $defaults;
 		}
@@ -289,6 +344,9 @@ class Avatars {
 	 * @return array updated comment fields.
 	 */
 	public function add_avatar_comment_field( $comment_fields ) {
+		if ( ! $this->can_change_avatar() ) {
+			return $comment_fields;
+		}
 		$avatar_field = $this->get_avatar_comment_field_array();
 		return $avatar_field + $comment_fields;
 	}
@@ -299,8 +357,18 @@ class Avatars {
 	 * @return array Return the avatar field as an array.
 	 */
 	private function get_avatar_comment_field_array() {
-		// Todo - Read in saved avatar.
+
 		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$current_avatar = false;
+		if ( is_user_logged_in() ) {
+			global $current_user;
+			$user_id    = $current_user->ID;
+			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true );
+			if ( $avatar_url ) {
+				$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' ) );
+				$current_avatar = $avatar_url;
+			}
+		}
 
 		// Get nicename/nickname if logged in.
 		if ( is_user_logged_in() ) {
@@ -310,7 +378,7 @@ class Avatars {
 			$user_nickname = __( 'Choose an Avatar', 'comment-edit-pro' );
 		}
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="0" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="' . ( $current_avatar ? esc_attr( $current_avatar ) : '' ) . '" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
 		);
 		return $avatar_field;
 	}
@@ -362,22 +430,36 @@ class Avatars {
 	 * Return avatar image html.
 	 *
 	 * @param string $src        The full URL to the asset.
-	 * @param int    $comment_id The width of the avatar (default 50px).
-	 * @param int    $user_id    The height of the avatar (default 50px).
+	 * @param int    $comment_id Comment ID for the comment.
+	 * @param int    $user_id    User ID for the comment.
+	 * @param int    $size       The ideal width/height of the avatar.
 	 *
 	 * @return unescaped image HTML.
 	 */
-	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0 ) {
+	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0, $size = 0 ) {
 		global $post, $comment;
 
-		// Todo - move width/height to option.
+		// If no size, try to pull from options.
+		if ( 0 === $size ) {
+			$options    = Options::get_options();
+			$maybe_size = $options['avatar_size'] ?? 0;
+			if ( $maybe_size ) {
+				$size = $maybe_size;
+			}
+		}
+
+		// If size still isn't set, set a default.
+		if ( 0 === $size || ! is_int( $size ) ) {
+			$size = 90;
+		}
+
 		/**
 		 * Filter: sce_avatar_size
 		 *
 		 * @param int $size (for both width/height).
 		 */
-		$width  = apply_filters( 'sce_avatar_size', 50 );
-		$height = apply_filters( 'sce_avatar_size', 50 );
+		$width  = apply_filters( 'sce_avatar_size', $size );
+		$height = apply_filters( 'sce_avatar_size', $size );
 
 		/**
 		 * Add ability to change width/height of image.
@@ -502,7 +584,7 @@ class Avatars {
 			return $avatar;
 		}
 
-		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ), $comment_id, $user_id );
+		$default_avatar = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ), $comment_id, $user_id, $size );
 		return $default_avatar;
 	}
 
