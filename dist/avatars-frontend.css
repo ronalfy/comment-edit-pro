@@ -246,4 +246,8 @@
   fill: #D78C67;
 }
 
+.sce-popover-error svg path {
+  fill: #D76774;
+}
+
 /*# sourceMappingURL=avatars-frontend.css.map*/

@@ -246,10 +246,15 @@
 .sce-popover-avatar-hidden {
 	display: none;
 }
-.sce-popover-spinner svg {
+.sce-popover-spinner svg{
 	animation: sce-rotate 4s linear infinite;
 
 	path {
 		fill: #D78C67;
+	}
+}
+.sce-popover-error svg {
+	path {
+		fill: #D76774;
 	}
 }
