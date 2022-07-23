@@ -388,10 +388,11 @@ class Avatars {
 	 *
 	 * @param int $comment_id The comment ID to retrieve data from.
 	 * @param int $user_id    The user ID to retrieve the avatar from.
+	 * @param int $size       The size of the avatar.
 	 *
 	 * @return string Avatar HTML.
 	 */
-	private function get_avatar( $comment_id = 0, $user_id = null ) {
+	private function get_avatar( $comment_id = 0, $user_id = null, $size = 90 ) {
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 		$avatar         = null;
 
@@ -419,7 +420,7 @@ class Avatars {
 
 		// Return avatar html or blank if avatar is still null.
 		if ( null !== $avatar ) {
-			$avatar_html = $this->get_avatar_image_html( $avatar, $comment_id, $user_id );
+			$avatar_html = $this->get_avatar_image_html( $avatar, $comment_id, $user_id, $size );
 			return $avatar_html;
 		}
 
@@ -590,7 +591,7 @@ class Avatars {
 
 		// Now get the user ID if it exists.
 		$user_id = $user->ID ?? null;
-		$avatar  = $this->get_avatar( $comment_id, $user_id );
+		$avatar  = $this->get_avatar( $comment_id, $user_id, $size );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
