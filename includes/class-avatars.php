@@ -517,7 +517,7 @@ class Avatars {
 
 		// Build JS if user can edit.
 		$can_edit_js = '';
-		if ( $can_edit ) {
+		if ( $can_edit && ! is_admin() ) {
 			$nonce_field = wp_create_nonce( 'sce-edit-avatar-' . $comment_id . $post_id );
 			$can_edit_js = sprintf(
 				'onClick="window.sce_avatars( event, %d, %d, %d, \'%s\' );"',
