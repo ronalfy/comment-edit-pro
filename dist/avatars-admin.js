@@ -5102,6 +5102,273 @@ function useGesture(handlers, config) {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/a11y/build-module/add-container.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/build-module/add-container.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ addContainer)
+/* harmony export */ });
+/**
+ * Build the live regions markup.
+ *
+ * @param {string} [ariaLive] Value for the 'aria-live' attribute; default: 'polite'.
+ *
+ * @return {HTMLDivElement} The ARIA live region HTML element.
+ */
+function addContainer() {
+  let ariaLive = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'polite';
+  const container = document.createElement('div');
+  container.id = `a11y-speak-${ariaLive}`;
+  container.className = 'a11y-speak-region';
+  container.setAttribute('style', 'position: absolute;' + 'margin: -1px;' + 'padding: 0;' + 'height: 1px;' + 'width: 1px;' + 'overflow: hidden;' + 'clip: rect(1px, 1px, 1px, 1px);' + '-webkit-clip-path: inset(50%);' + 'clip-path: inset(50%);' + 'border: 0;' + 'word-wrap: normal !important;');
+  container.setAttribute('aria-live', ariaLive);
+  container.setAttribute('aria-relevant', 'additions text');
+  container.setAttribute('aria-atomic', 'true');
+  const {
+    body
+  } = document;
+
+  if (body) {
+    body.appendChild(container);
+  }
+
+  return container;
+}
+//# sourceMappingURL=add-container.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/build-module/add-intro-text.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/build-module/add-intro-text.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ addIntroText)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Build the explanatory text to be placed before the aria live regions.
+ *
+ * This text is initially hidden from assistive technologies by using a `hidden`
+ * HTML attribute which is then removed once a message fills the aria-live regions.
+ *
+ * @return {HTMLParagraphElement} The explanatory text HTML element.
+ */
+
+function addIntroText() {
+  const introText = document.createElement('p');
+  introText.id = 'a11y-speak-intro-text';
+  introText.className = 'a11y-speak-intro-text';
+  introText.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Notifications');
+  introText.setAttribute('style', 'position: absolute;' + 'margin: -1px;' + 'padding: 0;' + 'height: 1px;' + 'width: 1px;' + 'overflow: hidden;' + 'clip: rect(1px, 1px, 1px, 1px);' + '-webkit-clip-path: inset(50%);' + 'clip-path: inset(50%);' + 'border: 0;' + 'word-wrap: normal !important;');
+  introText.setAttribute('hidden', 'hidden');
+  const {
+    body
+  } = document;
+
+  if (body) {
+    body.appendChild(introText);
+  }
+
+  return introText;
+}
+//# sourceMappingURL=add-intro-text.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/build-module/clear.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/build-module/clear.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ clear)
+/* harmony export */ });
+/**
+ * Clears the a11y-speak-region elements and hides the explanatory text.
+ */
+function clear() {
+  const regions = document.getElementsByClassName('a11y-speak-region');
+  const introText = document.getElementById('a11y-speak-intro-text');
+
+  for (let i = 0; i < regions.length; i++) {
+    regions[i].textContent = '';
+  } // Make sure the explanatory text is hidden from assistive technologies.
+
+
+  if (introText) {
+    introText.setAttribute('hidden', 'hidden');
+  }
+}
+//# sourceMappingURL=clear.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/build-module/filter-message.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/build-module/filter-message.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ filterMessage)
+/* harmony export */ });
+let previousMessage = '';
+/**
+ * Filter the message to be announced to the screenreader.
+ *
+ * @param {string} message The message to be announced.
+ *
+ * @return {string} The filtered message.
+ */
+
+function filterMessage(message) {
+  /*
+   * Strip HTML tags (if any) from the message string. Ideally, messages should
+   * be simple strings, carefully crafted for specific use with A11ySpeak.
+   * When re-using already existing strings this will ensure simple HTML to be
+   * stripped out and replaced with a space. Browsers will collapse multiple
+   * spaces natively.
+   */
+  message = message.replace(/<[^<>]+>/g, ' ');
+  /*
+   * Safari + VoiceOver don't announce repeated, identical strings. We use
+   * a `no-break space` to force them to think identical strings are different.
+   */
+
+  if (previousMessage === message) {
+    message += '\u00A0';
+  }
+
+  previousMessage = message;
+  return message;
+}
+//# sourceMappingURL=filter-message.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/build-module/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/build-module/index.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "setup": () => (/* binding */ setup),
+/* harmony export */   "speak": () => (/* binding */ speak)
+/* harmony export */ });
+/* harmony import */ var _wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/dom-ready */ "./node_modules/@wordpress/dom-ready/build-module/index.js");
+/* harmony import */ var _add_intro_text__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./add-intro-text */ "./node_modules/@wordpress/a11y/build-module/add-intro-text.js");
+/* harmony import */ var _add_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-container */ "./node_modules/@wordpress/a11y/build-module/add-container.js");
+/* harmony import */ var _clear__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./clear */ "./node_modules/@wordpress/a11y/build-module/clear.js");
+/* harmony import */ var _filter_message__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./filter-message */ "./node_modules/@wordpress/a11y/build-module/filter-message.js");
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+/**
+ * Create the live regions.
+ */
+
+function setup() {
+  const introText = document.getElementById('a11y-speak-intro-text');
+  const containerAssertive = document.getElementById('a11y-speak-assertive');
+  const containerPolite = document.getElementById('a11y-speak-polite');
+
+  if (introText === null) {
+    (0,_add_intro_text__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  }
+
+  if (containerAssertive === null) {
+    (0,_add_container__WEBPACK_IMPORTED_MODULE_1__["default"])('assertive');
+  }
+
+  if (containerPolite === null) {
+    (0,_add_container__WEBPACK_IMPORTED_MODULE_1__["default"])('polite');
+  }
+}
+/**
+ * Run setup on domReady.
+ */
+
+(0,_wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_4__["default"])(setup);
+/**
+ * Allows you to easily announce dynamic interface updates to screen readers using ARIA live regions.
+ * This module is inspired by the `speak` function in `wp-a11y.js`.
+ *
+ * @param {string} message    The message to be announced by assistive technologies.
+ * @param {string} [ariaLive] The politeness level for aria-live; default: 'polite'.
+ *
+ * @example
+ * ```js
+ * import { speak } from '@wordpress/a11y';
+ *
+ * // For polite messages that shouldn't interrupt what screen readers are currently announcing.
+ * speak( 'The message you want to send to the ARIA live region' );
+ *
+ * // For assertive messages that should interrupt what screen readers are currently announcing.
+ * speak( 'The message you want to send to the ARIA live region', 'assertive' );
+ * ```
+ */
+
+function speak(message, ariaLive) {
+  /*
+   * Clear previous messages to allow repeated strings being read out and hide
+   * the explanatory text from assistive technologies.
+   */
+  (0,_clear__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  message = (0,_filter_message__WEBPACK_IMPORTED_MODULE_3__["default"])(message);
+  const introText = document.getElementById('a11y-speak-intro-text');
+  const containerAssertive = document.getElementById('a11y-speak-assertive');
+  const containerPolite = document.getElementById('a11y-speak-polite');
+
+  if (containerAssertive && ariaLive === 'assertive') {
+    containerAssertive.textContent = message;
+  } else if (containerPolite) {
+    containerPolite.textContent = message;
+  }
+  /*
+   * Make the explanatory text available to assistive technologies by removing
+   * the 'hidden' HTML attribute.
+   */
+
+
+  if (introText) {
+    introText.removeAttribute('hidden');
+  }
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/components/build-module/animate/index.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/@wordpress/components/build-module/animate/index.js ***!
@@ -7592,6 +7859,169 @@ function useDraft(props) {
   };
 }
 //# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/notice/index.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/notice/index.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/@wordpress/element/build-module/serialize.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/@wordpress/element/build-module/raw-html.js");
+/* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/a11y */ "./node_modules/@wordpress/a11y/build-module/index.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ */ "./node_modules/@wordpress/components/build-module/button/index.js");
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/** @typedef {import('@wordpress/element').WPElement} WPElement */
+
+const noop = () => {};
+/**
+ * Custom hook which announces the message with the given politeness, if a
+ * valid message is provided.
+ *
+ * @param {string|WPElement}     [message]  Message to announce.
+ * @param {'polite'|'assertive'} politeness Politeness to announce.
+ */
+
+
+function useSpokenMessage(message, politeness) {
+  const spokenMessage = typeof message === 'string' ? message : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["default"])(message);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    if (spokenMessage) {
+      (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_2__.speak)(spokenMessage, politeness);
+    }
+  }, [spokenMessage, politeness]);
+}
+/**
+ * Given a notice status, returns an assumed default politeness for the status.
+ * Defaults to 'assertive'.
+ *
+ * @param {string} [status] Notice status.
+ *
+ * @return {'polite'|'assertive'} Notice politeness.
+ */
+
+
+function getDefaultPoliteness(status) {
+  switch (status) {
+    case 'success':
+    case 'warning':
+    case 'info':
+      return 'polite';
+
+    case 'error':
+    default:
+      return 'assertive';
+  }
+}
+
+function Notice(_ref) {
+  let {
+    className,
+    status = 'info',
+    children,
+    spokenMessage = children,
+    onRemove = noop,
+    isDismissible = true,
+    actions = [],
+    politeness = getDefaultPoliteness(status),
+    __unstableHTML,
+    // onDismiss is a callback executed when the notice is dismissed.
+    // It is distinct from onRemove, which _looks_ like a callback but is
+    // actually the function to call to remove the notice from the UI.
+    onDismiss = noop
+  } = _ref;
+  useSpokenMessage(spokenMessage, politeness);
+  const classes = classnames__WEBPACK_IMPORTED_MODULE_0___default()(className, 'components-notice', 'is-' + status, {
+    'is-dismissible': isDismissible
+  });
+
+  if (__unstableHTML) {
+    children = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["default"], null, children);
+  }
+
+  const onDismissNotice = event => {
+    var _event$preventDefault;
+
+    event === null || event === void 0 ? void 0 : (_event$preventDefault = event.preventDefault) === null || _event$preventDefault === void 0 ? void 0 : _event$preventDefault.call(event);
+    onDismiss();
+    onRemove();
+  };
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("div", {
+    className: classes
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("div", {
+    className: "components-notice__content"
+  }, children, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("div", {
+    className: "components-notice__actions"
+  }, actions.map((_ref2, index) => {
+    let {
+      className: buttonCustomClasses,
+      label,
+      isPrimary,
+      variant,
+      noDefaultClasses = false,
+      onClick,
+      url
+    } = _ref2;
+    let computedVariant = variant;
+
+    if (variant !== 'primary' && !noDefaultClasses) {
+      computedVariant = !url ? 'secondary' : 'link';
+    }
+
+    if (typeof computedVariant === 'undefined' && isPrimary) {
+      computedVariant = 'primary';
+    }
+
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(___WEBPACK_IMPORTED_MODULE_6__["default"], {
+      key: index,
+      href: url,
+      variant: computedVariant,
+      onClick: url ? undefined : onClick,
+      className: classnames__WEBPACK_IMPORTED_MODULE_0___default()('components-notice__action', buttonCustomClasses)
+    }, label);
+  }))), isDismissible && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(___WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: "components-notice__dismiss",
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dismiss this notice'),
+    onClick: onDismissNotice,
+    showTooltip: false
+  }));
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Notice);
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -10450,6 +10880,103 @@ function StyleProvider(_ref) {
     value: cache
   }, children);
 }
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/text-control/index.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/text-control/index.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TextControl": () => (/* binding */ TextControl),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
+/* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function UnforwardedTextControl(props, ref) {
+  const {
+    label,
+    hideLabelFromVision,
+    value,
+    help,
+    className,
+    onChange,
+    type = 'text',
+    ...additionalProps
+  } = props;
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__["default"])(TextControl);
+  const id = `inspector-text-control-${instanceId}`;
+
+  const onChangeValue = event => onChange(event.target.value);
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_base_control__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    label: label,
+    hideLabelFromVision: hideLabelFromVision,
+    id: id,
+    help: help,
+    className: className
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("input", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    className: "components-text-control__input",
+    type: type,
+    id: id,
+    value: value,
+    onChange: onChangeValue,
+    "aria-describedby": !!help ? id + '__help' : undefined,
+    ref: ref
+  }, additionalProps)));
+}
+/**
+ * TextControl components let users enter and edit text.
+ *
+ *
+ * @example
+ * ```jsx
+ * import { TextControl } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * const MyTextControl = () => {
+ *   const [ className, setClassName ] = useState( '' );
+ *
+ *   return (
+ *     <TextControl
+ *       label="Additional CSS Class"
+ *       value={ className }
+ *       onChange={ ( value ) => setClassName( value ) }
+ *     />
+ *   );
+ * };
+ * ```
+ */
+
+
+const TextControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.forwardRef)(UnforwardedTextControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TextControl);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -14576,6 +15103,65 @@ function deprecated(feature) {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/dom-ready/build-module/index.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@wordpress/dom-ready/build-module/index.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ domReady)
+/* harmony export */ });
+/**
+ * @typedef {() => void} Callback
+ *
+ * TODO: Remove this typedef and inline `() => void` type.
+ *
+ * This typedef is used so that a descriptive type is provided in our
+ * automatically generated documentation.
+ *
+ * An in-line type `() => void` would be preferable, but the generated
+ * documentation is `null` in that case.
+ *
+ * @see https://github.com/WordPress/gutenberg/issues/18045
+ */
+
+/**
+ * Specify a function to execute when the DOM is fully loaded.
+ *
+ * @param {Callback} callback A function to execute after the DOM is ready.
+ *
+ * @example
+ * ```js
+ * import domReady from '@wordpress/dom-ready';
+ *
+ * domReady( function() {
+ * 	//do something after DOM loads.
+ * } );
+ * ```
+ *
+ * @return {void}
+ */
+function domReady(callback) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  if (document.readyState === 'complete' || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
+  document.readyState === 'interactive' // DOMContentLoaded fires at this point, so we call directly.
+  ) {
+    return void callback();
+  } // DOMContentLoaded has not fired yet, delay callback until then.
+
+
+  document.addEventListener('DOMContentLoaded', callback);
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/dom/build-module/data-transfer.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@wordpress/dom/build-module/data-transfer.js ***!
@@ -17304,6 +17890,64 @@ function assertIsDefined(val, name) {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/element/build-module/raw-html.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@wordpress/element/build-module/raw-html.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RawHTML)
+/* harmony export */ });
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react */ "./node_modules/react/index.js");
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_react__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Internal dependencies
+ */
+ // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
+
+/** @typedef {{children: string} & import('react').ComponentPropsWithoutRef<'div'>} RawHTMLProps */
+
+/**
+ * Component used as equivalent of Fragment with unescaped HTML, in cases where
+ * it is desirable to render dangerous HTML without needing a wrapper element.
+ * To preserve additional props, a `div` wrapper _will_ be created if any props
+ * aside from `children` are passed.
+ *
+ * @param {RawHTMLProps} props Children should be a string of HTML or an array
+ *                             of strings. Other props will be passed through
+ *                             to the div wrapper.
+ *
+ * @return {JSX.Element} Dangerously-rendering component.
+ */
+
+function RawHTML(_ref) {
+  let {
+    children,
+    ...props
+  } = _ref;
+  let rawHtml = ''; // Cast children as an array, and concatenate each element if it is a string.
+
+  _react__WEBPACK_IMPORTED_MODULE_0__.Children.toArray(children).forEach(child => {
+    if (typeof child === 'string' && child.trim() !== '') {
+      rawHtml += child;
+    }
+  }); // The `div` wrapper will be stripped by the `renderElement` serializer in
+  // `./serialize.js` unless there are non-children props present.
+
+  return (0,_react__WEBPACK_IMPORTED_MODULE_0__.createElement)('div', {
+    dangerouslySetInnerHTML: {
+      __html: rawHtml
+    },
+    ...props
+  });
+}
+//# sourceMappingURL=raw-html.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/element/build-module/react.js":
 /*!***************************************************************!*\
   !*** ./node_modules/@wordpress/element/build-module/react.js ***!
@@ -17567,6 +18211,578 @@ function switchChildrenNodeName(children, nodeName) {
   });
 }
 //# sourceMappingURL=react.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/element/build-module/serialize.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@wordpress/element/build-module/serialize.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "hasPrefix": () => (/* binding */ hasPrefix),
+/* harmony export */   "renderAttributes": () => (/* binding */ renderAttributes),
+/* harmony export */   "renderComponent": () => (/* binding */ renderComponent),
+/* harmony export */   "renderElement": () => (/* binding */ renderElement),
+/* harmony export */   "renderNativeComponent": () => (/* binding */ renderNativeComponent),
+/* harmony export */   "renderStyle": () => (/* binding */ renderStyle)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/escape-html */ "./node_modules/@wordpress/escape-html/build-module/index.js");
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./react */ "./node_modules/react/index.js");
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _raw_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./raw-html */ "./node_modules/@wordpress/element/build-module/raw-html.js");
+/**
+ * Parts of this source were derived and modified from fast-react-render,
+ * released under the MIT license.
+ *
+ * https://github.com/alt-j/fast-react-render
+ *
+ * Copyright (c) 2016 Andrey Morozov
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/** @typedef {import('./react').WPElement} WPElement */
+
+const {
+  Provider,
+  Consumer
+} = (0,_react__WEBPACK_IMPORTED_MODULE_1__.createContext)(undefined);
+const ForwardRef = (0,_react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)(() => {
+  return null;
+});
+/**
+ * Valid attribute types.
+ *
+ * @type {Set<string>}
+ */
+
+const ATTRIBUTES_TYPES = new Set(['string', 'boolean', 'number']);
+/**
+ * Element tags which can be self-closing.
+ *
+ * @type {Set<string>}
+ */
+
+const SELF_CLOSING_TAGS = new Set(['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
+/**
+ * Boolean attributes are attributes whose presence as being assigned is
+ * meaningful, even if only empty.
+ *
+ * See: https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
+ * Extracted from: https://html.spec.whatwg.org/multipage/indices.html#attributes-3
+ *
+ * Object.keys( [ ...document.querySelectorAll( '#attributes-1 > tbody > tr' ) ]
+ *     .filter( ( tr ) => tr.lastChild.textContent.indexOf( 'Boolean attribute' ) !== -1 )
+ *     .reduce( ( result, tr ) => Object.assign( result, {
+ *         [ tr.firstChild.textContent.trim() ]: true
+ *     } ), {} ) ).sort();
+ *
+ * @type {Set<string>}
+ */
+
+const BOOLEAN_ATTRIBUTES = new Set(['allowfullscreen', 'allowpaymentrequest', 'allowusermedia', 'async', 'autofocus', 'autoplay', 'checked', 'controls', 'default', 'defer', 'disabled', 'download', 'formnovalidate', 'hidden', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nomodule', 'novalidate', 'open', 'playsinline', 'readonly', 'required', 'reversed', 'selected', 'typemustmatch']);
+/**
+ * Enumerated attributes are attributes which must be of a specific value form.
+ * Like boolean attributes, these are meaningful if specified, even if not of a
+ * valid enumerated value.
+ *
+ * See: https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#enumerated-attribute
+ * Extracted from: https://html.spec.whatwg.org/multipage/indices.html#attributes-3
+ *
+ * Object.keys( [ ...document.querySelectorAll( '#attributes-1 > tbody > tr' ) ]
+ *     .filter( ( tr ) => /^("(.+?)";?\s*)+/.test( tr.lastChild.textContent.trim() ) )
+ *     .reduce( ( result, tr ) => Object.assign( result, {
+ *         [ tr.firstChild.textContent.trim() ]: true
+ *     } ), {} ) ).sort();
+ *
+ * Some notable omissions:
+ *
+ *  - `alt`: https://blog.whatwg.org/omit-alt
+ *
+ * @type {Set<string>}
+ */
+
+const ENUMERATED_ATTRIBUTES = new Set(['autocapitalize', 'autocomplete', 'charset', 'contenteditable', 'crossorigin', 'decoding', 'dir', 'draggable', 'enctype', 'formenctype', 'formmethod', 'http-equiv', 'inputmode', 'kind', 'method', 'preload', 'scope', 'shape', 'spellcheck', 'translate', 'type', 'wrap']);
+/**
+ * Set of CSS style properties which support assignment of unitless numbers.
+ * Used in rendering of style properties, where `px` unit is assumed unless
+ * property is included in this set or value is zero.
+ *
+ * Generated via:
+ *
+ * Object.entries( document.createElement( 'div' ).style )
+ *     .filter( ( [ key ] ) => (
+ *         ! /^(webkit|ms|moz)/.test( key ) &&
+ *         ( e.style[ key ] = 10 ) &&
+ *         e.style[ key ] === '10'
+ *     ) )
+ *     .map( ( [ key ] ) => key )
+ *     .sort();
+ *
+ * @type {Set<string>}
+ */
+
+const CSS_PROPERTIES_SUPPORTS_UNITLESS = new Set(['animation', 'animationIterationCount', 'baselineShift', 'borderImageOutset', 'borderImageSlice', 'borderImageWidth', 'columnCount', 'cx', 'cy', 'fillOpacity', 'flexGrow', 'flexShrink', 'floodOpacity', 'fontWeight', 'gridColumnEnd', 'gridColumnStart', 'gridRowEnd', 'gridRowStart', 'lineHeight', 'opacity', 'order', 'orphans', 'r', 'rx', 'ry', 'shapeImageThreshold', 'stopOpacity', 'strokeDasharray', 'strokeDashoffset', 'strokeMiterlimit', 'strokeOpacity', 'strokeWidth', 'tabSize', 'widows', 'x', 'y', 'zIndex', 'zoom']);
+/**
+ * Returns true if the specified string is prefixed by one of an array of
+ * possible prefixes.
+ *
+ * @param {string}   string   String to check.
+ * @param {string[]} prefixes Possible prefixes.
+ *
+ * @return {boolean} Whether string has prefix.
+ */
+
+function hasPrefix(string, prefixes) {
+  return prefixes.some(prefix => string.indexOf(prefix) === 0);
+}
+/**
+ * Returns true if the given prop name should be ignored in attributes
+ * serialization, or false otherwise.
+ *
+ * @param {string} attribute Attribute to check.
+ *
+ * @return {boolean} Whether attribute should be ignored.
+ */
+
+function isInternalAttribute(attribute) {
+  return 'key' === attribute || 'children' === attribute;
+}
+/**
+ * Returns the normal form of the element's attribute value for HTML.
+ *
+ * @param {string} attribute Attribute name.
+ * @param {*}      value     Non-normalized attribute value.
+ *
+ * @return {*} Normalized attribute value.
+ */
+
+
+function getNormalAttributeValue(attribute, value) {
+  switch (attribute) {
+    case 'style':
+      return renderStyle(value);
+  }
+
+  return value;
+}
+/**
+ * This is a map of all SVG attributes that have dashes. Map(lower case prop => dashed lower case attribute).
+ * We need this to render e.g strokeWidth as stroke-width.
+ *
+ * List from: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute.
+ */
+
+
+const SVG_ATTRIBUTE_WITH_DASHES_LIST = ['accentHeight', 'alignmentBaseline', 'arabicForm', 'baselineShift', 'capHeight', 'clipPath', 'clipRule', 'colorInterpolation', 'colorInterpolationFilters', 'colorProfile', 'colorRendering', 'dominantBaseline', 'enableBackground', 'fillOpacity', 'fillRule', 'floodColor', 'floodOpacity', 'fontFamily', 'fontSize', 'fontSizeAdjust', 'fontStretch', 'fontStyle', 'fontVariant', 'fontWeight', 'glyphName', 'glyphOrientationHorizontal', 'glyphOrientationVertical', 'horizAdvX', 'horizOriginX', 'imageRendering', 'letterSpacing', 'lightingColor', 'markerEnd', 'markerMid', 'markerStart', 'overlinePosition', 'overlineThickness', 'paintOrder', 'panose1', 'pointerEvents', 'renderingIntent', 'shapeRendering', 'stopColor', 'stopOpacity', 'strikethroughPosition', 'strikethroughThickness', 'strokeDasharray', 'strokeDashoffset', 'strokeLinecap', 'strokeLinejoin', 'strokeMiterlimit', 'strokeOpacity', 'strokeWidth', 'textAnchor', 'textDecoration', 'textRendering', 'underlinePosition', 'underlineThickness', 'unicodeBidi', 'unicodeRange', 'unitsPerEm', 'vAlphabetic', 'vHanging', 'vIdeographic', 'vMathematical', 'vectorEffect', 'vertAdvY', 'vertOriginX', 'vertOriginY', 'wordSpacing', 'writingMode', 'xmlnsXlink', 'xHeight'].reduce((map, attribute) => {
+  // The keys are lower-cased for more robust lookup.
+  map[attribute.toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
+ * This is a map of all case-sensitive SVG attributes. Map(lowercase key => proper case attribute).
+ * The keys are lower-cased for more robust lookup.
+ * Note that this list only contains attributes that contain at least one capital letter.
+ * Lowercase attributes don't need mapping, since we lowercase all attributes by default.
+ */
+
+const CASE_SENSITIVE_SVG_ATTRIBUTES = ['allowReorder', 'attributeName', 'attributeType', 'autoReverse', 'baseFrequency', 'baseProfile', 'calcMode', 'clipPathUnits', 'contentScriptType', 'contentStyleType', 'diffuseConstant', 'edgeMode', 'externalResourcesRequired', 'filterRes', 'filterUnits', 'glyphRef', 'gradientTransform', 'gradientUnits', 'kernelMatrix', 'kernelUnitLength', 'keyPoints', 'keySplines', 'keyTimes', 'lengthAdjust', 'limitingConeAngle', 'markerHeight', 'markerUnits', 'markerWidth', 'maskContentUnits', 'maskUnits', 'numOctaves', 'pathLength', 'patternContentUnits', 'patternTransform', 'patternUnits', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'preserveAlpha', 'preserveAspectRatio', 'primitiveUnits', 'refX', 'refY', 'repeatCount', 'repeatDur', 'requiredExtensions', 'requiredFeatures', 'specularConstant', 'specularExponent', 'spreadMethod', 'startOffset', 'stdDeviation', 'stitchTiles', 'suppressContentEditableWarning', 'suppressHydrationWarning', 'surfaceScale', 'systemLanguage', 'tableValues', 'targetX', 'targetY', 'textLength', 'viewBox', 'viewTarget', 'xChannelSelector', 'yChannelSelector'].reduce((map, attribute) => {
+  // The keys are lower-cased for more robust lookup.
+  map[attribute.toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
+ * This is a map of all SVG attributes that have colons.
+ * Keys are lower-cased and stripped of their colons for more robust lookup.
+ */
+
+const SVG_ATTRIBUTES_WITH_COLONS = ['xlink:actuate', 'xlink:arcrole', 'xlink:href', 'xlink:role', 'xlink:show', 'xlink:title', 'xlink:type', 'xml:base', 'xml:lang', 'xml:space', 'xmlns:xlink'].reduce((map, attribute) => {
+  map[attribute.replace(':', '').toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
+ * Returns the normal form of the element's attribute name for HTML.
+ *
+ * @param {string} attribute Non-normalized attribute name.
+ *
+ * @return {string} Normalized attribute name.
+ */
+
+function getNormalAttributeName(attribute) {
+  switch (attribute) {
+    case 'htmlFor':
+      return 'for';
+
+    case 'className':
+      return 'class';
+  }
+
+  const attributeLowerCase = attribute.toLowerCase();
+
+  if (CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase]) {
+    return CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase];
+  } else if (SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]) {
+    return (0,lodash__WEBPACK_IMPORTED_MODULE_0__.kebabCase)(SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]);
+  } else if (SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase]) {
+    return SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase];
+  }
+
+  return attributeLowerCase;
+}
+/**
+ * Returns the normal form of the style property name for HTML.
+ *
+ * - Converts property names to kebab-case, e.g. 'backgroundColor' → 'background-color'
+ * - Leaves custom attributes alone, e.g. '--myBackgroundColor' → '--myBackgroundColor'
+ * - Converts vendor-prefixed property names to -kebab-case, e.g. 'MozTransform' → '-moz-transform'
+ *
+ * @param {string} property Property name.
+ *
+ * @return {string} Normalized property name.
+ */
+
+
+function getNormalStylePropertyName(property) {
+  if (property.startsWith('--')) {
+    return property;
+  }
+
+  if (hasPrefix(property, ['ms', 'O', 'Moz', 'Webkit'])) {
+    return '-' + (0,lodash__WEBPACK_IMPORTED_MODULE_0__.kebabCase)(property);
+  }
+
+  return (0,lodash__WEBPACK_IMPORTED_MODULE_0__.kebabCase)(property);
+}
+/**
+ * Returns the normal form of the style property value for HTML. Appends a
+ * default pixel unit if numeric, not a unitless property, and not zero.
+ *
+ * @param {string} property Property name.
+ * @param {*}      value    Non-normalized property value.
+ *
+ * @return {*} Normalized property value.
+ */
+
+
+function getNormalStylePropertyValue(property, value) {
+  if (typeof value === 'number' && 0 !== value && !CSS_PROPERTIES_SUPPORTS_UNITLESS.has(property)) {
+    return value + 'px';
+  }
+
+  return value;
+}
+/**
+ * Serializes a React element to string.
+ *
+ * @param {import('react').ReactNode} element         Element to serialize.
+ * @param {Object}                    [context]       Context object.
+ * @param {Object}                    [legacyContext] Legacy context object.
+ *
+ * @return {string} Serialized element.
+ */
+
+
+function renderElement(element, context) {
+  let legacyContext = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  if (null === element || undefined === element || false === element) {
+    return '';
+  }
+
+  if (Array.isArray(element)) {
+    return renderChildren(element, context, legacyContext);
+  }
+
+  switch (typeof element) {
+    case 'string':
+      return (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.escapeHTML)(element);
+
+    case 'number':
+      return element.toString();
+  }
+
+  const {
+    type,
+    props
+  } =
+  /** @type {{type?: any, props?: any}} */
+  element;
+
+  switch (type) {
+    case _react__WEBPACK_IMPORTED_MODULE_1__.StrictMode:
+    case _react__WEBPACK_IMPORTED_MODULE_1__.Fragment:
+      return renderChildren(props.children, context, legacyContext);
+
+    case _raw_html__WEBPACK_IMPORTED_MODULE_3__["default"]:
+      const {
+        children,
+        ...wrapperProps
+      } = props;
+      return renderNativeComponent(!Object.keys(wrapperProps).length ? null : 'div', { ...wrapperProps,
+        dangerouslySetInnerHTML: {
+          __html: children
+        }
+      }, context, legacyContext);
+  }
+
+  switch (typeof type) {
+    case 'string':
+      return renderNativeComponent(type, props, context, legacyContext);
+
+    case 'function':
+      if (type.prototype && typeof type.prototype.render === 'function') {
+        return renderComponent(type, props, context, legacyContext);
+      }
+
+      return renderElement(type(props, legacyContext), context, legacyContext);
+  }
+
+  switch (type && type.$$typeof) {
+    case Provider.$$typeof:
+      return renderChildren(props.children, props.value, legacyContext);
+
+    case Consumer.$$typeof:
+      return renderElement(props.children(context || type._currentValue), context, legacyContext);
+
+    case ForwardRef.$$typeof:
+      return renderElement(type.render(props), context, legacyContext);
+  }
+
+  return '';
+}
+/**
+ * Serializes a native component type to string.
+ *
+ * @param {?string} type            Native component type to serialize, or null if
+ *                                  rendering as fragment of children content.
+ * @param {Object}  props           Props object.
+ * @param {Object}  [context]       Context object.
+ * @param {Object}  [legacyContext] Legacy context object.
+ *
+ * @return {string} Serialized element.
+ */
+
+function renderNativeComponent(type, props, context) {
+  let legacyContext = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  let content = '';
+
+  if (type === 'textarea' && props.hasOwnProperty('value')) {
+    // Textarea children can be assigned as value prop. If it is, render in
+    // place of children. Ensure to omit so it is not assigned as attribute
+    // as well.
+    content = renderChildren(props.value, context, legacyContext);
+    const {
+      value,
+      ...restProps
+    } = props;
+    props = restProps;
+  } else if (props.dangerouslySetInnerHTML && typeof props.dangerouslySetInnerHTML.__html === 'string') {
+    // Dangerous content is left unescaped.
+    content = props.dangerouslySetInnerHTML.__html;
+  } else if (typeof props.children !== 'undefined') {
+    content = renderChildren(props.children, context, legacyContext);
+  }
+
+  if (!type) {
+    return content;
+  }
+
+  const attributes = renderAttributes(props);
+
+  if (SELF_CLOSING_TAGS.has(type)) {
+    return '<' + type + attributes + '/>';
+  }
+
+  return '<' + type + attributes + '>' + content + '</' + type + '>';
+}
+/** @typedef {import('./react').WPComponent} WPComponent */
+
+/**
+ * Serializes a non-native component type to string.
+ *
+ * @param {WPComponent} Component       Component type to serialize.
+ * @param {Object}      props           Props object.
+ * @param {Object}      [context]       Context object.
+ * @param {Object}      [legacyContext] Legacy context object.
+ *
+ * @return {string} Serialized element
+ */
+
+function renderComponent(Component, props, context) {
+  let legacyContext = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  const instance = new
+  /** @type {import('react').ComponentClass} */
+  Component(props, legacyContext);
+
+  if (typeof // Ignore reason: Current prettier reformats parens and mangles type assertion
+  // prettier-ignore
+
+  /** @type {{getChildContext?: () => unknown}} */
+  instance.getChildContext === 'function') {
+    Object.assign(legacyContext,
+    /** @type {{getChildContext?: () => unknown}} */
+    instance.getChildContext());
+  }
+
+  const html = renderElement(instance.render(), context, legacyContext);
+  return html;
+}
+/**
+ * Serializes an array of children to string.
+ *
+ * @param {import('react').ReactNodeArray} children        Children to serialize.
+ * @param {Object}                         [context]       Context object.
+ * @param {Object}                         [legacyContext] Legacy context object.
+ *
+ * @return {string} Serialized children.
+ */
+
+function renderChildren(children, context) {
+  let legacyContext = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  let result = '';
+  children = Array.isArray(children) ? children : [children];
+
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    result += renderElement(child, context, legacyContext);
+  }
+
+  return result;
+}
+/**
+ * Renders a props object as a string of HTML attributes.
+ *
+ * @param {Object} props Props object.
+ *
+ * @return {string} Attributes string.
+ */
+
+
+function renderAttributes(props) {
+  let result = '';
+
+  for (const key in props) {
+    const attribute = getNormalAttributeName(key);
+
+    if (!(0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.isValidAttributeName)(attribute)) {
+      continue;
+    }
+
+    let value = getNormalAttributeValue(key, props[key]); // If value is not of serializeable type, skip.
+
+    if (!ATTRIBUTES_TYPES.has(typeof value)) {
+      continue;
+    } // Don't render internal attribute names.
+
+
+    if (isInternalAttribute(key)) {
+      continue;
+    }
+
+    const isBooleanAttribute = BOOLEAN_ATTRIBUTES.has(attribute); // Boolean attribute should be omitted outright if its value is false.
+
+    if (isBooleanAttribute && value === false) {
+      continue;
+    }
+
+    const isMeaningfulAttribute = isBooleanAttribute || hasPrefix(key, ['data-', 'aria-']) || ENUMERATED_ATTRIBUTES.has(attribute); // Only write boolean value as attribute if meaningful.
+
+    if (typeof value === 'boolean' && !isMeaningfulAttribute) {
+      continue;
+    }
+
+    result += ' ' + attribute; // Boolean attributes should write attribute name, but without value.
+    // Mere presence of attribute name is effective truthiness.
+
+    if (isBooleanAttribute) {
+      continue;
+    }
+
+    if (typeof value === 'string') {
+      value = (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.escapeAttribute)(value);
+    }
+
+    result += '="' + value + '"';
+  }
+
+  return result;
+}
+/**
+ * Renders a style object as a string attribute value.
+ *
+ * @param {Object} style Style object.
+ *
+ * @return {string} Style attribute value.
+ */
+
+function renderStyle(style) {
+  // Only generate from object, e.g. tolerate string value.
+  if (!(0,lodash__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(style)) {
+    return style;
+  }
+
+  let result;
+
+  for (const property in style) {
+    const value = style[property];
+
+    if (null === value || undefined === value) {
+      continue;
+    }
+
+    if (result) {
+      result += ';';
+    } else {
+      result = '';
+    }
+
+    const normalName = getNormalStylePropertyName(property);
+    const normalValue = getNormalStylePropertyValue(property, value);
+    result += normalName + ':' + normalValue;
+  }
+
+  return result;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (renderElement);
+//# sourceMappingURL=serialize.js.map
 
 /***/ }),
 
@@ -44961,6 +46177,179 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/escape-html/build-module/escape-greater.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@wordpress/escape-html/build-module/escape-greater.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ __unstableEscapeGreaterThan)
+/* harmony export */ });
+/**
+ * Returns a string with greater-than sign replaced.
+ *
+ * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
+ * necessary for `__unstableEscapeGreaterThan` to exist.
+ *
+ * See: https://core.trac.wordpress.org/ticket/45387
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+function __unstableEscapeGreaterThan(value) {
+  return value.replace(/>/g, '&gt;');
+}
+//# sourceMappingURL=escape-greater.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/escape-html/build-module/index.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@wordpress/escape-html/build-module/index.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "escapeAmpersand": () => (/* binding */ escapeAmpersand),
+/* harmony export */   "escapeAttribute": () => (/* binding */ escapeAttribute),
+/* harmony export */   "escapeEditableHTML": () => (/* binding */ escapeEditableHTML),
+/* harmony export */   "escapeHTML": () => (/* binding */ escapeHTML),
+/* harmony export */   "escapeLessThan": () => (/* binding */ escapeLessThan),
+/* harmony export */   "escapeQuotationMark": () => (/* binding */ escapeQuotationMark),
+/* harmony export */   "isValidAttributeName": () => (/* binding */ isValidAttributeName)
+/* harmony export */ });
+/* harmony import */ var _escape_greater__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./escape-greater */ "./node_modules/@wordpress/escape-html/build-module/escape-greater.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Regular expression matching invalid attribute names.
+ *
+ * "Attribute names must consist of one or more characters other than controls,
+ * U+0020 SPACE, U+0022 ("), U+0027 ('), U+003E (>), U+002F (/), U+003D (=),
+ * and noncharacters."
+ *
+ * @see https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+ *
+ * @type {RegExp}
+ */
+
+const REGEXP_INVALID_ATTRIBUTE_NAME = /[\u007F-\u009F "'>/="\uFDD0-\uFDEF]/;
+/**
+ * Returns a string with ampersands escaped. Note that this is an imperfect
+ * implementation, where only ampersands which do not appear as a pattern of
+ * named, decimal, or hexadecimal character references are escaped. Invalid
+ * named references (i.e. ambiguous ampersand) are are still permitted.
+ *
+ * @see https://w3c.github.io/html/syntax.html#character-references
+ * @see https://w3c.github.io/html/syntax.html#ambiguous-ampersand
+ * @see https://w3c.github.io/html/syntax.html#named-character-references
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeAmpersand(value) {
+  return value.replace(/&(?!([a-z0-9]+|#[0-9]+|#x[a-f0-9]+);)/gi, '&amp;');
+}
+/**
+ * Returns a string with quotation marks replaced.
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeQuotationMark(value) {
+  return value.replace(/"/g, '&quot;');
+}
+/**
+ * Returns a string with less-than sign replaced.
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeLessThan(value) {
+  return value.replace(/</g, '&lt;');
+}
+/**
+ * Returns an escaped attribute value.
+ *
+ * @see https://w3c.github.io/html/syntax.html#elements-attributes
+ *
+ * "[...] the text cannot contain an ambiguous ampersand [...] must not contain
+ * any literal U+0022 QUOTATION MARK characters (")"
+ *
+ * Note we also escape the greater than symbol, as this is used by wptexturize to
+ * split HTML strings. This is a WordPress specific fix
+ *
+ * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
+ * necessary for `__unstableEscapeGreaterThan` to be used.
+ *
+ * See: https://core.trac.wordpress.org/ticket/45387
+ *
+ * @param {string} value Attribute value.
+ *
+ * @return {string} Escaped attribute value.
+ */
+
+function escapeAttribute(value) {
+  return (0,_escape_greater__WEBPACK_IMPORTED_MODULE_0__["default"])(escapeQuotationMark(escapeAmpersand(value)));
+}
+/**
+ * Returns an escaped HTML element value.
+ *
+ * @see https://w3c.github.io/html/syntax.html#writing-html-documents-elements
+ *
+ * "the text must not contain the character U+003C LESS-THAN SIGN (<) or an
+ * ambiguous ampersand."
+ *
+ * @param {string} value Element value.
+ *
+ * @return {string} Escaped HTML element value.
+ */
+
+function escapeHTML(value) {
+  return escapeLessThan(escapeAmpersand(value));
+}
+/**
+ * Returns an escaped Editable HTML element value. This is different from
+ * `escapeHTML`, because for editable HTML, ALL ampersands must be escaped in
+ * order to render the content correctly on the page.
+ *
+ * @param {string} value Element value.
+ *
+ * @return {string} Escaped HTML element value.
+ */
+
+function escapeEditableHTML(value) {
+  return escapeLessThan(value.replace(/&/g, '&amp;'));
+}
+/**
+ * Returns true if the given attribute name is valid, or false otherwise.
+ *
+ * @param {string} name Attribute name to test.
+ *
+ * @return {boolean} Whether attribute is valid.
+ */
+
+function isValidAttributeName(name) {
+  return !REGEXP_INVALID_ATTRIBUTE_NAME.test(name);
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/hooks/build-module/createAddHook.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
@@ -49859,6 +51248,143 @@ function sendCommand(action, data) {
 
 /***/ }),
 
+/***/ "./src/js/react/components/Notice/index.js":
+/*!*************************************************!*\
+  !*** ./src/js/react/components/Notice/index.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/a11y */ "./node_modules/@wordpress/a11y/build-module/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/notice/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// eslint-disable-next-line no-unused-vars
+
+ // ES6
+
+
+
+
+
+var Notice = function Notice(props) {
+  var _classNames;
+
+  var message = props.message,
+      status = props.status,
+      politeness = props.politeness,
+      icon = props.icon,
+      className = props.className,
+      inline = props.inline,
+      children = props.children;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__.speak)(message, politeness);
+  }, [message, status, politeness]);
+
+  var hasIcon = function hasIcon() {
+    return icon !== null;
+  };
+
+  var getIcon = function getIcon(Icon) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Icon, {
+      width: 16,
+      height: 16,
+      fill: "#6c757d"
+    });
+  };
+
+  var containerClasses = classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, 'sce-admin__notice', (_classNames = {
+    'sce-admin__notice--has-icon': hasIcon()
+  }, _defineProperty(_classNames, "sce-admin__notice-type--".concat(status), true), _defineProperty(_classNames, "sce-admin__notice-appearance--inline", inline), _defineProperty(_classNames, "sce-admin__notice-appearance--block", !inline), _classNames));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: containerClasses
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+    isDismissible: false,
+    spokenMessage: message,
+    actions: []
+  }, props), hasIcon() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__notice-icon"
+  }, getIcon(icon)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__notice-message"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, message, " ", children, " "))));
+};
+
+Notice.defaultProps = {
+  message: '',
+  status: 'info',
+  politeness: 'polite',
+  icon: null,
+  className: '',
+  inline: false
+};
+Notice.propTypes = {
+  message: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().string.isRequired),
+  status: prop_types__WEBPACK_IMPORTED_MODULE_4___default().oneOf(['info', 'warning', 'success', 'error']),
+  politeness: prop_types__WEBPACK_IMPORTED_MODULE_4___default().oneOf(['assertive', 'polite']),
+  icon: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().func),
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().string),
+  inline: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().bool)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Notice);
+
+/***/ }),
+
+/***/ "./src/js/react/components/icons/CircularExplanation.js":
+/*!**************************************************************!*\
+  !*** ./src/js/react/components/icons/CircularExplanation.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+
+ // ES6
+
+var CircularExclamationIcon = function CircularExclamationIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 512 512",
+    width: props.width,
+    height: props.height
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    fill: "var( ".concat(props["var"], ")"),
+    d: "M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"
+  }));
+};
+
+CircularExclamationIcon.defaultProps = {
+  width: 16,
+  height: 16,
+  fill: '#333333'
+};
+CircularExclamationIcon.propTypes = {
+  width: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  height: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  fill: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CircularExclamationIcon);
+
+/***/ }),
+
 /***/ "./src/js/react/components/icons/ClipboardCheck.js":
 /*!*********************************************************!*\
   !*** ./src/js/react/components/icons/ClipboardCheck.js ***!
@@ -49966,20 +51492,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! use-async-resource */ "./node_modules/use-async-resource/lib/index.js");
 /* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(use_async_resource__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
-/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/range-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/range-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
+/* harmony import */ var _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/icons/CircularExplanation */ "./src/js/react/components/icons/CircularExplanation.js");
+/* harmony import */ var _components_Notice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/Notice */ "./src/js/react/components/Notice/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -50011,6 +51540,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var retrieveAvatarOptions = function retrieveAvatarOptions() {
   return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_avatar_options', {
     nonce: sceAvatars.get_nonce
@@ -50024,7 +51555,7 @@ var Avatars = function Avatars(props) {
       getDefaults = _useAsyncResource2[1];
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
-    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Avatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_7___default()), {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Avatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default()), {
       color: '#9c68b0',
       loading: true,
       cssOverride: true,
@@ -50063,12 +51594,14 @@ var Interface = function Interface(props) {
       data = _response$data.data,
       success = _response$data.success;
 
-  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_8__.useForm)({
+  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
       enableAvatars: data.enableAvatars,
       avatarSize: data.avatarSize,
       enableAvatarsLoggedIn: data.enableAvatarsLoggedIn,
-      enableAvatarsAnonymous: data.enableAvatarsAnonymous
+      enableAvatarsAnonymous: data.enableAvatarsAnonymous,
+      chooseAvatarText: data.chooseAvatarText,
+      enableCustomAvatarSize: data.enableCustomAvatarSize
     }
   }),
       register = _useForm.register,
@@ -50078,11 +51611,11 @@ var Interface = function Interface(props) {
       getValues = _useForm.getValues,
       reset = _useForm.reset;
 
-  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_8__.useWatch)({
+  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useWatch)({
     control: control
   });
 
-  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_8__.useFormState)({
+  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useFormState)({
     control: control
   }),
       errors = _useFormState.errors,
@@ -50117,14 +51650,31 @@ var Interface = function Interface(props) {
   var getAvatarWidth = function getAvatarWidth() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Size', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_8__.Controller, {
-      name: "avatarSize",
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Size', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "enableCustomAvatarSize",
       control: control,
       render: function render(_ref) {
         var _ref$field = _ref.field,
             _onChange = _ref$field.onChange,
             value = _ref$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Avatar Custom Sizes', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('By default, the theme typically chooses how large avatars are in the comment section. This will override the default size.', 'comment-edit-pro')
+        }));
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "avatarSize",
+      control: control,
+      render: function render(_ref2) {
+        var _ref2$field = _ref2.field,
+            _onChange2 = _ref2$field.onChange,
+            value = _ref2$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set Avatar Size', 'comment-edit-pro'),
           step: 2,
           value: value,
@@ -50137,7 +51687,7 @@ var Interface = function Interface(props) {
           onChange: function onChange(avatarSizeValue) {
             setAvatarSize(avatarSizeValue);
 
-            _onChange(avatarSizeValue);
+            _onChange2(avatarSizeValue);
           },
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set the Size of the Avatars.', 'comment-edit-pro'),
           trackColor: "#8019c4",
@@ -50156,42 +51706,78 @@ var Interface = function Interface(props) {
   var getAvatarPermissions = function getAvatarPermissions() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Permissions', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_8__.Controller, {
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Permissions', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
       name: "enableAvatarsLoggedIn",
-      control: control,
-      render: function render(_ref2) {
-        var _ref2$field = _ref2.field,
-            _onChange2 = _ref2$field.onChange,
-            value = _ref2$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users', 'comment-edit-pro'),
-          className: "sce-admin__toggle-control",
-          checked: value,
-          onChange: function onChange(boolValue) {
-            //setShowButtonOptions( boolValue );
-            _onChange2(boolValue);
-          },
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow avatars for logged-in users.', 'comment-edit-pro')
-        }));
-      }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_8__.Controller, {
-      name: "enableAvatarsAnonymous",
       control: control,
       render: function render(_ref3) {
         var _ref3$field = _ref3.field,
             _onChange3 = _ref3$field.onChange,
             value = _ref3$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Anonymous Users', 'comment-edit-pro'),
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users', 'comment-edit-pro'),
           className: "sce-admin__toggle-control",
           checked: value,
           onChange: function onChange(boolValue) {
             //setShowButtonOptions( boolValue );
             _onChange3(boolValue);
           },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow avatars for logged-in users.', 'comment-edit-pro')
+        }));
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "enableAvatarsAnonymous",
+      control: control,
+      render: function render(_ref4) {
+        var _ref4$field = _ref4.field,
+            _onChange4 = _ref4$field.onChange,
+            value = _ref4$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Anonymous Users', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            //setShowButtonOptions( boolValue );
+            _onChange4(boolValue);
+          },
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow avatars for non-logged-in (Anonymous) users.', 'comment-edit-pro')
         }));
       }
+    })));
+  };
+
+  var getAvatarLabel = function getAvatarLabel() {
+    var _errors$chooseAvatarT2;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Labels', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "chooseAvatarText",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref5) {
+        var _errors$chooseAvatarT;
+
+        var field = _ref5.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Label', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$chooseAvatarT = errors.chooseAvatarText) === null || _errors$chooseAvatarT === void 0 ? void 0 : _errors$chooseAvatarT.type),
+            'is-required': true
+          }),
+          placeholder: "Choose an Avatar",
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('When a user is not logged in, they will see this label before they submit their comment.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$chooseAvatarT2 = errors.chooseAvatarText) === null || _errors$chooseAvatarT2 === void 0 ? void 0 : _errors$chooseAvatarT2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
 
@@ -50225,27 +51811,27 @@ var Interface = function Interface(props) {
     className: "form-table"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_8__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
     name: "enableAvatars",
     control: control,
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange4 = _ref4$field.onChange,
-          value = _ref4$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange5 = _ref6$field.onChange,
+          value = _ref6$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Comment Avatars', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange4(boolValue);
+          _onChange5(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable Comment Avatars.', 'comment-edit-pro')
       });
     }
-  }))), getAvatarPermissions(), getAvatarWidth())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getAvatarPermissions(), getAvatarLabel(), getAvatarWidth())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {
@@ -50261,7 +51847,15 @@ var Interface = function Interface(props) {
     iconSize: "18",
     iconPosition: "right",
     disabled: saving
-  }))));
+  })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "polite"
+  }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  })));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Avatars);

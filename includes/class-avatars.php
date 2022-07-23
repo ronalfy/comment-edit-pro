@@ -234,6 +234,8 @@ class Avatars {
 			'avatarSize'             => $avatar_options['avatar_size'],
 			'enableAvatarsLoggedIn'  => $avatar_options['enable_avatars_logged_in'],
 			'enableAvatarsAnonymous' => $avatar_options['enable_avatars_anonymous'],
+			'chooseAvatarText'       => $avatar_options['choose_avatar_text'],
+			'enableCustomAvatarSize' => $avatar_options['enable_custom_avatar_size'],
 		);
 
 		// Exit gracefully.
@@ -247,10 +249,11 @@ class Avatars {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		$options_to_save = array(
-			'enable_avatars'           => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
-			'avatar_size'              => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
-			'enable_avatars_logged_in' => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
-			'enable_avatars_anonymous' => filter_input( INPUT_POST, 'enableAvatarsAnonymous', FILTER_VALIDATE_BOOLEAN ),
+			'enable_avatars'            => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
+			'avatar_size'               => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
+			'enable_avatars_logged_in'  => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
+			'enable_custom_avatar_size' => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
+			'choose_avatar_text'        => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
 		);
 
 		// Security.
@@ -358,14 +361,14 @@ class Avatars {
 	 */
 	private function get_avatar_comment_field_array() {
 
-		$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
 		$current_avatar = false;
 		if ( is_user_logged_in() ) {
 			global $current_user;
 			$user_id    = $current_user->ID;
 			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true );
 			if ( $avatar_url ) {
-				$avatar_html = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' ) );
+				$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' ) );
 				$current_avatar = $avatar_url;
 			}
 		}
@@ -439,7 +442,7 @@ class Avatars {
 	 */
 	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0, $size = 0 ) {
 		global $post, $comment;
-		$options    = Options::get_options();
+		$options = Options::get_options();
 
 		// If no size, try to pull from options.
 		if ( 0 === $size ) {

@@ -8,15 +8,14 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	ButtonGroup,
-	RadioControl,
-	FormTokenField,
 	RangeControl,
 	ToggleControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import sendCommand from '../../../SendCommand';
+import CircularExclamationIcon from '../../components/icons/CircularExplanation';
+import Notice from '../../components/Notice';
 
 const retrieveAvatarOptions = () => {
 	return sendCommand( 'sce_get_avatar_options', {
@@ -44,7 +43,6 @@ const Avatars = ( props ) => {
 	);
 };
 
-
 const Interface = ( props ) => {
 	const [ avatarsEnabled, setAvatarsEnabled ] = useState( false );
 	const [ avatarSize, setAvatarSize ] = useState( 90 );
@@ -62,6 +60,8 @@ const Interface = ( props ) => {
 				avatarSize: data.avatarSize,
 				enableAvatarsLoggedIn: data.enableAvatarsLoggedIn,
 				enableAvatarsAnonymous: data.enableAvatarsAnonymous,
+				chooseAvatarText: data.chooseAvatarText,
+				enableCustomAvatarSize: data.enableCustomAvatarSize,
 			},
 		} );
 
@@ -79,7 +79,7 @@ const Interface = ( props ) => {
 		setSaving( true );
 		sendCommand( 'sce_save_avatar_options', {
 			nonce: sceAvatars.save_nonce,
-			...formData
+			...formData,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
@@ -107,6 +107,29 @@ const Interface = ( props ) => {
 					{ __( 'Avatar Size', 'comment-edit-pro' ) }
 				</th>
 				<td>
+					<Controller
+						name="enableCustomAvatarSize"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<>
+								<ToggleControl
+									label={ __(
+										'Enable Avatar Custom Sizes',
+										'comment-edit-pro'
+									) }
+									className="sce-admin__toggle-control"
+									checked={ value }
+									onChange={ ( boolValue ) => {
+										onChange( boolValue );
+									} }
+									help={ __(
+										'By default, the theme typically chooses how large avatars are in the comment section. This will override the default size.',
+										'comment-edit-pro'
+									) }
+								/>
+							</>
+						) }
+					/>
 					<Controller
 						name="avatarSize"
 						control={ control }
@@ -207,6 +230,56 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getAvatarLabel = () => {
+		return (
+			<tr>
+				<th scope="row">
+					{ __( 'Labels', 'comment-edit-pro' ) }
+				</th>
+				<td>
+					<Controller
+						name="chooseAvatarText"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								label={ __( 'Avatar Label', 'quotes-dlx' ) }
+								{ ...field }
+								className={ classNames(
+									'qdlx-admin__text-control',
+									{
+										'has-error':
+											'required' ===
+											errors.chooseAvatarText?.type,
+										'is-required': true,
+									}
+								) }
+								placeholder="Choose an Avatar"
+								help={ __(
+									'When a user is not logged in, they will see this label before they submit their comment.',
+									'comment-edit-pro'
+								) }
+								aria-required="true"
+							/>
+						) }
+					/>
+					{ 'required' === errors.chooseAvatarText?.type && (
+						<Notice
+							message={ __(
+								'This field is a required field.'
+							) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+				</td>
+			</tr>
+
+		);
+	};
+
 	const getSaveIcon = () => {
 		if ( saving ) {
 			return ( Spinner );
@@ -263,6 +336,7 @@ const Interface = ( props ) => {
 							</td>
 						</tr>
 						{ getAvatarPermissions() }
+						{ getAvatarLabel() }
 						{ getAvatarWidth() }
 					</tbody>
 				</table>
@@ -276,13 +350,28 @@ const Interface = ( props ) => {
 							{ 'is-saved': isSaved }
 						) }
 						type="submit"
-						text={getSaveText() }
+						text={ getSaveText() }
 						icon={ getSaveIcon() }
 						iconSize="18"
 						iconPosition="right"
 						disabled={ saving }
 					/>
 				</div>
+				{ hasErrors() && (
+					<Notice
+						message={ __(
+							'There are form validation errors. Please correct them above.', 'comment-edit-pro' ) }
+						status="error"
+						politeness="polite"
+					/>
+				) }
+				{ isSaved && (
+					<Notice
+						message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
+						status="success"
+						politeness="assertive"
+					/>
+				) }
 			</form>
 		</>
 	);

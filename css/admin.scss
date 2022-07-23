@@ -41,6 +41,17 @@ $delete_button_color_text: #fff;
 $danger_button_color: #721c24;
 $danger_button_color_text: #fff;
 
+:root {
+	--sce-admin--color-notice--info: #e3f3f7;
+	--sce-admin--color-notice--info-alt: #3a8dc4;
+	--sce-admin--color-notice--success: #eaf5ea;
+	--sce-admin--color-notice--success-alt: #49a939;
+	--sce-admin--color-notice--warning: #fef6e1;
+	--sce-admin--color-notice--warning-alt: #e8a931;
+	--sce-admin--color-notice--error: #f5e5e4;
+	--sce-admin--color-notice--error-alt: #bc2b2c;
+}
+
 @import 'button-resets.scss';
 @import 'breakpoints-mixin.scss';
 @import 'a11y-mixin.scss';
@@ -642,6 +653,168 @@ h3.sce-panel-heading {
 					}
 				}
 			}
+		}
+	}
+}
+
+/* Text fields */
+.sce-panel-row {
+	p.components-base-control__help,
+	p.components-form-token-field__help {
+		font-size: 13px;
+		font-style: italic;
+	}
+
+	// Text control styles.
+	.components-base-control,
+	.components-form-token-field,
+	.sce-admin__button-group--align {
+		margin-bottom: 25px;
+
+		&.has-error {
+			margin-bottom: 5px;
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+		label {
+			font-weight: 700;
+		}
+		input[type='text'] {
+			position: relative;
+			display: block;
+			min-width: 200px;
+			line-height: 2;
+			font-size: 13px;
+		}
+
+		.components-radio-control__option {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			input[type='radio'] {
+				margin: 0;
+				margin-right: 5px;
+			}
+
+			label {
+				font-weight: 400;
+			}
+		}
+	}
+	label.components-base-control__label {
+		position: relative;
+	}
+	.is-required label:after {
+		position: absolute;
+		display: inline-block;
+		vertical-align: middle;
+		content: "*";
+		top: -3px;
+		right: -12px;
+		color: #b53b07;
+		font-size: 1.4em;
+		line-height: 1.3;
+	}
+}
+
+/* Admin panel notices */
+/* Error Notices */
+.sce-admin__notice {
+	margin: 10px 0;
+	&.sce-admin__notice--has-icon {
+		.components-notice__content {
+			display: grid;
+			grid-template-columns: 32px 1fr 1px;
+			align-items: center;
+		}
+
+		&.sce-admin__notice-appearance--inline .components-notice__content {
+			display: flex;
+
+			.sce-admin__notice-icon {
+				margin-right: 8px;
+			}
+		}
+	}
+	.sce-admin__notice-message {
+		color: #393838;
+		font-size: 1.1em;
+		line-height: 1.2;
+		font-weight: 500;
+	}
+	&.sce-admin__notice-appearance--block .components-notice {
+		border-left: 4px solid transparent;
+		padding: 15px 20px;
+		padding-left: 15px;
+		margin-bottom: 15px;
+	}
+	&.sce-admin__notice-appearance--inline .components-notice {
+		padding-left: 0;
+	}
+
+	svg {
+		display: flex;
+		align-items: center;
+		width: 20px;
+		height: 20px;
+	}
+
+	&.sce-admin__notice-type--error:not(.sce-admin__notice-appearance--inline) {
+		background-color: var(--sce-admin--color-notice--error);
+		.components-notice {
+			border-left-color: var(--sce-admin--color-notice--error-alt);
+		}
+		svg path {
+			fill: var(--sce-admin--color-notice--error-alt);
+		}
+	}
+	&.sce-admin__notice-type--error.sce-admin__notice-appearance--inline {
+		.sce-admin__notice-message {
+			color: var(--sce-admin--color-notice--error-alt);
+		}
+		.sce-admin__notice-message {
+			font-size: 0.9em;
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+			path {
+				fill: var(--sce-admin--color-notice--error-alt);
+			}
+		}
+	}
+	&.sce-admin__notice-type--success {
+		background-color: var(--sce-admin--color-notice--success);
+		.components-notice {
+			border-left-color: var(--sce-admin--color-notice--success-alt);
+		}
+		svg path {
+			fill: var(--sce-admin--color-notice--success-alt);
+		}
+	}
+	&.sce-admin__notice-type--info {
+		background-color: var(--sce-admin--color-notice--info);
+		.components-notice {
+			border-left-color: var(--sce-admin--color-notice--info-alt);
+		}
+		svg path {
+			fill: var(--sce-admin--color-notice--info-alt);
+		}
+	}
+	&.sce-admin__notice-type--warning {
+		background-color: var(--sce-admin--color-notice--warning);
+		.components-notice {
+			border-left-color: var(--sce-admin--color-notice--warning-alt);
+		}
+		svg path {
+			fill: var(--sce-admin--color-notice--warning-alt);
 		}
 	}
 }

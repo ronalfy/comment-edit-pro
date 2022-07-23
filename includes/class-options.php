@@ -94,7 +94,7 @@ class Options {
 	 *
 	 * @return array Array of options.
 	 */
-	public static function get_options( $force = false) {
+	public static function get_options( $force = false ) {
 		if ( is_array( self::$options ) && ! $force ) {
 			return self::$options;
 		}
@@ -162,10 +162,12 @@ class Options {
 			'allow_unlimited_editing'         => false,
 			'allow_front_end_character_limit' => false,
 			'allow_front_end_editing'         => false,
-			'enable_avatars' => false,
-			'avatar_size' => 90,
-			'enable_avatars_logged_in' => true,
-			'enable_avatars_anonymous' => true,
+			'enable_avatars'                  => false,
+			'avatar_size'                     => 90,
+			'enable_avatars_logged_in'        => true,
+			'enable_avatars_anonymous'        => true,
+			'enable_custom_avatar_size'       => false,
+			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
 		);
 		return $defaults;
 	}
