@@ -4842,34 +4842,42 @@ window.addEventListener('load', function (event) {
 
 
   var avatarWrapper = document.querySelector('.comment-form-sce-avatar .sce-avatar img');
-  avatarWrapper.addEventListener('click', function (e) {
-    toggleModalState();
-  }); // Avatar modal - Actions to run for when the modal is visible.
-  // Credit: https://codepen.io/rebelchris/pen/MWyyLXR
 
-  var modalWrapper = document.querySelector('#sce-avatar-form-modal');
-  modalWrapper.setAttribute('height', '0');
-  modalWrapper.setAttribute('height', '0');
-  modalWrapper.classList.add('sce-comment-form-hidden');
-  modalWrapper.setAttribute('aria-hidden', 'true');
-  modalWrapper.innerHTML = imageHtml;
-  modalWrapper.querySelectorAll('.sce-inline-avatar').forEach(function (avatar) {
-    avatar.addEventListener('click', function (e) {
-      var filename = e.target.getAttribute('data-key');
-      var imgUrl = e.target.getAttribute('src'); // Get the current avatar image.
-
-      var currentAvatar = document.querySelector('.comment-form-sce-avatar img.avatar');
-      var commentFormInput = document.querySelector('#sce-comment-form-avatar');
-      commentFormInput.setAttribute('value', filename);
-      currentAvatar.setAttribute('src', imgUrl);
+  if (null !== avatarWrapper) {
+    avatarWrapper.addEventListener('click', function (e) {
       toggleModalState();
     });
-  }); // Close button.
+  } // Avatar modal - Actions to run for when the modal is visible.
+  // Credit: https://codepen.io/rebelchris/pen/MWyyLXR
 
-  var closeButton = modalWrapper.querySelector('.sce-avatar-form-modal-close');
-  closeButton.addEventListener('click', function (e) {
-    toggleModalState();
-  }); // An anchor is shown around the avatar, so this stops the anchor event from triggering.
+
+  var modalWrapper = document.querySelector('#sce-avatar-form-modal');
+
+  if (null !== modalWrapper) {
+    modalWrapper.setAttribute('height', '0');
+    modalWrapper.setAttribute('height', '0');
+    modalWrapper.classList.add('sce-comment-form-hidden');
+    modalWrapper.setAttribute('aria-hidden', 'true');
+    modalWrapper.innerHTML = imageHtml;
+    modalWrapper.querySelectorAll('.sce-inline-avatar').forEach(function (avatar) {
+      avatar.addEventListener('click', function (e) {
+        var filename = e.target.getAttribute('data-key');
+        var imgUrl = e.target.getAttribute('src'); // Get the current avatar image.
+
+        var currentAvatar = document.querySelector('.comment-form-sce-avatar img.avatar');
+        var commentFormInput = document.querySelector('#sce-comment-form-avatar');
+        commentFormInput.setAttribute('value', filename);
+        currentAvatar.setAttribute('src', imgUrl);
+        toggleModalState();
+      });
+    }); // Close button.
+
+    var closeButton = modalWrapper.querySelector('.sce-avatar-form-modal-close');
+    closeButton.addEventListener('click', function (e) {
+      toggleModalState();
+    });
+  } // An anchor is shown around the avatar, so this stops the anchor event from triggering.
+
 
   window.sce_avatars_stop_propagation = function (anchorEvent) {
     anchorEvent.preventDefault();

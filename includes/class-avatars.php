@@ -439,10 +439,10 @@ class Avatars {
 	 */
 	private function get_avatar_image_html( $src, $comment_id = 0, $user_id = 0, $size = 0 ) {
 		global $post, $comment;
+		$options    = Options::get_options();
 
 		// If no size, try to pull from options.
 		if ( 0 === $size ) {
-			$options    = Options::get_options();
 			$maybe_size = $options['avatar_size'] ?? 0;
 			if ( $maybe_size ) {
 				$size = $maybe_size;
@@ -520,8 +520,15 @@ class Avatars {
 			'sce-custom-avatar',
 			'sce-popover-comment-id-' . $comment_id,
 		);
+
 		if ( $can_edit ) {
-			$classes[] = 'sce-can-edit';
+			if ( is_user_logged_in() ) {
+				$classes[] = 'sce-can-edit';
+			} else {
+				if ( $can_edit && true === $options['enable_avatars_anonymous'] ) {
+					$classes[] = 'sce-can-edit';
+				}
+			}
 		}
 
 		if ( ! $this->can_change_avatar() ) {
