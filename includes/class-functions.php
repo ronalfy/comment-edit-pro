@@ -305,6 +305,8 @@ class Functions {
 			'xmls'        => array(),
 		);
 
+		$allowed_tags['span'] = array();
+
 		return $allowed_tags;
 	}
 

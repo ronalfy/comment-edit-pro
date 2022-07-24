@@ -28,10 +28,13 @@ class Admin_Settings {
 		<?php
 		self::get_settings_header();
 		?>
-		<div class="sce-settings-tabs">
-			<?php
-			self::get_settings_tabs();
-			?>
+		<div class="sce-settings-tabs-wrapper">
+			<div class="sce-settings-tabs">
+				<?php
+				self::get_settings_tabs();
+				?>
+				<span aria-hidden="true"></span>
+			</div>
 		</div>
 		<?php
 		self::get_settings_footer();
@@ -45,10 +48,12 @@ class Admin_Settings {
 	public static function get_settings_header() {
 		?>
 		<header id="comment-edit-pro-header" style="background-image: url(<?php echo esc_url( Functions::get_plugin_url( 'images/admin-header-bg.jpg' ) ); ?>); background-size: cover; background-repeat: no-repeat;">
-			<h1>
-				<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Comment Edit Pro" /></a>
-			</h1>
-			<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section by allowing your users to edit their comments.', 'comment-edit-pro' ); ?></p>
+			<div id="comment-edit-pro-header-content">
+				<h1>
+					<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Comment Edit Pro" /></a>
+				</h1>
+				<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section by allowing your users to edit their comments.', 'comment-edit-pro' ); ?></p>
+			</div>
 		</header>
 		<?php
 	}
@@ -215,7 +220,7 @@ class Admin_Settings {
 			 * @param array $tabs Associative array of tabs.
 			 */
 			$tabs       = apply_filters( 'comment_edit_pro_admin_tabs', $tabs );
-			$tab_html   = '<nav class="nav-tab-wrapper">';
+			$tab_html   = '<nav>';
 			$tabs_count = count( $tabs );
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
 				$active_tab = Functions::get_admin_tab();
@@ -238,7 +243,7 @@ class Admin_Settings {
 				}
 				$do_action = false;
 				foreach ( $tabs as $tab ) {
-					$classes = array( 'nav-tab' );
+					$classes = array();
 					$tab_get = isset( $tab['get'] ) ? $tab['get'] : '';
 					if ( $active_tab === $tab_get ) {
 						$classes[] = 'nav-tab-active';
@@ -350,8 +355,9 @@ class Admin_Settings {
 						);
 					}
 				}
-				if ( $do_action ) {
 
+				if ( $do_action ) {
+					echo '<div class="sce-admin-tab-content">';
 					/**
 					 * Perform a tab action.
 					 *
@@ -364,6 +370,8 @@ class Admin_Settings {
 					 * @param string Sub Tab
 					 */
 					do_action( $do_action, $current_tab, $current_sub_tab );
+
+					echo '</div>';
 				}
 			}
 			?>

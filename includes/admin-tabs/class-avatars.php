@@ -40,7 +40,7 @@ class Avatars {
 			'get'    => 'avatars',
 			'action' => 'comment_edit_pro_output_avatars',
 			'url'    => Functions::get_settings_url( 'avatars' ),
-			'label'  => _x( 'Avatars', 'Tab label as Main', 'ultimate-auto-updates' ),
+			'label'  => _x( 'Avatars (Beta)', 'Tab label as Main', 'ultimate-auto-updates' ),
 			'icon'   => 'avatar',
 		);
 		return $tabs;
@@ -74,22 +74,14 @@ class Avatars {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<?php
-						$avatar_filenames = Avatars_Helper::get_avatar_filenames();
-						foreach ( $avatar_filenames as $filename ) {
-							$avatar_url = Functions::get_plugin_url( 'images/avatars/' . $filename . '.png' );
-							?>
-								<img src="<?php echo esc_url( $avatar_url ); ?>" alt="Avatar" width="128" height="128" />
-							<?php
-						}
-						?>
+						<div id="sce-tab-avatars"></div>	
 					</div>
 				</div>
-				<div class="sce-admin-panel-area">
+				<!-- <div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						Recaptcha
+						<div id="sce-tab-avatar-protection"></div>
 					</div>
-				</div>
+				</div> -->
 				<?php
 			}
 		}

@@ -102,6 +102,7 @@
 #sce-avatar-form-modal img,
 .sce-avatars-popover img {
   max-width: 75px;
+  height: auto;
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 100%;
@@ -200,10 +201,19 @@
 }
 
 /* Inline comment editing and avatars */
-.sce-can-edit {
+#wpadminbar #wp-admin-bar-my-account > a {
+  display: inline-block;
+  cursor: unset;
+}
+
+.sce-custom-avatar {
+  cursor: unset;
+}
+
+.sce-custom-avatar.sce-can-edit {
   cursor: pointer;
 }
-.sce-can-edit:hover {
+.sce-custom-avatar.sce-can-edit:hover {
   filter: saturate(125%);
   border: 1px solid #bbb;
 }
@@ -236,6 +246,10 @@
 }
 .sce-popover-spinner svg path {
   fill: #D78C67;
+}
+
+.sce-popover-error svg path {
+  fill: #D76774;
 }
 
 /*# sourceMappingURL=avatars-frontend.css.map*/

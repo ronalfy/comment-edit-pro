@@ -103,6 +103,7 @@
 
 	img {
 		max-width: 75px;
+		height: auto;
 		cursor: pointer;
 		border: 1px solid transparent;
 		border-radius: 100%;
@@ -209,8 +210,14 @@
 }
 
 /* Inline comment editing and avatars */
-
-.sce-can-edit {
+#wpadminbar #wp-admin-bar-my-account > a {
+	display: inline-block;
+	cursor: unset;
+}
+.sce-custom-avatar {
+	cursor: unset;
+}
+.sce-custom-avatar.sce-can-edit {
 	cursor: pointer;
 	&:hover {
 		filter: saturate(125%);
@@ -241,10 +248,15 @@
 .sce-popover-avatar-hidden {
 	display: none;
 }
-.sce-popover-spinner svg {
+.sce-popover-spinner svg{
 	animation: sce-rotate 4s linear infinite;
 
 	path {
 		fill: #D78C67;
+	}
+}
+.sce-popover-error svg {
+	path {
+		fill: #D76774;
 	}
 }

@@ -19,6 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Options {
 
 	/**
+	 * Array holding the options.
+	 *
+	 * @var [type]
+	 */
+	protected static $options = false;
+
+	/**
 	 * Update options via sanitization
 	 *
 	 * @since 1.0.0
@@ -37,8 +44,7 @@ class Options {
 					$option = $timer;
 					break;
 				case 'min_comment_length':
-					$option = absint( $options[ $key ] );
-					break;
+				case 'avatar_size':
 				case 'max_comment_length':
 					$option = absint( $options[ $key ] );
 					break;
@@ -54,6 +60,9 @@ class Options {
 				case 'allow_unlimited_editing':
 				case 'allow_front_end_character_limit':
 				case 'allow_front_end_editing':
+				case 'enable_avatars':
+				case 'enable_avatars_logged_in':
+				case 'enable_avatars_anonymous':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -74,14 +83,21 @@ class Options {
 		} else {
 			update_option( 'sce_options', $options );
 		}
+		self::$options = $options;
+		return $options;
 	}
 
 	/**
 	 * Return a list of options.
 	 *
+	 * @param bool $force Whether to get options from cache or not.
+	 *
 	 * @return array Array of options.
 	 */
-	public static function get_options() {
+	public static function get_options( $force = false ) {
+		if ( is_array( self::$options ) && ! $force ) {
+			return self::$options;
+		}
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', array() );
 		} else {
@@ -92,6 +108,7 @@ class Options {
 		if ( count( $options ) < count( $defaults ) ) {
 			$options = wp_parse_args( $options, $defaults );
 		}
+		self::$options = $options;
 		return $options;
 	}
 
@@ -145,6 +162,12 @@ class Options {
 			'allow_unlimited_editing'         => false,
 			'allow_front_end_character_limit' => false,
 			'allow_front_end_editing'         => false,
+			'enable_avatars'                  => false,
+			'avatar_size'                     => 90,
+			'enable_avatars_logged_in'        => true,
+			'enable_avatars_anonymous'        => true,
+			'enable_custom_avatar_size'       => false,
+			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
 		);
 		return $defaults;
 	}

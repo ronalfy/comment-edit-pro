@@ -240,7 +240,6 @@ class Comment_Edit_Pro {
 		if ( ! is_singular() || ! comments_open() ) {
 			return;
 		}
-		Functions::get_plugin_dir( 'includes/class-sce-options.php' );
 		$options            = Options::get_options();
 		$min_comment_option = filter_var( $options['require_comment_length'], FILTER_VALIDATE_BOOLEAN );
 		$max_comment_option = filter_var( $options['require_comment_length_max'], FILTER_VALIDATE_BOOLEAN );
