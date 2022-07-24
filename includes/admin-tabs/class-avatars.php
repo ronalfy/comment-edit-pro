@@ -40,7 +40,7 @@ class Avatars {
 			'get'    => 'avatars',
 			'action' => 'comment_edit_pro_output_avatars',
 			'url'    => Functions::get_settings_url( 'avatars' ),
-			'label'  => _x( 'Avatars', 'Tab label as Main', 'ultimate-auto-updates' ),
+			'label'  => _x( 'Avatars (Beta)', 'Tab label as Main', 'ultimate-auto-updates' ),
 			'icon'   => 'avatar',
 		);
 		return $tabs;
@@ -77,11 +77,11 @@ class Avatars {
 						<div id="sce-tab-avatars"></div>	
 					</div>
 				</div>
-				<div class="sce-admin-panel-area">
+				<!-- <div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
 						<div id="sce-tab-avatar-protection"></div>
 					</div>
-				</div>
+				</div> -->
 				<?php
 			}
 		}

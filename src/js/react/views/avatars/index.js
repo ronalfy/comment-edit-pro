@@ -10,10 +10,10 @@ root.render(
 		<Avatars />
 	</React.StrictMode>
 );
-const avatarProtectionContainer = document.getElementById( 'sce-tab-avatar-protection' );
-const avatarProtection = createRoot( avatarProtectionContainer );
-avatarProtection.render(
-	<React.StrictMode>
-		<GravatarProtection />
-	</React.StrictMode>
-);
+// const avatarProtectionContainer = document.getElementById( 'sce-tab-avatar-protection' );
+// const avatarProtection = createRoot( avatarProtectionContainer );
+// avatarProtection.render(
+// 	<React.StrictMode>
+// 		<GravatarProtection />
+// 	</React.StrictMode>
+// );

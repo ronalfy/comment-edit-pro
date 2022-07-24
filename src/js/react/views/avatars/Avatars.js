@@ -30,7 +30,7 @@ const Avatars = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( 'Custom Comment Avatars', 'comment-edit-pro' ) }</h2>
+					<h2>{ __( 'Custom Comment Avatars (Beta)', 'comment-edit-pro' ) }</h2>
 					<BeatLoader
 						color={ '#9c68b0' }
 						loading={ true }
@@ -285,7 +285,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Custom Comment Avatars', 'comment-edit-pro' ) }</h2>
+			<h2>{ __( 'Custom Comment Avatars (Beta)', 'comment-edit-pro' ) }</h2>
 			<p className="description">{ __( 'Spruce up your comment section and allow some fun and default avatars.', 'comment-edit-pro' ) }</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
