@@ -35,7 +35,7 @@ class Mailchimp {
 		add_action( 'wp_ajax_sce_save_mailchimp_options', array( $this, 'ajax_save_mailchimp_options' ) );
 
 		// Retrieve avatar settings in the admin.
-		add_action( 'wp_ajax_sce_get_mailchimp_options', array( $this, 'ajax_get_mailchimp_options' ) );		
+		add_action( 'wp_ajax_sce_get_mailchimp_options', array( $this, 'ajax_get_mailchimp_options' ) );
 	}
 
 	/**
@@ -56,8 +56,8 @@ class Mailchimp {
 		$options = Options::get_options();
 
 		$json_array = array(
-			'enableMailchimp'          => $options['enable_mailchimp'],
-			'apiKey'          => $options['mailchimp_api_key'],
+			'enableMailchimp'       => $options['enable_mailchimp'],
+			'apiKey'                => $options['mailchimp_api_key'],
 			'mailchimpServerPrefix' => $options['mailchimp_api_key_server_prefix'],
 		);
 
@@ -71,12 +71,6 @@ class Mailchimp {
 	public function ajax_save_mailchimp_options() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
-		$options_to_save = array(
-			'enable_mailchimp'            => filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN ),
-			'mailchimp_api_key'        => sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) ),
-			'mailchimp_api_key_server_prefix' => sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) ),
-		);
-
 		// Security.
 		if ( ! wp_verify_nonce( $nonce, 'sce-save-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
@@ -86,33 +80,91 @@ class Mailchimp {
 			);
 		}
 
-		// Retrieve lists.
+		// Nonce passed, let's get post vars.
+		$mailchimp_enabled = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
+		$api_token         = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_server_prefix = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
+
+		// If mailchimp is disabled, let's clear out some keys.
+		if ( ! $mailchimp_enabled ) {
+			$options_to_save = array(
+				'enable_mailchimp'                => false,
+				'mailchimp_api_key'               => '',
+				'mailchimp_api_key_server_prefix' => '',
+			);
+
+			// todo: clear mailchimp lists option.
+
+			Options::update_options( $options_to_save );
+			wp_send_json_success( array( 'list' => false ) );
+			exit;
+		}
+
+		// Now let's save options.
+		$options_to_save = array(
+			'enable_mailchimp'                => $mailchimp_enabled,
+			'mailchimp_api_key'               => $api_token,
+			'mailchimp_api_key_server_prefix' => $$api_server_prefix,
+		);
+		Options::update_options( $options_to_save );
+
+		// Let's check if mailchimp key has changed and if so, let's grab the list again.
+		$needs_refresh = true;
+		$options       = Options::get_options();
+		if ( $options['mailchimp_api_key'] !== $api_token ) {
+			$needs_refresh = true;
+		}
+
+		// If we don't need to refresh the list, let's not do it.
+		if ( ! $needs_refresh ) {
+			// Exit gracefully.
+			wp_send_json_success( array( 'list' => false ) );
+			exit;
+		}
+
+		// Format API url for a server prefix..
 		$mailchimp_api_url = str_replace(
 			'<sp>',
-			sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) ),
+			$api_server_prefix,
 			$this->mailchimp_api
 		);
 
 		// Start building up HTTP args.
-		$http_args = array();
-
-		$api_token = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-
+		$http_args            = array();
 		$http_args['headers'] = array(
 			'Authorization' => 'Bearer ' . $api_token,
 			'Accept'        => 'application/json;ver=1.0',
 		);
 
+		// Get lists endpoint.
 		$lists_api_url = esc_url_raw( $mailchimp_api_url . '/lists' );
 
 		// Make API call.
 		$response = wp_remote_get( $lists_api_url, $http_args );
 
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not connect to Mailchimp.', 'comment-edit-pro' ) ) );
+		}
 
+		// Now format response from JSON.
+		$lists = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		Options::update_options( $options_to_save );
+		// Save list in option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_mailchimp_lists', $lists );
+		} else {
+			update_option( 'sce_mailchimp_lists', $lists );
+		}
 
+		$lists_to_return = $lists['lists'] ?? array();
+
+		// return success with flag showing lists being returned.
 		// Exit gracefully.
-		wp_send_json_success( array() );
+		wp_send_json_success(
+			array(
+				'list'  => true,
+				'lists' => $lists_to_return,
+			)
+		);
 	}
 }

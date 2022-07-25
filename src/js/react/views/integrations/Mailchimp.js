@@ -104,7 +104,7 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
-
+console.log( ajaxData );
 				if ( ajaxSuccess ) {
 					setIsSaved( true );
 					setTimeout( () => {

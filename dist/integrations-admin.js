@@ -51656,6 +51656,7 @@ var Interface = function Interface(props) {
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
+      console.log(ajaxData);
 
       if (ajaxSuccess) {
         setIsSaved(true);
