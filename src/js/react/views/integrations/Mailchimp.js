@@ -20,7 +20,7 @@ import Notice from '../../components/Notice';
 
 const retrieveAvatarOptions = () => {
 	return sendCommand( 'sce_get_mailchimp_options', {
-		nonce: sceAvatars.get_nonce,
+		nonce: sceIntegrations.get_nonce,
 	} );
 };
 
@@ -81,7 +81,7 @@ const Interface = ( props ) => {
 	const onSubmit = ( formData ) => {
 		setSaving( true );
 		sendCommand( 'sce_save_avatar_options', {
-			nonce: sceAvatars.save_nonce,
+			nonce: sceIntegrations.save_nonce,
 			...formData,
 		} )
 			.then( ( ajaxResponse ) => {
@@ -157,7 +157,7 @@ const Interface = ( props ) => {
 									/>
 									<img
 										className="sce-admin__avatar-preview"
-										src={ sceAvatars.preview_avatar }
+										src={ sceIntegrations.preview_avatar }
 										width={ value }
 										height={ value }
 										alt={ __( 'Preview avatar', 'comment-edit-pro' ) }

@@ -51234,7 +51234,7 @@ function sendCommand(action, data) {
 
   var options = {
     method: 'post',
-    url: sceAvatars.ajaxurl,
+    url: ajaxurl,
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {

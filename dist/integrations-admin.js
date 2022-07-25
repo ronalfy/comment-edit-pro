@@ -51234,7 +51234,7 @@ function sendCommand(action, data) {
 
   var options = {
     method: 'post',
-    url: sceAvatars.ajaxurl,
+    url: ajaxurl,
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {
@@ -51545,7 +51545,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var retrieveAvatarOptions = function retrieveAvatarOptions() {
   return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_mailchimp_options', {
-    nonce: sceAvatars.get_nonce
+    nonce: sceIntegrations.get_nonce
   });
 };
 
@@ -51631,7 +51631,7 @@ var Interface = function Interface(props) {
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_avatar_options', _objectSpread({
-      nonce: sceAvatars.save_nonce
+      nonce: sceIntegrations.save_nonce
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
@@ -51695,7 +51695,7 @@ var Interface = function Interface(props) {
           railColor: "#dad4eb"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
           className: "sce-admin__avatar-preview",
-          src: sceAvatars.preview_avatar,
+          src: sceIntegrations.preview_avatar,
           width: value,
           height: value,
           alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Preview avatar', 'comment-edit-pro')
@@ -113042,7 +113042,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var container = document.getElementById('sce-tab-avatars');
+var container = document.getElementById('sce-tab-mailchimp');
 var root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
 root.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Mailchimp__WEBPACK_IMPORTED_MODULE_2__["default"], null))); // const avatarProtectionContainer = document.getElementById( 'sce-tab-avatar-protection' );
 // const avatarProtection = createRoot( avatarProtectionContainer );

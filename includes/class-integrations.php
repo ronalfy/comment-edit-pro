@@ -11,9 +11,9 @@ use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options as Options;
 
 /**
- * Class Mailchimp
+ * Class Integrations
  */
-class Mailchimp {
+class Integrations {
 
 	/**
 	 * Class runner.
@@ -28,12 +28,12 @@ class Mailchimp {
 		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
 
 		// Retrieve avatar settings in the admin.
-		add_action( 'wp_ajax_sce_get_avatar_options', array( $this, 'ajax_get_avatar_options' ) );
+		add_action( 'wp_ajax_sce_get_mailchimp_options', array( $this, 'ajax_get_mailchimp_options' ) );
 
 		// Load Avatar scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 		// Load Avatar scripts.
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_avatar_scripts_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_mailchimp_scripts_styles' ) );
 
 		// Load the pngs for use in the popover.
 		add_action( 'admin_footer', array( $this, 'add_footer_html' ) );
@@ -108,9 +108,9 @@ class Mailchimp {
 	}
 
 	/**
-	 * Load scripts and styles to change avatars in discussion area.
+	 * Load scripts and styles  in discussion area.
 	 */
-	public function add_admin_avatar_scripts_styles() {
+	public function add_admin_mailchimp_scripts_styles() {
 		global $pagenow;
 		if ( 'edit-comments.php' !== $pagenow ) {
 			return;
@@ -126,21 +126,20 @@ class Mailchimp {
 		if ( null === $current_tab ) {
 			return;
 		}
-		if ( 'avatars' === $current_tab ) {
+		if ( 'integrations' === $current_tab ) {
 			wp_enqueue_script(
-				'sce-avatars',
-				Functions::get_plugin_url( 'dist/avatars-admin.js' ),
+				'sce-integrations',
+				Functions::get_plugin_url( 'dist/integrations-admin.js' ),
 				array(),
 				Functions::get_plugin_version(),
 				true
 			);
 			wp_localize_script(
-				'sce-avatars',
-				'sceAvatars',
+				'sce-integrations',
+				'sceIntegrations',
 				array(
-					'preview_avatar' => Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ),
-					'save_nonce'     => wp_create_nonce( 'sce-save-avatar-options' ),
-					'get_nonce'      => wp_create_nonce( 'sce-retrieve-avatar-options' ),
+					'save_nonce'     => wp_create_nonce( 'sce-save-integrations-options' ),
+					'get_nonce'      => wp_create_nonce( 'sce-retrieve-integrations-options' ),
 					'ajaxurl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);
@@ -231,7 +230,7 @@ class Mailchimp {
 	/**
 	 * Save avatar options.
 	 */
-	public function ajax_get_avatar_options() {
+	public function ajax_get_mailchimp_options() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
@@ -246,12 +245,7 @@ class Mailchimp {
 		$avatar_options = Options::get_options();
 
 		$json_array = array(
-			'enableAvatars'          => $avatar_options['enable_avatars'],
-			'avatarSize'             => $avatar_options['avatar_size'],
-			'enableAvatarsLoggedIn'  => $avatar_options['enable_avatars_logged_in'],
-			'enableAvatarsAnonymous' => $avatar_options['enable_avatars_anonymous'],
-			'chooseAvatarText'       => $avatar_options['choose_avatar_text'],
-			'enableCustomAvatarSize' => $avatar_options['enable_custom_avatar_size'],
+			'enableMailchimp'          => $avatar_options['enable_mailchimp'],
 		);
 
 		// Exit gracefully.
