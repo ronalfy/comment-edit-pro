@@ -242,10 +242,11 @@ class Integrations {
 			);
 		}
 
-		$avatar_options = Options::get_options();
+		$options = Options::get_options();
 
 		$json_array = array(
-			'enableMailchimp'          => $avatar_options['enable_mailchimp'],
+			'enableMailchimp'          => $options['enable_mailchimp'],
+			'apiKey'          => $options['mailchimp_api_key'],
 		);
 
 		// Exit gracefully.

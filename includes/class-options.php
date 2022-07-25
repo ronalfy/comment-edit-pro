@@ -169,6 +169,7 @@ class Options {
 			'enable_custom_avatar_size'       => false,
 			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
 			'enable_mailchimp'                => false,
+			'mailchimp_api_key'               => '',
 		);
 		return $defaults;
 	}

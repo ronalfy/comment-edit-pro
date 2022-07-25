@@ -30,7 +30,7 @@ const Mailchimp = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( 'MailChimp', 'comment-edit-pro' ) }</h2>
+					<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) }</h2>
 					<BeatLoader
 						color={ '#9c68b0' }
 						loading={ true }
@@ -59,12 +59,8 @@ const Interface = ( props ) => {
 	const { register, control, handleSubmit, setValue, getValues, reset } =
 		useForm( {
 			defaultValues: {
-				enableAvatars: data.enableAvatars,
-				avatarSize: data.avatarSize,
-				enableAvatarsLoggedIn: data.enableAvatarsLoggedIn,
-				enableAvatarsAnonymous: data.enableAvatarsAnonymous,
-				chooseAvatarText: data.chooseAvatarText,
-				enableCustomAvatarSize: data.enableCustomAvatarSize,
+				enableMailchimp: data.enableMailchimp,
+				apiKey: data.apiKey,
 			},
 		} );
 
@@ -171,85 +167,32 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getAvatarPermissions = () => {
+	const getAPIKey = () => {
 		return (
 			<tr>
-				<th scope="row">{ __( 'Avatar Permissions', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'API Key', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
-						name="enableAvatarsLoggedIn"
-						control={ control }
-						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<ToggleControl
-									label={ __( 'Logged-in Users', 'comment-edit-pro' ) }
-									className="sce-admin__toggle-control"
-									checked={ value }
-									onChange={ ( boolValue ) => {
-										//setShowButtonOptions( boolValue );
-										onChange( boolValue );
-									} }
-									help={ __(
-										'Allow avatars for logged-in users.',
-										'comment-edit-pro'
-									) }
-								/>
-							</>
-						) }
-					/>
-					<Controller
-						name="enableAvatarsAnonymous"
-						control={ control }
-						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<ToggleControl
-									label={ __( 'Anonymous Users', 'comment-edit-pro' ) }
-									className="sce-admin__toggle-control"
-									checked={ value }
-									onChange={ ( boolValue ) => {
-										//setShowButtonOptions( boolValue );
-										onChange( boolValue );
-									} }
-									help={ __(
-										'Allow avatars for non-logged-in (Anonymous) users.',
-										'comment-edit-pro'
-									) }
-								/>
-							</>
-						) }
-					/>
-				</td>
-			</tr>
-		);
-	};
-
-	const getAvatarLabel = () => {
-		return (
-			<tr>
-				<th scope="row">{ __( 'Labels', 'comment-edit-pro' ) }</th>
-				<td>
-					<Controller
-						name="chooseAvatarText"
+						name="apiKey"
 						control={ control }
 						rules={ { required: true } }
 						render={ ( { field } ) => (
 							<TextControl
-								label={ __( 'Avatar Label', 'quotes-dlx' ) }
+								label={ __( 'Mailchimp API Key', 'quotes-dlx' ) }
 								{ ...field }
 								className={ classNames( 'qdlx-admin__text-control', {
-									'has-error': 'required' === errors.chooseAvatarText?.type,
+									'has-error': 'required' === errors.apiKey?.type,
 									'is-required': true,
 								} ) }
-								placeholder="Choose an Avatar"
 								help={ __(
-									'When a user is not logged in, they will see this label before they submit their comment.',
+									'Enter your Mailchimp API Key in order to choose a default list.',
 									'comment-edit-pro'
 								) }
 								aria-required="true"
 							/>
 						) }
 					/>
-					{ 'required' === errors.chooseAvatarText?.type && (
+					{ 'required' === errors.apiKey?.type && (
 						<Notice
 							message={ __( 'This field is a required field.' ) }
 							status="error"
@@ -285,20 +228,20 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Custom Comment Avatars (Beta)', 'comment-edit-pro' ) }</h2>
-			<p className="description">{ __( 'Spruce up your comment section and allow some fun and default avatars.', 'comment-edit-pro' ) }</p>
+			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) }</h2>
+			<p className="description">{ __( 'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.', 'comment-edit-pro' ) }</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
 					<tbody>
 						<tr>
-							<th scope="row">{ __( 'Avatars', 'comment-edit-pro' ) }</th>
+							<th scope="row">{ __( 'Mailchimp', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
 									name="enableAvatars"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											label={ __( 'Enable Comment Avatars', 'comment-edit-pro' ) }
+											label={ __( 'Enable Mailchimp', 'comment-edit-pro' ) }
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
@@ -306,7 +249,7 @@ const Interface = ( props ) => {
 												onChange( boolValue );
 											} }
 											help={ __(
-												'Enable or Disable Comment Avatars.',
+												'Enable or Disable the Mailchimp Integration.',
 												'comment-edit-pro'
 											) }
 										/>
@@ -316,9 +259,7 @@ const Interface = ( props ) => {
 						</tr>
 						{ getValues( 'enableAvatars' ) && (
 							<>
-								{ getAvatarPermissions() }
-								{ getAvatarLabel() }
-								{ getAvatarWidth() }
+								{ getAPIKey() }
 							</>
 						) }
 					</tbody>
