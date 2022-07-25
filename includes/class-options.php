@@ -63,6 +63,7 @@ class Options {
 				case 'enable_avatars':
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
+				case 'enable_mailchimp':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -170,6 +171,8 @@ class Options {
 			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
 			'enable_mailchimp'                => false,
 			'mailchimp_api_key'               => '',
+			'mailchimp_api_key_valid'         => false,
+			'mailchimp_api_key_server_prefix' => '',
 		);
 		return $defaults;
 	}

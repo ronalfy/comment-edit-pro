@@ -51598,7 +51598,8 @@ var Interface = function Interface(props) {
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
       enableMailchimp: data.enableMailchimp,
-      apiKey: data.apiKey
+      apiKey: data.apiKey,
+      mailchimpServerPrefix: data.mailchimpServerPrefix
     }
   }),
       register = _useForm.register,
@@ -51624,9 +51625,33 @@ var Interface = function Interface(props) {
     return Object.keys(errors).length > 0;
   };
 
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var apiKey = getValues('apiKey');
+
+    if ('' === apiKey || null === apiKey) {
+      return;
+    } // Try to get server prefix for Mailchimp API key.
+
+
+    var regex = new RegExp(/-(\w+)$/);
+    var matches = apiKey.match(regex); // If no matches, return empty string.
+
+    if (null === matches) {
+      return;
+    } // We have matches! Match should be index 1.
+
+
+    var serverPrefix = matches[1];
+    setValue('mailchimpServerPrefix', serverPrefix, {
+      shouldDirty: false,
+      shouldValidate: false,
+      shouldTouch: false
+    });
+  }, [formValues.apiKey]);
+
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_avatar_options', _objectSpread({
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_mailchimp_options', _objectSpread({
       nonce: sceIntegrations.save_nonce
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
@@ -51700,13 +51725,18 @@ var Interface = function Interface(props) {
     })));
   };
 
-  var getAPIKey = function getAPIKey() {
-    var _errors$apiKey2;
+  var getServerPrefix = function getServerPrefix() {
+    var apiKey = getValues('apiKey');
+
+    if ('' === apiKey) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    } // Output server prefix in readonly mode.
+
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('API Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
-      name: "apiKey",
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Server Prefix', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "mailchimpServerPrefix",
       control: control,
       rules: {
         required: true
@@ -51716,17 +51746,47 @@ var Interface = function Interface(props) {
 
         var field = _ref3.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp API Key', 'quotes-dlx')
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp Server Prefix', 'quotes-dlx')
         }, field, {
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
             'has-error': 'required' === ((_errors$apiKey = errors.apiKey) === null || _errors$apiKey === void 0 ? void 0 : _errors$apiKey.type),
+            'is-required': true
+          }),
+          disabled: true,
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('A server prefix is automatically generated for API access.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    })));
+  };
+
+  var getAPIKey = function getAPIKey() {
+    var _errors$apiKey3;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('API Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "apiKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref4) {
+        var _errors$apiKey2;
+
+        var field = _ref4.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp API Key', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type),
             'is-required': true
           }),
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Mailchimp API Key in order to choose a default list.', 'comment-edit-pro'),
           "aria-required": "true"
         }));
       }
-    }), 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), 'required' === ((_errors$apiKey3 = errors.apiKey) === null || _errors$apiKey3 === void 0 ? void 0 : _errors$apiKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
@@ -51768,12 +51828,12 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
-    name: "enableAvatars",
+    name: "enableMailchimp",
     control: control,
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange3 = _ref4$field.onChange,
-          value = _ref4$field.value;
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange3 = _ref5$field.onChange,
+          value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Mailchimp', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -51785,7 +51845,7 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the Mailchimp Integration.', 'comment-edit-pro')
       });
     }
-  }))), getValues('enableAvatars') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getValues('enableMailchimp') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getServerPrefix()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

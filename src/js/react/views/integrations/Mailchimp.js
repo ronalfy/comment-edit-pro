@@ -61,6 +61,7 @@ const Interface = ( props ) => {
 			defaultValues: {
 				enableMailchimp: data.enableMailchimp,
 				apiKey: data.apiKey,
+				mailchimpServerPrefix: data.mailchimpServerPrefix,
 			},
 		} );
 
@@ -74,9 +75,29 @@ const Interface = ( props ) => {
 		return Object.keys( errors ).length > 0;
 	};
 
+	useEffect( () => {
+		const apiKey = getValues( 'apiKey' );
+		if ( '' === apiKey || null === apiKey ) {
+			return;
+		}
+		// Try to get server prefix for Mailchimp API key.
+		const regex = new RegExp(/-(\w+)$/);
+		const matches = apiKey.match( regex );
+
+		// If no matches, return empty string.
+		if ( null === matches ) {
+			return;
+		}
+
+		// We have matches! Match should be index 1.
+		const serverPrefix = matches[1];
+
+		setValue( 'mailchimpServerPrefix', serverPrefix, { shouldDirty: false, shouldValidate: false, shouldTouch: false } );
+	}, [ formValues.apiKey ] );
+
 	const onSubmit = ( formData ) => {
 		setSaving( true );
-		sendCommand( 'sce_save_avatar_options', {
+		sendCommand( 'sce_save_mailchimp_options', {
 			nonce: sceIntegrations.save_nonce,
 			...formData,
 		} )
@@ -167,6 +188,43 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getServerPrefix = () => {
+		const apiKey = getValues( 'apiKey' );
+		if ( '' === apiKey) {
+			return <></>;
+		}
+
+		// Output server prefix in readonly mode.
+		return (
+			<tr>
+				<th scope="row">{ __( 'Server Prefix', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="mailchimpServerPrefix"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								label={ __( 'Mailchimp Server Prefix', 'quotes-dlx' ) }
+								{ ...field }
+								className={ classNames( 'qdlx-admin__text-control', {
+									'has-error': 'required' === errors.apiKey?.type,
+									'is-required': true,
+								} ) }
+								disabled={ true }
+								help={ __(
+									'A server prefix is automatically generated for API access.',
+									'comment-edit-pro'
+								) }
+								aria-required="true"
+							/>
+						) }
+					/>
+				</td>
+			</tr>
+		);
+	}
+
 	const getAPIKey = () => {
 		return (
 			<tr>
@@ -237,7 +295,7 @@ const Interface = ( props ) => {
 							<th scope="row">{ __( 'Mailchimp', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
-									name="enableAvatars"
+									name="enableMailchimp"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
@@ -257,9 +315,10 @@ const Interface = ( props ) => {
 								/>
 							</td>
 						</tr>
-						{ getValues( 'enableAvatars' ) && (
+						{ getValues( 'enableMailchimp' ) && (
 							<>
 								{ getAPIKey() }
+								{ getServerPrefix() }
 							</>
 						) }
 					</tbody>
