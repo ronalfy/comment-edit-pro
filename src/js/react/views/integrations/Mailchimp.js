@@ -281,7 +281,7 @@ const Interface = ( props ) => {
 		if ( isSaved ) {
 			return __( 'Saved', 'quotes-dlx' );
 		}
-		return __( 'Save Avatar Options', 'quotes-dlx' );
+		return __( 'Save Mailchimp Options', 'quotes-dlx' );
 	};
 
 	return (

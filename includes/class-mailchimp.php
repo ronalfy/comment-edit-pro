@@ -16,6 +16,13 @@ use CommentEditPro\Includes\Options as Options;
 class Mailchimp {
 
 	/**
+	 * Mailchimp API variable with <sp> (server prefix) for search/replace.
+	 *
+	 * @var string Mailchimp API variable.
+	 */
+	private $mailchimp_api = 'https://<sp>.api.mailchimp.com/3.0/';
+
+	/**
 	 * Class runner.
 	 */
 	public function run() {
@@ -67,6 +74,7 @@ class Mailchimp {
 		$options_to_save = array(
 			'enable_mailchimp'            => filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN ),
 			'mailchimp_api_key'        => sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) ),
+			'mailchimp_api_key_server_prefix' => sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) ),
 		);
 
 		// Security.
@@ -77,6 +85,30 @@ class Mailchimp {
 				)
 			);
 		}
+
+		// Retrieve lists.
+		$mailchimp_api_url = str_replace(
+			'<sp>',
+			sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) ),
+			$this->mailchimp_api
+		);
+
+		// Start building up HTTP args.
+		$http_args = array();
+
+		$api_token = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+
+		$http_args['headers'] = array(
+			'Authorization' => 'Bearer ' . $api_token,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+
+		$lists_api_url = esc_url_raw( $mailchimp_api_url . '/lists' );
+
+		// Make API call.
+		$response = wp_remote_get( $lists_api_url, $http_args );
+
+
 
 		Options::update_options( $options_to_save );
 
