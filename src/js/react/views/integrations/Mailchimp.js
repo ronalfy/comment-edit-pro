@@ -56,6 +56,8 @@ const Interface = ( props ) => {
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
 	const [ mailchimpLists, setMailchimpLists ] = useState( data.mailchimpLists );
+	const [ resetting, setResetting ] = useState( false );
+	const [ isReset, setIsReset ] = useState( false );
 
 	const { register, control, handleSubmit, setValue, getValues, reset, setError } =
 		useForm( {
@@ -331,6 +333,27 @@ const Interface = ( props ) => {
 						iconPosition="right"
 						disabled={ saving }
 					/>
+					<Button
+									className={ classNames(
+										'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
+										{ 'has-icon': resetting },
+										{ 'is-resetting': { resetting } }
+									) }
+									type="button"
+									text={
+										resetting
+											? __( 'Resetting…', 'quotes-dlx' )
+											: __( 'Disconnect Mailchimp', 'quotes-dlx' )
+									}
+									icon={ resetting ? Spinner : false }
+									iconSize="18"
+									iconPosition="right"
+									disabled={ saving || resetting }
+									onClick={ ( e ) => {
+										setResetting( true );
+										handleReset( e );
+									} }
+								/>
 				</div>
 				{ hasErrors() && (
 					<Notice
