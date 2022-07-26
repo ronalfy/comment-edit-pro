@@ -173,6 +173,8 @@ class Options {
 			'mailchimp_api_key'               => '',
 			'mailchimp_api_key_valid'         => false,
 			'mailchimp_api_key_server_prefix' => '',
+			'mailchimp_lists'                 => array(),
+			'mailchimp_selected_list'         => '',
 		);
 		return $defaults;
 	}

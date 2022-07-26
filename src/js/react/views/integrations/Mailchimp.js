@@ -9,7 +9,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	RangeControl,
+	RadioControl,
 	ToggleControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
@@ -47,21 +47,24 @@ const Mailchimp = ( props ) => {
 };
 
 const Interface = ( props ) => {
-	const [ avatarsEnabled, setAvatarsEnabled ] = useState( false );
-	const [ avatarSize, setAvatarSize ] = useState( 90 );
-	const [ saving, setSaving ] = useState( false );
-	const [ isSaved, setIsSaved ] = useState( false );
 
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
 
-	const { register, control, handleSubmit, setValue, getValues, reset } =
+	const [ selectedList, setSelectedList ] = useState( data.selectedList );
+	const [ saving, setSaving ] = useState( false );
+	const [ isSaved, setIsSaved ] = useState( false );
+	const [ mailchimpLists, setMailchimpLists ] = useState( data.mailchimpLists );
+
+	const { register, control, handleSubmit, setValue, getValues, reset, setError } =
 		useForm( {
 			defaultValues: {
 				enableMailchimp: data.enableMailchimp,
 				apiKey: data.apiKey,
 				mailchimpServerPrefix: data.mailchimpServerPrefix,
+				mailchimpLists: data.mailchimpLists,
+				selectedList: data.selectedList,
 			},
 		} );
 
@@ -104,14 +107,20 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
-console.log( ajaxData );
 				if ( ajaxSuccess ) {
+					const { lists, selected_list } = ajaxData;
+					const listsValues = [];
+					lists.forEach( ( keys, index) => {
+						listsValues.push( keys );
+					} );
+					setSelectedList( selected_list );
+					setMailchimpLists( listsValues );
 					setIsSaved( true );
 					setTimeout( () => {
 						setIsSaved( false );
 					}, 3000 );
 				} else {
-					// Error stuff.
+					setError( 'apiKey', { type: 'noLists', message: ajaxData.message } );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
@@ -120,73 +129,46 @@ console.log( ajaxData );
 			} );
 	};
 
-	const getAvatarWidth = () => {
+	const getMailchimpLists = () => {
+		if ( mailchimpLists.length === 0 ) {
+			return <></>;
+		}
+
 		return (
-			<tr>
-				<th scope="row">{ __( 'Avatar Size', 'comment-edit-pro' ) }</th>
+		<tr>
+				<th scope="row">{ __( 'Mailchimp Lists', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
-						name="enableCustomAvatarSize"
+						name="mailchimpLists"
 						control={ control }
+						rules={ { required: true } }
 						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<ToggleControl
-									label={ __( 'Enable Avatar Custom Sizes', 'comment-edit-pro' ) }
-									className="sce-admin__toggle-control"
-									checked={ value }
-									onChange={ ( boolValue ) => {
-										onChange( boolValue );
-									} }
-									help={ __(
-										'By default, the theme typically chooses how large avatars are in the comment section. This will override the default size.',
-										'comment-edit-pro'
-									) }
-								/>
-							</>
+							<RadioControl
+								label={ __( 'Select a default list', 'comment-edit-pro' ) }
+								help={ __( 'Select a default list that will be used for your newsletter prompt', 'comment-edit-pro' ) }
+								selected={ selectedList }
+								options={ mailchimpLists }
+								onChange={ ( listValue ) => {
+									onChange( listValue );
+									setSelectedList( listValue );
+								} }
+
+							/>
 						) }
 					/>
-					{ getValues( 'enableCustomAvatarSize' ) && (
-						<Controller
-							name="avatarSize"
-							control={ control }
-							render={ ( { field: { onChange, value } } ) => (
-								<>
-									<RangeControl
-										label={ __( 'Set Avatar Size', 'comment-edit-pro' ) }
-										step={ 2 }
-										value={ value }
-										max={ 128 }
-										min={ 24 }
-										currentInput={ 50 }
-										initialPosition={ 50 }
-										allowReset={ true }
-										className="sce-admin__range-control"
-										onChange={ ( avatarSizeValue ) => {
-											setAvatarSize( avatarSizeValue );
-											onChange( avatarSizeValue );
-										} }
-										help={ __(
-											'Set the Size of the Avatars.',
-											'comment-edit-pro'
-										) }
-										trackColor="#8019c4"
-										railColor="#dad4eb"
-									/>
-									<img
-										className="sce-admin__avatar-preview"
-										src={ sceIntegrations.preview_avatar }
-										width={ value }
-										height={ value }
-										alt={ __( 'Preview avatar', 'comment-edit-pro' ) }
-									/>
-								</>
-							) }
+					{ 'required' === errors.mailchimpLists?.type && (
+						<Notice
+							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
 						/>
 					) }
 				</td>
 			</tr>
 		);
-	};
+	}
 
 	const getServerPrefix = () => {
 		const apiKey = getValues( 'apiKey' );
@@ -223,7 +205,7 @@ console.log( ajaxData );
 				</td>
 			</tr>
 		);
-	}
+	};
 
 	const getAPIKey = () => {
 		return (
@@ -253,6 +235,15 @@ console.log( ajaxData );
 					{ 'required' === errors.apiKey?.type && (
 						<Notice
 							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+					{ 'noLists' === errors.apiKey?.type && (
+						<Notice
+							message={ __( 'No Mailchimp lists for the API key were found.' ) }
 							status="error"
 							politeness="assertive"
 							inline={ true }
@@ -319,6 +310,7 @@ console.log( ajaxData );
 							<>
 								{ getAPIKey() }
 								{ getServerPrefix() }
+								{ getMailchimpLists() }
 							</>
 						) }
 					</tbody>

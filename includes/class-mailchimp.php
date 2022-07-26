@@ -54,11 +54,19 @@ class Mailchimp {
 		}
 
 		$options = Options::get_options();
+		$lists = array();
+		if ( Functions::is_multisite() ) {
+			$lists = get_site_option( 'sce_mailchimp_lists', array() );
+		} else {
+			$lists = get_option( 'sce_mailchimp_lists', array() );
+		}
 
 		$json_array = array(
 			'enableMailchimp'       => $options['enable_mailchimp'],
 			'apiKey'                => $options['mailchimp_api_key'],
 			'mailchimpServerPrefix' => $options['mailchimp_api_key_server_prefix'],
+			'mailchimpLists'        => $lists,
+			'selectedList'          => $options['mailchimp_selected_list'],
 		);
 
 		// Exit gracefully.
@@ -84,6 +92,7 @@ class Mailchimp {
 		$mailchimp_enabled = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
 		$api_token         = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
 		$api_server_prefix = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
+		$selected_list     = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpLists', FILTER_DEFAULT ) );
 
 		// If mailchimp is disabled, let's clear out some keys.
 		if ( ! $mailchimp_enabled ) {
@@ -91,7 +100,13 @@ class Mailchimp {
 				'enable_mailchimp'                => false,
 				'mailchimp_api_key'               => '',
 				'mailchimp_api_key_server_prefix' => '',
+				'mailchimp_selected_list'         => '',
 			);
+			if ( Functions::is_multisite() ) {
+				delete_site_option( 'sce_mailchimp_lists' );
+			} else {
+				delete_option( 'sce_mailchimp_lists' );
+			}
 
 			// todo: clear mailchimp lists option.
 
@@ -104,7 +119,8 @@ class Mailchimp {
 		$options_to_save = array(
 			'enable_mailchimp'                => $mailchimp_enabled,
 			'mailchimp_api_key'               => $api_token,
-			'mailchimp_api_key_server_prefix' => $$api_server_prefix,
+			'mailchimp_api_key_server_prefix' => $api_server_prefix,
+			'mailchimp_selected_list'         => $selected_list,
 		);
 		Options::update_options( $options_to_save );
 
@@ -147,24 +163,36 @@ class Mailchimp {
 		}
 
 		// Now format response from JSON.
-		$lists = json_decode( wp_remote_retrieve_body( $response ), true );
+		$lists_raw        = json_decode( wp_remote_retrieve_body( $response ), true );
+		$lists            = $lists_raw['lists'] ?? array();
+		$sanitized_values = array();
+		foreach ( $lists as $index => $values ) {
+			$sanitized_values[ $index ] = array(
+				'label' => sanitize_text_field( $lists[ $index ]['name'] ),
+				'value' => sanitize_text_field( $lists[ $index ]['id'] ),
+			);
+		}
 
 		// Save list in option.
 		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailchimp_lists', $lists );
+			update_site_option( 'sce_mailchimp_lists', $sanitized_values );
 		} else {
-			update_option( 'sce_mailchimp_lists', $lists );
+			update_option( 'sce_mailchimp_lists', $sanitized_values );
 		}
 
-		$lists_to_return = $lists['lists'] ?? array();
+		// When no lists were found, return error.
+		if ( empty( $sanitized_values ) ) {
+			wp_send_json_error( array( 'message' => __( 'There are no Mailchimp lists that were found.', 'comment-edit-pro' ) ) );
+			exit;
+		}
 
-		// return success with flag showing lists being returned.
-		// Exit gracefully.
 		wp_send_json_success(
 			array(
-				'list'  => true,
-				'lists' => $lists_to_return,
+				'list'          => true,
+				'lists'         => $sanitized_values,
+				'selected_list' => $options['mailchimp_selected_list'],
 			)
 		);
+		exit;
 	}
 }
