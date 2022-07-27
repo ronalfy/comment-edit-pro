@@ -55,7 +55,6 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
-	console.log( data );
 	const {
 		register,
 		control,
@@ -225,7 +224,7 @@ const Interface = ( props ) => {
 						control={ control }
 						render={ ( { field: { onChange, value } } ) => (
 							<ToggleControl
-								label={ __( 'Sign Up Checkbox', 'comment-edit-pro' ) }
+								label={ __( 'Sign Up Checkbox Checked', 'comment-edit-pro' ) }
 								className="sce-admin__toggle-control"
 								checked={ value }
 								onChange={ ( boolValue ) => {

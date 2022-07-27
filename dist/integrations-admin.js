@@ -44615,8 +44615,6 @@ var Interface = function Interface(props) {
       isReset = _useState8[0],
       setIsReset = _useState8[1];
 
-  console.log(data);
-
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
       enableMailchimp: data.enableMailchimp,
@@ -44790,7 +44788,7 @@ var Interface = function Interface(props) {
             _onChange = _ref2$field.onChange,
             value = _ref2$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox Checked', 'comment-edit-pro'),
           className: "sce-admin__toggle-control",
           checked: value,
           onChange: function onChange(boolValue) {
