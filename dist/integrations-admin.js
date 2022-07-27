@@ -44520,9 +44520,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
@@ -44615,13 +44615,17 @@ var Interface = function Interface(props) {
       isReset = _useState8[0],
       setIsReset = _useState8[1];
 
+  console.log(data);
+
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
       enableMailchimp: data.enableMailchimp,
       apiKey: data.apiKey,
       mailchimpServerPrefix: data.mailchimpServerPrefix,
       mailchimpLists: data.mailchimpLists,
-      selectedList: data.selectedList
+      selectedList: data.selectedList,
+      signUpLabel: data.signUpLabel,
+      checkboxEnabled: data.checkboxEnabled
     }
   }),
       register = _useForm.register,
@@ -44682,13 +44686,15 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         var lists = ajaxData.lists,
-            mailchimp_selected_list = ajaxData.mailchimp_selected_list;
+            mailchimp_selected_list = ajaxData.mailchimp_selected_list,
+            mailchimp_signup_label = ajaxData.mailchimp_signup_label;
         var listsValues = [];
         lists.forEach(function (keys, index) {
           listsValues.push(keys);
         });
         setValue('selectedList', mailchimp_selected_list);
         setValue('mailchimpLists', listsValues);
+        setValue('signUpLabel', mailchimp_signup_label);
         setIsSaved(true);
         setTimeout(function () {
           setIsSaved(false);
@@ -44719,7 +44725,8 @@ var Interface = function Interface(props) {
           mailchimpServerPrefix: '',
           apiKey: '',
           mailchimpLists: [],
-          selectedList: ''
+          selectedList: '',
+          signUpLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up for Updates', 'comment-edit-pro')
         });
         setTimeout(function () {
           setIsReset(false);
@@ -44728,6 +44735,71 @@ var Interface = function Interface(props) {
     })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
       setResetting(false);
     });
+  };
+
+  var getNewsletterLabel = function getNewsletterLabel() {
+    var _errors$signUpLabel2;
+
+    if (!getValues('selectedList')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Label', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "signUpLabel",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref) {
+        var _errors$signUpLabel;
+
+        var field = _ref.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({}, field, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign-up Label', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$signUpLabel = errors.signUpLabel) === null || _errors$signUpLabel === void 0 ? void 0 : _errors$signUpLabel.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This text will be shown in the comment section when a user leaves a comment.', 'comment-edit-pro')
+        }));
+      }
+    }), 'required' === ((_errors$signUpLabel2 = errors.signUpLabel) === null || _errors$signUpLabel2 === void 0 ? void 0 : _errors$signUpLabel2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSignupCheckbox = function getSignupCheckbox() {
+    if (!getValues('selectedList')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "checkboxEnabled",
+      control: control,
+      render: function render(_ref2) {
+        var _ref2$field = _ref2.field,
+            _onChange = _ref2$field.onChange,
+            value = _ref2$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Check the newsletter checkbox by default (not recommended).', 'comment-edit-pro')
+        });
+      }
+    })));
   };
 
   var getMailchimpLists = function getMailchimpLists() {
@@ -44747,17 +44819,17 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref) {
-        var _ref$field = _ref.field,
-            _onChange = _ref$field.onChange,
-            value = _ref$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      render: function render(_ref3) {
+        var _ref3$field = _ref3.field,
+            _onChange2 = _ref3$field.onChange,
+            value = _ref3$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list', 'comment-edit-pro'),
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list that will be used for your newsletter prompt', 'comment-edit-pro'),
           selected: getValues('selectedList'),
           options: getValues('mailchimpLists'),
           onChange: function onChange(listValue) {
-            _onChange(getValues('mailchimpLists'));
+            _onChange2(getValues('mailchimpLists'));
 
             setValue('selectedList', listValue);
           }
@@ -44769,9 +44841,9 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref2) {
-        var field = _ref2.field;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({}, field, {
+      render: function render(_ref4) {
+        var field = _ref4.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({}, field, {
           type: "hidden",
           "aria-hidden": "true"
         }));
@@ -44801,11 +44873,11 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref3) {
+      render: function render(_ref5) {
         var _errors$apiKey;
 
-        var field = _ref3.field;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        var field = _ref5.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp Server Prefix', 'quotes-dlx')
         }, field, {
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
@@ -44831,11 +44903,11 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref4) {
+      render: function render(_ref6) {
         var _errors$apiKey2;
 
-        var field = _ref4.field;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        var field = _ref6.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp API Key', 'quotes-dlx')
         }, field, {
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
@@ -44908,22 +44980,22 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
     name: "enableMailchimp",
     control: control,
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-          _onChange2 = _ref5$field.onChange,
-          value = _ref5$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange3 = _ref7$field.onChange,
+          value = _ref7$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Mailchimp', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange2(boolValue);
+          _onChange3(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the Mailchimp Integration.', 'comment-edit-pro')
       });
     }
-  }))), getValues('enableMailchimp') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getServerPrefix(), getMailchimpLists()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getValues('enableMailchimp') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getServerPrefix(), getMailchimpLists(), getNewsletterLabel(), getSignupCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

@@ -178,6 +178,8 @@ class Options {
 			'mailchimp_api_key_server_prefix' => '',
 			'mailchimp_lists'                 => array(),
 			'mailchimp_selected_list'         => '',
+			'mailchimp_signup_label' => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'mailchimp_checkbox_enabled'          => false,
 		);
 		return $defaults;
 	}

@@ -55,19 +55,27 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
-	const { register, control, handleSubmit, setValue, getValues, reset, setError } =
-		useForm( {
-			defaultValues: {
-				enableMailchimp: data.enableMailchimp,
-				apiKey: data.apiKey,
-				mailchimpServerPrefix: data.mailchimpServerPrefix,
-				mailchimpLists: data.mailchimpLists,
-				selectedList: data.selectedList,
-			},
-		} );
-
+	console.log( data );
+	const {
+		register,
+		control,
+		handleSubmit,
+		setValue,
+		getValues,
+		reset,
+		setError,
+	} = useForm( {
+		defaultValues: {
+			enableMailchimp: data.enableMailchimp,
+			apiKey: data.apiKey,
+			mailchimpServerPrefix: data.mailchimpServerPrefix,
+			mailchimpLists: data.mailchimpLists,
+			selectedList: data.selectedList,
+			signUpLabel: data.signUpLabel,
+			checkboxEnabled: data.checkboxEnabled,
+		},
+	} );
 	const formValues = useWatch( { control } );
-
 	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
 		control,
 	} );
@@ -93,7 +101,11 @@ const Interface = ( props ) => {
 		// We have matches! Match should be index 1.
 		const serverPrefix = matches[ 1 ];
 
-		setValue( 'mailchimpServerPrefix', serverPrefix, { shouldDirty: false, shouldValidate: false, shouldTouch: false } );
+		setValue( 'mailchimpServerPrefix', serverPrefix, {
+			shouldDirty: false,
+			shouldValidate: false,
+			shouldTouch: false,
+		} );
 	}, [ formValues.apiKey ] );
 
 	const onSubmit = ( formData ) => {
@@ -106,13 +118,15 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { lists, mailchimp_selected_list } = ajaxData;
+					const { lists, mailchimp_selected_list, mailchimp_signup_label } =
+						ajaxData;
 					const listsValues = [];
 					lists.forEach( ( keys, index ) => {
 						listsValues.push( keys );
 					} );
 					setValue( 'selectedList', mailchimp_selected_list );
 					setValue( 'mailchimpLists', listsValues );
+					setValue( 'signUpLabel', mailchimp_signup_label );
 					setIsSaved( true );
 					setTimeout( () => {
 						setIsSaved( false );
@@ -131,25 +145,102 @@ const Interface = ( props ) => {
 		setResetting( true );
 		sendCommand( 'sce_reset_mailchimp_options', {
 			nonce: sceIntegrations.reset_nonce,
-		} ).then( ( ajaxResponse ) => {
-			const ajaxData = ajaxResponse.data.data;
-			const ajaxSuccess = ajaxResponse.data.success;
-			if ( ajaxSuccess ) {
-				setIsReset( true );
-				reset( {
-					enableMailchimp: false,
-					mailchimpServerPrefix: '',
-					apiKey: '',
-					mailchimpLists: [],
-					selectedList: '',
-				} );
-				setTimeout( () => {
-					setIsReset( false );
-				}, 3000 );
-			}
-		} ).catch( ( ajaxResponse ) => {} ).then( ( ajaxResponse ) => {
-			setResetting( false );
-		} );
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					setIsReset( true );
+					reset( {
+						enableMailchimp: false,
+						mailchimpServerPrefix: '',
+						apiKey: '',
+						mailchimpLists: [],
+						selectedList: '',
+						signUpLabel: __( 'Sign Up for Updates', 'comment-edit-pro' ),
+					} );
+					setTimeout( () => {
+						setIsReset( false );
+					}, 3000 );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setResetting( false );
+			} );
+	};
+
+	const getNewsletterLabel = () => {
+		if ( ! getValues( 'selectedList' ) ) {
+			return <></>;
+		}
+		return (
+			<tr>
+				<th scope="row">{ __( 'Sign Up Label', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="signUpLabel"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								{ ...field }
+								label={ __( 'Sign-up Label', 'comment-edit-pro' ) }
+								className={ classNames( 'qdlx-admin__text-control', {
+									'has-error': 'required' === errors.signUpLabel?.type,
+									'is-required': true,
+								} ) }
+								aria-required="true"
+								help={ __(
+									'This text will be shown in the comment section when a user leaves a comment.',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+					{ 'required' === errors.signUpLabel?.type && (
+						<Notice
+							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+				</td>
+			</tr>
+		);
+	};
+
+	const getSignupCheckbox = () => {
+		if ( ! getValues( 'selectedList' ) ) {
+			return <></>;
+		}
+		return (
+			<tr>
+				<th scope="row">{ __( 'Sign Up Checkbox', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="checkboxEnabled"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<ToggleControl
+								label={ __( 'Sign Up Checkbox', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									onChange( boolValue );
+								} }
+								help={ __(
+									'Check the newsletter checkbox by default (not recommended).',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+				</td>
+			</tr>
+		);
 	};
 
 	const getMailchimpLists = () => {
@@ -169,14 +260,16 @@ const Interface = ( props ) => {
 						render={ ( { field: { onChange, value } } ) => (
 							<RadioControl
 								label={ __( 'Select a default list', 'comment-edit-pro' ) }
-								help={ __( 'Select a default list that will be used for your newsletter prompt', 'comment-edit-pro' ) }
+								help={ __(
+									'Select a default list that will be used for your newsletter prompt',
+									'comment-edit-pro'
+								) }
 								selected={ getValues( 'selectedList' ) }
 								options={ getValues( 'mailchimpLists' ) }
 								onChange={ ( listValue ) => {
 									onChange( getValues( 'mailchimpLists' ) );
 									setValue( 'selectedList', listValue );
 								} }
-
 							/>
 						) }
 					/>
@@ -185,11 +278,7 @@ const Interface = ( props ) => {
 						control={ control }
 						rules={ { required: true } }
 						render={ ( { field } ) => (
-							<TextControl
-								{ ...field }
-								type="hidden"
-								aria-hidden="true"
-							/>
+							<TextControl { ...field } type="hidden" aria-hidden="true" />
 						) }
 					/>
 					{ 'required' === errors.selectedList?.type && (
@@ -324,7 +413,12 @@ const Interface = ( props ) => {
 	return (
 		<>
 			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) }</h2>
-			<p className="description">{ __( 'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.', 'comment-edit-pro' ) }</p>
+			<p className="description">
+				{ __(
+					'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.',
+					'comment-edit-pro'
+				) }
+			</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
 					<tbody>
@@ -357,6 +451,8 @@ const Interface = ( props ) => {
 								{ getAPIKey() }
 								{ getServerPrefix() }
 								{ getMailchimpLists() }
+								{ getNewsletterLabel() }
+								{ getSignupCheckbox() }
 							</>
 						) }
 					</tbody>
@@ -396,7 +492,6 @@ const Interface = ( props ) => {
 							} }
 						/>
 					) }
-
 				</div>
 				{ hasErrors() && (
 					<Notice
@@ -408,14 +503,14 @@ const Interface = ( props ) => {
 						politeness="polite"
 					/>
 				) }
-				{ ( isSaved ) && (
+				{ isSaved && (
 					<Notice
 						message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
 						status="success"
 						politeness="assertive"
 					/>
 				) }
-				{ ( isReset ) && (
+				{ isReset && (
 					<Notice
 						message={ __( 'Your settings have been reset.', 'comment-edit-pro' ) }
 						status="success"

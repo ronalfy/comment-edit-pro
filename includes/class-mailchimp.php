@@ -57,7 +57,7 @@ class Mailchimp {
 		}
 
 		$options = Options::get_options();
-		$lists = array();
+		$lists   = array();
 		if ( Functions::is_multisite() ) {
 			$lists = get_site_option( 'sce_mailchimp_lists', array() );
 		} else {
@@ -70,6 +70,8 @@ class Mailchimp {
 			'mailchimpServerPrefix' => $options['mailchimp_api_key_server_prefix'],
 			'mailchimpLists'        => $lists,
 			'selectedList'          => $options['mailchimp_selected_list'],
+			'signUpLabel'           => $options['mailchimp_signup_label'],
+			'checkboxEnabled'       => $options['mailchimp_checkbox_enabled'],
 		);
 
 		// Exit gracefully.
@@ -92,10 +94,12 @@ class Mailchimp {
 		}
 
 		// Nonce passed, let's get post vars.
-		$mailchimp_enabled = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
-		$api_token         = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_server_prefix = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
-		$selected_list     = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
+		$mailchimp_enabled          = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
+		$api_token                  = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_server_prefix          = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
+		$selected_list              = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
+		$mailchimp_checkbox_enabled = filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$signup_label               = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
 
 		// If mailchimp is disabled, let's clear out some keys.
 		if ( ! $mailchimp_enabled ) {
@@ -104,6 +108,8 @@ class Mailchimp {
 				'mailchimp_api_key'               => '',
 				'mailchimp_api_key_server_prefix' => '',
 				'mailchimp_selected_list'         => '',
+				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+				'mailchimp_checkbox_enabled'      => true,
 			);
 			if ( Functions::is_multisite() ) {
 				delete_site_option( 'sce_mailchimp_lists' );
@@ -124,6 +130,8 @@ class Mailchimp {
 			'mailchimp_api_key'               => $api_token,
 			'mailchimp_api_key_server_prefix' => $api_server_prefix,
 			'mailchimp_selected_list'         => $selected_list,
+			'mailchimp_signup_label'          => $signup_label,
+			'mailchimp_checkbox_enabled'      => $mailchimp_checkbox_enabled,
 		);
 		Options::update_options( $options_to_save );
 
@@ -232,6 +240,8 @@ class Mailchimp {
 				'mailchimp_api_key'               => '',
 				'mailchimp_api_key_server_prefix' => '',
 				'mailchimp_selected_list'         => '',
+				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+				'mailchimp_checkbox_enabled'      => false,
 			)
 		);
 
