@@ -34,6 +34,8 @@ class Options {
 	 * @return void
 	 */
 	public static function update_options( $options ) {
+		$force = true;
+		$current_options = self::get_options( $force );
 		foreach ( $options as $key => &$option ) {
 			switch ( $key ) {
 				case 'timer':
@@ -79,6 +81,7 @@ class Options {
 					break;
 			}
 		}
+		$options = wp_parse_args( $options, $current_options );
 		if ( Functions::is_multisite() ) {
 			update_site_option( 'sce_options', $options );
 		} else {

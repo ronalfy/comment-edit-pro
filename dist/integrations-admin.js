@@ -44595,35 +44595,25 @@ var Interface = function Interface(props) {
       data = _response$data.data,
       success = _response$data.success;
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.selectedList),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
-      selectedList = _useState2[0],
-      setSelectedList = _useState2[1];
+      saving = _useState2[0],
+      setSaving = _useState2[1];
 
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState4 = _slicedToArray(_useState3, 2),
-      saving = _useState4[0],
-      setSaving = _useState4[1];
+      isSaved = _useState4[0],
+      setIsSaved = _useState4[1];
 
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
-      isSaved = _useState6[0],
-      setIsSaved = _useState6[1];
+      resetting = _useState6[0],
+      setResetting = _useState6[1];
 
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.mailchimpLists),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState8 = _slicedToArray(_useState7, 2),
-      mailchimpLists = _useState8[0],
-      setMailchimpLists = _useState8[1];
-
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState10 = _slicedToArray(_useState9, 2),
-      resetting = _useState10[0],
-      setResetting = _useState10[1];
-
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState12 = _slicedToArray(_useState11, 2),
-      isReset = _useState12[0],
-      setIsReset = _useState12[1];
+      isReset = _useState8[0],
+      setIsReset = _useState8[1];
 
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
@@ -44697,8 +44687,8 @@ var Interface = function Interface(props) {
         lists.forEach(function (keys, index) {
           listsValues.push(keys);
         });
-        setSelectedList(selected_list);
-        setMailchimpLists(listsValues);
+        setValue('selectedList', selected_list);
+        setValue('mailchimpLists', listsValues);
         setIsSaved(true);
         setTimeout(function () {
           setIsSaved(false);
@@ -44714,10 +44704,38 @@ var Interface = function Interface(props) {
     });
   };
 
-  var getMailchimpLists = function getMailchimpLists() {
-    var _errors$mailchimpList;
+  var handleReset = function handleReset() {
+    setResetting(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_mailchimp_options', {
+      nonce: sceIntegrations.reset_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
 
-    if (mailchimpLists.length === 0) {
+      if (ajaxSuccess) {
+        setIsReset(true);
+        reset({
+          enableMailchimp: false,
+          mailchimpServerPrefix: '',
+          apiKey: '',
+          mailchimpLists: [],
+          selectedList: ''
+        });
+        setTimeout(function () {
+          setIsReset(false);
+        }, 3000);
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setResetting(false);
+    });
+  };
+
+  var getMailchimpLists = function getMailchimpLists() {
+    var _errors$selectedList;
+
+    var mailchimpCurrentLists = getValues('mailchimpLists');
+
+    if (mailchimpCurrentLists.length === 0) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
@@ -44736,16 +44754,29 @@ var Interface = function Interface(props) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list', 'comment-edit-pro'),
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list that will be used for your newsletter prompt', 'comment-edit-pro'),
-          selected: selectedList,
-          options: mailchimpLists,
+          selected: getValues('selectedList'),
+          options: getValues('mailchimpLists'),
           onChange: function onChange(listValue) {
-            _onChange(listValue);
+            _onChange(getValues('mailchimpLists'));
 
-            setSelectedList(listValue);
+            setValue('selectedList', listValue);
           }
         });
       }
-    }), 'required' === ((_errors$mailchimpList = errors.mailchimpLists) === null || _errors$mailchimpList === void 0 ? void 0 : _errors$mailchimpList.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "selectedList",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref2) {
+        var field = _ref2.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({}, field, {
+          type: "hidden",
+          "aria-hidden": "true"
+        }));
+      }
+    }), 'required' === ((_errors$selectedList = errors.selectedList) === null || _errors$selectedList === void 0 ? void 0 : _errors$selectedList.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
@@ -44770,10 +44801,10 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref2) {
+      render: function render(_ref3) {
         var _errors$apiKey;
 
-        var field = _ref2.field;
+        var field = _ref3.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp Server Prefix', 'quotes-dlx')
         }, field, {
@@ -44800,10 +44831,10 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref3) {
+      render: function render(_ref4) {
         var _errors$apiKey2;
 
-        var field = _ref3.field;
+        var field = _ref4.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp API Key', 'quotes-dlx')
         }, field, {
@@ -44854,6 +44885,18 @@ var Interface = function Interface(props) {
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Mailchimp Options', 'quotes-dlx');
   };
 
+  var getResetText = function getResetText() {
+    if (resetting) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'quotes-dlx');
+    }
+
+    if (isReset) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Mailchimp', 'quotes-dlx');
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "description"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
@@ -44865,10 +44908,10 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
     name: "enableMailchimp",
     control: control,
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange2 = _ref4$field.onChange,
-          value = _ref4$field.value;
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange2 = _ref5$field.onChange,
+          value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Mailchimp', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -44898,7 +44941,7 @@ var Interface = function Interface(props) {
     iconSize: "18",
     iconPosition: "right",
     disabled: saving
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+  }), '' !== getValues('selectedList') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
       'has-icon': resetting
     }, {
@@ -44907,7 +44950,7 @@ var Interface = function Interface(props) {
       }
     }),
     type: "button",
-    text: resetting ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Resetting…', 'quotes-dlx') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect Mailchimp', 'quotes-dlx'),
+    text: getResetText(),
     icon: resetting ? _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"] : false,
     iconSize: "18",
     iconPosition: "right",
@@ -44922,6 +44965,10 @@ var Interface = function Interface(props) {
     politeness: "polite"
   }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  }), isReset && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been reset.', 'comment-edit-pro'),
     status: "success",
     politeness: "assertive"
   })));

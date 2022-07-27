@@ -50,6 +50,7 @@ class Integrations {
 				array(
 					'save_nonce' => wp_create_nonce( 'sce-save-integrations-options' ),
 					'get_nonce'  => wp_create_nonce( 'sce-retrieve-integrations-options' ),
+					'reset_nonce' => wp_create_nonce( 'sce-reset-integrations-options' ),
 					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);

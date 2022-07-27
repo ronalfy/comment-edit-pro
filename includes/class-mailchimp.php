@@ -28,14 +28,17 @@ class Mailchimp {
 	public function run() {
 
 		/**
-		 * Avatar admin panel actions.
+		 * Mailchimp admin panel actions.
 		 */
 
-		// Save avatar settings in the admin.
+		// Save mailchimp settings in the admin.
 		add_action( 'wp_ajax_sce_save_mailchimp_options', array( $this, 'ajax_save_mailchimp_options' ) );
 
-		// Retrieve avatar settings in the admin.
+		// Retrieve mailchimp settings in the admin.
 		add_action( 'wp_ajax_sce_get_mailchimp_options', array( $this, 'ajax_get_mailchimp_options' ) );
+
+		// Reset Mailchimp API key.
+		add_action( 'wp_ajax_sce_reset_mailchimp_options', array( $this, 'ajax_reset_mailchimp_options' ) );
 	}
 
 	/**
@@ -92,7 +95,7 @@ class Mailchimp {
 		$mailchimp_enabled = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
 		$api_token         = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
 		$api_server_prefix = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
-		$selected_list     = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpLists', FILTER_DEFAULT ) );
+		$selected_list     = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
 
 		// If mailchimp is disabled, let's clear out some keys.
 		if ( ! $mailchimp_enabled ) {
@@ -125,16 +128,16 @@ class Mailchimp {
 		Options::update_options( $options_to_save );
 
 		// Let's check if mailchimp key has changed and if so, let's grab the list again.
-		$needs_refresh = true;
+		$needs_refresh = false;
 		$options       = Options::get_options();
-		if ( $options['mailchimp_api_key'] !== $api_token ) {
+		if ( '' === $options['mailchimp_selected_list'] ) {
 			$needs_refresh = true;
 		}
 
 		// If we don't need to refresh the list, let's not do it.
 		if ( ! $needs_refresh ) {
 			// Exit gracefully.
-			wp_send_json_success( array( 'list' => false ) );
+			wp_send_json_success( $options_to_save );
 			exit;
 		}
 
@@ -194,5 +197,43 @@ class Mailchimp {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Reset Mailchimp Options.
+	 */
+	public function ajax_reset_mailchimp_options() {
+		// Security.
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Remove list options.
+		if ( Functions::is_multisite() ) {
+			delete_site_option( 'sce_mailchimp_lists' );
+		} else {
+			delete_option( 'sce_mailchimp_lists' );
+		}
+
+		// Clear options.
+		Options::update_options(
+			array(
+				'enable_mailchimp'                => false,
+				'mailchimp_api_key'               => '',
+				'mailchimp_api_key_server_prefix' => '',
+				'mailchimp_selected_list'         => '',
+			)
+		);
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'Mailchimp options have been reset.', 'comment-edit-pro' ),
+			)
+		);
+
 	}
 }

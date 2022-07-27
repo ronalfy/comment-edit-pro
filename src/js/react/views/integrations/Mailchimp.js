@@ -47,15 +47,11 @@ const Mailchimp = ( props ) => {
 };
 
 const Interface = ( props ) => {
-
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
-
-	const [ selectedList, setSelectedList ] = useState( data.selectedList );
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
-	const [ mailchimpLists, setMailchimpLists ] = useState( data.mailchimpLists );
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
@@ -86,7 +82,7 @@ const Interface = ( props ) => {
 			return;
 		}
 		// Try to get server prefix for Mailchimp API key.
-		const regex = new RegExp(/-(\w+)$/);
+		const regex = new RegExp( /-(\w+)$/ );
 		const matches = apiKey.match( regex );
 
 		// If no matches, return empty string.
@@ -95,7 +91,7 @@ const Interface = ( props ) => {
 		}
 
 		// We have matches! Match should be index 1.
-		const serverPrefix = matches[1];
+		const serverPrefix = matches[ 1 ];
 
 		setValue( 'mailchimpServerPrefix', serverPrefix, { shouldDirty: false, shouldValidate: false, shouldTouch: false } );
 	}, [ formValues.apiKey ] );
@@ -112,11 +108,11 @@ const Interface = ( props ) => {
 				if ( ajaxSuccess ) {
 					const { lists, selected_list } = ajaxData;
 					const listsValues = [];
-					lists.forEach( ( keys, index) => {
+					lists.forEach( ( keys, index ) => {
 						listsValues.push( keys );
 					} );
-					setSelectedList( selected_list );
-					setMailchimpLists( listsValues );
+					setValue( 'selectedList', selected_list );
+					setValue( 'mailchimpLists', listsValues );
 					setIsSaved( true );
 					setTimeout( () => {
 						setIsSaved( false );
@@ -131,13 +127,39 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const handleReset = () => {
+		setResetting( true );
+		sendCommand( 'sce_reset_mailchimp_options', {
+			nonce: sceIntegrations.reset_nonce,
+		} ).then( ( ajaxResponse ) => {
+			const ajaxData = ajaxResponse.data.data;
+			const ajaxSuccess = ajaxResponse.data.success;
+			if ( ajaxSuccess ) {
+				setIsReset( true );
+				reset( {
+					enableMailchimp: false,
+					mailchimpServerPrefix: '',
+					apiKey: '',
+					mailchimpLists: [],
+					selectedList: '',
+				} );
+				setTimeout( () => {
+					setIsReset( false );
+				}, 3000 );
+			}
+		} ).catch( ( ajaxResponse ) => {} ).then( ( ajaxResponse ) => {
+			setResetting( false );
+		} );
+	};
+
 	const getMailchimpLists = () => {
-		if ( mailchimpLists.length === 0 ) {
+		const mailchimpCurrentLists = getValues( 'mailchimpLists' );
+		if ( mailchimpCurrentLists.length === 0 ) {
 			return <></>;
 		}
 
 		return (
-		<tr>
+			<tr>
 				<th scope="row">{ __( 'Mailchimp Lists', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
@@ -148,17 +170,29 @@ const Interface = ( props ) => {
 							<RadioControl
 								label={ __( 'Select a default list', 'comment-edit-pro' ) }
 								help={ __( 'Select a default list that will be used for your newsletter prompt', 'comment-edit-pro' ) }
-								selected={ selectedList }
-								options={ mailchimpLists }
+								selected={ getValues( 'selectedList' ) }
+								options={ getValues( 'mailchimpLists' ) }
 								onChange={ ( listValue ) => {
-									onChange( listValue );
-									setSelectedList( listValue );
+									onChange( getValues( 'mailchimpLists' ) );
+									setValue( 'selectedList', listValue );
 								} }
 
 							/>
 						) }
 					/>
-					{ 'required' === errors.mailchimpLists?.type && (
+					<Controller
+						name="selectedList"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								{ ...field }
+								type="hidden"
+								aria-hidden="true"
+							/>
+						) }
+					/>
+					{ 'required' === errors.selectedList?.type && (
 						<Notice
 							message={ __( 'This field is a required field.' ) }
 							status="error"
@@ -170,11 +204,11 @@ const Interface = ( props ) => {
 				</td>
 			</tr>
 		);
-	}
+	};
 
 	const getServerPrefix = () => {
 		const apiKey = getValues( 'apiKey' );
-		if ( '' === apiKey) {
+		if ( '' === apiKey ) {
 			return <></>;
 		}
 
@@ -277,6 +311,16 @@ const Interface = ( props ) => {
 		return __( 'Save Mailchimp Options', 'quotes-dlx' );
 	};
 
+	const getResetText = () => {
+		if ( resetting ) {
+			return __( 'Disconnecting…', 'quotes-dlx' );
+		}
+		if ( isReset ) {
+			return __( 'Disconnected', 'quotes-dlx' );
+		}
+		return __( 'Disconnect From Mailchimp', 'quotes-dlx' );
+	};
+
 	return (
 		<>
 			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) }</h2>
@@ -333,27 +377,26 @@ const Interface = ( props ) => {
 						iconPosition="right"
 						disabled={ saving }
 					/>
-					<Button
-									className={ classNames(
-										'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
-										{ 'has-icon': resetting },
-										{ 'is-resetting': { resetting } }
-									) }
-									type="button"
-									text={
-										resetting
-											? __( 'Resetting…', 'quotes-dlx' )
-											: __( 'Disconnect Mailchimp', 'quotes-dlx' )
-									}
-									icon={ resetting ? Spinner : false }
-									iconSize="18"
-									iconPosition="right"
-									disabled={ saving || resetting }
-									onClick={ ( e ) => {
-										setResetting( true );
-										handleReset( e );
-									} }
-								/>
+					{ '' !== getValues( 'selectedList' ) && (
+						<Button
+							className={ classNames(
+								'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
+								{ 'has-icon': resetting },
+								{ 'is-resetting': { resetting } }
+							) }
+							type="button"
+							text={ getResetText() }
+							icon={ resetting ? Spinner : false }
+							iconSize="18"
+							iconPosition="right"
+							disabled={ saving || resetting }
+							onClick={ ( e ) => {
+								setResetting( true );
+								handleReset( e );
+							} }
+						/>
+					) }
+
 				</div>
 				{ hasErrors() && (
 					<Notice
@@ -365,9 +408,16 @@ const Interface = ( props ) => {
 						politeness="polite"
 					/>
 				) }
-				{ isSaved && (
+				{ ( isSaved ) && (
 					<Notice
 						message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
+						status="success"
+						politeness="assertive"
+					/>
+				) }
+				{ ( isReset ) && (
+					<Notice
+						message={ __( 'Your settings have been reset.', 'comment-edit-pro' ) }
 						status="success"
 						politeness="assertive"
 					/>
