@@ -66,6 +66,10 @@ class Options {
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
 				case 'enable_mailchimp':
+				case 'akismet_enabled':
+				case 'akismet_edit_comments_enabled':
+				case 'akismet_api_valid':
+				case 'akismet_active':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -180,6 +184,10 @@ class Options {
 			'mailchimp_selected_list'         => '',
 			'mailchimp_signup_label' => __( 'Sign Up for Updates', 'comment-edit-pro' ),
 			'mailchimp_checkbox_enabled'          => false,
+			'akismet_active' => class_exists( 'Akismet' ),
+			'akismet_enabled' => true,
+			'akismet_edit_comments_enabled' => true,
+			'akismet_api_valid' => false,
 		);
 		return $defaults;
 	}
