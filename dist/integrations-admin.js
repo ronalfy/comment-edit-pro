@@ -44682,12 +44682,12 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         var lists = ajaxData.lists,
-            selected_list = ajaxData.selected_list;
+            mailchimp_selected_list = ajaxData.mailchimp_selected_list;
         var listsValues = [];
         lists.forEach(function (keys, index) {
           listsValues.push(keys);
         });
-        setValue('selectedList', selected_list);
+        setValue('selectedList', mailchimp_selected_list);
         setValue('mailchimpLists', listsValues);
         setIsSaved(true);
         setTimeout(function () {

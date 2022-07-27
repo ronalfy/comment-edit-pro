@@ -137,6 +137,12 @@ class Mailchimp {
 		// If we don't need to refresh the list, let's not do it.
 		if ( ! $needs_refresh ) {
 			// Exit gracefully.
+			if ( Functions::is_multisite() ) {
+				$mailchimp_lists = get_site_option( 'sce_mailchimp_lists', array() );
+			} else {
+				$mailchimp_lists = get_option( 'sce_mailchimp_lists', array() );
+			}
+			$options_to_save['lists'] = $mailchimp_lists;
 			wp_send_json_success( $options_to_save );
 			exit;
 		}

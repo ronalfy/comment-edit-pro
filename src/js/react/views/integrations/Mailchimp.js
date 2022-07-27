@@ -106,12 +106,12 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { lists, selected_list } = ajaxData;
+					const { lists, mailchimp_selected_list } = ajaxData;
 					const listsValues = [];
 					lists.forEach( ( keys, index ) => {
 						listsValues.push( keys );
 					} );
-					setValue( 'selectedList', selected_list );
+					setValue( 'selectedList', mailchimp_selected_list );
 					setValue( 'mailchimpLists', listsValues );
 					setIsSaved( true );
 					setTimeout( () => {
