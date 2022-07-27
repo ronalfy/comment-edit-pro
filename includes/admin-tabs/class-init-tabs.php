@@ -20,7 +20,7 @@ class Init_Tabs {
 		new Avatars();
 		// new Comment_Actions();
 		new Translations();
-		// new Integrations();
+		new Integrations();
 		new License();
 		new Support();
 	}

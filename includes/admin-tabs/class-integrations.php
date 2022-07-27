@@ -73,7 +73,7 @@ class Integrations {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						Mailchimp
+						<div id="sce-tab-mailchimp"></div>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">

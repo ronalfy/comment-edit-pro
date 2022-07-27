@@ -5,7 +5,8 @@
 		"wpApiSettings": true,
 		"window": true,
 		"document": true,
-		"sceAvatars": "readonly"
+		"sceAvatars": "readonly",
+		"sceIntegrations": "readonly"
 	},
 	"env": {
 		"browser": true,

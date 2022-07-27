@@ -34,6 +34,8 @@ class Options {
 	 * @return void
 	 */
 	public static function update_options( $options ) {
+		$force = true;
+		$current_options = self::get_options( $force );
 		foreach ( $options as $key => &$option ) {
 			switch ( $key ) {
 				case 'timer':
@@ -63,6 +65,7 @@ class Options {
 				case 'enable_avatars':
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
+				case 'enable_mailchimp':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -78,6 +81,7 @@ class Options {
 					break;
 			}
 		}
+		$options = wp_parse_args( $options, $current_options );
 		if ( Functions::is_multisite() ) {
 			update_site_option( 'sce_options', $options );
 		} else {
@@ -168,6 +172,12 @@ class Options {
 			'enable_avatars_anonymous'        => true,
 			'enable_custom_avatar_size'       => false,
 			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
+			'enable_mailchimp'                => false,
+			'mailchimp_api_key'               => '',
+			'mailchimp_api_key_valid'         => false,
+			'mailchimp_api_key_server_prefix' => '',
+			'mailchimp_lists'                 => array(),
+			'mailchimp_selected_list'         => '',
 		);
 		return $defaults;
 	}

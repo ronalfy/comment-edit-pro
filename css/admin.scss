@@ -684,6 +684,8 @@ h3.sce-panel-heading {
 			position: relative;
 			display: block;
 			min-width: 200px;
+			max-width: 100%;
+			width: 25em;
 			line-height: 2;
 			font-size: 13px;
 		}

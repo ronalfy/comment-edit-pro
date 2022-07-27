@@ -18,6 +18,7 @@ module.exports = ( env ) => {
 				avatars: [ './src/js/avatars.js' ],
 				'avatars-frontend': [ './src/scss/avatars-frontend.scss' ],
 				'avatars-admin': [ './src/js/react/views/avatars/index.js' ],
+				'integrations-admin': [ './src/js/react/views/integrations/index.js' ],
 			},
 			module: {
 				rules: [
