@@ -44650,7 +44650,6 @@ var Interface = function Interface(props) {
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_akismet_options', _objectSpread({
       nonce: sceIntegrations.save_nonce
     }, formData)).then(function (ajaxResponse) {
-      var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
 
       if (ajaxSuccess) {
@@ -44674,6 +44673,12 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         setIsReset(true);
+        reset({
+          akismetApiValid: getValues('akismetApiValid'),
+          akismetActive: getValues('akismetActive'),
+          akismetEnabled: true,
+          akismetEditCommentsEnabled: true
+        });
         setTimeout(function () {
           setIsReset(false);
         }, 3000);
@@ -44716,7 +44721,7 @@ var Interface = function Interface(props) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
     }
 
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Akismet', 'quotes-dlx');
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restore Akismet Defaults', 'quotes-dlx');
   };
 
   var getAkismetHeader = function getAkismetHeader() {

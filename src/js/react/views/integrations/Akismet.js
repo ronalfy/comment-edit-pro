@@ -87,7 +87,6 @@ const Interface = ( props ) => {
 			...formData,
 		} )
 			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					setIsSaved( true );
@@ -113,6 +112,12 @@ const Interface = ( props ) => {
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					setIsReset( true );
+					reset( {
+						akismetApiValid: getValues( 'akismetApiValid' ),
+						akismetActive: getValues( 'akismetActive' ),
+						akismetEnabled: true,
+						akismetEditCommentsEnabled: true,
+					} );
 					setTimeout( () => {
 						setIsReset( false );
 					}, 3000 );
@@ -151,7 +156,7 @@ const Interface = ( props ) => {
 		if ( isReset ) {
 			return __( 'Disconnected', 'quotes-dlx' );
 		}
-		return __( 'Disconnect From Akismet', 'quotes-dlx' );
+		return __( 'Restore Akismet Defaults', 'quotes-dlx' );
 	};
 
 	const getAkismetHeader = () => {
