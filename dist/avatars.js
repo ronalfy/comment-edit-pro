@@ -2503,11 +2503,7 @@ function sendCommand(action, data) {
 
   var options = {
     method: 'post',
-<<<<<<< Updated upstream
     url: ajaxurl,
-=======
-    url: sceAvatars.ajaxurl,
->>>>>>> Stashed changes
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {
