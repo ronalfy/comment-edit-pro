@@ -615,8 +615,11 @@ h3.sce-panel-heading {
   position: relative;
   display: block;
   min-width: 200px;
+<<<<<<< Updated upstream
   max-width: 100%;
   width: 25em;
+=======
+>>>>>>> Stashed changes
   line-height: 2;
   font-size: 13px;
 }
