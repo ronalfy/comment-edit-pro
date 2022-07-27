@@ -78,7 +78,7 @@ class Integrations {
 				</div>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						Recaptcha
+						<div id="sce-tab-akismet"></div>
 					</div>
 				</div>
 				<?php
