@@ -47,7 +47,7 @@ class Recaptcha {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'recaptchaEnabled'   => $options['recaptcha_enabled'],
+			'recaptchaEnabled'   => (bool) $options['recaptcha_enabled'],
 			'recaptchaSiteKey'   => $options['recaptcha_site_key'],
 			'recaptchaSecretKey' => $options['recaptcha_secret_key'],
 		);
@@ -72,15 +72,15 @@ class Recaptcha {
 		}
 
 		// Nonce passed, let's get post vars.
-		$recaptcha_enabled    = filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_enabled    = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
 		$recaptcha_site_key   = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
 		$recaptcha_secret_key = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'recaptcha_enabled'  => $recaptcha_enabled,
-			'recaptcha_site_key' => $recaptcha_site_key,
-			'recaptchaSecretKey' => $recaptcha_secret_key,
+			'recaptcha_enabled'    => $recaptcha_enabled,
+			'recaptcha_site_key'   => $recaptcha_site_key,
+			'recaptcha_secret_key' => $recaptcha_secret_key,
 		);
 		Options::update_options( $options_to_save );
 
