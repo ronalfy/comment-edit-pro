@@ -34,7 +34,7 @@ class Options {
 	 * @return void
 	 */
 	public static function update_options( $options ) {
-		$force = true;
+		$force           = true;
 		$current_options = self::get_options( $force );
 		foreach ( $options as $key => &$option ) {
 			switch ( $key ) {
@@ -182,12 +182,15 @@ class Options {
 			'mailchimp_api_key_server_prefix' => '',
 			'mailchimp_lists'                 => array(),
 			'mailchimp_selected_list'         => '',
-			'mailchimp_signup_label' => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-			'mailchimp_checkbox_enabled'          => false,
-			'akismet_active' => class_exists( 'Akismet' ),
-			'akismet_enabled' => true,
-			'akismet_edit_comments_enabled' => true,
-			'akismet_api_valid' => false,
+			'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'mailchimp_checkbox_enabled'      => false,
+			'akismet_active'                  => class_exists( 'Akismet' ),
+			'akismet_enabled'                 => true,
+			'akismet_edit_comments_enabled'   => true,
+			'akismet_api_valid'               => false,
+			'recaptcha_enabled'               => false,
+			'recaptcha_site_key'              => '',
+			'recaptcha_secret_key'            => '',
 		);
 		return $defaults;
 	}
