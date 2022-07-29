@@ -42,6 +42,23 @@ class Mailchimp {
 
 		// Add Mailchimp Checkbox.
 		add_filter( 'comment_form_defaults', array( $this, 'add_mailchimp_checkbox' ), 100 );
+		// When a new comment has been added.
+		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+	}
+
+	/**
+	 * Send Mailchimp when a comment has been posted.
+	 *
+	 * @param int  $comment_id Comment ID that has been submitted.
+	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
+	 */
+	public function comment_posted( $comment_id, $maybe_comment_approved ) {
+		$signup_enabled = (bool) filter_input( INPUT_POST, 'sce-mailchimp-signup', FILTER_VALIDATE_BOOLEAN );
+
+		if ( $signup_enabled ) {
+			// do mailchimp stuff.
+			$blah = 'blah';
+		}
 	}
 
 	/**
