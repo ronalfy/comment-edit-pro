@@ -39,6 +39,36 @@ class Mailchimp {
 
 		// Reset Mailchimp API key.
 		add_action( 'wp_ajax_sce_reset_mailchimp_options', array( $this, 'ajax_reset_mailchimp_options' ) );
+
+		// Add Mailchimp Checkbox.
+		add_filter( 'comment_form_defaults', array( $this, 'add_mailchimp_checkbox' ), 100 );
+	}
+
+	/**
+	 * Add an nakcguno option below the comment textarea and above the submit button.
+	 *
+	 * @param array $comment_fields Array of defaults for the form field.
+	 */
+	public function add_mailchimp_checkbox( $comment_fields ) {
+		$options           = Options::get_options();
+		$mailchimp_enabled = (bool) $options['enable_mailchimp'];
+
+		// Chceck to see if Mailchimp is enabled.
+		if ( ! $mailchimp_enabled || current_user_can( 'moderate_comments' ) ) {
+			return $comment_fields;
+		}
+
+		// Now get the checkbox details.
+		$checked_by_default              = (bool) $options['mailchimp_checkbox_enabled'];
+		$mailchimp_html                  = array(
+			'sce-mailchimp' => sprintf(
+				'<section class="comment-form-sce-mailchimp"><label><input type="checkbox" name="sce-mailchimp-signup" checked="%s" /> %s</label></section>',
+				$checked_by_default ? 'checked' : '',
+				esc_html( $options['mailchimp_signup_label'] )
+			),
+		);
+		$comment_fields['submit_button'] = $mailchimp_html['sce-mailchimp'] . $comment_fields['submit_button'];
+		return $comment_fields;
 	}
 
 	/**
@@ -65,13 +95,13 @@ class Mailchimp {
 		}
 
 		$json_array = array(
-			'enableMailchimp'       => $options['enable_mailchimp'],
+			'enableMailchimp'       => (bool) $options['enable_mailchimp'],
 			'apiKey'                => $options['mailchimp_api_key'],
 			'mailchimpServerPrefix' => $options['mailchimp_api_key_server_prefix'],
 			'mailchimpLists'        => $lists,
 			'selectedList'          => $options['mailchimp_selected_list'],
 			'signUpLabel'           => $options['mailchimp_signup_label'],
-			'checkboxEnabled'       => $options['mailchimp_checkbox_enabled'],
+			'checkboxEnabled'       => (bool) $options['mailchimp_checkbox_enabled'],
 		);
 
 		// Exit gracefully.
@@ -94,11 +124,11 @@ class Mailchimp {
 		}
 
 		// Nonce passed, let's get post vars.
-		$mailchimp_enabled          = filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
+		$mailchimp_enabled          = (bool) filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
 		$api_token                  = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
 		$api_server_prefix          = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
 		$selected_list              = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
-		$mailchimp_checkbox_enabled = filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$mailchimp_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
 		$signup_label               = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
 
 		// If mailchimp is disabled, let's clear out some keys.

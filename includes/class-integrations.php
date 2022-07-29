@@ -30,7 +30,7 @@ class Integrations {
 
 		// Init Akismet.
 		$recaptcha = new Recaptcha();
-		$recaptcha->run();
+		$akismet->run();
 
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
