@@ -47,9 +47,12 @@ class Recaptcha {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'recaptchaEnabled'   => (bool) $options['recaptcha_enabled'],
-			'recaptchaSiteKey'   => $options['recaptcha_site_key'],
-			'recaptchaSecretKey' => $options['recaptcha_secret_key'],
+			'recaptchaEnabled'               => (bool) $options['recaptcha_enabled'],
+			'recaptchaSiteKey'               => $options['recaptcha_site_key'],
+			'recaptchaSecretKey'             => $options['recaptcha_secret_key'],
+			'recaptchaLoggedInUsersEnabled'  => $options['recaptcha_logged_in_users_enabled'],
+			'recaptchaCommentFormId'         => $options['recaptcha_comment_form_id'],
+			'recaptchaCommentSubmitButtonId' => $options['recaptcha_comment_submit_button_id'],
 		);
 
 		// Exit gracefully.
@@ -72,16 +75,23 @@ class Recaptcha {
 		}
 
 		// Nonce passed, let's get post vars.
-		$recaptcha_enabled    = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
-		$recaptcha_site_key   = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
-		$recaptcha_secret_key = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
+		$recaptcha_enabled                  = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_site_key                 = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
+		$recaptcha_secret_key               = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
+		$recaptcha_logged_in_users_enabled  = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_comment_form_id          = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentFormId', FILTER_DEFAULT ) );
+		$recaptcha_comment_submit_button_id = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentSubmitButtonId', FILTER_DEFAULT ) );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'recaptcha_enabled'    => $recaptcha_enabled,
-			'recaptcha_site_key'   => $recaptcha_site_key,
-			'recaptcha_secret_key' => $recaptcha_secret_key,
+			'recaptcha_enabled'                  => $recaptcha_enabled,
+			'recaptcha_site_key'                 => $recaptcha_site_key,
+			'recaptcha_secret_key'               => $recaptcha_secret_key,
+			'recaptcha_logged_in_users_enabled'  => $recaptcha_logged_in_users_enabled,
+			'recaptcha_comment_form_id'          => $recaptcha_comment_form_id,
+			'recaptcha_comment_submit_button_id' => $recaptcha_comment_submit_button_id,
 		);
+
 		Options::update_options( $options_to_save );
 
 		wp_send_json_success(
@@ -108,9 +118,12 @@ class Recaptcha {
 		// Clear options.
 		Options::update_options(
 			array(
-				'recaptcha_enabled'    => false,
-				'recaptcha_site_key'   => '',
-				'recaptcha_secret_key' => '',
+				'recaptcha_enabled'                  => false,
+				'recaptcha_site_key'                 => '',
+				'recaptcha_secret_key'               => '',
+				'recaptcha_logged_in_users_enabled'  => true,
+				'recaptcha_comment_form_id'          => '#commentform',
+				'recaptcha_comment_submit_button_id' => '#submit',
 			)
 		);
 
