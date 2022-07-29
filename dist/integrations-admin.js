@@ -44618,7 +44618,8 @@ var Interface = function Interface(props) {
       akismetActive: data.akismetActive,
       akismetEnabled: data.akismetEnabled,
       akismetEditCommentsEnabled: data.akismetEditCommentsEnabled,
-      akismetApiValid: data.akismetApiValid
+      akismetApiValid: data.akismetApiValid,
+      akismetLoggedInUsersEnabled: data.akismetLoggedInUsersEnabled
     }
   }),
       register = _useForm.register,
@@ -44677,7 +44678,8 @@ var Interface = function Interface(props) {
           akismetApiValid: getValues('akismetApiValid'),
           akismetActive: getValues('akismetActive'),
           akismetEnabled: true,
-          akismetEditCommentsEnabled: true
+          akismetEditCommentsEnabled: true,
+          akismetLoggedInUsersEnabled: true
         });
         setTimeout(function () {
           setIsReset(false);
@@ -44774,27 +44776,47 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Akismet protection is on by default for comments. Disabling this will prevent Akismet protection for new comments.', 'comment-edit-pro')
       });
     }
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }))), getValues('akismetEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Akismet Edit Comments Protection', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
-    name: "akismetEditCommentsEnabled",
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users ', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "akismetLoggedInUsersEnabled",
     control: control,
     render: function render(_ref2) {
       var _ref2$field = _ref2.field,
           _onChange2 = _ref2$field.onChange,
           value = _ref2$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Akismet for Edited Comments', 'comment-edit-pro'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Akismet for Logged-in Users', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
           _onChange2(boolValue);
         },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('By default, Akismet protection is enabled for all logged-in users.', 'comment-edit-pro')
+      });
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit Comments', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "akismetEditCommentsEnabled",
+    control: control,
+    render: function render(_ref3) {
+      var _ref3$field = _ref3.field,
+          _onChange3 = _ref3$field.onChange,
+          value = _ref3$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Akismet for Edited Comments', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          //setShowButtonOptions( boolValue );
+          _onChange3(boolValue);
+        },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('By default, Akismet is enabled for edited comments.', 'comment-edit-pro')
       });
     }
-  }))))), getValues('akismetActive') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })))))), getValues('akismetActive') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

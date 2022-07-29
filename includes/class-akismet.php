@@ -31,16 +31,43 @@ class Akismet {
 
 		// Check to see if Akismet options are on.
 		add_filter( 'akismet_get_api_key', array( $this, 'maybe_disable_akismet_api_key' ), 10, 1 );
+
+		$options = Options::get_options();
+
+		// First check to see if Akismet is enabled/disabled for comments.
+		if ( ! $options['akismet_enabled'] ) {
+			// Disable Akismet comment checks.
+			remove_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
+			remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
+			remove_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 1 );
+		}
 	}
 
 	/**
 	 * Get akismet options and return empty string if disabled.
+	 *
+	 * @param string $api_key The Akismet API Key.
+	 *
+	 * @return string Empty string if Akismet is disabled.
 	 */
 	public function maybe_disable_akismet_api_key( $api_key ) {
-		$options = Options::get_options();
+		// If we're in the admin section, just return the key.
+		if ( is_admin() ) {
+			return $api_key;
+		}
 
-		if ( ! $options['akismet_enabled'] ) {
-			return '';
+		// Now check to see if logged-in users can be excluded.
+		if ( is_user_logged_in() ) {
+			if ( ! $options['akismet_logged_in_users_enabled'] ) {
+				return '';
+			}
+		}
+
+		// Now chcek if anonymous and are in the middle of saving an edit.
+		if ( ! is_user_logged_in() && defined( 'DOING_SCE' ) && DOING_SCE ) {
+			if ( ! $options['akismet_edit_comments_enabled'] ) {
+				return '';
+			}
 		}
 
 		return $api_key;
@@ -71,10 +98,11 @@ class Akismet {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'akismetActive'              => $options['akismet_active'],
-			'akismetEnabled'             => $options['akismet_enabled'],
-			'akismetEditCommentsEnabled' => $options['akismet_edit_comments_enabled'],
-			'akismetApiValid'            => $akismet_api_key_valid,
+			'akismetActive'               => $options['akismet_active'],
+			'akismetEnabled'              => $options['akismet_enabled'],
+			'akismetEditCommentsEnabled'  => $options['akismet_edit_comments_enabled'],
+			'akismetApiValid'             => $akismet_api_key_valid,
+			'akismetLoggedInUsersEnabled' => $options['akismet_logged_in_users_enabled'],
 		);
 
 		// Exit gracefully.
@@ -97,13 +125,15 @@ class Akismet {
 		}
 
 		// Nonce passed, let's get post vars.
-		$akismet_enabled          = filter_input( INPUT_POST, 'akismetEnabled', FILTER_VALIDATE_BOOLEAN );
-		$akismet_edit_comments_enabled          = filter_input( INPUT_POST, 'akismetEditCommentsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$akismet_enabled                 = (bool) filter_input( INPUT_POST, 'akismetEnabled', FILTER_VALIDATE_BOOLEAN );
+		$akismet_edit_comments_enabled   = (bool) filter_input( INPUT_POST, 'akismetEditCommentsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$akismet_logged_in_users_enabled = (bool) filter_input( INPUT_POST, 'akismetLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'akismet_enabled'                => $akismet_enabled,
-			'akismet_edit_comments_enabled'               => $akismet_edit_comments_enabled,
+			'akismet_enabled'                 => $akismet_enabled,
+			'akismet_edit_comments_enabled'   => $akismet_edit_comments_enabled,
+			'akismet_logged_in_users_enabled' => $akismet_logged_in_users_enabled,
 		);
 		Options::update_options( $options_to_save );
 
@@ -131,9 +161,10 @@ class Akismet {
 		// Clear options.
 		Options::update_options(
 			array(
-				'akismet_enabled'                => true,
-				'akismet_edit_comments_enabled'               => true,
-				'akismet_api_valid' => false,
+				'akismet_enabled'                 => true,
+				'akismet_edit_comments_enabled'   => true,
+				'akismet_api_valid'               => false,
+				'akismet_logged_in_users_enabled' => true,
 			)
 		);
 

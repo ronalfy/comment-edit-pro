@@ -69,6 +69,7 @@ const Interface = ( props ) => {
 			akismetEnabled: data.akismetEnabled,
 			akismetEditCommentsEnabled: data.akismetEditCommentsEnabled,
 			akismetApiValid: data.akismetApiValid,
+			akismetLoggedInUsersEnabled: data.akismetLoggedInUsersEnabled,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -117,6 +118,7 @@ const Interface = ( props ) => {
 						akismetActive: getValues( 'akismetActive' ),
 						akismetEnabled: true,
 						akismetEditCommentsEnabled: true,
+						akismetLoggedInUsersEnabled: true,
 					} );
 					setTimeout( () => {
 						setIsReset( false );
@@ -191,7 +193,10 @@ const Interface = ( props ) => {
 			<>
 				{ getAkismetHeader() }
 				<Notice
-					message={ __( 'The API key for Akismet is invalid.', 'comment-edit-pro' ) }
+					message={ __(
+						'The API key for Akismet is invalid.',
+						'comment-edit-pro'
+					) }
 					status="warning"
 					politeness="polite"
 				/>
@@ -246,35 +251,68 @@ const Interface = ( props ) => {
 								/>
 							</td>
 						</tr>
-						<tr>
-							<th scope="row">
-								{ __( 'Akismet Edit Comments Protection', 'comment-edit-pro' ) }
-							</th>
-							<td>
-								<Controller
-									name="akismetEditCommentsEnabled"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Akismet for Edited Comments',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'By default, Akismet is enabled for edited comments.',
-												'comment-edit-pro'
+						{ getValues( 'akismetEnabled' ) && (
+							<>
+								<tr>
+									<th scope="row">
+										{ __( 'Logged-in Users ', 'comment-edit-pro' ) }
+									</th>
+									<td>
+										<Controller
+											name="akismetLoggedInUsersEnabled"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Akismet for Logged-in Users',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'By default, Akismet protection is enabled for all logged-in users.',
+														'comment-edit-pro'
+													) }
+												/>
 											) }
 										/>
-									) }
-								/>
-							</td>
-						</tr>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										{ __( 'Edit Comments', 'comment-edit-pro' ) }
+									</th>
+									<td>
+										<Controller
+											name="akismetEditCommentsEnabled"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Akismet for Edited Comments',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'By default, Akismet is enabled for edited comments.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+							</>
+						) }
 					</tbody>
 				</table>
 				{ getValues( 'akismetActive' ) && (
@@ -325,14 +363,20 @@ const Interface = ( props ) => {
 						) }
 						{ isSaved && (
 							<Notice
-								message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
+								message={ __(
+									'Your settings have been saved.',
+									'comment-edit-pro'
+								) }
 								status="success"
 								politeness="assertive"
 							/>
 						) }
 						{ isReset && (
 							<Notice
-								message={ __( 'Your settings have been reset.', 'comment-edit-pro' ) }
+								message={ __(
+									'Your settings have been reset.',
+									'comment-edit-pro'
+								) }
 								status="success"
 								politeness="assertive"
 							/>

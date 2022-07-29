@@ -70,6 +70,7 @@ class Options {
 				case 'akismet_edit_comments_enabled':
 				case 'akismet_api_valid':
 				case 'akismet_active':
+				case 'akismet_logged_in_users_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -186,6 +187,7 @@ class Options {
 			'mailchimp_checkbox_enabled'      => false,
 			'akismet_active'                  => class_exists( 'Akismet' ),
 			'akismet_enabled'                 => true,
+			'akismet_logged_in_users_enabled' => true,
 			'akismet_edit_comments_enabled'   => true,
 			'akismet_api_valid'               => false,
 			'recaptcha_enabled'               => false,
