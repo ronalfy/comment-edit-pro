@@ -28,6 +28,22 @@ class Akismet {
 		add_action( 'wp_ajax_sce_get_akismet_options', array( $this, 'ajax_get_akismet_options' ) );
 		add_action( 'wp_ajax_sce_save_akismet_options', array( $this, 'ajax_save_akismet_options' ) );
 		add_action( 'wp_ajax_sce_reset_akismet_options', array( $this, 'ajax_reset_akismet_options' ) );
+
+		// Check to see if Akismet options are on.
+		add_filter( 'akismet_get_api_key', array( $this, 'maybe_disable_akismet_api_key' ), 10, 1 );
+	}
+
+	/**
+	 * Get akismet options and return empty string if disabled.
+	 */
+	public function maybe_disable_akismet_api_key( $api_key ) {
+		$options = Options::get_options();
+
+		if ( ! $options['akismet_enabled'] ) {
+			return '';
+		}
+
+		return $api_key;
 	}
 
 	/**
