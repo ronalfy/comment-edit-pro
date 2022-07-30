@@ -113,10 +113,8 @@ class Options {
 			$options = get_option( 'sce_options', array() );
 		}
 
-		$defaults = self::get_defaults();
-		if ( count( $options ) < count( $defaults ) ) {
-			$options = wp_parse_args( $options, $defaults );
-		}
+		$defaults      = self::get_defaults();
+		$options       = wp_parse_args( $options, $defaults );
 		self::$options = $options;
 		return $options;
 	}
@@ -196,6 +194,7 @@ class Options {
 			'recaptcha_secret_key'               => '',
 			'recaptcha_comment_form_id'          => 'commentform',
 			'recaptcha_comment_submit_button_id' => 'submit',
+			'recaptcha_score_threshold'          => 0.5,
 		);
 		return $defaults;
 	}

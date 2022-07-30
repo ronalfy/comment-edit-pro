@@ -35,6 +35,56 @@ class Recaptcha {
 		add_filter( 'comment_form_submit_button', array( $this, 'modify_comment_submit_button' ), 10, 2 );
 		add_filter( 'comment_form_defaults', array( $this, 'add_recaptcha_css_class' ), 10, 1 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'print_recaptcha_scripts' ) );
+		add_action( 'pre_comment_on_post', array( $this, 'verify_recaptcha' ), 10, 1 );
+	}
+
+	/**
+	 * Verify the recaptcha response.
+	 *
+	 * @param int $comment_id The comment ID to check.
+	 */
+	public function verify_recaptcha( $comment_id ) {
+		$options = Options::get_options();
+		if ( ! $options['recaptcha_enabled'] ) {
+			return;
+		}
+		$token = sanitize_text_field( filter_input( INPUT_POST, 'g-recaptcha-response', FILTER_DEFAULT ) );
+		if ( ! $token ) {
+			wp_die( esc_html__( 'Could not verify reCAPTCHA.', 'comment-edit-pro' ) );
+		}
+		$secret_key = $options['recaptcha_secret_key'];
+		$url        = 'https://www.google.com/recaptcha/api/siteverify';
+
+		// Get the IP address of the user.
+		$comment  = get_comment( $comment_id );
+		$ip       = $comment->comment_author_IP;
+		$data     = array(
+			'secret'   => $secret_key,
+			'response' => $token,
+			'remoteip' => $ip,
+		);
+		$options  = array(
+			'body'      => $data,
+			'method'    => 'POST',
+			'sslverify' => true,
+		);
+		$response = wp_remote_post( esc_url( $url ), $options );
+		if ( is_wp_error( $response ) ) {
+			wp_die( esc_html__( 'reCAPTCHA could not be verified.', 'comment-edit-pro' ) );
+		}
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( ! $body['success'] ) {
+			wp_die( esc_html__( 'reCAPTCHA security challenge has failed.', 'comment-edit-pro' ) );
+		}
+
+		// all is well. Check the threshold.
+		$score_threshold = (float) $options['recaptcha_score_threshold'];
+		$comment_recaptcha_score = (float) $body['score'];
+		if ( $comment_recaptcha_score < $score_threshold ) {
+			wp_die( esc_html__( 'reCAPTCHA security challenge has failed.', 'comment-edit-pro' ) );
+		}
+
+		// Now silently exit as all is well now.
 	}
 
 	/**
@@ -164,9 +214,10 @@ class Recaptcha {
 			'recaptchaEnabled'               => (bool) $options['recaptcha_enabled'],
 			'recaptchaSiteKey'               => $options['recaptcha_site_key'],
 			'recaptchaSecretKey'             => $options['recaptcha_secret_key'],
-			'recaptchaLoggedInUsersEnabled'  => $options['recaptcha_logged_in_users_enabled'],
+			'recaptchaLoggedInUsersEnabled'  => (bool) $options['recaptcha_logged_in_users_enabled'],
 			'recaptchaCommentFormId'         => $options['recaptcha_comment_form_id'],
 			'recaptchaCommentSubmitButtonId' => $options['recaptcha_comment_submit_button_id'],
+			'recaptchaScoreThreshold'        => (float) $options['recaptcha_score_threshold'],
 		);
 
 		// Exit gracefully.
@@ -195,6 +246,7 @@ class Recaptcha {
 		$recaptcha_logged_in_users_enabled  = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
 		$recaptcha_comment_form_id          = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentFormId', FILTER_DEFAULT ) );
 		$recaptcha_comment_submit_button_id = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentSubmitButtonId', FILTER_DEFAULT ) );
+		$recaptcha_score_threshold = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 
 		// Now let's save options.
 		$options_to_save = array(
@@ -204,6 +256,7 @@ class Recaptcha {
 			'recaptcha_logged_in_users_enabled'  => $recaptcha_logged_in_users_enabled,
 			'recaptcha_comment_form_id'          => $recaptcha_comment_form_id,
 			'recaptcha_comment_submit_button_id' => $recaptcha_comment_submit_button_id,
+			'recaptcha_score_threshold'          => $recaptcha_score_threshold,
 		);
 
 		Options::update_options( $options_to_save );
@@ -238,6 +291,7 @@ class Recaptcha {
 				'recaptcha_logged_in_users_enabled'  => true,
 				'recaptcha_comment_form_id'          => 'commentform',
 				'recaptcha_comment_submit_button_id' => 'submit',
+				'recaptcha_score_threshold'          => 0.5,
 			)
 		);
 

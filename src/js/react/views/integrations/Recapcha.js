@@ -9,7 +9,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	RadioControl,
+	RangeControl,
 	ToggleControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
@@ -71,6 +71,7 @@ const Interface = ( props ) => {
 			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
 			recaptchaCommentFormId: data.recaptchaCommentFormId,
 			recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
+			recaptchaScoreThreshold: data.recaptchaScoreThreshold,
 		},
 	} );
 
@@ -314,6 +315,44 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getRecaptchaThreshold = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'reCAPTCHA Threshold', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="recaptchaScoreThreshold"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<>
+								<RangeControl
+									label={ __( 'Set reCAPTCHA Minimum Threshold', 'comment-edit-pro' ) }
+									step={ 0.05 }
+									value={ value }
+									max={ 1 }
+									min={ 0 }
+									currentInput={ value }
+									initialPosition={ value }
+									allowReset={ true }
+									className="sce-admin__range-control"
+									onChange={ ( recaptchaThreshold ) => {
+										onChange( recaptchaThreshold );
+									} }
+									help={ __(
+										'The threshold score is between 0 and 1. The higher the score, the higher the chance of a successful reCAPTCHA challenge. The default value is 0.5. Meaning that the reCAPTCHA challenge will succeed if the score is greater than or equal to 0.5.',
+										'comment-edit-pro'
+									) }
+									trackColor="#8019c4"
+									railColor="#dad4eb"
+								/>
+							</>
+						) }
+					/>
+				</td>
+			</tr>
+		);
+	};
+
 	const getSaveIcon = () => {
 		if ( saving ) {
 			return Spinner;
@@ -385,6 +424,7 @@ const Interface = ( props ) => {
 								{ getSecretKey() }
 								{ getLoggedInToggle() }
 								{ getCommentEntityIds() }
+								{ getRecaptchaThreshold() }
 							</>
 						) }
 					</tbody>
