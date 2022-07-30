@@ -51,7 +51,7 @@ class Recaptcha {
 		}
 
 		// If user is logged in and reCAPTCHA is disabled for logged-in users, exit.
-		if ( is_user_logged_in() && (bool) $options['recaptcha_logged_in_users_enabled'] ) {
+		if ( is_user_logged_in() && ! (bool) $options['recaptcha_logged_in_users_enabled'] ) {
 			return;
 		}
 
@@ -128,10 +128,10 @@ class Recaptcha {
 		$options                            = Options::get_options();
 		$comment_form_id                    = $options['recaptcha_comment_form_id'];
 		$recaptcha_comment_submit_button_id = $options['recaptcha_comment_submit_button_id'];
-		if ( $options['recaptcha_enabled'] && $comment_form_id ) {
+		if ( (bool) $options['recaptcha_enabled'] && $comment_form_id ) {
 			?>
 			<script>
-				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( 'sce-recaptcha-form-submit' ); ?>' );
+				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( 'sce-recaptcha-submit' ); ?>' );
 				if ( null !== sceCommentSubmitButton ) {
 					sceCommentSubmitButton.addEventListener( 'click', function( event ) {
 						sceCommentSubmit( event );
@@ -173,7 +173,7 @@ class Recaptcha {
 
 		if ( ! empty( $recaptcha_site_key ) && $options['recaptcha_enabled'] ) {
 			$submit_button = str_replace( 'type="submit"', 'type="button"', $submit_button );
-			$submit_button = str_replace( 'id="' . esc_attr( $recaptcha_submit_button_id ) . '"', 'id="sce-recaptcha-form-submit"', $submit_button );
+			$submit_button = str_replace( 'id="' . esc_attr( $recaptcha_submit_button_id ) . '"', 'id="sce-recaptcha-submit"', $submit_button );
 			return $submit_button;
 		}
 		return $submit_button;
@@ -204,7 +204,7 @@ class Recaptcha {
 	public function enqueue_recaptcha_scripts() {
 		$options = Options::get_options();
 
-		if ( $options['recaptcha_enabled'] ) {
+		if ( (bool) $options['recaptcha_enabled'] ) {
 			wp_enqueue_script(
 				'sce-recaptcha',
 				esc_url_raw( 'https://www.google.com/recaptcha/api.js?render=' . sanitize_text_field( $options['recaptcha_site_key'] ) ),
