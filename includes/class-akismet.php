@@ -64,7 +64,7 @@ class Akismet {
 			}
 		}
 
-		// Now chcek if anonymous and are in the middle of saving an edit.
+		// Now check if anonymous and are in the middle of saving an edit.
 		if ( ! is_user_logged_in() && defined( 'DOING_SCE' ) && DOING_SCE ) {
 			if ( ! $options['akismet_edit_comments_enabled'] ) {
 				return '';

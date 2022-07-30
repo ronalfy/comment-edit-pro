@@ -29,6 +29,32 @@ class Recaptcha {
 		add_action( 'wp_ajax_sce_save_recaptcha_options', array( $this, 'ajax_save_recaptcha_options' ) );
 		add_action( 'wp_ajax_sce_reset_recaptcha_options', array( $this, 'ajax_reset_recaptcha_options' ) );
 
+		$options = Options::get_options();
+
+		// Let's check that reCAPTCHA is enabled.
+		if ( ! (bool) $options['recaptcha_enabled'] ) {
+			return;
+		}
+
+		// Let's check that the secret and site key are set.
+		$site_key   = $options['recaptcha_site_key'];
+		$secret_key = $options['recaptcha_secret_key'];
+		if ( empty( $site_key ) || empty( $secret_key ) ) {
+			return;
+		}
+
+		// Recaptcha options are below. Let's see if we can exclude people from them.
+
+		// If user can moderate comments, no captcha.
+		if ( current_user_can( 'moderate_comments' ) ) {
+			return;
+		}
+
+		// If user is logged in and reCAPTCHA is disabled for logged-in users, exit.
+		if ( is_user_logged_in() && (bool) $options['recaptcha_logged_in_users_enabled'] ) {
+			return;
+		}
+
 		// Enqueue recaptcha assets on the front-end.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_recaptcha_scripts' ) );
 		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
@@ -54,21 +80,16 @@ class Recaptcha {
 		}
 		$secret_key = $options['recaptcha_secret_key'];
 		$url        = 'https://www.google.com/recaptcha/api/siteverify';
-
-		// Get the IP address of the user.
-		$comment  = get_comment( $comment_id );
-		$ip       = $comment->comment_author_IP;
-		$data     = array(
+		$data       = array(
 			'secret'   => $secret_key,
 			'response' => $token,
-			'remoteip' => $ip,
 		);
-		$options  = array(
+		$args       = array(
 			'body'      => $data,
 			'method'    => 'POST',
 			'sslverify' => true,
 		);
-		$response = wp_remote_post( esc_url( $url ), $options );
+		$response   = wp_remote_post( esc_url( $url ), $args );
 		if ( is_wp_error( $response ) ) {
 			wp_die( esc_html__( 'reCAPTCHA could not be verified.', 'comment-edit-pro' ) );
 		}
@@ -78,7 +99,7 @@ class Recaptcha {
 		}
 
 		// all is well. Check the threshold.
-		$score_threshold = (float) $options['recaptcha_score_threshold'];
+		$score_threshold         = (float) $options['recaptcha_score_threshold'];
 		$comment_recaptcha_score = (float) $body['score'];
 		if ( $comment_recaptcha_score < $score_threshold ) {
 			wp_die( esc_html__( 'reCAPTCHA security challenge has failed.', 'comment-edit-pro' ) );
@@ -246,7 +267,7 @@ class Recaptcha {
 		$recaptcha_logged_in_users_enabled  = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
 		$recaptcha_comment_form_id          = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentFormId', FILTER_DEFAULT ) );
 		$recaptcha_comment_submit_button_id = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentSubmitButtonId', FILTER_DEFAULT ) );
-		$recaptcha_score_threshold = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+		$recaptcha_score_threshold          = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 
 		// Now let's save options.
 		$options_to_save = array(
