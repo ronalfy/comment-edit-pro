@@ -68,8 +68,12 @@ const Interface = ( props ) => {
 			recaptchaEnabled: data.recaptchaEnabled,
 			recaptchaSiteKey: data.recaptchaSiteKey,
 			recaptchaSecretKey: data.recaptchaSecretKey,
+			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
+			recaptchaCommentFormId: data.recaptchaCommentFormId,
+			recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
 		},
 	} );
+
 	const formValues = useWatch( { control } );
 	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
 		control,
@@ -116,6 +120,7 @@ const Interface = ( props ) => {
 						recaptchaEnabled: false,
 						recaptchaSiteKey: '',
 						recaptchaSecretKey: '',
+						recaptchaLoggedInUsersEnabled: true,
 					} );
 					setTimeout( () => {
 						setIsReset( false );
@@ -206,6 +211,109 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getCommentEntityIds = () => {
+		return (
+			<>
+				<tr>
+					<th scope="row">{ __( 'Comment Form ID', 'comment-edit-pro' ) }</th>
+					<td>
+						<Controller
+							name="recaptchaCommentFormId"
+							control={ control }
+							rules={ { required: true } }
+							render={ ( { field } ) => (
+								<TextControl
+									label={ __( 'Comment Form ID', 'quotes-dlx' ) }
+									{ ...field }
+									className={ classNames( 'qdlx-admin__text-control', {
+										'has-error': 'required' === errors.recaptchaSiteKey?.type,
+										'is-required': true,
+									} ) }
+									help={ __(
+										'Enter the CSS/HTML ID for the comment form so Recaptcha can target the correct comment form.',
+										'comment-edit-pro'
+									) }
+									aria-required="true"
+								/>
+							) }
+						/>
+						{ 'required' === errors.recaptchaCommentFormId?.type && (
+							<Notice
+								message={ __( 'This field is a required field.' ) }
+								status="error"
+								politeness="assertive"
+								inline={ true }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">{ __( 'Comment Submit Button ID', 'comment-edit-pro' ) }</th>
+					<td>
+						<Controller
+							name="recaptchaCommentSubmitButtonId"
+							control={ control }
+							rules={ { required: true } }
+							render={ ( { field } ) => (
+								<TextControl
+									label={ __( 'Submit Comment Button ID', 'quotes-dlx' ) }
+									{ ...field }
+									className={ classNames( 'qdlx-admin__text-control', {
+										'has-error': 'required' === errors.recaptchaCommentSubmitButtonId?.type,
+										'is-required': true,
+									} ) }
+									help={ __(
+										'Enter the CSS/HTML ID for the comment form button so Recaptcha can target the correct button.',
+										'comment-edit-pro'
+									) }
+									aria-required="true"
+								/>
+							) }
+						/>
+						{ 'required' === errors.recaptchaCommentSubmitButtonId?.type && (
+							<Notice
+								message={ __( 'This field is a required field.' ) }
+								status="error"
+								politeness="assertive"
+								inline={ true }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+					</td>
+				</tr>
+			</>
+		);
+	};
+
+	const getLoggedInToggle = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Logged-in Users', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="recaptchaLoggedInUsersEnabled"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<ToggleControl
+								label={ __( 'Enable Recaptcha for Logged-in Users', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									onChange( boolValue );
+								} }
+								help={ __(
+									'You can exclude logged-in users from Recaptcha with this setting.',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+				</td>
+			</tr>
+		);
+	};
+
 	const getSaveIcon = () => {
 		if ( saving ) {
 			return Spinner;
@@ -275,6 +383,8 @@ const Interface = ( props ) => {
 							<>
 								{ getSiteKey() }
 								{ getSecretKey() }
+								{ getLoggedInToggle() }
+								{ getCommentEntityIds() }
 							</>
 						) }
 					</tbody>

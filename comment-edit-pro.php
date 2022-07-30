@@ -357,11 +357,11 @@ class Comment_Edit_Pro {
 		}
 		$this->output           = new \CommentEditPro\Includes\Output();
 		$this->frontend_editing = new \CommentEditPro\Includes\Frontend_Editing();
-		$this->avatars =  new \CommentEditPro\Includes\Avatars();
+		$this->avatars          = new \CommentEditPro\Includes\Avatars();
 		$this->avatars->run();
-		$this->integrations =  new \CommentEditPro\Includes\Integrations();
+		$this->integrations = new \CommentEditPro\Includes\Integrations();
 		$this->integrations->run();
-		$this->comment_actions =  new \CommentEditPro\Includes\Comment_Actions();
+		$this->comment_actions = new \CommentEditPro\Includes\Comment_Actions();
 		$this->comment_actions->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );

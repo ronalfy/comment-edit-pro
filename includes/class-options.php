@@ -194,8 +194,8 @@ class Options {
 			'recaptcha_logged_in_users_enabled'  => true,
 			'recaptcha_site_key'                 => '',
 			'recaptcha_secret_key'               => '',
-			'recaptcha_comment_form_id'          => '#commentform',
-			'recaptcha_comment_submit_button_id' => '#submit',
+			'recaptcha_comment_form_id'          => 'commentform',
+			'recaptcha_comment_submit_button_id' => 'submit',
 		);
 		return $defaults;
 	}

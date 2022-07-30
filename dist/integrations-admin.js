@@ -45539,7 +45539,10 @@ var Interface = function Interface(props) {
     defaultValues: {
       recaptchaEnabled: data.recaptchaEnabled,
       recaptchaSiteKey: data.recaptchaSiteKey,
-      recaptchaSecretKey: data.recaptchaSecretKey
+      recaptchaSecretKey: data.recaptchaSecretKey,
+      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
+      recaptchaCommentFormId: data.recaptchaCommentFormId,
+      recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId
     }
   }),
       register = _useForm.register,
@@ -45598,7 +45601,8 @@ var Interface = function Interface(props) {
         reset({
           recaptchaEnabled: false,
           recaptchaSiteKey: '',
-          recaptchaSecretKey: ''
+          recaptchaSecretKey: '',
+          recaptchaLoggedInUsersEnabled: true
         });
         setTimeout(function () {
           setIsReset(false);
@@ -45679,6 +45683,93 @@ var Interface = function Interface(props) {
     })));
   };
 
+  var getCommentEntityIds = function getCommentEntityIds() {
+    var _errors$recaptchaComm, _errors$recaptchaComm3;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Form ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaCommentFormId",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref3) {
+        var _errors$recaptchaSite4;
+
+        var field = _ref3.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Form ID', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaSite4 = errors.recaptchaSiteKey) === null || _errors$recaptchaSite4 === void 0 ? void 0 : _errors$recaptchaSite4.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment form so Recaptcha can target the correct comment form.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaComm = errors.recaptchaCommentFormId) === null || _errors$recaptchaComm === void 0 ? void 0 : _errors$recaptchaComm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Submit Button ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaCommentSubmitButtonId",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref4) {
+        var _errors$recaptchaComm2;
+
+        var field = _ref4.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Submit Comment Button ID', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaComm2 = errors.recaptchaCommentSubmitButtonId) === null || _errors$recaptchaComm2 === void 0 ? void 0 : _errors$recaptchaComm2.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment form button so Recaptcha can target the correct button.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaComm3 = errors.recaptchaCommentSubmitButtonId) === null || _errors$recaptchaComm3 === void 0 ? void 0 : _errors$recaptchaComm3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }))));
+  };
+
+  var getLoggedInToggle = function getLoggedInToggle() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaLoggedInUsersEnabled",
+      control: control,
+      render: function render(_ref5) {
+        var _ref5$field = _ref5.field,
+            _onChange = _ref5$field.onChange,
+            value = _ref5$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha for Logged-in Users', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('You can exclude logged-in users from Recaptcha with this setting.', 'comment-edit-pro')
+        });
+      }
+    })));
+  };
+
   var getSaveIcon = function getSaveIcon() {
     if (saving) {
       return _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"];
@@ -45726,21 +45817,21 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
     name: "recaptchaEnabled",
     control: control,
-    render: function render(_ref3) {
-      var _ref3$field = _ref3.field,
-          _onChange = _ref3$field.onChange,
-          value = _ref3$field.value;
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange2 = _ref6$field.onChange,
+          value = _ref6$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha 3', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange(boolValue);
+          _onChange2(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha 3 support.', 'comment-edit-pro')
       });
     }
-  }))), getValues('recaptchaEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getSiteKey(), getSecretKey()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getValues('recaptchaEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getSiteKey(), getSecretKey(), getLoggedInToggle(), getCommentEntityIds()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

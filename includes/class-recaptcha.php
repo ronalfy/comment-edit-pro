@@ -28,6 +28,120 @@ class Recaptcha {
 		add_action( 'wp_ajax_sce_get_recaptcha_options', array( $this, 'ajax_get_recaptcha_options' ) );
 		add_action( 'wp_ajax_sce_save_recaptcha_options', array( $this, 'ajax_save_recaptcha_options' ) );
 		add_action( 'wp_ajax_sce_reset_recaptcha_options', array( $this, 'ajax_reset_recaptcha_options' ) );
+
+		// Enqueue recaptcha assets on the front-end.
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_recaptcha_scripts' ) );
+		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
+		add_filter( 'comment_form_submit_button', array( $this, 'modify_comment_submit_button' ), 10, 2 );
+		add_filter( 'comment_form_defaults', array( $this, 'add_recaptcha_css_class' ), 10, 1 );
+		add_action( 'wp_print_footer_scripts', array( $this, 'print_recaptcha_scripts' ) );
+	}
+
+	/**
+	 * Add Google Recaptcha to the comment submit button.
+	 *
+	 * @param array $args Comment defaults.
+	 */
+	public function add_recaptcha_css_class( $args ) {
+		$args['class_submit'] .= ' g-recaptcha';
+		$args['name_submit']   = 'sce-recaptcha-submit';
+		$args['id_submit']     = 'sce-recaptcha-submit';
+
+		return $args;
+	}
+
+	/**
+	 * Print recaptcha scripts to the front-end.
+	 */
+	public function print_recaptcha_scripts() {
+		$options                            = Options::get_options();
+		$comment_form_id                    = $options['recaptcha_comment_form_id'];
+		$recaptcha_comment_submit_button_id = $options['recaptcha_comment_submit_button_id'];
+		if ( $options['recaptcha_enabled'] && $comment_form_id ) {
+			?>
+			<script>
+				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( 'sce-recaptcha-form-submit' ); ?>' );
+				if ( null !== sceCommentSubmitButton ) {
+					sceCommentSubmitButton.addEventListener( 'click', function( event ) {
+						sceCommentSubmit( event );
+					} );
+			}
+			function sceCommentSubmit( e ) {
+				e.preventDefault();
+				grecaptcha.ready(function() {
+				grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
+					let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
+					if ( null !== recaptchaForm ) {
+						var recaptchaInput = document.createElement('input');
+						recaptchaInput.setAttribute('type', 'hidden');
+						recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+						recaptchaInput.setAttribute('value', token);
+						recaptchaForm.appendChild(recaptchaInput);
+						recaptchaForm.submit();
+					}
+				});
+				});
+			};
+			</script>
+			<?php
+		}
+	}
+
+	/**
+	 * Modify the comment submit button.
+	 *
+	 * @param string $submit_button The comment submit button.
+	 * @param array  $args          The comment form arguments.
+	 *
+	 * @return string The modified comment submit button.
+	 */
+	public function modify_comment_submit_button( $submit_button, $args ) {
+		$options                    = Options::get_options();
+		$recaptcha_site_key         = $options['recaptcha_site_key'];
+		$recaptcha_submit_button_id = $options['recaptcha_comment_submit_button_id'];
+
+		if ( ! empty( $recaptcha_site_key ) && $options['recaptcha_enabled'] ) {
+			$submit_button = str_replace( 'type="submit"', 'type="button"', $submit_button );
+			$submit_button = str_replace( 'id="' . esc_attr( $recaptcha_submit_button_id ) . '"', 'id="sce-recaptcha-form-submit"', $submit_button );
+			return $submit_button;
+		}
+		return $submit_button;
+	}
+
+	/**
+	 * Defer the recaptcha scripts.
+	 *
+	 * @param string $tag    The script tag.
+	 * @param string $handle The script handle.
+	 * @param string $src    The script source.
+	 *
+	 * @return string The script tag.
+	 */
+	public function defer_scripts( $tag, $handle, $src ) {
+		$scripts_to_defer = array(
+			'sce-recaptcha',
+		);
+		if ( in_array( $handle, $scripts_to_defer, true ) ) {
+			return str_replace( ' src', ' defer="defer" src', $tag );
+		}
+		return $tag;
+	}
+
+	/**
+	 * Load recaptcha if enabled and comments are open.
+	 */
+	public function enqueue_recaptcha_scripts() {
+		$options = Options::get_options();
+
+		if ( $options['recaptcha_enabled'] ) {
+			wp_enqueue_script(
+				'sce-recaptcha',
+				esc_url_raw( 'https://www.google.com/recaptcha/api.js?render=' . sanitize_text_field( $options['recaptcha_site_key'] ) ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
+		}
 	}
 
 	/**
@@ -122,14 +236,14 @@ class Recaptcha {
 				'recaptcha_site_key'                 => '',
 				'recaptcha_secret_key'               => '',
 				'recaptcha_logged_in_users_enabled'  => true,
-				'recaptcha_comment_form_id'          => '#commentform',
-				'recaptcha_comment_submit_button_id' => '#submit',
+				'recaptcha_comment_form_id'          => 'commentform',
+				'recaptcha_comment_submit_button_id' => 'submit',
 			)
 		);
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Akismet options have been reset to defaults.', 'comment-edit-pro' ),
+				'message' => __( 'Recaptcha options have been reset to defaults.', 'comment-edit-pro' ),
 			)
 		);
 

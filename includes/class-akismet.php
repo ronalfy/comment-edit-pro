@@ -51,6 +51,7 @@ class Akismet {
 	 * @return string Empty string if Akismet is disabled.
 	 */
 	public function maybe_disable_akismet_api_key( $api_key ) {
+		$options = Options::get_options();
 		// If we're in the admin section, just return the key.
 		if ( is_admin() ) {
 			return $api_key;
