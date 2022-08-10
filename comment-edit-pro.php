@@ -4,7 +4,7 @@ Plugin Name: Comment Edit Pro
 Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 2.0.4
+Version: 2.2.0
 Requires at least: 5.0
 Author URI: https://dlxplugins.com
 Contributors: DLX Plugins
@@ -22,7 +22,7 @@ use CommentEditPro\Includes\Options as Options;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '2.0.4' );
+define( 'COMMENTEDITPRO_VERSION', '2.2.0' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
 define( 'COMMENTEDITPRO_FILE', __FILE__ );
@@ -357,9 +357,11 @@ class Comment_Edit_Pro {
 		}
 		$this->output           = new \CommentEditPro\Includes\Output();
 		$this->frontend_editing = new \CommentEditPro\Includes\Frontend_Editing();
-		$this->avatars =  new \CommentEditPro\Includes\Avatars();
+		$this->avatars          = new \CommentEditPro\Includes\Avatars();
 		$this->avatars->run();
-		$this->comment_actions =  new \CommentEditPro\Includes\Comment_Actions();
+		$this->integrations = new \CommentEditPro\Includes\Integrations();
+		$this->integrations->run();
+		$this->comment_actions = new \CommentEditPro\Includes\Comment_Actions();
 		$this->comment_actions->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );

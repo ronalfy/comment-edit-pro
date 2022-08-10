@@ -129,10 +129,10 @@ class Support {
 						</p>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/simple-comment-editing" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://docs.dlxplugins.com/v/simple-comment-editing/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Simple Comment Editing', 'comment-edit-pro' ); ?></a>
 					</div>
 					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/comment-edit-pro" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Comment Edit Pro', 'comment-edit-pro' ); ?></a>
+						<a class="sce-button sce-button-info" href="https://docs.dlxplugins.com/v/comment-edit-pro/" target="_blank"><svg class="sce-icon"><use xlink:href="#sce-book-icon"></use></svg>&nbsp;&nbsp;<?php esc_html_e( 'Comment Edit Pro', 'comment-edit-pro' ); ?></a>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">

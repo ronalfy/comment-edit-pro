@@ -34,6 +34,8 @@ class Options {
 	 * @return void
 	 */
 	public static function update_options( $options ) {
+		$force           = true;
+		$current_options = self::get_options( $force );
 		foreach ( $options as $key => &$option ) {
 			switch ( $key ) {
 				case 'timer':
@@ -63,6 +65,12 @@ class Options {
 				case 'enable_avatars':
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
+				case 'enable_mailchimp':
+				case 'akismet_enabled':
+				case 'akismet_edit_comments_enabled':
+				case 'akismet_api_valid':
+				case 'akismet_active':
+				case 'akismet_logged_in_users_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'allow_comment_logging':
@@ -78,6 +86,7 @@ class Options {
 					break;
 			}
 		}
+		$options = wp_parse_args( $options, $current_options );
 		if ( Functions::is_multisite() ) {
 			update_site_option( 'sce_options', $options );
 		} else {
@@ -104,10 +113,8 @@ class Options {
 			$options = get_option( 'sce_options', array() );
 		}
 
-		$defaults = self::get_defaults();
-		if ( count( $options ) < count( $defaults ) ) {
-			$options = wp_parse_args( $options, $defaults );
-		}
+		$defaults      = self::get_defaults();
+		$options       = wp_parse_args( $options, $defaults );
 		self::$options = $options;
 		return $options;
 	}
@@ -122,52 +129,72 @@ class Options {
 	 */
 	private static function get_defaults() {
 		$defaults = array(
-			'timer'                           => 5,
-			'show_timer'                      => true,
-			'loading_image'                   => \Simple_Comment_Editing::get_instance()->get_plugin_url( '/images/loading.gif' ),
-			'allow_delete'                    => true,
-			'delete_only'                     => false,
-			'button_theme'                    => 'default',
-			'show_icons'                      => false,
-			'click_to_edit_text'              => __( 'Click to Edit', 'comment-edit-pro' ),
-			'show_timer'                      => true,
-			'save_text'                       => __( 'Save', 'comment-edit-pro' ),
-			'cancel_text'                     => __( 'Cancel', 'comment-edit-pro' ),
-			'delete_text'                     => __( 'Delete', 'comment-edit-pro' ),
-			'custom_class'                    => '',
-			'allow_delete_confirmation'       => true,
-			'allow_edit_notification'         => false,
-			'edit_notification_to'            => Functions::is_multisite() ? get_site_option( 'admin_email' ) : get_option(
+			'timer'                              => 5,
+			'show_timer'                         => true,
+			'loading_image'                      => \Simple_Comment_Editing::get_instance()->get_plugin_url( '/images/loading.gif' ),
+			'allow_delete'                       => true,
+			'delete_only'                        => false,
+			'button_theme'                       => 'default',
+			'show_icons'                         => false,
+			'click_to_edit_text'                 => __( 'Click to Edit', 'comment-edit-pro' ),
+			'show_timer'                         => true,
+			'save_text'                          => __( 'Save', 'comment-edit-pro' ),
+			'cancel_text'                        => __( 'Cancel', 'comment-edit-pro' ),
+			'delete_text'                        => __( 'Delete', 'comment-edit-pro' ),
+			'custom_class'                       => '',
+			'allow_delete_confirmation'          => true,
+			'allow_edit_notification'            => false,
+			'edit_notification_to'               => Functions::is_multisite() ? get_site_option( 'admin_email' ) : get_option(
 				'admin_email'
 			),
-			'edit_notification_from'          => Functions::is_multisite() ? get_site_option( 'admin_email' ) : get_option(
+			'edit_notification_from'             => Functions::is_multisite() ? get_site_option( 'admin_email' ) : get_option(
 				'admin_email'
 			),
 			/* Translators: %s is the site name a user has left a comment on */
-			'edit_notification_subject'       => sprintf( __( 'A user has edited a comment on %s', 'comment-edit-pro' ), Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
-			'edit_text'                       => __( 'Click to Edit', 'comment-edit-pro' ),
-			'confirm_delete'                  => __( 'Do you want to delete this comment?', 'comment-edit-pro' ),
-			'comment_deleted'                 => __( 'Your comment has been removed.', 'comment-edit-pro' ),
-			'comment_deleted_error'           => __( 'Your comment could not be deleted', 'comment-edit-pro' ),
-			'comment_empty_error'             => \Simple_Comment_Editing::get_instance()->errors->get_error_message( 'comment_empty' ),
-			'require_comment_length'          => false,
-			'min_comment_length'              => 50,
-			'require_comment_length_max'      => false,
-			'max_comment_length'              => 2000,
-			'allow_comment_logging'           => false,
-			'show_stop_timer'                 => false,
-			'stop_timer_text'                 => __( 'Cancel Timer', 'comment-edit-pro' ),
-			'timer_appearance'                => 'words',
-			'license'                         => '',
-			'allow_unlimited_editing'         => false,
-			'allow_front_end_character_limit' => false,
-			'allow_front_end_editing'         => false,
-			'enable_avatars'                  => false,
-			'avatar_size'                     => 90,
-			'enable_avatars_logged_in'        => true,
-			'enable_avatars_anonymous'        => true,
-			'enable_custom_avatar_size'       => false,
-			'choose_avatar_text'              => __( 'Choose an Avatar', 'comment-edit-pro' ),
+			'edit_notification_subject'          => sprintf( __( 'A user has edited a comment on %s', 'comment-edit-pro' ), Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
+			'edit_text'                          => __( 'Click to Edit', 'comment-edit-pro' ),
+			'confirm_delete'                     => __( 'Do you want to delete this comment?', 'comment-edit-pro' ),
+			'comment_deleted'                    => __( 'Your comment has been removed.', 'comment-edit-pro' ),
+			'comment_deleted_error'              => __( 'Your comment could not be deleted', 'comment-edit-pro' ),
+			'comment_empty_error'                => \Simple_Comment_Editing::get_instance()->errors->get_error_message( 'comment_empty' ),
+			'require_comment_length'             => false,
+			'min_comment_length'                 => 50,
+			'require_comment_length_max'         => false,
+			'max_comment_length'                 => 2000,
+			'allow_comment_logging'              => false,
+			'show_stop_timer'                    => false,
+			'stop_timer_text'                    => __( 'Cancel Timer', 'comment-edit-pro' ),
+			'timer_appearance'                   => 'words',
+			'license'                            => '',
+			'allow_unlimited_editing'            => false,
+			'allow_front_end_character_limit'    => false,
+			'allow_front_end_editing'            => false,
+			'enable_avatars'                     => false,
+			'avatar_size'                        => 90,
+			'enable_avatars_logged_in'           => true,
+			'enable_avatars_anonymous'           => true,
+			'enable_custom_avatar_size'          => false,
+			'choose_avatar_text'                 => __( 'Choose an Avatar', 'comment-edit-pro' ),
+			'enable_mailchimp'                   => false,
+			'mailchimp_api_key'                  => '',
+			'mailchimp_api_key_valid'            => false,
+			'mailchimp_api_key_server_prefix'    => '',
+			'mailchimp_lists'                    => array(),
+			'mailchimp_selected_list'            => '',
+			'mailchimp_signup_label'             => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'mailchimp_checkbox_enabled'         => false,
+			'akismet_active'                     => class_exists( 'Akismet' ),
+			'akismet_enabled'                    => true,
+			'akismet_logged_in_users_enabled'    => true,
+			'akismet_edit_comments_enabled'      => true,
+			'akismet_api_valid'                  => false,
+			'recaptcha_enabled'                  => false,
+			'recaptcha_logged_in_users_enabled'  => true,
+			'recaptcha_site_key'                 => '',
+			'recaptcha_secret_key'               => '',
+			'recaptcha_comment_form_id'          => 'commentform',
+			'recaptcha_comment_submit_button_id' => 'submit',
+			'recaptcha_score_threshold'          => 0.5,
 		);
 		return $defaults;
 	}
