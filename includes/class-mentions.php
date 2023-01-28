@@ -25,8 +25,61 @@ class Mentions {
 		add_action( 'wp_ajax_sce_save_mentions_options', array( $this, 'ajax_save_mentions_options' ) );
 		add_action( 'wp_ajax_sce_reset_mentions_options', array( $this, 'ajax_reset_mentions_options' ) );
 
-		// Load integration scripts.
+		// Load mentions scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+
+		// Load frontend mentions scripts.
+		$options = Options::get_options();
+		if ( $options['mentions_enabled'] ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
+		}
+	}
+
+	/**
+	 * Add @ Mention frontend scripts/styles.
+	 */
+	public function add_frontend_scripts_styles() {
+		// Determine if comments are open.
+		if ( comments_open() ) {
+			global $post;
+			wp_enqueue_script(
+				'sce-mentions-frontend',
+				Functions::get_plugin_url( 'dist/mentions-frontend.js' ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
+
+			// Get a list of all comments.
+			$comments = get_comments(
+				array(
+					'post_id' => $post->ID,
+				)
+			);
+
+			// Loop through comments and build names array.
+			$comment_authors = array();
+			foreach ( $comments as $comment ) {
+				$comment_authors[] = $comment->comment_author;
+			}
+			$comment_authors = array_unique( $comment_authors );
+			$comment_names   = array();
+			foreach ( $comment_authors as $author ) {
+				$comment_names[] = array(
+					'key'   => $author,
+					'value' => $author,
+				);
+			}
+
+			// Output localalized mentions.
+			wp_localize_script(
+				'sce-mentions-frontend',
+				'sceMentions',
+				array(
+					'values' => $comment_names,
+				)
+			);
+		}
 	}
 
 	/**
