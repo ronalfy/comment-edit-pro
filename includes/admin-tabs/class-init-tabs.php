@@ -17,9 +17,10 @@ class Init_Tabs {
 	public function run() {
 		new Main();
 		new Appearance();
-		new Avatars();
-		// new Comment_Actions();
 		new Translations();
+		new Avatars();
+		new Mentions();
+		// new Comment_Actions();
 		new Integrations();
 		new License();
 		new Support();

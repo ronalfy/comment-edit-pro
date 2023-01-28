@@ -820,3 +820,34 @@ h3.sce-panel-heading {
 		}
 	}
 }
+
+.has-error {
+	input.components-text-control__input {
+		border: 1px solid var( --sce-admin--color-notice--error-alt);
+		background-color: var( --sce-admin--color-notice--error);
+	}
+}
+
+/* Text Input Box */
+.sce-admin__text-control{
+	label {
+		font-size: 0.8125rem;
+		font-weight: 500;
+	}
+	input[type='text'],
+	input[type='password'] {
+		max-width: 100%;
+		width: 100%;
+		background-color: #fff;
+		border-radius: 3px;
+		font-family: inherit;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		padding: 0.6875rem 1rem;
+		line-height: 2;
+		min-height: 30px;
+		margin: 0;
+		outline-style: none;
+		box-sizing: border-box;
+	}
+}

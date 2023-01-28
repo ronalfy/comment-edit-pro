@@ -363,6 +363,8 @@ class Comment_Edit_Pro {
 		$this->integrations->run();
 		$this->comment_actions = new \CommentEditPro\Includes\Comment_Actions();
 		$this->comment_actions->run();
+		$this->comment_mentions = new \CommentEditPro\Includes\Mentions();
+		$this->comment_mentions->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

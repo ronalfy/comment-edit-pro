@@ -6,7 +6,8 @@
 		"window": true,
 		"document": true,
 		"sceAvatars": "readonly",
-		"sceIntegrations": "readonly"
+		"sceIntegrations": "readonly",
+		"sceMentions": "readonly"
 	},
 	"env": {
 		"browser": true,
