@@ -12,14 +12,19 @@
   margin-top: 2px;
   padding: 0;
   list-style: none;
-  background: #efefef;
+  background: #FFF;
+  border: 1px solid #CCC;
 }
 .tribute-container li {
   padding: 5px 5px;
   cursor: pointer;
+  border-bottom: 1px solid #EEE;
+}
+.tribute-container li:last-child {
+  border-bottom: 0;
 }
 .tribute-container li.highlight {
-  background: #ddd;
+  background: #efefef;
 }
 .tribute-container li span {
   font-weight: bold;
