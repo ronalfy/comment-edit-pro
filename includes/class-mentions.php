@@ -25,6 +25,9 @@ class Mentions {
 		add_action( 'wp_ajax_sce_save_mentions_options', array( $this, 'ajax_save_mentions_options' ) );
 		add_action( 'wp_ajax_sce_reset_mentions_options', array( $this, 'ajax_reset_mentions_options' ) );
 
+		// Add Opt-in @ mention Checkbox.
+		add_filter( 'comment_form_defaults', array( $this, 'add_mentions_checkbox' ), 100 );
+
 		// Load mentions scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 
@@ -219,5 +222,33 @@ class Mentions {
 			$json_array
 		);
 
+	}
+
+	/**
+	 * Add an mention option below the comment textarea and above the submit button.
+	 *
+	 * @param array $comment_fields Array of defaults for the form field.
+	 */
+	public function add_mentions_checkbox( $comment_fields ) {
+		$options           = Options::get_options();
+		$mentions_enabled = (bool) $options['mentions_enabled'];
+		$emails_enabled = (bool) $options['mentions_emails_enabled'];
+
+		// Chceck to see if mentions are enabled.
+		if ( ! $mentions_enabled || ! $emails_enabled || current_user_can( 'moderate_comments' ) ) {
+			return $comment_fields;
+		}
+
+		// Now get the checkbox details.
+		$checked_by_default              = false;
+		$mentions_html                  = array(
+			'sce-mentions' => sprintf(
+				'<section class="comment-form-sce-mentions"><label><input type="checkbox" name="sce-mentions-signup" %s /> %s</label></section>',
+				checked( $checked_by_default, true, false ),
+				esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' )
+			),
+		);
+		$comment_fields['submit_button'] = $mentions_html['sce-mentions'] . $comment_fields['submit_button'];
+		return $comment_fields;
 	}
 }

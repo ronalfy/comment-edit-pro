@@ -31,4 +31,15 @@
   font-weight: bold;
 }
 
+/* Frontend checkboxes */
+.comment-form-sce-mentions,
+.comment-form-sce-mailchimp {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+#submit {
+  margin-top: 15px;
+}
+
 /*# sourceMappingURL=sce-frontend.css.map*/
