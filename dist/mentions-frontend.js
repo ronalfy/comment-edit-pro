@@ -95,7 +95,17 @@ __webpack_require__.r(__webpack_exports__);
 
 window.onload = function () {
   var tribute = new (tributejs__WEBPACK_IMPORTED_MODULE_0___default())({
-    values: sceMentions.values
+    values: sceMentions.values,
+    selectTemplate: function selectTemplate(item) {
+      var commentForm = document.getElementById('#comment');
+
+      if (null !== commentForm) {
+        commentForm.append("<input type=\"hidden\" name=\"mentions[]\" value=\"".concat(item.original.key, "\">"));
+      }
+
+      console.log(item);
+      return '@' + 'doh';
+    }
   }); // Initialize tribute.
 
   var commentForm = document.getElementById('comment');

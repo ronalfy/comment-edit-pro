@@ -71,9 +71,16 @@ class Options {
 				case 'akismet_api_valid':
 				case 'akismet_active':
 				case 'akismet_logged_in_users_enabled':
-				case 'mentions_enabled':
 				case 'mentions_emails_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					break;
+				case 'mentions_enabled':
+					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					if ( true === $option ) {
+						Table_Mentions::create_table();
+					} else {
+						Table_Mentions::drop();
+					}
 					break;
 				case 'allow_comment_logging':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );

@@ -60,14 +60,14 @@ class Mentions {
 			// Loop through comments and build names array.
 			$comment_authors = array();
 			foreach ( $comments as $comment ) {
-				$comment_authors[] = $comment->comment_author;
+				$comment_authors[ $comment->comment_ID ] = $comment->comment_author;
 			}
 			$comment_authors = array_unique( $comment_authors );
 			$comment_names   = array();
-			foreach ( $comment_authors as $author ) {
+			foreach ( $comment_authors as $comment_id => $author ) {
 				$comment_names[] = array(
 					'key'   => $author,
-					'value' => $author,
+					'value' => sanitize_text_field( $comment_id ),
 				);
 			}
 
