@@ -71,6 +71,9 @@ const Interface = ( props ) => {
 			mentionsEmailsEnabled: data.mentionsEmailsEnabled,
 			mentionsEmailsFromName: data.mentionsEmailsFromName,
 			mentionsEmailsFromEmail: data.mentionsEmailsFromEmail,
+			mentionsSignupLabel: data.mentionsSignupLabel,
+			mentionsCheckboxEnabled: data.mentionsCheckboxEnabled,
+			mentionsCommentTextareaId: data.mentionsCommentTextareaId,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -167,6 +170,73 @@ const Interface = ( props ) => {
 					) }
 				</p>
 			</>
+		);
+	};
+
+	const getSignupLabel = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Sign Up Label', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="mentionsSignupLabel"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								{ ...field }
+								label={ __( 'Sign-up Label', 'comment-edit-pro' ) }
+								className={ classNames( 'qdlx-admin__text-control', {
+									'has-error': 'required' === errors.signUpLabel?.type,
+									'is-required': true,
+								} ) }
+								aria-required="true"
+								help={ __(
+									'This text will be shown in the comment section when a user leaves a comment.',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+					{ 'required' === errors.signUpLabel?.type && (
+						<Notice
+							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+				</td>
+			</tr>
+		);
+	};
+
+	const getSignupCheckbox = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Sign Up Checkbox', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="mentionsCheckboxEnabled"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<ToggleControl
+								label={ __( 'Sign Up Checkbox Checked', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									onChange( boolValue );
+								} }
+								help={ __(
+									'Check the mentions email checkbox by default (not recommended).',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+				</td>
+			</tr>
 		);
 	};
 
@@ -295,6 +365,42 @@ const Interface = ( props ) => {
 												status="error"
 												politeness="assertive"
 												inline={ false }
+												icon={ CircularExclamationIcon }
+											/>
+										) }
+									</td>
+								</tr>
+								{ getSignupCheckbox() }
+								{ getSignupLabel() }
+								<tr>
+									<th scope="row">{ __( 'Comment Textarea ID', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="mentionsCommentTextareaId"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field } ) => (
+												<TextControl
+													label={ __( 'Comment Textarea ID', 'quotes-dlx' ) }
+													{ ...field }
+													className={ classNames( 'qdlx-admin__text-control', {
+														'has-error': 'required' === errors.mentionsCommentTextareaId?.type,
+														'is-required': true,
+													} ) }
+													help={ __(
+														'Enter the CSS/HTML ID for the comment textarea so the @ mentions can target the correct textarea field.',
+														'comment-edit-pro'
+													) }
+													aria-required="true"
+												/>
+											) }
+										/>
+										{ 'required' === errors.mentionsCommentTextareaId?.type && (
+											<Notice
+												message={ __( 'This field is a required field.' ) }
+												status="error"
+												politeness="assertive"
+												inline={ true }
 												icon={ CircularExclamationIcon }
 											/>
 										) }

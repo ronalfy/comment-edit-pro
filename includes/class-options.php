@@ -72,6 +72,7 @@ class Options {
 				case 'akismet_active':
 				case 'akismet_logged_in_users_enabled':
 				case 'mentions_emails_enabled':
+				case 'mentions_checkbox_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -208,6 +209,9 @@ class Options {
 			'mentions_emails_enabled'            => true,
 			'mentions_emails_from_name'          => get_bloginfo( 'name' ),
 			'mentions_emails_from_email'         => get_bloginfo( 'admin_email' ),
+			'mentions_signup_label'              => esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' ),
+			'mentions_checkbox_enabled'          => false,
+			'mentions_comment_textarea_id'       => 'comment',
 		);
 		return $defaults;
 	}

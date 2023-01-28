@@ -45,6 +45,7 @@ class Mentions {
 		// Determine if comments are open.
 		if ( comments_open() ) {
 			global $post;
+			$options = Options::get_options();
 			wp_enqueue_script(
 				'sce-mentions-frontend',
 				Functions::get_plugin_url( 'dist/mentions-frontend.js' ),
@@ -79,7 +80,8 @@ class Mentions {
 				'sce-mentions-frontend',
 				'sceMentions',
 				array(
-					'values' => $comment_names,
+					'values'        => $comment_names,
+					'commentFormId' => $options['mentions_comment_textarea_id'],
 				)
 			);
 
@@ -140,10 +142,13 @@ class Mentions {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'mentionsEnabled'         => (bool) $options['mentions_enabled'],
-			'mentionsEmailsEnabled'   => (bool) $options['mentions_emails_enabled'],
-			'mentionsEmailsFromName'  => $options['mentions_emails_from_name'],
-			'mentionsEmailsFromEmail' => $options['mentions_emails_from_email'],
+			'mentionsEnabled'           => (bool) $options['mentions_enabled'],
+			'mentionsEmailsEnabled'     => (bool) $options['mentions_emails_enabled'],
+			'mentionsEmailsFromName'    => $options['mentions_emails_from_name'],
+			'mentionsEmailsFromEmail'   => $options['mentions_emails_from_email'],
+			'mentionsSignupLabel'       => $options['mentions_signup_label'],
+			'mentionsCheckboxEnabled'   => $options['mentions_checkbox_enabled'],
+			'mentionsCommentTextareaId' => $options['mentions_comment_textarea_id'],
 		);
 
 		// Exit gracefully.
@@ -166,17 +171,23 @@ class Mentions {
 		}
 
 		// Nonce passed, let's get post vars.
-		$mentions_enabled           = (bool) filter_input( INPUT_POST, 'mentionsEnabled', FILTER_VALIDATE_BOOLEAN );
-		$mentions_emails_enabled    = (bool) filter_input( INPUT_POST, 'mentionsEmailsEnabled', FILTER_VALIDATE_BOOLEAN );
-		$mentions_emails_from_name  = sanitize_text_field( filter_input( INPUT_POST, 'mentionsEmailsFromName', FILTER_DEFAULT ) );
-		$mentions_emails_from_email = sanitize_text_field( filter_input( INPUT_POST, 'mentionsEmailsFromEmail', FILTER_DEFAULT ) );
+		$mentions_enabled             = (bool) filter_input( INPUT_POST, 'mentionsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$mentions_emails_enabled      = (bool) filter_input( INPUT_POST, 'mentionsEmailsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$mentions_emails_from_name    = sanitize_text_field( filter_input( INPUT_POST, 'mentionsEmailsFromName', FILTER_DEFAULT ) );
+		$mentions_emails_from_email   = sanitize_text_field( filter_input( INPUT_POST, 'mentionsEmailsFromEmail', FILTER_DEFAULT ) );
+		$mentions_signup_label        = sanitize_text_field( filter_input( INPUT_POST, 'mentionsSignupLabel', FILTER_DEFAULT ) );
+		$mentions_checkbox_enabled    = (bool) filter_input( INPUT_POST, 'mentionsCheckboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$mentions_comment_textarea_id = sanitize_text_field( filter_input( INPUT_POST, 'mentionsCommentTextareaId', FILTER_DEFAULT ) );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'mentions_enabled'           => $mentions_enabled,
-			'mentions_emails_enabled'    => $mentions_emails_enabled,
-			'mentions_emails_from_name'  => $mentions_emails_from_name,
-			'mentions_emails_from_email' => $mentions_emails_from_email,
+			'mentions_enabled'             => $mentions_enabled,
+			'mentions_emails_enabled'      => $mentions_emails_enabled,
+			'mentions_emails_from_name'    => $mentions_emails_from_name,
+			'mentions_emails_from_email'   => $mentions_emails_from_email,
+			'mentions_signup_label'        => $mentions_signup_label,
+			'mentions_checkbox_enabled'    => $mentions_checkbox_enabled,
+			'mentions_comment_textarea_id' => $mentions_comment_textarea_id,
 		);
 		Options::update_options( $options_to_save );
 
@@ -201,21 +212,29 @@ class Mentions {
 			);
 		}
 
+		$signup_label_default = esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' );
+
 		// Clear options.
 		Options::update_options(
 			array(
-				'mentions_enabled'           => false,
-				'mentions_emails_enabled'    => true,
-				'mentions_emails_from_name'  => get_bloginfo( 'name' ),
-				'mentions_emails_from_email' => get_bloginfo( 'admin_email' ),
+				'mentions_enabled'             => false,
+				'mentions_emails_enabled'      => true,
+				'mentions_emails_from_name'    => get_bloginfo( 'name' ),
+				'mentions_emails_from_email'   => get_bloginfo( 'admin_email' ),
+				'mentions_signup_label'        => $signup_label_default,
+				'mentions_checkbox_enabled'    => false,
+				'mentions_comment_textarea_id' => 'comment',
 			)
 		);
 
 		$json_array = array(
-			'mentionsEnabled'         => false,
-			'mentionsEmailsEnabled'   => true,
-			'mentionsEmailsFromName'  => get_bloginfo( 'name' ),
-			'mentionsEmailsFromEmail' => get_bloginfo( 'admin_email' ),
+			'mentionsEnabled'           => false,
+			'mentionsEmailsEnabled'     => true,
+			'mentionsEmailsFromName'    => get_bloginfo( 'name' ),
+			'mentionsEmailsFromEmail'   => get_bloginfo( 'admin_email' ),
+			'mentionsSignupLabel'       => $signup_label_default,
+			'mentionsCheckboxEnabled'   => false,
+			'mentionsCommentTextareaId' => 'comment',
 		);
 
 		wp_send_json_success(
@@ -230,9 +249,9 @@ class Mentions {
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
 	public function add_mentions_checkbox( $comment_fields ) {
-		$options           = Options::get_options();
+		$options          = Options::get_options();
 		$mentions_enabled = (bool) $options['mentions_enabled'];
-		$emails_enabled = (bool) $options['mentions_emails_enabled'];
+		$emails_enabled   = (bool) $options['mentions_emails_enabled'];
 
 		// Chceck to see if mentions are enabled.
 		if ( ! $mentions_enabled || ! $emails_enabled || current_user_can( 'moderate_comments' ) ) {
@@ -241,11 +260,11 @@ class Mentions {
 
 		// Now get the checkbox details.
 		$checked_by_default              = false;
-		$mentions_html                  = array(
+		$mentions_html                   = array(
 			'sce-mentions' => sprintf(
 				'<section class="comment-form-sce-mentions"><label><input type="checkbox" name="sce-mentions-signup" %s /> %s</label></section>',
-				checked( $checked_by_default, true, false ),
-				esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' )
+				checked( (bool) $options['mentions_checkbox_enabled'], true, false ),
+				esc_html( $options['mentions_signup_label'] )
 			),
 		);
 		$comment_fields['submit_button'] = $mentions_html['sce-mentions'] . $comment_fields['submit_button'];

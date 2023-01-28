@@ -97,7 +97,8 @@ window.onload = function () {
   var tribute = new (tributejs__WEBPACK_IMPORTED_MODULE_0___default())({
     values: sceMentions.values,
     selectTemplate: function selectTemplate(item) {
-      var commentForm = document.getElementById('comment');
+      var commentTextareaId = sceMentions.commentFormId;
+      var commentForm = document.getElementById(commentTextareaId);
 
       if (null !== commentForm) {
         // Create a hidden input to append to the comment form.

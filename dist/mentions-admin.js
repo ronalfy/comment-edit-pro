@@ -19425,8 +19425,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var _validation_ValidateEmail__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../validation/ValidateEmail */ "./src/js/react/validation/ValidateEmail.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
@@ -19494,6 +19494,8 @@ var Mentions = function Mentions(props) {
 };
 
 var Interface = function Interface(props) {
+  var _errors$mentionsComme2;
+
   var defaults = props.defaults;
   var response = defaults();
   var _response$data = response.data,
@@ -19525,7 +19527,10 @@ var Interface = function Interface(props) {
       mentionsEnabled: data.mentionsEnabled,
       mentionsEmailsEnabled: data.mentionsEmailsEnabled,
       mentionsEmailsFromName: data.mentionsEmailsFromName,
-      mentionsEmailsFromEmail: data.mentionsEmailsFromEmail
+      mentionsEmailsFromEmail: data.mentionsEmailsFromEmail,
+      mentionsSignupLabel: data.mentionsSignupLabel,
+      mentionsCheckboxEnabled: data.mentionsCheckboxEnabled,
+      mentionsCommentTextareaId: data.mentionsCommentTextareaId
     }
   }),
       register = _useForm.register,
@@ -19633,6 +19638,63 @@ var Interface = function Interface(props) {
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow commenters to mention others in their replies.', 'comment-edit-pro')));
   };
 
+  var getSignupLabel = function getSignupLabel() {
+    var _errors$signUpLabel2;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Label', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "mentionsSignupLabel",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref) {
+        var _errors$signUpLabel;
+
+        var field = _ref.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({}, field, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign-up Label', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+            'has-error': 'required' === ((_errors$signUpLabel = errors.signUpLabel) === null || _errors$signUpLabel === void 0 ? void 0 : _errors$signUpLabel.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This text will be shown in the comment section when a user leaves a comment.', 'comment-edit-pro')
+        }));
+      }
+    }), 'required' === ((_errors$signUpLabel2 = errors.signUpLabel) === null || _errors$signUpLabel2 === void 0 ? void 0 : _errors$signUpLabel2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+    })));
+  };
+
+  var getSignupCheckbox = function getSignupCheckbox() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "mentionsCheckboxEnabled",
+      control: control,
+      render: function render(_ref2) {
+        var _ref2$field = _ref2.field,
+            _onChange = _ref2$field.onChange,
+            value = _ref2$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox Checked', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Check the mentions email checkbox by default (not recommended).', 'comment-edit-pro')
+        });
+      }
+    })));
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getMentionsHeader(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
@@ -19642,17 +19704,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('@ Mentions Options', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "mentionsEnabled",
     control: control,
-    render: function render(_ref) {
-      var _ref$field = _ref.field,
-          _onChange = _ref$field.onChange,
-          value = _ref$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    render: function render(_ref3) {
+      var _ref3$field = _ref3.field,
+          _onChange2 = _ref3$field.onChange,
+          value = _ref3$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable @ Mentions Comments', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange(boolValue);
+          _onChange2(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow your commenters to @ mention others users in their replies', 'comment-edit-pro')
       });
@@ -19662,17 +19724,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Email Preferences ', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "mentionsEmailsEnabled",
     control: control,
-    render: function render(_ref2) {
-      var _ref2$field = _ref2.field,
-          _onChange2 = _ref2$field.onChange,
-          value = _ref2$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    render: function render(_ref4) {
+      var _ref4$field = _ref4.field,
+          _onChange3 = _ref4$field.onChange,
+          value = _ref4$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Sending Emails to @ Mention\'d users', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange2(boolValue);
+          _onChange3(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('By default, @ mention\'d users will receive an email notification if opted in.', 'comment-edit-pro')
       });
@@ -19685,13 +19747,13 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref3) {
+    render: function render(_ref5) {
       var _errors$mentionsEmail;
 
-      var _ref3$field = _ref3.field,
-          _onChange3 = _ref3$field.onChange,
-          value = _ref3$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      var _ref5$field = _ref5.field,
+          _onChange4 = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email', 'highlight-and-share'),
         value: value,
         onChange: function onChange(newValue) {
@@ -19703,7 +19765,7 @@ var Interface = function Interface(props) {
             clearErrors('mentionsEmailsFromEmail');
           }
 
-          _onChange3(newValue);
+          _onChange4(newValue);
         },
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$mentionsEmail = errors.mentionsEmailsFromEmail) === null || _errors$mentionsEmail === void 0 ? void 0 : _errors$mentionsEmail.type),
@@ -19723,13 +19785,13 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref4) {
+    render: function render(_ref6) {
       var _errors$mentionsEmail2;
 
-      var _ref4$field = _ref4.field,
-          onChange = _ref4$field.onChange,
-          value = _ref4$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      var _ref6$field = _ref6.field,
+          onChange = _ref6$field.onChange,
+          value = _ref6$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Name', 'highlight-and-share'),
         value: value,
         onChange: onChange,
@@ -19744,6 +19806,35 @@ var Interface = function Interface(props) {
     status: "error",
     politeness: "assertive",
     inline: false,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+  }))), getSignupCheckbox(), getSignupLabel(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Textarea ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "mentionsCommentTextareaId",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref7) {
+      var _errors$mentionsComme;
+
+      var field = _ref7.field;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Textarea ID', 'quotes-dlx')
+      }, field, {
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+          'has-error': 'required' === ((_errors$mentionsComme = errors.mentionsCommentTextareaId) === null || _errors$mentionsComme === void 0 ? void 0 : _errors$mentionsComme.type),
+          'is-required': true
+        }),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment textarea so the @ mentions can target the correct textarea field.', 'comment-edit-pro'),
+        "aria-required": "true"
+      }));
+    }
+  }), 'required' === ((_errors$mentionsComme2 = errors.mentionsCommentTextareaId) === null || _errors$mentionsComme2 === void 0 ? void 0 : _errors$mentionsComme2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+    status: "error",
+    politeness: "assertive",
+    inline: true,
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"

@@ -4,7 +4,8 @@ window.onload = () => {
 	const tribute = new Tribute( {
 		values: sceMentions.values,
 		selectTemplate: ( item ) => {
-			const commentForm = document.getElementById( 'comment' );
+			const commentTextareaId = sceMentions.commentFormId;
+			const commentForm = document.getElementById( commentTextareaId );
 			if ( null !== commentForm ) {
 				// Create a hidden input to append to the comment form.
 				const input = document.createElement( 'input' );
