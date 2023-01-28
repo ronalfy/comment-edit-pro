@@ -97,14 +97,18 @@ window.onload = function () {
   var tribute = new (tributejs__WEBPACK_IMPORTED_MODULE_0___default())({
     values: sceMentions.values,
     selectTemplate: function selectTemplate(item) {
-      var commentForm = document.getElementById('#comment');
+      var commentForm = document.getElementById('comment');
 
       if (null !== commentForm) {
-        commentForm.append("<input type=\"hidden\" name=\"mentions[]\" value=\"".concat(item.original.key, "\">"));
+        // Create a hidden input to append to the comment form.
+        var input = document.createElement('input');
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', 'mentions[]');
+        input.setAttribute('value', item.original.value);
+        commentForm.after(input);
       }
 
-      console.log(item);
-      return '@' + 'doh';
+      return '@' + item.original.key;
     }
   }); // Initialize tribute.
 

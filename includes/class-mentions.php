@@ -79,6 +79,15 @@ class Mentions {
 					'values' => $comment_names,
 				)
 			);
+
+			// Enqueue frontend styles.
+			wp_enqueue_style(
+				'sce-frontend',
+				Functions::get_plugin_url( 'dist/sce-frontend.css' ),
+				array(),
+				Functions::get_plugin_version(),
+				'all'
+			);
 		}
 	}
 

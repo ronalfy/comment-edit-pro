@@ -4,12 +4,17 @@ window.onload = () => {
 	const tribute = new Tribute( {
 		values: sceMentions.values,
 		selectTemplate: ( item ) => {
-			const commentForm = document.getElementById( '#comment' );
+			const commentForm = document.getElementById( 'comment' );
 			if ( null !== commentForm ) {
-				commentForm.append( `<input type="hidden" name="mentions[]" value="${ item.original.key }">`);
+				// Create a hidden input to append to the comment form.
+				const input = document.createElement( 'input' );
+				input.setAttribute( 'type', 'hidden' );
+				input.setAttribute( 'name', 'mentions[]' );
+				input.setAttribute( 'value', item.original.value );
+
+				commentForm.after( input );
 			}
-			console.log( item  );
-			return '@' + 'doh';
+			return '@' + item.original.key;
 		},
 	} );
 

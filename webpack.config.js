@@ -22,6 +22,7 @@ module.exports = ( env ) => {
 				'integrations-admin': [ './src/js/react/views/integrations/index.js' ],
 				'mentions-admin': [ './src/js/react/views/mentions/index.js' ],
 				'mentions-frontend': [ './src/js/mentions/index.js' ],
+				'sce-frontend': [ './src/scss/frontend.scss' ],
 			},
 			module: {
 				rules: [
