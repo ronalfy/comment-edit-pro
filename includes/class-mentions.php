@@ -59,11 +59,62 @@ class Mentions {
 			return;
 		}
 
+		$state      = json_decode( base64_decode( $state ), true );
+		$comment_id = $state['comment_id'] ?? false;
+		$nonce      = $state['nonce'] ?? false;
+		if ( ! $comment_id || ! $nonce ) {
+			return;
+		}
+
+		// Get comment from comment ID.
+		$comment = get_comment( $comment_id );
+		if ( ! $comment ) {
+			return;
+		}
+		$email_address = $comment->comment_author_email;
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce_mentions_subscribe_' . sanitize_text_field( $comment_id ) . $email_address ) ) {
+			return;
+		}
+
+		// Get current hash/password for email.
+		global $wpdb;
+		$tablename = $wpdb->base_prefix . 'sce_mentions';
+		$email_hash = $wpdb->get_var(
+			$wpdb->prepare(
+				'select hash from ' . esc_sql( $tablename ) . ' where email = %s limit 1',
+				$email_address
+			)
+		);
+		if ( ! $email_hash || is_wp_error( $email_hash ) ) {
+			return;
+		}
+		$email_hash = sanitize_text_field( $email_hash );
+
+		// Get unsubscribe URL.
+		$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $comment_id . $email_address );
+			$unsubscribe_url   = add_query_arg(
+				array(
+					'hash'   => md5( $comment_id . $email_address . $email_hash . $unsubscribe_nonce ),
+					'state'  => base64_encode( // phpcs:ignore
+						wp_json_encode(
+							array(
+								'comment_id' => $comment_id,
+								'nonce'      => $unsubscribe_nonce,
+							)
+						)
+					),
+					'action' => 'sce-mentions-unsubscribe',
+				),
+				home_url()
+			);
+
 		ob_start();
 		?>
 		<h2><?php esc_html_e( 'Thank you for subscribing', 'comment-edit-pro' ); ?></h2>
 		<p><?php esc_html_e( 'You will now receive an email if you are mentioned.', 'comment-edit-pro' ); ?></p>
-		<p class="unsubscribe"><a href="#">Unsubscribe</a></p>
+		<p class="unsubscribe"><a href="<?php echo esc_url_raw( $unsubscribe_url ); ?>"><?php esc_html_e( 'Unsubscribe', 'comment-edit-pro' ); ?></a></p>
 		<?php
 		$body = ob_get_clean();
 		echo wp_kses_post( $body );
@@ -118,6 +169,11 @@ class Mentions {
 			}
 			$email_address = $comment->comment_author_email;
 
+			// Verify nonce.
+			if ( ! wp_verify_nonce( $nonce, 'sce_mentions_subscribe_' . sanitize_text_field( $comment_id ) . $email_address ) ) {
+				return;
+			}
+
 			// Get password from db.
 			global $wpdb;
 			$tablename = $wpdb->base_prefix . 'sce_mentions';
@@ -137,7 +193,7 @@ class Mentions {
 				return;
 			}
 			$is_subscribed = sanitize_text_field( $email_row->is_subscribed );
-			if ( 'false' === $is_subscribed || false === $is_subscribed ) {
+			if ( 'false' === $is_subscribed || false === $is_subscribed || empty( $is_subscribed ) ) {
 				$mention_id = absint( $email_row->id );
 				$wpdb->update(
 					$tablename,
@@ -430,7 +486,7 @@ class Mentions {
 			}
 
 			// Create email send hash. Comement ID. Email address. Unique hash. Nonce with comment ID and email address.
-			$subscribe_nonce = wp_create_nonce( 'sce_mentions_subscribe_' . $comment_id . $email_address );
+			$subscribe_nonce = wp_create_nonce( 'sce_mentions_subscribe_' . sanitize_text_field( $comment_id ) . $email_address );
 			$subscribe_pass  = wp_generate_password( 20, false ); // Will be stored in db.
 			$hash            = $comment_id . $email_address . $subscribe_pass . $subscribe_nonce;
 
@@ -566,14 +622,14 @@ class Mentions {
 			$body .= esc_url( home_url() );
 
 			// Create unsubscribe link.
-			$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $comment_id . $user_email );
+			$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $mention . $user_email );
 			$unsubscribe_url   = add_query_arg(
 				array(
 					'hash'   => md5( $comment_id . $user_email . $unsubscribe_nonce ),
 					'state'  => base64_encode( // phpcs:ignore
 						wp_json_encode(
 							array(
-								'comment_id' => $comment_id,
+								'comment_id' => $mention,
 								'nonce'      => $unsubscribe_nonce,
 							)
 						)
