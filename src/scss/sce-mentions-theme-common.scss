@@ -1,0 +1,38 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+section#sce-mentions-subscribe-wrapper {
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#sce-status-error,
+#sce-status-success {
+	padding: 20px 20px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 1.3em;
+	line-height: 1.1;
+	font-weight: 700;
+	color: #BD3F32;
+	margin: 0;
+	margin-top: 15px;
+	text-align: center;
+	border-top: 2px solid darken(#BD3F32, 10%);
+	border-bottom: 2px solid darken(#BD3F32, 10%);
+}
+#sce-status-success {
+	border: 0;
+}
+#sce-status-normal {
+	padding: 5px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 4.2em;
+	margin: 0;
+	line-height: 1.1;
+	font-weight: 700;
+	color: #BD3F32;
+	text-align: center;
+}
