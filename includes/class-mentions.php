@@ -809,6 +809,7 @@ class Mentions {
 			// Get email headers from name.
 			$headers = array(
 				'From: ' . $options['mentions_emails_from_name'] . ' <' . $options['mentions_emails_from_email'] . '>',
+				'Content-Type: text/html; charset=UTF-8',
 			);
 
 			// Craft to field.
@@ -816,14 +817,14 @@ class Mentions {
 
 			// Craft email body.
 			// Translators: %s is the name of the user.
-			$body  = sprintf( __( 'Hello %s,', 'comment-edit-pro' ), sanitize_text_field( $user_name ) ) . "\n\n";
-			$body .= "You have been mentioned in a comment.\n\n";
-			$body .= esc_html__( 'Comment: ', 'comment-edit-pro' ) . "\n";
+			$body  = '<p>' . sprintf( __( 'Hello %s,', 'comment-edit-pro' ), sanitize_text_field( $user_name ) ) . '</p>';
+			$body .= '<p>' . esc_html__( 'You have been mentioned in a comment.', 'comment-edit-pro' );
+			$body .= '<p>' . esc_html__( 'Comment: ', 'comment-edit-pro' ) . '</p>';
 			$body .= esc_textarea( $comment->comment_content ) . "\n\n";
-			$body .= esc_html__( 'Link to comment: ', 'comment-edit-pro' ) . "\n";
-			$body .= get_comment_link( $comment ) . "\n\n";
-			$body .= esc_html__( 'Thank you,', 'comment-edit-pro' ) . "\n";
-			$body .= esc_url( home_url() );
+			$body .= '<p>' . esc_html__( 'Link to comment: ', 'comment-edit-pro' ) . '</p>';
+			$body .= '<p>' . sprintf( '<a href="%s">%s</a>', esc_url( get_comment_link( $comment ) ), esc_html__( 'Link to Comment', 'comment-edit-pro' ) . '</p>' );
+			$body .= '<p>' . esc_html__( 'Thank you,', 'comment-edit-pro' ) . '</p>';
+			$body .= '<p>' . esc_url( home_url() ) . '</p>';
 
 			// Create unsubscribe link.
 			$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $mention . $user_email );
@@ -844,14 +845,22 @@ class Mentions {
 			);
 
 			// Add unsubscribe link to body.
-			$body .= "\n\n" . esc_html__( 'Unsubscribe from future mentions: ', 'comment-edit-pro' ) . "\n";
-			$body .= $unsubscribe_url;
+			$body .= '<p>' . esc_html__( 'Unsubscribe from future mentions: ', 'comment-edit-pro' ) . '</p>';
+			$body .= '<p>' . sprintf( '<a href="%s">%s</a>', esc_url_raw( $unsubscribe_url ), esc_html__( 'Unsubscribe', 'comment-edit-pro' ) ) . '</p>';
+
+			ob_start();
+			include Functions::get_plugin_dir( 'templates/emails/comment-mentions-email.php' );
+			$email_body = ob_get_clean();
+			$email_body = str_replace( '{{site_name}}', esc_html( get_bloginfo( 'name' ) ), $email_body );
+			$email_body = str_replace( '{{confirm_message}}', wp_kses_post( $body ), $email_body );
+			/* Translators: %s is the site name */
+			$email_body = str_replace( '{{email_sent_from}}', sprintf( esc_html__( 'This email was sent from: %s', 'comment-edit-pro' ), esc_url( rtrim( home_url(), '/' ) ) ), $email_body );
 
 			// Send the email.
 			wp_mail(
 				$to_field,
 				$subject,
-				$body,
+				$email_body,
 				$headers
 			);
 		}
