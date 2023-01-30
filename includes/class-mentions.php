@@ -36,19 +36,22 @@ class Mentions {
 		if ( $options['mentions_enabled'] ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
 
-			// When a new comment has been added.
-			add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
-			add_action( 'comment_post', array( $this, 'send_notification_emails' ), 100, 2 );
+			// If emails are enabled, add the email actions.
+			if ( $options['mentions_emails_enabled'] ) {
+				// When a new comment has been added.
+				add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+				add_action( 'comment_post', array( $this, 'send_notification_emails' ), 100, 2 );
 
-			// Template actions for the mentions subscribe screen.
-			add_filter( 'template_include', array( $this, 'add_subscribe_template' ) );
-			add_filter( 'sce_mentions_subscribe_styles_header', array( static::class, 'add_subscribe_styles_header' ) );
-			add_action( 'sce_mentions_subscribe_body', array( static::class, 'add_mentions_subscribe_body' ) );
+				// Template actions for the mentions subscribe screen.
+				add_filter( 'template_include', array( $this, 'add_subscribe_template' ) );
+				add_filter( 'sce_mentions_subscribe_styles_header', array( static::class, 'add_subscribe_styles_header' ) );
+				add_action( 'sce_mentions_subscribe_body', array( static::class, 'add_mentions_subscribe_body' ) );
 
-			// Template actions for the mentions unsubscribe screen.
-			add_filter( 'template_include', array( $this, 'add_unsubscribe_template' ) );
-			add_filter( 'sce_mentions_unsubscribe_styles_header', array( static::class, 'add_unsubscribe_styles_header' ) );
-			add_action( 'sce_mentions_unsubscribe_body', array( static::class, 'add_mentions_unsubscribe_body' ) );
+				// Template actions for the mentions unsubscribe screen.
+				add_filter( 'template_include', array( $this, 'add_unsubscribe_template' ) );
+				add_filter( 'sce_mentions_unsubscribe_styles_header', array( static::class, 'add_unsubscribe_styles_header' ) );
+				add_action( 'sce_mentions_unsubscribe_body', array( static::class, 'add_mentions_unsubscribe_body' ) );
+			}
 		}
 	}
 
