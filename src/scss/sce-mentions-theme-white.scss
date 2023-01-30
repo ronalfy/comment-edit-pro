@@ -5,7 +5,8 @@ $text_color: #003060;
 $error: #d70c24;
 $error_border: #b01b1b;
 
-section#sce-mentions-subscribe-wrapper {
+section#sce-mentions-subscribe-wrapper,
+section#sce-mentions-unsubscribe-wrapper {
 	background: #FFF;
 	color: #333;
 
@@ -34,13 +35,32 @@ section#sce-mentions-subscribe-wrapper {
 		font-family: Verdana, Geneva, Tahoma, sans-serif;
 		text-align: center;
 	}
+	p.sce-button-return {
+		margin-top: 1em;
+		margin-bottom: 0;
+		a {
+			display: inline-block;
+			background: #FFF;
+			color: #222;
+			padding: 15px 25px;
+			border: 1px solid #333;
+			border-radius: 5px;
+			text-decoration: none;
+			font-size: 1.1em;
+			&:hover {
+				background: #DDD;
+			}
+		}
+	}
 	p.unsubscribe {
+		margin-top: 1em;
 		font-size: 13px;
 		a {
-			color: #ff6900;
+			color: #FFF;
+			text-decoration: underline;
 
 			&:hover {
-				color: #db5d03;
+				color: #DDD;
 			}
 		}
 	}

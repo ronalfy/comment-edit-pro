@@ -52,7 +52,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<main>
 				<?php do_action( 'sce_mentions_subscribe_body' ); ?>
 			</main>
-			
 		</section>
 		<?php
 		/**
@@ -66,7 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! is_array( $script_footer_handles ) ) {
 			$script_footer_handles = array();
 		}
-		$script_footer_handles[] = 'eff_lock_form';
 		wp_print_scripts( $script_footer_handles );
 		?>
 	</body>

@@ -44,6 +44,11 @@ class Mentions {
 			add_filter( 'template_include', array( $this, 'add_subscribe_template' ) );
 			add_filter( 'sce_mentions_subscribe_styles_header', array( static::class, 'add_subscribe_styles_header' ) );
 			add_action( 'sce_mentions_subscribe_body', array( static::class, 'add_mentions_subscribe_body' ) );
+
+			// Template actions for the mentions unsubscribe screen.
+			add_filter( 'template_include', array( $this, 'add_unsubscribe_template' ) );
+			add_filter( 'sce_mentions_unsubscribe_styles_header', array( static::class, 'add_unsubscribe_styles_header' ) );
+			add_action( 'sce_mentions_unsubscribe_body', array( static::class, 'add_mentions_unsubscribe_body' ) );
 		}
 	}
 
@@ -59,7 +64,7 @@ class Mentions {
 			return;
 		}
 
-		$state      = json_decode( base64_decode( $state ), true );
+		$state      = json_decode( base64_decode( $state ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		$comment_id = $state['comment_id'] ?? false;
 		$nonce      = $state['nonce'] ?? false;
 		if ( ! $comment_id || ! $nonce ) {
@@ -80,8 +85,8 @@ class Mentions {
 
 		// Get current hash/password for email.
 		global $wpdb;
-		$tablename = $wpdb->base_prefix . 'sce_mentions';
-		$email_hash = $wpdb->get_var(
+		$tablename  = $wpdb->base_prefix . 'sce_mentions';
+		$email_hash = $wpdb->get_var(  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
 				'select hash from ' . esc_sql( $tablename ) . ' where email = %s limit 1',
 				$email_address
@@ -93,8 +98,8 @@ class Mentions {
 		$email_hash = sanitize_text_field( $email_hash );
 
 		// Get unsubscribe URL.
-		$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $comment_id . $email_address );
-			$unsubscribe_url   = add_query_arg(
+		$unsubscribe_nonce   = wp_create_nonce( 'sce_mentions_unsubscribe_' . $comment_id . $email_address );
+			$unsubscribe_url = add_query_arg(
 				array(
 					'hash'   => md5( $comment_id . $email_address . $email_hash . $unsubscribe_nonce ),
 					'state'  => base64_encode( // phpcs:ignore
@@ -114,9 +119,25 @@ class Mentions {
 		?>
 		<h2><?php esc_html_e( 'Thank you for subscribing', 'comment-edit-pro' ); ?></h2>
 		<p><?php esc_html_e( 'You will now receive an email if you are mentioned.', 'comment-edit-pro' ); ?></p>
+		<p class="sce-button-return">
+			<?php
+			printf(
+				'<a href="%1$s">Return to %2$s</a>',
+				esc_url( home_url() ),
+				esc_html( get_bloginfo( 'name' ) )
+			);
+			?>
+		</p>
 		<p class="unsubscribe"><a href="<?php echo esc_url_raw( $unsubscribe_url ); ?>"><?php esc_html_e( 'Unsubscribe', 'comment-edit-pro' ); ?></a></p>
 		<?php
 		$body = ob_get_clean();
+		/**
+		 * Filter the body text of the subscription success screen.
+		 *
+		 * @param string $body            The body of the subscription success screen.
+		 * @param string $unsubscribe_url The unsubscribe URL.
+		 */
+		$body = apply_filters( 'sce_mentions_subscribe_body_text', $body, $unsubscribe_url );
 		echo wp_kses_post( $body );
 	}
 
@@ -155,47 +176,47 @@ class Mentions {
 			}
 
 			// Get comment ID and nonce from state.
-			$state      = json_decode( base64_decode( $state ), true );
+			$state      = json_decode( base64_decode( $state ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			$comment_id = $state['comment_id'] ?? false;
 			$nonce      = $state['nonce'] ?? false;
 			if ( ! $comment_id || ! $nonce ) {
-				return;
+				return $original_template;
 			}
 
 			// Get comment from comment ID.
 			$comment = get_comment( $comment_id );
 			if ( ! $comment ) {
-				return;
+				return $original_template;
 			}
 			$email_address = $comment->comment_author_email;
 
 			// Verify nonce.
 			if ( ! wp_verify_nonce( $nonce, 'sce_mentions_subscribe_' . sanitize_text_field( $comment_id ) . $email_address ) ) {
-				return;
+				return $original_template;
 			}
 
 			// Get password from db.
 			global $wpdb;
 			$tablename = $wpdb->base_prefix . 'sce_mentions';
 			// Check if email exists.
-			$email_row = $wpdb->get_row(
+			$email_row = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					'select id, email, is_subscribed, hash from ' . esc_sql( $tablename ) . ' where email = %s limit 1',
 					$email_address
 				)
 			);
 			if ( ! $email_row || is_wp_error( $email_row ) ) {
-				return;
+				return $original_template;
 			}
 			$subscribe_pass = $email_row->hash;
 			$new_hash       = md5( $comment_id . $email_address . $subscribe_pass . $nonce );
 			if ( $hash !== $new_hash ) {
-				return;
+				return $original_template;
 			}
 			$is_subscribed = sanitize_text_field( $email_row->is_subscribed );
 			if ( 'false' === $is_subscribed || false === $is_subscribed || empty( $is_subscribed ) ) {
 				$mention_id = absint( $email_row->id );
-				$wpdb->update(
+				$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$tablename,
 					array(
 						'is_subscribed' => 'true',
@@ -218,6 +239,172 @@ class Mentions {
 
 			$sce_mentions_theme_name = 'default';
 			$template                = Functions::get_plugin_dir( 'templates/mentions-subscribe.php' );
+
+			/**
+			 * Filter the template used for the unsubscribe page.
+			 */
+			$template = apply_filters( 'sce_mentions_subscribe_template', $template );
+			if ( file_exists( $template ) ) {
+				require_once $template;
+			} else {
+				wp_die( esc_html__( 'Template not found', 'comment-edit-pro' ) );
+				exit;
+			}
+			exit;
+		}
+		return $original_template;
+	}
+
+	/**
+	 * Output the unsubscribe body and remove subscription status.
+	 */
+	public static function add_mentions_unsubscribe_body() {
+		// Let's gather hash and state.
+		$hash  = sanitize_text_field( filter_input( INPUT_GET, 'hash', FILTER_DEFAULT ) );
+		$state = sanitize_text_field( filter_input( INPUT_GET, 'state', FILTER_DEFAULT ) );
+
+		if ( empty( $hash ) || empty( $state ) ) {
+			return;
+		}
+
+		$state      = json_decode( base64_decode( $state ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		$comment_id = $state['comment_id'] ?? false;
+		$nonce      = $state['nonce'] ?? false;
+		if ( ! $comment_id || ! $nonce ) {
+			return;
+		}
+
+		// Get comment from comment ID.
+		$comment = get_comment( $comment_id );
+		if ( ! $comment ) {
+			return;
+		}
+		$email_address = $comment->comment_author_email;
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce_mentions_unsubscribe_' . sanitize_text_field( $comment_id ) . $email_address ) ) {
+			return;
+		}
+
+		ob_start();
+		?>
+		<h2><?php esc_html_e( 'You have been unsubscribed', 'comment-edit-pro' ); ?></h2>
+		<p><?php esc_html_e( 'You will no longer receive an email if you are mentioned in a comment.', 'comment-edit-pro' ); ?></p>
+		<p class="sce-button-return">
+			<?php
+			printf(
+				'<a href="%1$s">Return to %2$s</a>',
+				esc_url( home_url() ),
+				esc_html( get_bloginfo( 'name' ) )
+			);
+			?>
+		</p>
+		<?php
+		$body = ob_get_clean();
+		/**
+		 * Filter the body of the unsubscribe success screen.
+		 *
+		 * @param string $body            The body of the subscription success screen.
+		 */
+		$body = apply_filters( 'sce_mentions_unsubscribe_body_text', $body );
+		echo wp_kses_post( $body );
+	}
+
+	/**
+	 * Load styles for the unsubscribe header.
+	 *
+	 * @param array $style_handles Array of style handles.
+	 */
+	public static function add_unsubscribe_styles_header( $style_handles ) {
+		$header_style_handle = 'sce_mentions_unsubscribe_css';
+		wp_register_style(
+			$header_style_handle,
+			Functions::get_plugin_url( 'dist/sce-mentions-theme-white.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
+		);
+		$style_handles[] = $header_style_handle;
+		return $style_handles;
+	}
+
+	/**
+	 * Load the subscribe template.
+	 *
+	 * @param string $original_template The original template.
+	 */
+	public function add_unsubscribe_template( $original_template ) {
+		$maybe_subscribe_action = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+		if ( 'sce-mentions-unsubscribe' === $maybe_subscribe_action ) {
+			// Get hash and state and check status.
+			$hash  = sanitize_text_field( filter_input( INPUT_GET, 'hash', FILTER_DEFAULT ) );
+			$state = sanitize_text_field( filter_input( INPUT_GET, 'state', FILTER_DEFAULT ) );
+			if ( empty( $hash ) || empty( $state ) ) {
+				wp_die( esc_html__( 'Could not verify email address', 'comment-edit-pro' ) );
+				exit;
+			}
+
+			// Get comment ID and nonce from state.
+			$state      = json_decode( base64_decode( $state ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+			$comment_id = $state['comment_id'] ?? false;
+			$nonce      = $state['nonce'] ?? false;
+			if ( ! $comment_id || ! $nonce ) {
+				return $original_template;
+			}
+
+			// Get comment from comment ID.
+			$comment = get_comment( $comment_id );
+			if ( ! $comment ) {
+				return $original_template;
+			}
+			$email_address = $comment->comment_author_email;
+
+			// Verify nonce.
+			if ( ! wp_verify_nonce( $nonce, 'sce_mentions_unsubscribe_' . sanitize_text_field( $comment_id ) . $email_address ) ) {
+				return $original_template;
+			}
+
+			// Get password from db.
+			global $wpdb;
+			$tablename = $wpdb->base_prefix . 'sce_mentions';
+			// Check if email exists.
+			$email_row = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+					'select id, email, is_subscribed, hash from ' . esc_sql( $tablename ) . ' where email = %s limit 1',
+					$email_address
+				)
+			);
+			if ( ! $email_row || is_wp_error( $email_row ) ) {
+				return $original_template;
+			}
+			$subscribe_pass = $email_row->hash;
+			$new_hash       = md5( $comment_id . $email_address . $subscribe_pass . $nonce );
+			if ( $hash !== $new_hash ) {
+				return $original_template;
+			}
+
+			// Remove subscriber from DB.
+			$is_subscribed = sanitize_text_field( $email_row->is_subscribed );
+			if ( 'true' === $is_subscribed ) {
+				$mention_id = absint( $email_row->id );
+				$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+					$tablename,
+					array(
+						'id' => $mention_id,
+					),
+					array(
+						'%d',
+					)
+				);
+			}
+
+			$sce_mentions_theme_name = 'default';
+			$template                = Functions::get_plugin_dir( 'templates/mentions-unsubscribe.php' );
+
+			/**
+			 * Filter the template used for the unsubscribe page.
+			 */
+			$template = apply_filters( 'sce_mentions_unsubscribe_template', $template );
 			if ( file_exists( $template ) ) {
 				require_once $template;
 			} else {
@@ -515,14 +702,14 @@ class Mentions {
 			$tablename = $wpdb->base_prefix . 'sce_mentions';
 
 			// Check if email already exists.
-			$maybe_email = $wpdb->get_var(
+			$maybe_email = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					'select email from ' . esc_sql( $tablename ) . ' where email = %s limit 1',
 					$email_address
 				)
 			);
 			if ( ( ! $maybe_email || empty( $maybe_email ) ) && is_email( $email_address ) ) {
-				$wpdb->insert(
+				$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$tablename,
 					array(
 						'email'         => $email_address,
@@ -533,7 +720,7 @@ class Mentions {
 				);
 			}
 
-			$maybe_subscribed = $wpdb->get_var(
+			$maybe_subscribed = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					'select is_subscribed from ' . esc_sql( $tablename ) . ' where email = %s AND is_subscribed = "true"',
 					$email_address
@@ -546,14 +733,22 @@ class Mentions {
 					__( '[%s] Please confirm your subscription', 'simple-comment-editing' ),
 					wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES )
 				);
-				$body = sprintf(
-					/* translators: %s: Subscribe URL. */
-					esc_html__( 'Please click the following link to confirm your subscription: %s', 'simple-comment-editing', 'comment-edit-pro' ),
-					"\n\n" . esc_url_raw( $subscribe_url )
-				);
+
+				// Get email template.
+				ob_start();
+				include Functions::get_plugin_dir( 'templates/emails/subscribe-email.php' );
+				$body = ob_get_clean();
+				$body = str_replace( '{{site_name}}', esc_html( get_bloginfo( 'name' ) ), $body );
+				$body = str_replace( '{{confirm_message}}', esc_html__( 'Please confirm your subscription to comment mentions', 'comment-edit-pro' ), $body );
+				$body = str_replace( '{{subscribe_url}}', esc_url_raw( $subscribe_url ), $body );
+				$body = str_replace( '{{subscribe_text}}', esc_html__( 'Subscribe', 'comment-edit-pro' ), $body );
+				/* Translators: %s is the site URL. */
+				$body = str_replace( '{{email_sent_from}}', sprintf( esc_html__( 'This email was sent from: %s', 'comment-edit-pro' ), esc_url( rtrim( home_url(), '/' ) ) ), $body );
+
 				// Get email headers from name.
 				$headers = array(
 					'From: ' . $options['mentions_emails_from_name'] . ' <' . $options['mentions_emails_from_email'] . '>',
+					'Content-Type: text/html; charset=UTF-8',
 				);
 				wp_mail( $email_address, $subject, $body, $headers );
 			}
@@ -586,15 +781,23 @@ class Mentions {
 			// Check if subscribed.
 			global $wpdb;
 			$tablename        = $wpdb->base_prefix . 'sce_mentions';
-			$maybe_subscribed = $wpdb->get_var(
+			$maybe_subscribed = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
-					'select is_subscribed from ' . esc_sql( $tablename ) . ' where email = %s AND is_subscribed = "true"',
+					'select hash, is_subscribed from ' . esc_sql( $tablename ) . ' where email = %s AND is_subscribed = "true" limit 1',
 					$user_email
 				)
 			);
-			if ( ! $maybe_subscribed ) {
+			if ( ! $maybe_subscribed || is_wp_error( $maybe_subscribed ) ) {
 				continue;
 			}
+
+			// continue if not subscribed.
+			if ( 'true' !== $maybe_subscribed->is_subscribed ) {
+				continue;
+			}
+
+			// Get password hash.
+			$hash = sanitize_text_field( $maybe_subscribed->hash );
 
 			// Get subject line for email.
 			$subject = sprintf(
@@ -612,6 +815,7 @@ class Mentions {
 			$to_field = $user_email;
 
 			// Craft email body.
+			// Translators: %s is the name of the user.
 			$body  = sprintf( __( 'Hello %s,', 'comment-edit-pro' ), sanitize_text_field( $user_name ) ) . "\n\n";
 			$body .= "You have been mentioned in a comment.\n\n";
 			$body .= esc_html__( 'Comment: ', 'comment-edit-pro' ) . "\n";
@@ -625,7 +829,7 @@ class Mentions {
 			$unsubscribe_nonce = wp_create_nonce( 'sce_mentions_unsubscribe_' . $mention . $user_email );
 			$unsubscribe_url   = add_query_arg(
 				array(
-					'hash'   => md5( $comment_id . $user_email . $unsubscribe_nonce ),
+					'hash'   => md5( $mention . $user_email . $hash . $unsubscribe_nonce ),
 					'state'  => base64_encode( // phpcs:ignore
 						wp_json_encode(
 							array(

@@ -2,7 +2,8 @@ body {
 	margin: 0;
 	padding: 0;
 }
-section#sce-mentions-subscribe-wrapper {
+section#sce-mentions-subscribe-wrapper,
+section#sce-mentions-unsubscribe-wrapper {
 	height: 100vh;
 	width: 100%;
 	display: flex;
