@@ -24,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 define( 'COMMENTEDITPRO_VERSION', '2.2.0' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
+define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
 define( 'COMMENTEDITPRO_FILE', __FILE__ );
 define( 'SCE_MIN_VERSION', '2.4.5' );
@@ -363,6 +364,8 @@ class Comment_Edit_Pro {
 		$this->integrations->run();
 		$this->comment_actions = new \CommentEditPro\Includes\Comment_Actions();
 		$this->comment_actions->run();
+		$this->comment_mentions = new \CommentEditPro\Includes\Mentions();
+		$this->comment_mentions->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

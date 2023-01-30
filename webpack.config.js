@@ -8,6 +8,7 @@ module.exports = ( env ) => {
 			resolve: {
 				alias: {
 					react: path.resolve( 'node_modules/react' ),
+					'react-dom': path.resolve( 'node_modules/react-dom' ),
 				},
 			},
 			devtool: 'source-map',
@@ -19,6 +20,10 @@ module.exports = ( env ) => {
 				'avatars-frontend': [ './src/scss/avatars-frontend.scss' ],
 				'avatars-admin': [ './src/js/react/views/avatars/index.js' ],
 				'integrations-admin': [ './src/js/react/views/integrations/index.js' ],
+				'mentions-admin': [ './src/js/react/views/mentions/index.js' ],
+				'mentions-frontend': [ './src/js/mentions/index.js' ],
+				'sce-frontend': [ './src/scss/frontend.scss' ],
+				'sce-mentions-theme-white': [ './src/scss/sce-mentions-theme-white.scss' ],
 			},
 			module: {
 				rules: [

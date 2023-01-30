@@ -1,0 +1,67 @@
+@import './sce-mentions-theme-common.scss';
+
+$background: #68BBE3;
+$text_color: #003060;
+$error: #d70c24;
+$error_border: #b01b1b;
+
+section#sce-mentions-subscribe-wrapper,
+section#sce-mentions-unsubscribe-wrapper {
+	background: #FFF;
+	color: #333;
+
+	main {
+		display: block;
+		position: relative;
+		background: #333;
+		border: 2px solid #444;
+		color: #ddd;
+		border-radius: 5px;
+		box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+		padding: 45px 30px;
+		max-width: 650px;
+		width: 100%;
+	}
+	h2 {
+		margin: 0;
+		padding: 0;
+		font-size: 1.3em;
+		font-family: Verdana, Geneva, Tahoma, sans-serif;
+		text-transform: uppercase;
+		color: #FFF;
+		text-align: center;
+	}
+	p {
+		font-family: Verdana, Geneva, Tahoma, sans-serif;
+		text-align: center;
+	}
+	p.sce-button-return {
+		margin-top: 1em;
+		margin-bottom: 0;
+		a {
+			display: inline-block;
+			background: #FFF;
+			color: #222;
+			padding: 15px 25px;
+			border: 1px solid #333;
+			border-radius: 5px;
+			text-decoration: none;
+			font-size: 1.1em;
+			&:hover {
+				background: #DDD;
+			}
+		}
+	}
+	p.unsubscribe {
+		margin-top: 1em;
+		font-size: 13px;
+		a {
+			color: #FFF;
+			text-decoration: underline;
+
+			&:hover {
+				color: #DDD;
+			}
+		}
+	}
+}

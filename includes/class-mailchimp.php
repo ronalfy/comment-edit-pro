@@ -42,8 +42,22 @@ class Mailchimp {
 
 		// Add Mailchimp Checkbox.
 		add_filter( 'comment_form_defaults', array( $this, 'add_mailchimp_checkbox' ), 100 );
+
+		// Remove SCE Mailchimp filter.
+		add_action( 'init', array( $this, 'remove_simple_comment_editing_mailchimp_filter' ), 100 );
+
 		// When a new comment has been added.
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+	}
+
+	/**
+	 * Remove SCE's Mailchimp option to prevent duplicate output.
+	 */
+	public function remove_simple_comment_editing_mailchimp_filter() {
+		if ( class_exists( 'Simple_Comment_Editing' ) ) {
+			$sce = \Simple_Comment_Editing::get_instance();
+			remove_filter( 'comment_form_defaults', array( $sce, 'add_mailchimp_checkbox' ), 100 );
+		}
 	}
 
 	/**

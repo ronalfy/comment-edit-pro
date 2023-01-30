@@ -71,7 +71,17 @@ class Options {
 				case 'akismet_api_valid':
 				case 'akismet_active':
 				case 'akismet_logged_in_users_enabled':
+				case 'mentions_emails_enabled':
+				case 'mentions_checkbox_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					break;
+				case 'mentions_enabled':
+					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					if ( true === $option ) {
+						Table_Mentions::create_table();
+					} else {
+						Table_Mentions::drop();
+					}
 					break;
 				case 'allow_comment_logging':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
@@ -195,6 +205,13 @@ class Options {
 			'recaptcha_comment_form_id'          => 'commentform',
 			'recaptcha_comment_submit_button_id' => 'submit',
 			'recaptcha_score_threshold'          => 0.5,
+			'mentions_enabled'                   => false,
+			'mentions_emails_enabled'            => true,
+			'mentions_emails_from_name'          => get_bloginfo( 'name' ),
+			'mentions_emails_from_email'         => get_bloginfo( 'admin_email' ),
+			'mentions_signup_label'              => esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' ),
+			'mentions_checkbox_enabled'          => false,
+			'mentions_comment_textarea_id'       => 'comment',
 		);
 		return $defaults;
 	}
