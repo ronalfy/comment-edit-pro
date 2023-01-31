@@ -73,6 +73,7 @@ class Options {
 				case 'akismet_logged_in_users_enabled':
 				case 'mentions_emails_enabled':
 				case 'mentions_checkbox_enabled':
+				case 'enable_gravatar_protection':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -185,6 +186,8 @@ class Options {
 			'enable_avatars_anonymous'           => true,
 			'enable_custom_avatar_size'          => false,
 			'choose_avatar_text'                 => __( 'Choose an Avatar', 'comment-edit-pro' ),
+			'enable_gravatar_protection'         => false,
+			'gravatar_protection_text'           => __( 'Prevent my avatar from showing next to my comment', 'comment-edit-pro' ),
 			'enable_mailchimp'                   => false,
 			'mailchimp_api_key'                  => '',
 			'mailchimp_api_key_valid'            => false,

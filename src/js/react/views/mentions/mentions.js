@@ -31,7 +31,7 @@ const Mentions = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( '@ Mentions', 'comment-edit-pro' ) }</h2>
+					<h2>{ __( '@ Mentions (Beta)', 'comment-edit-pro' ) }</h2>
 					<BeatLoader
 						color={ '#9c68b0' }
 						loading={ true }
@@ -162,7 +162,7 @@ const Interface = ( props ) => {
 	const getMentionsHeader = () => {
 		return (
 			<>
-				<h2>{ __( '@ Mentions', 'comment-edit-pro' ) }</h2>
+				<h2>{ __( '@ Mentions (Beta)', 'comment-edit-pro' ) }</h2>
 				<p className="description">
 					{ __(
 						'Allow commenters to mention others in their replies.',

@@ -27,8 +27,14 @@ class Avatars {
 		// Save avatar settings in the admin.
 		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
 
+		// Save gravatar settings in the admin.
+		add_action( 'wp_ajax_sce_save_gravatar_options', array( $this, 'ajax_save_gravatar_options' ) );
+
 		// Retrieve avatar settings in the admin.
 		add_action( 'wp_ajax_sce_get_avatar_options', array( $this, 'ajax_get_avatar_options' ) );
+
+		// Retrieve avatar settings in the admin.
+		add_action( 'wp_ajax_sce_get_gravatar_options', array( $this, 'ajax_get_gravatar_options' ) );
 
 		// Load Avatar scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
@@ -126,6 +132,7 @@ class Avatars {
 		if ( null === $current_tab ) {
 			return;
 		}
+		$options = Options::get_options();
 		if ( 'avatars' === $current_tab ) {
 			wp_enqueue_script(
 				'sce-avatars',
@@ -138,10 +145,11 @@ class Avatars {
 				'sce-avatars',
 				'sceAvatars',
 				array(
-					'preview_avatar' => Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ),
-					'save_nonce'     => wp_create_nonce( 'sce-save-avatar-options' ),
-					'get_nonce'      => wp_create_nonce( 'sce-retrieve-avatar-options' ),
-					'ajaxurl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'preview_avatar'  => Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ),
+					'save_nonce'      => wp_create_nonce( 'sce-save-avatar-options' ),
+					'get_nonce'       => wp_create_nonce( 'sce-retrieve-avatar-options' ),
+					'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'avatars_enabled' => (bool) $options['enable_avatars'],
 				)
 			);
 		}
@@ -229,7 +237,7 @@ class Avatars {
 	}
 
 	/**
-	 * Save avatar options.
+	 * Get avatar options.
 	 */
 	public function ajax_get_avatar_options() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
@@ -259,6 +267,32 @@ class Avatars {
 	}
 
 	/**
+	 * Get Gravatar options.
+	 */
+	public function ajax_get_gravatar_options() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		$avatar_options = Options::get_options();
+
+		$json_array = array(
+			'enableGravatarProtection' => $avatar_options['enable_gravatar_protection'],
+			'gravatarProtectionText'   => $avatar_options['gravatar_protection_text'],
+		);
+
+		// Exit gracefully.
+		wp_send_json_success( $json_array );
+	}
+
+	/**
 	 * Save avatar options.
 	 */
 	public function ajax_save_avatar_options() {
@@ -270,6 +304,32 @@ class Avatars {
 			'enable_avatars_logged_in'  => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
 			'enable_custom_avatar_size' => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
 			'choose_avatar_text'        => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
+		);
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		Options::update_options( $options_to_save );
+
+		// Exit gracefully.
+		wp_send_json_success( array() );
+	}
+
+	/**
+	 * Save gravatar options.
+	 */
+	public function ajax_save_gravatar_options() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		$options_to_save = array(
+			'enable_gravatar_protection' => filter_input( INPUT_POST, 'enableGravatarProtection', FILTER_VALIDATE_BOOLEAN ),
+			'gravatar_protection_text'   => sanitize_text_field( filter_input( INPUT_POST, 'gravatarProtectionText', FILTER_DEFAULT ) ),
 		);
 
 		// Security.

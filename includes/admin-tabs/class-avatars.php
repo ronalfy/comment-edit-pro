@@ -72,11 +72,8 @@ class Avatars {
 		if ( 'avatars' === $tab ) {
 			if ( empty( $sub_tab ) || 'avatars' === $sub_tab ) {
 				?>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-avatars"></div>	
-					</div>
-				</div>
+				<div id="sce-tab-avatars"></div>	
+				
 				<!-- <div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
 						<div id="sce-tab-avatar-protection"></div>
