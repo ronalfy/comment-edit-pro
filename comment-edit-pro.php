@@ -22,7 +22,7 @@ use CommentEditPro\Includes\Options as Options;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '2.2.0' );
+define( 'COMMENTEDITPRO_VERSION', '2.2.1' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );

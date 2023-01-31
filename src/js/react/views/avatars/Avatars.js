@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { useState, Suspense, useContext, useEffect } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
@@ -17,6 +17,7 @@ import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
+import AvatarsContext from './Context';
 
 const retrieveAvatarOptions = () => {
 	return sendCommand( 'sce_get_avatar_options', {
@@ -30,7 +31,7 @@ const Avatars = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( 'Custom Comment Avatars (Beta)', 'comment-edit-pro' ) }</h2>
+					<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
 					<BeatLoader
 						color={ '#9c68b0' }
 						loading={ true }
@@ -47,14 +48,21 @@ const Avatars = ( props ) => {
 };
 
 const Interface = ( props ) => {
-	const [ avatarsEnabled, setAvatarsEnabled ] = useState( false );
 	const [ avatarSize, setAvatarSize ] = useState( 90 );
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
 
+	const { avatarsEnabled, setAvatarsEnabled } = useContext( AvatarsContext );
+
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
+
+	useEffect( () => {
+		if ( data.enableAvatars !== avatarsEnabled ) {
+			setAvatarsEnabled( data.enableAvatars );
+		}
+	}, [ data.enableAvatars ] );
 
 	const { register, control, handleSubmit, setValue, getValues, reset } =
 		useForm( {
@@ -285,7 +293,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Custom Comment Avatars (Beta)', 'comment-edit-pro' ) }</h2>
+			<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-avatars">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
 			<p className="description">{ __( 'Spruce up your comment section and allow some fun and default avatars.', 'comment-edit-pro' ) }</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
@@ -304,6 +312,7 @@ const Interface = ( props ) => {
 											onChange={ ( boolValue ) => {
 												//setShowButtonOptions( boolValue );
 												onChange( boolValue );
+												setAvatarsEnabled( boolValue );
 											} }
 											help={ __(
 												'Enable or Disable Comment Avatars.',

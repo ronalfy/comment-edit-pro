@@ -137,7 +137,7 @@ class Mailchimp {
 	}
 
 	/**
-	 * Add an nakcguno option below the comment textarea and above the submit button.
+	 * Add an mailchimp option below the comment textarea and above the submit button.
 	 *
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
