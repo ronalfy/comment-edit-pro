@@ -44,36 +44,72 @@ class Avatars {
 		// Load the pngs for use in the popover.
 		add_action( 'admin_footer', array( $this, 'add_footer_html' ) );
 
-		/**
-		 * Misc Frontend Avatar Actions.
-		 */
+		// Get plugin options.
+		$options = Options::get_options();
 
-		// Exit quickly if avatars aren't enabled.
-		$options        = Options::get_options();
-		$enable_avatars = $options['enable_avatars'] ?? false;
-		if ( ! $enable_avatars ) {
-			return;
+		// Check if avatars are enabled.
+		$enable_avatars = (bool) $options['enable_avatars'] ?? false;
+
+		// Perform actions if gravatar protection is enabled.
+		$enable_gravatar_protection = (bool) $options['enable_gravatar_protection'] ?? false;
+		if ( $enable_gravatar_protection && ! $enable_avatars ) { // Don't run if comment avatars are enabled.
+			// Add Gravatar Protection Checkbox.
+			add_filter( 'comment_form_defaults', array( $this, 'add_gravatar_protection_checkbox' ), 100 );
+
+			// When a new comment has been added.
+			add_action( 'comment_post', array( $this, 'comment_posted_gravatar_protection' ), 100, 2 );
+
+			// When the commenters avatar is being outputted.
+			add_filter( 'pre_get_avatar', array( $this, 'pre_avatar_override_gravatar_protection' ), 10, 3 );
 		}
-		// User Avatar override.
-		add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
-		add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
+		// Perform actions if comment avatars are enabled.
+		if ( $enable_avatars ) {
+			// User Avatar override.
+			add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
+			add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
 
-		// Add avatar to comments field.
-		add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
-		add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
+			// Add avatar to comments field.
+			add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
+			add_filter( 'comment_form_defaults', array( $this, 'add_avatar_textarea_field' ), 100 );
 
-		// Add an avatar script to preload images.
-		add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
+			// Add an avatar script to preload images.
+			add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
 
-		// Load the pngs for use in the popover.
-		add_action( 'wp_footer', array( $this, 'add_footer_html' ) );
+			// Load the pngs for use in the popover.
+			add_action( 'wp_footer', array( $this, 'add_footer_html' ) );
 
-		// When a new comment has been added.
-		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+			// When a new comment has been added.
+			add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
 
-		// Save avatar via ajax.
-		add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
-		add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+			// Save avatar via ajax.
+			add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+			add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+		}
+	}
+
+	/**
+	 * Add an mailchimp option below the comment textarea and above the submit button.
+	 *
+	 * @param array $comment_fields Array of defaults for the form field.
+	 */
+	public function add_gravatar_protection_checkbox( $comment_fields ) {
+		$options            = Options::get_options();
+		$gravity_protection = (bool) $options['enable_gravatar_protection'];
+
+		// Chceck to see if Gravatar Protection is enabled.
+		if ( ! $gravity_protection || current_user_can( 'moderate_comments' ) ) {
+			return $comment_fields;
+		}
+
+		$gravatar_html                   = array(
+			'sce-gravatar-protection' => sprintf(
+				'<section class="comment-form-sce-gravatar-protection"><label><input type="checkbox" name="sce-gravatar-protection" %s /> %s</label></section>',
+				'',
+				esc_html( $options['gravatar_protection_text'] )
+			),
+		);
+		$comment_fields['submit_button'] = $gravatar_html['sce-gravatar-protection'] . $comment_fields['submit_button'];
+		return $comment_fields;
 	}
 
 	/**
@@ -663,6 +699,72 @@ class Avatars {
 	}
 
 	/**
+	 * Return gravatar privacy image html.
+	 *
+	 * @param string $src        The full URL to the asset.
+	 * @param int    $comment_id Comment ID for the comment.
+	 * @param int    $size       The ideal width/height of the avatar.
+	 *
+	 * @return unescaped image HTML.
+	 */
+	private function get_gravatar_privacy_image_html( $src, $comment_id = 0, $size = 0 ) {
+		global $post, $comment;
+		$options = Options::get_options();
+
+		// If size still isn't set, set a default.
+		if ( 0 === $size || ! is_int( $size ) ) {
+			$size = 90;
+		}
+
+		/**
+		 * Filter: sce_gravatar_protection_size
+		 *
+		 * @param int $size (for both width/height).
+		 */
+		$width  = apply_filters( 'sce_gravatar_protection_size', $size );
+		$height = apply_filters( 'sce_gravatar_protection_size', $size );
+
+		/**
+		 * Add ability to change width/height of image.
+		 */
+		$avatar_dimensions = apply_filters(
+			'sce_gravatar_protection_size_args',
+			array(
+				'width'  => $width,
+				'height' => $height,
+			)
+		);
+
+		$classes = array(
+			'avatar',
+			sprintf( 'avatar-%s', esc_attr( $width ) ),
+			'photo',
+			'sce-custom-avatar',
+			'sce-gravatar-protection-avatar',
+		);
+
+		/**
+		 * Filter: sce_gravatar_protection_classes
+		 *
+		 * @param array $classes Array of classes for the Avatar output.
+		 */
+		$classes = apply_filters( 'sce_gravatar_protection_classes', $classes );
+
+		$avatar_html = sprintf(
+			'<img class="%s" src="%s" alt="Default Avatar" loading="lazy" width="%d" height="%d" />',
+			esc_attr( implode( ' ', $classes ) ),
+			esc_url( $src ),
+			esc_attr( $avatar_dimensions['width'] ),
+			esc_attr( $avatar_dimensions['height'] ),
+		);
+
+		if ( is_admin() ) {
+			return $avatar_html;
+		}
+		return $avatar_html;
+	}
+
+	/**
 	 * Override an Avatar with a User Profile Picture.
 	 *
 	 * Overrides an avatar with a profile image
@@ -743,6 +845,43 @@ class Avatars {
 	}
 
 	/**
+	 * Overrides an gravatar with a mystery image if the user has opted out from Gravatar.
+	 *
+	 * @param string|null $avatar_html HTML for the user's avatar. Default null.
+	 * @param mixed       $id_or_email The avatar to retrieve. Accepts a user_id, Gravatar MD5 hash,
+	 *                                 user email, WP_User object, WP_Post object, or WP_Comment object.
+	 * @param array       $args        Arguments passed to get_avatar_url(), after processing.
+	 *
+	 * @return string|null Avatar HTML.
+	 **/
+	public function pre_avatar_override_gravatar_protection( $avatar_html, $id_or_email, $args ) {
+		global $comment;
+		$comment_id = 0;
+		if ( is_a( $comment, 'WP_Comment' ) ) {
+			$comment_id = $comment->comment_ID;
+		} elseif ( is_a( $id_or_email, 'WP_Comment' ) ) {
+			$comment_id = $id_or_email->comment_ID;
+		}
+
+		// Return if not in context of a comment.
+		if ( 0 === $comment_id ) {
+			return $avatar_html;
+		}
+
+		// Get size.
+		$size = $args['size'] ?? 64;
+
+		// Get comment meta for gravatar protection.
+		$is_gravatar_protected = (bool) get_comment_meta( $comment_id, 'sce-gravatar-protection', true );
+		if ( $is_gravatar_protected ) {
+			$avatar_html = $this->get_gravatar_privacy_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ), $comment_id, $size );
+		}
+
+		// Nothing to see here. Return.
+		return $avatar_html;
+	}
+
+	/**
 	 * Retrieve a list of avatar filenames for the avatars functionality.
 	 * Decided to use pngs vs SVGs as pngs were significantly lighter.
 	 *
@@ -782,6 +921,22 @@ class Avatars {
 				global $current_user;
 				update_user_meta( $current_user->ID, 'sce-avatar-location', $avatar );
 			}
+		}
+	}
+
+	/**
+	 * Save gravatar protection meta when a comment has been posted.
+	 *
+	 * @param int  $comment_id Comment ID that has been submitted.
+	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
+	 */
+	public function comment_posted_gravatar_protection( $comment_id, $maybe_comment_approved ) {
+		$gravatar_protection_enabled = (bool) filter_input( INPUT_POST, 'sce-gravatar-protection', FILTER_VALIDATE_BOOLEAN );
+
+		// An approved or moderated comment is okay. Spam, skip.
+		if ( 'spam' !== $maybe_comment_approved && $gravatar_protection_enabled ) {
+			// Store as comment meta.
+			update_comment_meta( $comment_id, 'sce-gravatar-protection', true );
 		}
 	}
 }
