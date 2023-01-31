@@ -14,7 +14,7 @@ module.exports = ( env ) => {
 			devtool: 'source-map',
 			entry: {
 				themes: [ './css/themes.scss' ],
-				'sce-cc-progress-bar': [ './css/sce-ccc-progress-bar.scss' ],
+				'sce-ccc-progress-bar': [ './css/sce-ccc-progress-bar.scss' ],
 				admin: [ './css/admin.scss' ],
 				avatars: [ './src/js/avatars.js' ],
 				'avatars-frontend': [ './src/scss/avatars-frontend.scss' ],
