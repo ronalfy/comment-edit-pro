@@ -11,7 +11,13 @@ module.exports = ( env ) => {
 					'react-dom': path.resolve( 'node_modules/react-dom' ),
 				},
 			},
-			devtool: 'source-map',
+			devtool: 'production' === env.mode ? false : 'source-map',
+			output: {
+				filename: '[name].js',
+				sourceMapFilename: '[file].map[query]',
+				assetModuleFilename: 'fonts/[name][ext]',
+				clean: true,
+			},
 			entry: {
 				themes: [ './css/themes.scss' ],
 				'sce-ccc-progress-bar': [ './css/sce-ccc-progress-bar.scss' ],
