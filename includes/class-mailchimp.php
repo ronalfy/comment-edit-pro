@@ -48,6 +48,9 @@ class Mailchimp {
 
 		// When a new comment has been added.
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+
+		// Add frontend scripts and styles.
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
 	}
 
 	/**
@@ -373,5 +376,28 @@ class Mailchimp {
 			)
 		);
 
+	}
+
+	/**
+	 * Add frontend scripts/styles.
+	 */
+	public function add_frontend_scripts_styles() {
+		// Determine if comments are open.
+		if ( comments_open() ) {
+			$options = Options::get_options();
+			$mailchimp_enabled = (bool) $options['enable_mailchimp'];
+			if ( ! $mailchimp_enabled ) {
+				return;
+			}
+
+			// Enqueue frontend styles.
+			wp_enqueue_style(
+				'sce-frontend',
+				Functions::get_plugin_url( 'dist/sce-frontend.css' ),
+				array(),
+				Functions::get_plugin_version(),
+				'all'
+			);
+		}
 	}
 }

@@ -52,7 +52,10 @@ class Avatars {
 
 		// Perform actions if gravatar protection is enabled.
 		$enable_gravatar_protection = (bool) $options['enable_gravatar_protection'] ?? false;
+
+		$can_enqueue = false;
 		if ( $enable_gravatar_protection && ! $enable_avatars ) { // Don't run if comment avatars are enabled.
+			$can_enqueue = true;
 			// Add Gravatar Protection Checkbox.
 			add_filter( 'comment_form_defaults', array( $this, 'add_gravatar_protection_checkbox' ), 100 );
 
@@ -64,6 +67,7 @@ class Avatars {
 		}
 		// Perform actions if comment avatars are enabled.
 		if ( $enable_avatars ) {
+			$can_enqueue = true;
 			// User Avatar override.
 			add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
 			add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
@@ -84,6 +88,11 @@ class Avatars {
 			// Save avatar via ajax.
 			add_action( 'wp_ajax_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
 			add_action( 'wp_ajax_nopriv_sce_save_user_avatar', array( $this, 'ajax_save_user_avatar' ) );
+		}
+
+		if ( $can_enqueue ) {
+			// Add frontend scripts and styles.
+			add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
 		}
 	}
 
@@ -937,6 +946,23 @@ class Avatars {
 		if ( 'spam' !== $maybe_comment_approved && $gravatar_protection_enabled ) {
 			// Store as comment meta.
 			update_comment_meta( $comment_id, 'sce-gravatar-protection', true );
+		}
+	}
+
+	/**
+	 * Add frontend scripts/styles.
+	 */
+	public function add_frontend_scripts_styles() {
+		// Determine if comments are open.
+		if ( comments_open() ) {
+			// Enqueue frontend styles.
+			wp_enqueue_style(
+				'sce-frontend',
+				Functions::get_plugin_url( 'dist/sce-frontend.css' ),
+				array(),
+				Functions::get_plugin_version(),
+				'all'
+			);
 		}
 	}
 }

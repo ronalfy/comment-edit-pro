@@ -1,3 +1,50 @@
-.tribute-container{position:absolute;top:0;left:0;height:auto;overflow:auto;display:block;z-index:999999}.tribute-container ul{margin:0;margin-top:2px;padding:0;list-style:none;background:#fff;border:1px solid #ccc}.tribute-container li{padding:5px 5px;cursor:pointer;border-bottom:1px solid #eee}.tribute-container li:last-child{border-bottom:0}.tribute-container li.highlight{background:#efefef}.tribute-container li span{font-weight:bold}.tribute-container li.no-match{cursor:default}.tribute-container .menu-highlighted{font-weight:bold}.comment-form-sce-mentions,.comment-form-sce-mailchimp{font-weight:500;margin-bottom:5px}#submit{margin-top:15px}
+.tribute-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  overflow: auto;
+  display: block;
+  z-index: 999999;
+}
+.tribute-container ul {
+  margin: 0;
+  margin-top: 2px;
+  padding: 0;
+  list-style: none;
+  background: #FFF;
+  border: 1px solid #CCC;
+}
+.tribute-container li {
+  padding: 5px 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #EEE;
+}
+.tribute-container li:last-child {
+  border-bottom: 0;
+}
+.tribute-container li.highlight {
+  background: #efefef;
+}
+.tribute-container li span {
+  font-weight: bold;
+}
+.tribute-container li.no-match {
+  cursor: default;
+}
+.tribute-container .menu-highlighted {
+  font-weight: bold;
+}
+
+/* Frontend checkboxes */
+.comment-form-sce-mentions,
+.comment-form-sce-mailchimp {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+#submit {
+  margin-top: 15px;
+}
 
 /*# sourceMappingURL=sce-frontend.css.map*/

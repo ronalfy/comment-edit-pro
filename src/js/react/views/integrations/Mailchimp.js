@@ -411,7 +411,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) }</h2>
+			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
 			<p className="description">
 				{ __(
 					'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.',
