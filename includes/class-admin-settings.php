@@ -49,10 +49,16 @@ class Admin_Settings {
 		?>
 		<header id="comment-edit-pro-header" style="background-image: url(<?php echo esc_url( Functions::get_plugin_url( 'images/admin-header-bg.jpg' ) ); ?>); background-size: cover; background-repeat: no-repeat;">
 			<div id="comment-edit-pro-header-content">
-				<h1>
-					<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Comment Edit Pro" /></a>
-				</h1>
-				<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section.', 'comment-edit-pro' ); ?></p>
+				<div class="sce-admin-header-logo">
+					<h1>
+						<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Comment Edit Pro" /></a>
+					</h1>
+					<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section.', 'comment-edit-pro' ); ?></p>
+				</div>
+				<div class="sce-admin-header-links">
+					<a href="https://docs.dlxplugins.com/v/comment-edit-pro/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Documentation', 'comment-edit-pro' ); ?></a>
+					<a href="https://dlxplugins.com/support/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
+				</div>
 			</div>
 		</header>
 		<?php

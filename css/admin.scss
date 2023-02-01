@@ -74,10 +74,44 @@ $danger_button_color_text: #fff;
 		#comment-edit-pro-header-content {
 			display: grid;
 			max-width: 69.5rem;
+			grid-template-columns: 1fr;
+			@include respond-to(medium) {
+				grid-template-columns: 400px 1fr;
+			}
 			
 			margin: 0 auto;
 			overflow: hidden;
 			align-items: center;
+		}
+		.sce-admin-header-links {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-gap: 1rem;
+
+			@include respond-to(medium) {
+				justify-self: end;
+				align-self: center;
+				display: grid;
+				grid-template-columns: 1fr;
+				grid-gap: 1rem;
+			}
+
+			a {
+				display: block;
+				min-width: 250px;
+				text-decoration: none;
+				font-size: 1.2em;
+				padding: 15px 25px;
+				background: #9c68b0;
+				color: #fff;
+				border-radius: 5px;
+				text-align: center;
+				transition: background-color 0.5s ease;
+				&:hover {
+					background: #9c68b0;
+					text-decoration: none;
+				}
+			}
 		}
 	}
 
@@ -532,7 +566,8 @@ h3.sce-panel-heading {
 
 		a {
 			display: grid;
-			grid-template-columns: 26px 1fr;
+			grid-template-columns: 26px;
+			justify-content: center;
 			grid-column-gap: 0.5em;
 			grid-row-gap: 0.4em;
 			padding: 1.0rem 0.5rem 1.0rem 1rem;
@@ -542,12 +577,20 @@ h3.sce-panel-heading {
 			background: transparent;
 			color: #393838;
 
+			@include respond-to( 'small' ) {
+				grid-template-columns: 26px 1fr;
+			}
+
 			span {
-				display: flex;
-				align-items: center;
-				vertical-align: middle;
-				grid-column-start: 2;
-				grid-column-end: 4;
+				display: none;
+				@include respond-to( 'small' ) {
+					display: flex;
+					align-items: center;
+					vertical-align: middle;
+					grid-column-start: 2;
+					grid-column-end: 4;
+				}
+				
 			}
 		}
 

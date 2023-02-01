@@ -55,9 +55,45 @@ button.button-reset.show-cursor {
 #wpcontent #comment-edit-pro-header #comment-edit-pro-header-content {
   display: grid;
   max-width: 69.5rem;
+  grid-template-columns: 1fr;
   margin: 0 auto;
   overflow: hidden;
   align-items: center;
+}
+@media (min-width: 48em) {
+  #wpcontent #comment-edit-pro-header #comment-edit-pro-header-content {
+    grid-template-columns: 400px 1fr;
+  }
+}
+#wpcontent #comment-edit-pro-header .sce-admin-header-links {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+}
+@media (min-width: 48em) {
+  #wpcontent #comment-edit-pro-header .sce-admin-header-links {
+    justify-self: end;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+  }
+}
+#wpcontent #comment-edit-pro-header .sce-admin-header-links a {
+  display: block;
+  min-width: 250px;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 15px 25px;
+  background: #9c68b0;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.5s ease;
+}
+#wpcontent #comment-edit-pro-header .sce-admin-header-links a:hover {
+  background: #9c68b0;
+  text-decoration: none;
 }
 #wpcontent header {
   background: #fff;
@@ -472,7 +508,8 @@ h3.sce-panel-heading {
 }
 .sce-settings-tabs nav a {
   display: grid;
-  grid-template-columns: 26px 1fr;
+  grid-template-columns: 26px;
+  justify-content: center;
   grid-column-gap: 0.5em;
   grid-row-gap: 0.4em;
   padding: 1rem 0.5rem 1rem 1rem;
@@ -482,12 +519,22 @@ h3.sce-panel-heading {
   background: transparent;
   color: #393838;
 }
+@media (min-width: 30em) {
+  .sce-settings-tabs nav a {
+    grid-template-columns: 26px 1fr;
+  }
+}
 .sce-settings-tabs nav a span {
-  display: flex;
-  align-items: center;
-  vertical-align: middle;
-  grid-column-start: 2;
-  grid-column-end: 4;
+  display: none;
+}
+@media (min-width: 30em) {
+  .sce-settings-tabs nav a span {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    grid-column-start: 2;
+    grid-column-end: 4;
+  }
 }
 .sce-settings-tabs nav svg {
   vertical-align: middle;
