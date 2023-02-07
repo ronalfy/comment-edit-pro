@@ -11,8 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Plugin_License as License_Helper;
 use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options as Options;
 
 /**
  * Output the main tab and content.
@@ -70,90 +71,24 @@ class License {
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'license' === $tab ) {
 			if ( empty( $sub_tab ) || 'license' === $sub_tab ) {
-				$license_message = '';
-				if ( isset( $_POST['submit'] ) && isset( $_POST['options'] ) ) {
-					check_admin_referer( 'save_sce_options' );
-					$options = Options::get_options();
-					$options = wp_parse_args( $_POST['options'], $options ); // phpcs:ignore
-					Options::update_options( $options );
 
-					// Check for valid license.
-					$store_url  = 'https://dlxplugins.com';
-					$api_params = array(
-						'edd_action' => 'activate_license',
-						'license'    => sanitize_text_field( $_POST['options']['license'] ), // phpcs:ignore
-						'item_name'  => urlencode( 'Comment Edit Pro' ), // phpcs:ignore
-						'url'        => home_url(),
-					);
-					// Call the custom API.
-					$response = wp_remote_post(
-						$store_url,
-						array(
-							'timeout'   => 15,
-							'sslverify' => false,
-							'body'      => $api_params,
-						)
-					);
-
-					// make sure the response came back okay.
-					if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-
-						if ( is_wp_error( $response ) ) {
-							$license_message = $response->get_error_message();
-						} else {
-							$license_message = __( 'An error occurred, please try again.', 'comment-edit-pro' );
-						}
-					} else {
-
-						$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-						if ( false === $license_data->success ) {
-							delete_site_option( 'comment_edit_pro_license_status' );
-							switch ( $license_data->error ) {
-
-								case 'expired':
-									$license_message = sprintf(
-										/* translators: %s is a date of license expiration */
-										__( 'Your license key expired on %s.', 'comment-edit-pro' ),
-										date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) ) // phpcs:ignore
-									);
-									break;
-
-								case 'disabled':
-								case 'revoked':
-									$license_message = __( 'Your license key has been disabled.', 'comment-edit-pro' );
-									break;
-
-								case 'missing':
-									$license_message = __( 'Invalid license.', 'comment-edit-pro' );
-									break;
-
-								case 'invalid':
-								case 'site_inactive':
-									$license_message = __( 'Your license is not active for this URL.', 'comment-edit-pro' );
-									break;
-
-								case 'item_name_mismatch':
-									/* Translators: %s is the plugin name. */
-									$license_message = sprintf( __( 'This appears to be an invalid license key for %s.', 'comment-edit-pro' ), 'Comment Edit Pro' );
-									break;
-
-								case 'no_activations_left':
-									$license_message = __( 'Your license key has reached its activation limit.', 'comment-edit-pro' );
-									break;
-
-								default:
-									$license_message = __( 'An error occurred, please try again.', 'comment-edit-pro' );
-									break;
-							}
-						}
-						if ( empty( $license_message ) ) {
-							update_site_option( 'comment_edit_pro_license_status', $license_data->license );
-						}
-					}
-				}
-				// Get options and defaults.
-				$options = Options::get_options();
+				wp_enqueue_script(
+					'sce-admin-license',
+					Functions::get_plugin_url( '/dist/sce-license.js' ),
+					array(),
+					Functions::get_plugin_version(),
+					true
+				);
+				wp_localize_script(
+					'sce-admin-license',
+					'sceAdminLicense',
+					array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+						'save_nonce'  => wp_create_nonce( 'sce-save-license-options' ),
+						'get_nonce'   => wp_create_nonce( 'sce-retrieve-license-options' ),
+						'reset_nonce' => wp_create_nonce( 'sce-reset-license-options' ),
+					)
+				);
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
