@@ -74,6 +74,9 @@ class Options {
 				case 'mentions_emails_enabled':
 				case 'mentions_checkbox_enabled':
 				case 'enable_gravatar_protection':
+				case 'slack_enabled':
+				case 'slack_moderation_enabled':
+				case 'slack_edit_comments_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -91,6 +94,9 @@ class Options {
 					} else {
 						Table::drop();
 					}
+					break;
+				case 'slack_webhook_url':
+					$option = esc_url( $option );
 					break;
 				default:
 					$option = sanitize_text_field( $options[ $key ] );
@@ -215,6 +221,10 @@ class Options {
 			'mentions_signup_label'              => esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' ),
 			'mentions_checkbox_enabled'          => false,
 			'mentions_comment_textarea_id'       => 'comment',
+			'slack_enabled'                      => false,
+			'slack_webhook_url'                  => '',
+			'slack_moderation_enabled'           => false,
+			'slack_edit_comments_enabled'        => false,
 		);
 		return $defaults;
 	}

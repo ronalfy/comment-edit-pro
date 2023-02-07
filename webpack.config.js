@@ -14,6 +14,7 @@ module.exports = ( env ) => {
 			devtool: 'production' === env.mode ? false : 'source-map',
 			output: {
 				filename: '[name].js',
+				chunkFilename: '[name].chunk.bundle.js',
 				sourceMapFilename: '[file].map[query]',
 				assetModuleFilename: 'fonts/[name][ext]',
 				clean: true,

@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
-import Mailchimp from './Mailchimp';
-import Akismet from './Akismet';
-import Recaptcha from './Recapcha';
+const Mailchimp = lazy( () =>
+	import( './Mailchimp' )
+);
+const Akismet = lazy( () =>
+	import( './Akismet' )
+);
+const Recaptcha = lazy( () =>
+	import( './Recapcha' )
+);
+const Slack = lazy( () =>
+	import( './Slack' )
+);
 
 const container = document.getElementById( 'sce-tab-mailchimp' );
 const root = createRoot( container );
@@ -24,5 +33,13 @@ const recaptchaProtection = createRoot( recaptchaContainer );
 recaptchaProtection.render(
 	<React.StrictMode>
 		<Recaptcha />
+	</React.StrictMode>
+);
+
+const slackContainer = document.getElementById( 'sce-tab-slack' );
+const slackIntegration = createRoot( slackContainer );
+slackIntegration.render(
+	<React.StrictMode>
+		<Slack />
 	</React.StrictMode>
 );

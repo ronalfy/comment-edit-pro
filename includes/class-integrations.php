@@ -28,9 +28,13 @@ class Integrations {
 		$akismet = new Akismet();
 		$akismet->run();
 
-		// Init Akismet.
+		// Init reCAPTCHA.
 		$recaptcha = new Recaptcha();
 		$recaptcha->run();
+
+		// Init Slack.
+		$slack = new Slack();
+		$slack->run();
 
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
