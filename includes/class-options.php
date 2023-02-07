@@ -77,6 +77,7 @@ class Options {
 				case 'slack_enabled':
 				case 'slack_moderation_enabled':
 				case 'slack_edit_comments_enabled':
+				case 'license_activated':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -182,7 +183,16 @@ class Options {
 			'show_stop_timer'                    => false,
 			'stop_timer_text'                    => __( 'Cancel Timer', 'comment-edit-pro' ),
 			'timer_appearance'                   => 'words',
+			'license_valid'                      => '',
 			'license'                            => '',
+			'license_activated'                  => false,
+			'license_status'                     => '',
+			'item_name'                          => '',
+			'expires'                            => '',
+			'license_limit'                      => '',
+			'site_count'                         => '',
+			'activations_left'                   => '',
+			'beta'                               => false,
 			'allow_unlimited_editing'            => false,
 			'allow_front_end_character_limit'    => false,
 			'allow_front_end_editing'            => false,

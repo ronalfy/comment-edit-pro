@@ -157,36 +157,7 @@ class License {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<h2><?php esc_html_e( 'Please enter your license below', 'comment-edit-pro' ); ?></h2>
-						<p class="description"><?php esc_html_e( 'A license will ensure you are alerted to any updates.', 'comment-edit-pro' ); ?></p>
-						<form action="" method="POST">
-							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<table class="form-table">
-								<tbody>
-								<tr>
-										<th scope="row"><label for="sce-license"><?php esc_html_e( 'Enter Your License', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input id="sce-license" class="regular-text" type="text" value="<?php echo esc_attr( $options['license'] ); ?>" name="options[license]" /><br />
-											<?php
-											$license_status = get_site_option( 'comment_edit_pro_license_status', false );
-											if ( false === $license_status ) {
-												printf( '<p>%s</p>', esc_html__( 'Please enter your licence key.', 'comment-edit-pro' ) );
-											} else {
-												printf( '<p>%s</p>', esc_html__( 'Your license is valid and you will now receive update notifications.', 'comment-edit-pro' ) );
-											}
-											?>
-											<?php
-											if ( ! empty( $license_message ) ) {
-												printf( '<div class="updated error"><p><strong>%s</p></strong></div>', esc_html( $license_message ) );
-											}
-											?>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
-						</form>
+						<div id="sce-tab-license"></div>
 					</div>
 				</div>
 				<?php
