@@ -172,8 +172,7 @@ class Slack {
 		$comment_author_email = $comment->comment_author_email;
 		$comment_author_url   = $comment->comment_author_url;
 		$post_id              = $comment->comment_post_ID;
-		$post_title           = get_the_title( $post_id );
-
+		$post_title           = htmlspecialchars( get_the_title( $post_id ) );
 		// Get avatar for commenter.
 		$avatar = get_avatar_url( $comment_author_email, 32 );
 
@@ -200,6 +199,16 @@ class Slack {
 			admin_url( 'comment.php?action=spamcomment&c=' . $comment_id )
 		);
 
+		// Comment status label.
+		$comment_status = $comment->comment_approved;
+		if ( '1' === $comment_status ) {
+			$comment_status = __( 'Approved', 'comment-edit-pro' );
+		} elseif ( '0' === $comment_status ) {
+			$comment_status = __( 'Unapproved', 'comment-edit-pro' );
+		} elseif ( 'spam' === $comment_status ) {
+			$comment_status = __( 'Spam', 'comment-edit-pro' );
+		}
+
 		// Begin message.
 		$message_array = array(
 			'text'   => esc_html(
@@ -207,7 +216,7 @@ class Slack {
 					/* translators: %s: Comment author name. */
 					__( 'There is a new comment by %1$s on %2$s', 'comment-edit-pro' ),
 					esc_html( $comment_author ),
-					wp_kses_post( $post_title )
+					wp_kses_post( addslashes( $post_title ) )
 				)
 			),
 			'blocks' => array(
@@ -221,7 +230,7 @@ class Slack {
 								__( '*There is a <%1$s|new comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
 							esc_url( get_comment_link( $comment ) ),
 							esc_html( $comment_author ),
-							wp_kses_post( $post_title ),
+							wp_kses_post( addslashes( $post_title ) ),
 							esc_url( get_permalink( $post_id ) )
 						),
 					),
@@ -247,6 +256,10 @@ class Slack {
 						array(
 							'type' => 'mrkdwn',
 							'text' => __( '*Commenter:*', 'comment-edit-pro' ) . ' ' . esc_html( $comment_author ) . "\n\n",
+						),
+						array(
+							'type' => 'mrkdwn',
+							'text' => __( '*Comment Status:*', 'comment-edit-pro' ) . ' ' . $comment_status . "\n",
 						),
 						array(
 							'type' => 'mrkdwn',
