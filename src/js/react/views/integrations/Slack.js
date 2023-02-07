@@ -154,7 +154,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Slack Webhook URL', 'quotes-dlx' ) }
 								value={ escapeAttribute( value ) }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': ( 'required' === errors.slackWebhookUrl?.type || 'validate' === errors.slackWebhookUrl?.type ),
 									'is-required': true,
 								} ) }

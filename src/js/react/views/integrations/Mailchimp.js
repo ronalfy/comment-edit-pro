@@ -185,7 +185,7 @@ const Interface = ( props ) => {
 							<TextControl
 								{ ...field }
 								label={ __( 'Sign-up Label', 'comment-edit-pro' ) }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.signUpLabel?.type,
 									'is-required': true,
 								} ) }
@@ -313,7 +313,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Mailchimp Server Prefix', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.apiKey?.type,
 									'is-required': true,
 								} ) }
@@ -344,7 +344,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Mailchimp API Key', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.apiKey?.type,
 									'is-required': true,
 								} ) }

@@ -141,7 +141,7 @@ const Interface = ( props ) => {
 							<TextControl
 								{ ...field }
 								label={ __( 'Privacy Label', 'comment-edit-pro' ) }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.signUpLabel?.type,
 									'is-required': true,
 								} ) }

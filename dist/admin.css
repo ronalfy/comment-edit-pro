@@ -662,8 +662,8 @@ h3.sce-panel-heading {
   position: relative;
   display: block;
   min-width: 200px;
-  max-width: 100%;
-  width: 25em;
+  max-width: 80%;
+  width: 100%;
   line-height: 2;
   font-size: 13px;
 }
@@ -811,7 +811,7 @@ h3.sce-panel-heading {
   font-family: inherit;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  padding: 0.6875rem 1rem;
+  padding: 0.2875rem 0.5rem;
   line-height: 2;
   min-height: 30px;
   margin: 0;

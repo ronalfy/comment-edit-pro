@@ -641,7 +641,7 @@ var Interface = function Interface(props) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Slack Webhook URL', 'quotes-dlx'),
           value: (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_13__.escapeAttribute)(value),
-          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$slackWebhookU = errors.slackWebhookUrl) === null || _errors$slackWebhookU === void 0 ? void 0 : _errors$slackWebhookU.type) || 'validate' === ((_errors$slackWebhookU2 = errors.slackWebhookUrl) === null || _errors$slackWebhookU2 === void 0 ? void 0 : _errors$slackWebhookU2.type),
             'is-required': true
           }),

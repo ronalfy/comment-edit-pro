@@ -147,7 +147,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Recaptcha 3 Site Key', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.recaptchaSiteKey?.type,
 									'is-required': true,
 								} ) }
@@ -186,7 +186,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Recaptcha 3 Secret Key', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.recaptchaSiteKey?.type,
 									'is-required': true,
 								} ) }
@@ -226,7 +226,7 @@ const Interface = ( props ) => {
 								<TextControl
 									label={ __( 'Comment Form ID', 'quotes-dlx' ) }
 									{ ...field }
-									className={ classNames( 'qdlx-admin__text-control', {
+									className={ classNames( 'sce-admin__text-control', {
 										'has-error': 'required' === errors.recaptchaSiteKey?.type,
 										'is-required': true,
 									} ) }
@@ -260,7 +260,7 @@ const Interface = ( props ) => {
 								<TextControl
 									label={ __( 'Submit Comment Button ID', 'quotes-dlx' ) }
 									{ ...field }
-									className={ classNames( 'qdlx-admin__text-control', {
+									className={ classNames( 'sce-admin__text-control', {
 										'has-error': 'required' === errors.recaptchaCommentSubmitButtonId?.type,
 										'is-required': true,
 									} ) }

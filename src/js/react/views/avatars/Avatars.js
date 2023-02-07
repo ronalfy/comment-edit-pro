@@ -244,7 +244,7 @@ const Interface = ( props ) => {
 							<TextControl
 								label={ __( 'Avatar Label', 'quotes-dlx' ) }
 								{ ...field }
-								className={ classNames( 'qdlx-admin__text-control', {
+								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.chooseAvatarText?.type,
 									'is-required': true,
 								} ) }
