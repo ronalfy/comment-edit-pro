@@ -99,7 +99,7 @@ class Plugin_License {
 		if ( empty( $this->license ) && 'check_license' === $action ) {
 			return array(
 				'license_errors' => true,
-				'license_key'    => $this->license,
+				'license'        => $this->license,
 				'license_valid'  => false,
 				'message'        => __( 'It appears the license key is blank.', 'quotes-dlx' ),
 				'data'           => array(),
@@ -149,8 +149,8 @@ class Plugin_License {
 			} else {
 				$options = wp_parse_args(
 					array(
-						'license'       => $response['license'] ?? '',
-						'license_valid' => $response['license_valid'] ?? '',
+						'license'       => $response['license_key'] ?? '',
+						'license_valid' => $response['license'] ?? '', // Response for $license is a valid or invalid string.
 					),
 					$options
 				);

@@ -989,3 +989,13 @@ h2 a.sce-admin-heading-docs {
 		}
 	}
 }
+.sce-admin__license-beta-saving {
+	svg {
+		width: 32px;
+		height: 32px;
+		animation: sce-rotate 1s linear infinite;
+		path {
+			fill: $save_button_color;
+		}
+	}
+}

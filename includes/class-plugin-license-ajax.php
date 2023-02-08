@@ -25,7 +25,8 @@ class Plugin_License_Ajax {
 		// For retrieving/validating/revoking plugin license.
 		add_action( 'wp_ajax_sce_retrieve_admin_license_core', array( static::class, 'ajax_retrieve_license_core' ) );
 		add_action( 'wp_ajax_sce_save_admin_license_core', array( static::class, 'ajax_save_license_core' ) );
-		add_action( 'wp_ajax_sce_revoke_admin_license_core', array( static::class, 'ajax_revoke_license_core' ) );
+		add_action( 'wp_ajax_sce_save_revoke_license_core', array( static::class, 'ajax_revoke_license_core' ) );
+		add_action( 'wp_ajax_sce_save_beta_option', array( static::class, 'ajax_save_beta_option' ) );
 	}
 
 	/**
@@ -52,12 +53,12 @@ class Plugin_License_Ajax {
 	 * Save license data (labeled core in case there are additional add-ons).
 	 */
 	public static function ajax_save_license_core() {
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), Functions::get_admin_save_nonce() ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-save-license-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array() );
 		}
 
 		$license_key    = sanitize_text_field( filter_input( INPUT_POST, 'license_key', FILTER_DEFAULT ) );
-		$license_helper = new License();
+		$license_helper = new License_Helper();
 		$response       = $license_helper->perform_action( 'activate_license', $license_key, true );
 
 		if ( $response['license_errors'] ) {
@@ -74,7 +75,7 @@ class Plugin_License_Ajax {
 			$response['license_valid']     = false;
 			$response['license_activated'] = false;
 		}
-		$response['quotesdlxLicense'] = $license_key;
+		$response['sceLicense'] = $license_key;
 
 		wp_send_json_success( $response );
 	}
@@ -83,11 +84,11 @@ class Plugin_License_Ajax {
 	 * Revoke license data (labeled core in case there are additional add-ons).
 	 */
 	public static function ajax_revoke_license_core() {
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), Functions::get_admin_save_nonce() ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-license-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array() );
 		}
 
-		$license_helper = new License();
+		$license_helper = new License_Helper();
 		$response       = $license_helper->perform_action( 'deactivate_license' );
 
 		if ( ! $response['license_errors'] ) {
@@ -96,5 +97,25 @@ class Plugin_License_Ajax {
 		}
 
 		wp_send_json_error( array() );
+	}
+
+	/**
+	 * Save whether the licensee is opted in to betas.
+	 */
+	public static function ajax_save_beta_option() {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-save-license-options' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array() );
+		}
+
+		$beta    = (bool) filter_input( INPUT_POST, 'beta', FILTER_VALIDATE_BOOLEAN );
+		$options = Options::get_options();
+		if ( $beta ) {
+			$options['beta'] = true;
+		} else {
+			$options['beta'] = false;
+		}
+		Options::update_options( $options );
+
+		wp_send_json_success( $options );
 	}
 }

@@ -904,4 +904,13 @@ h2 a.sce-admin-heading-docs {
   fill: var(--sce-admin--color-text-link-color);
 }
 
+.sce-admin__license-beta-saving svg {
+  width: 32px;
+  height: 32px;
+  animation: sce-rotate 1s linear infinite;
+}
+.sce-admin__license-beta-saving svg path {
+  fill: #22721c;
+}
+
 /*# sourceMappingURL=admin.css.map*/

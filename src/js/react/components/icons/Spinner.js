@@ -6,7 +6,6 @@ const Spinner = ( props ) => {
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 576 512"
-			{ ...props }
 			width={ props.width }
 			height={ props.height }
 		>
@@ -35,8 +34,8 @@ Spinner.defaultProps = {
 Spinner.propTypes = {
 	width: PropTypes.number,
 	height: PropTypes.number,
-	primaryColor: PropTypes.string,
-	secondaryColor: PropTypes.string,
+	primaryColor: PropTypes.string.isRequired,
+	secondaryColor: PropTypes.string.isRequired,
 };
 
 export default Spinner;

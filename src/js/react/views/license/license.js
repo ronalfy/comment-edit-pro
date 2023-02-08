@@ -149,7 +149,7 @@ const Interface = ( props ) => {
 	const revokeLicense = ( e ) => {
 		setRevokingLicense( true );
 		sendCommand( 'sce_save_revoke_license_core', {
-			nonce: sceAdminLicense.options_save_nonce,
+			nonce: sceAdminLicense.reset_nonce,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
@@ -180,8 +180,8 @@ const Interface = ( props ) => {
 
 	const onBetaToggle = ( on_or_off ) => {
 		setBetaSaving( true );
-		sendCommand( 'quotes_dlx_save_beta_option', {
-			nonce: sceAdminLicense.options_save_nonce,
+		sendCommand( 'sce_save_beta_option', {
+			nonce: sceAdminLicense.save_nonce,
 			beta: on_or_off,
 		} )
 			.then( ( ajaxResponse ) => {

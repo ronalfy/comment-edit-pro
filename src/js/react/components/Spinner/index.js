@@ -12,7 +12,6 @@ function Spinner( props ) {
 			viewBox="0 0 512 512"
 			width="16"
 			height="16"
-			{ ...props }
 		>
 			<path
 				fill="currentColor"
