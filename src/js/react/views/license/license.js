@@ -100,7 +100,7 @@ const Interface = ( props ) => {
 		setError,
 	} = useForm( {
 		defaultValues: {
-			sceLicense: data.license_key.substr( 0, 8 ) + '********',
+			sceLicense: data.license_key ?? '',
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -163,6 +163,7 @@ const Interface = ( props ) => {
 					// // Reset count.
 					setLicenseActivated( false );
 					setIsRevoked( true );
+					setValue( 'sceLicense', '' );
 					setTimeout( () => {
 						setIsRevoked( false );
 					}, 3000 );
@@ -205,15 +206,19 @@ const Interface = ( props ) => {
 	const getLicenseType = () => {
 		switch ( price_id ) {
 			case '1':
+			case '5':
 				return 'Hobbyist';
 				break;
 			case '2':
+			case '6':
 				return 'Freelancer';
 				break;
 			case '3':
+			case '7':
 				return 'Agency';
 				break;
 			case '4':
+			case '8':
 				return 'Unlimited';
 				break;
 			default:
@@ -251,49 +256,14 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getSaveIcon = () => {
-		if ( saving ) {
-			return Spinner;
-		}
-		if ( isSaved ) {
-			return ClipboardCheck;
-		}
-		return false;
-	};
-
-	const getSaveText = () => {
-		if ( saving ) {
-			return __( 'Saving…', 'comment-edit-pro' );
-		}
-		if ( isSaved ) {
-			return __( 'Saved', 'comment-edit-pro' );
-		}
-		return __( 'Save License', 'comment-edit-pro' );
-	};
-
-	const getResetText = () => {
-		if ( resetting ) {
-			return __( 'Revoking…', 'comment-edit-pro' );
-		}
-		if ( isReset ) {
-			return __( 'Revoked', 'comment-edit-pro' );
-		}
-		return __( 'Revoke License', 'comment-edit-pro' );
-	};
-
 	const getLicenseHeader = () => {
 		return (
-			<>
+			<div className="sce-admin__tabs--content-heading">
 				<h2>
-					{ __( 'License', 'comment-edit-pro' ) }{ ' ' }
-					<a
-						className="sce-admin-heading-docs"
-						target="_blank"
-						rel="noreferrer"
-						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection"
-					>
-						({ __( 'Docs', 'comment-edit-pro' ) })
-					</a>
+					<KeyIcon width={ 48 } height={ 48 } aria-hidden="true" />
+					<span className="sce-admin__heading--text">
+						{ __( 'License', 'comment-edit-pro' ) }
+					</span>
 				</h2>
 				<p className="description">
 					{ __(
@@ -301,7 +271,7 @@ const Interface = ( props ) => {
 						'comment-edit-pro'
 					) }
 				</p>
-			</>
+			</div>
 		);
 	};
 
@@ -341,9 +311,9 @@ const Interface = ( props ) => {
 											pattern: /^[0-9A-Za-z]+$/i,
 											validate: true,
 										} }
-										render={ ( { field } ) => (
+										render={ ( { field: { onChange, value }} ) => (
 											<TextControl
-												{ ...field }
+												value={ value }
 												label={ __( 'License Key', 'comment-edit-pro' ) }
 												id="search-comment-edit-pro-license-secret"
 												className={ classNames(
@@ -351,10 +321,11 @@ const Interface = ( props ) => {
 													{
 														'has-error':
 													'pattern' === errors.sceLicense?.type ||
-													'required' === errors.sceLicense?.type,
+													'required' === errors.sceLicense?.type || 'validate' === errors.sceLicense?.type,
 														'is-required': true,
 													}
 												) }
+												onChange={ onChange }
 												disabled={ licenseActivated }
 												aria-required="true"
 												help={ __(
@@ -409,7 +380,7 @@ const Interface = ( props ) => {
 											</span>
 										</label>
 									</div>
-									{ 'required' === errors.quotesdlxLicense?.type && (
+									{ 'required' === errors.sceLicense?.type && (
 										<Notice
 											message={ __( 'This field is a required field.' ) }
 											status="error"
@@ -418,7 +389,7 @@ const Interface = ( props ) => {
 											icon={ CircularExclamationIcon }
 										/>
 									) }
-									{ 'pattern' === errors.quotesdlxLicense?.type && (
+									{ 'pattern' === errors.sceLicense?.type && (
 										<Notice
 											message={ __(
 												'It appears there are invalid characters in the license.'
@@ -429,9 +400,9 @@ const Interface = ( props ) => {
 											icon={ CircularExclamationIcon }
 										/>
 									) }
-									{ 'validate' === errors.quotesdlxLicense?.type && (
+									{ 'validate' === errors.sceLicense?.type && (
 										<Notice
-											message={ errors.quotesdlxLicense.message }
+											message={ errors.sceLicense.message }
 											status="error"
 											politeness="assertive"
 											inline={ true }

@@ -913,4 +913,47 @@ h2 a.sce-admin-heading-docs {
   fill: #22721c;
 }
 
+/* Heading with icon styles */
+.sce-admin__tabs--content-heading h2 {
+  display: flex;
+  align-items: center;
+}
+.sce-admin__tabs--content-heading h2 svg {
+  width: 32px;
+  height: 32px;
+}
+.sce-admin__tabs--content-heading h2 svg path {
+  fill: #9c68b0;
+}
+.sce-admin__tabs--content-heading h2 span {
+  display: block;
+}
+.sce-admin__tabs--content-heading h2 span.sce-admin__heading--text {
+  margin-left: 8px;
+}
+
+/* License Table */
+.comment-edit-pro-table {
+  box-sizing: border-box;
+  border: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+.comment-edit-pro-table tr {
+  border-bottom: 0.0625rem solid #d6d8db;
+}
+.comment-edit-pro-table th {
+  font-weight: 500;
+  padding: 0.8125rem 1.125rem;
+  font-size: 1.3em;
+  text-align: left;
+}
+.comment-edit-pro-table tbody tr:last-child {
+  border-bottom: 0;
+}
+.comment-edit-pro-table td {
+  padding: 1.25rem 1.125rem;
+  text-align: left;
+}
+
 /*# sourceMappingURL=admin.css.map*/
