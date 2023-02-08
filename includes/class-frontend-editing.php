@@ -144,6 +144,13 @@ class Frontend_Editing {
 			Functions::get_plugin_version(),
 			'all'
 		);
+		wp_enqueue_script(
+			'comment-edit-pro',
+			Functions::get_plugin_url( '/js/simple-comment-editing-options.js' ),
+			array( 'jquery', 'fancybox' ),
+			Functions::get_plugin_version(),
+			true
+		);
 		// wp_enqueue_script(
 		// 	'sce-frontend-editing',
 		// 	plugins_url( '/js/front-end-editing.js', dirname( __FILE__ ) ),
@@ -290,8 +297,8 @@ class Frontend_Editing {
 			admin_url( 'admin-ajax.php' )
 		);
 		$html  = sprintf(
-			'<a data-fancybox data-type="iframe" data-src="%s" href="#">%s</a>',
-			esc_url( $url ),
+			'<a data-fancybox data-type="iframe" href="%s">%s</a>',
+			esc_url_raw( $url ),
 			__( 'Edit', 'comment-edit-pro' )
 		);
 		return $html;

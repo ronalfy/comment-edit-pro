@@ -79,7 +79,7 @@ jQuery( document ).ready( function( $ ) {
 
 	};
 	$( '.sce-edit-button' ).simplecommenteditingoptions();
-	if ( typeof jQuery.fancybox == 'function' ) {
+	if ( typeof jQuery.fancybox !== 'undefined' ) {
 		jQuery('[data-fancybox]').fancybox({
 			toolbar  : true,
 			smallBtn : true,
