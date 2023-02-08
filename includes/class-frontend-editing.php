@@ -33,7 +33,7 @@ class Frontend_Editing {
 	public function setup_comment_filters() {
 		$options = Options::get_options();
 		/* Begin Filters */
-		if ( ! is_feed() && ! defined( 'DOING_SCE' ) && true === filter_var( $options['allow_front_end_editing'], FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( ! is_feed() && ! defined( 'DOING_SCE' ) && true === filter_var( $options['allow_front_end_editing'], FILTER_VALIDATE_BOOLEAN ) && current_user_can( 'moderate_comments' ) ) {
 			if ( current_user_can( 'moderate_comments' ) ) {
 				add_filter( 'comment_excerpt', array( $this, 'add_edit_interface' ), 1000, 2 );
 				add_filter( 'comment_text', array( $this, 'add_edit_interface' ), 1000, 2 );
@@ -151,13 +151,6 @@ class Frontend_Editing {
 			Functions::get_plugin_version(),
 			true
 		);
-		// wp_enqueue_script(
-		// 	'sce-frontend-editing',
-		// 	plugins_url( '/js/front-end-editing.js', dirname( __FILE__ ) ),
-		// 	array( 'jquery', 'fancybox' ),
-		// 	Functions::get_plugin_version(),
-		// 	true
-		// );
 	}
 
 	/**

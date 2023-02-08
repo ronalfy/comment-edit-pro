@@ -47,4 +47,15 @@
   margin-top: 15px;
 }
 
+/* Fancy box modal */
+.fancybox-content {
+  max-width: 80% !important;
+  max-height: 80vh !important;
+}
+
+.fancybox-is-open .fancybox-bg {
+  background: #1e1e1e !important;
+  opacity: 0.74 !important;
+}
+
 /*# sourceMappingURL=sce-frontend.css.map*/
