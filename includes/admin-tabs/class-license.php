@@ -90,11 +90,7 @@ class License {
 					)
 				);
 				?>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-license"></div>
-					</div>
-				</div>
+				<div id="sce-tab-license"></div>
 				<?php
 			}
 		}

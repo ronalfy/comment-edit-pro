@@ -36,14 +36,19 @@ const License = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( 'Comment Edit Pro License', 'comment-edit-pro' ) }</h2>
-					<BeatLoader
-						color={ '#9c68b0' }
-						loading={ true }
-						cssOverride={ true }
-						size={ 25 }
-						speedMultiplier={ 0.65 }
-					/>
+					<div className="sce-admin-panel-area">
+						<div className="sce-panel-row">
+							<h2>{ __( 'Comment Edit Pro License', 'comment-edit-pro' ) }</h2>
+							<BeatLoader
+								color={ '#9c68b0' }
+								loading={ true }
+								cssOverride={ true }
+								size={ 25 }
+								speedMultiplier={ 0.65 }
+							/>
+						</div>
+					</div>
+
 				</>
 			}
 		>
@@ -302,296 +307,309 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			{ getLicenseHeader() }
 			<form onSubmit={ handleSubmit( onSubmit ) }>
-				<div className="sce-admin__tabs--content-panel">
-					<div className="sce-admin__tabs--content-heading">
-						{ licenseActivated && (
-							<Notice
-								message={ __( 'Your license is valid.', 'comment-edit-pro' ) }
-								status="success"
-								politeness="polite"
-							/>
-						) }
-						{ ! licenseActivated && (
-							<Notice
-								message={ __(
-									'Please enter a valid license to receive support and updates',
-									'comment-edit-pro'
+				<div className="sce-admin-panel-area">
+					<div className="sce-panel-row">
+						{ getLicenseHeader() }
+						<div className="sce-admin__tabs--content-panel">
+							<div className="sce-admin__tabs--content-heading">
+								{ licenseActivated && (
+									<Notice
+										message={ __( 'Your license is valid.', 'comment-edit-pro' ) }
+										status="success"
+										politeness="polite"
+									/>
 								) }
-								status="warning"
-								politeness="polite"
-							/>
-						) }
-					</div>
-					<div className="sce-admin__license--wrapper is-required">
-						<div className="sce-admin__license--input-wrapper">
-							<Controller
-								name="sceLicense"
-								control={ control }
-								rules={ {
-									required: true,
-									pattern: /^[0-9A-Za-z]+$/i,
-									validate: true,
-								} }
-								render={ ( { field } ) => (
-									<TextControl
-										{ ...field }
-										label={ __( 'License Key', 'comment-edit-pro' ) }
-										id="search-comment-edit-pro-license-secret"
-										className={ classNames(
-											'sce-admin__text-control-license',
-											{
-												'has-error':
+								{ ! licenseActivated && (
+									<Notice
+										message={ __(
+											'Please enter a valid license to receive support and updates',
+											'comment-edit-pro'
+										) }
+										status="warning"
+										politeness="polite"
+									/>
+								) }
+							</div>
+							<div className="sce-admin__license--wrapper is-required">
+								<div className="sce-admin__license--input-wrapper">
+									<Controller
+										name="sceLicense"
+										control={ control }
+										rules={ {
+											required: true,
+											pattern: /^[0-9A-Za-z]+$/i,
+											validate: true,
+										} }
+										render={ ( { field } ) => (
+											<TextControl
+												{ ...field }
+												label={ __( 'License Key', 'comment-edit-pro' ) }
+												id="search-comment-edit-pro-license-secret"
+												className={ classNames(
+													'sce-admin__text-control-license',
+													{
+														'has-error':
 													'pattern' === errors.sceLicense?.type ||
 													'required' === errors.sceLicense?.type,
-												'is-required': true,
-											}
+														'is-required': true,
+													}
+												) }
+												disabled={ licenseActivated }
+												aria-required="true"
+												help={ __(
+													'Entering a license will enable support and updates.',
+													'comment-edit-pro'
+												) }
+												type={ showSecret ? 'text' : 'password' }
+											/>
 										) }
-										disabled={ licenseActivated }
-										aria-required="true"
-										help={ __(
-											'Entering a license will enable support and updates.',
+									/>
+									<div className="sce-admin__license--input-preview">
+										<input
+											id="comment-edit-pro-license-show-hide"
+											type="checkbox"
+											aria-label={ __(
+												'Click to Show or Hide the License',
+												'comment-edit-pro'
+											) }
+											onClick={ () => {
+												if ( showSecret ) {
+													setShowSecret( false );
+												} else {
+													setShowSecret( true );
+												}
+											} }
+											title={
+												showSecret
+													? __( 'Hide License', 'comment-edit-pro' )
+													: __( 'Show License', 'comment-edit-pro' )
+											}
+										/>
+										<label htmlFor="comment-edit-pro-license-show-hide not-is-required">
+											<span className="comment-edit-pro-license-show-hide--label">
+												{ __( 'Click to Show or Hide the License', 'comment-edit-pro' ) }
+											</span>
+											<span className="comment-edit-pro-license-show-hide--icon">
+												{ ! showSecret ? (
+													<Button
+														label={ __( 'Show License', 'comment-edit-pro' ) }
+														size={ 20 }
+														icon={ EyeIcon }
+														className="button-reset"
+													/>
+												) : (
+													<Button
+														label={ __( 'Hide License', 'comment-edit-pro' ) }
+														size={ 20 }
+														icon={ EyeSlashRegular }
+														className="button-reset"
+													/>
+												) }
+											</span>
+										</label>
+									</div>
+									{ 'required' === errors.quotesdlxLicense?.type && (
+										<Notice
+											message={ __( 'This field is a required field.' ) }
+											status="error"
+											politeness="assertive"
+											inline={ true }
+											icon={ CircularExclamationIcon }
+										/>
+									) }
+									{ 'pattern' === errors.quotesdlxLicense?.type && (
+										<Notice
+											message={ __(
+												'It appears there are invalid characters in the license.'
+											) }
+											status="error"
+											politeness="assertive"
+											inline={ true }
+											icon={ CircularExclamationIcon }
+										/>
+									) }
+									{ 'validate' === errors.quotesdlxLicense?.type && (
+										<Notice
+											message={ errors.quotesdlxLicense.message }
+											status="error"
+											politeness="assertive"
+											inline={ true }
+											icon={ CircularExclamationIcon }
+										/>
+									) }
+								</div>
+								<div className="sce-admin__tabs--content-actions sce-admin-buttons">
+									{ ! licenseActivated && getSaveButton() }
+									{ licenseActivated && (
+										<Button
+											className={ classNames(
+												'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
+												{ 'has-icon': revokingLicense },
+												{ 'is-resetting': { revokingLicense } }
+											) }
+											type="button"
+											text={
+												revokingLicense
+													? __( 'Revoking License…', 'comment-edit-pro' )
+													: __( 'Revoke License', 'comment-edit-pro' )
+											}
+											icon={ revokingLicense ? Spinner : false }
+											iconSize="18"
+											iconPosition="right"
+											disabled={ saving || revokingLicense }
+											onClick={ ( e ) => {
+												setRevokingLicense( true );
+												revokeLicense( e );
+											} }
+										/>
+									) }
+								</div>
+								{ hasErrors() && (
+									<Notice
+										message={ __(
+											'There are form validation errors. Please correct them above.',
 											'comment-edit-pro'
 										) }
-										type={ showSecret ? 'text' : 'password' }
+										status="error"
+										politeness="polite"
 									/>
 								) }
-							/>
-							<div className="sce-admin__license--input-preview">
-								<input
-									id="comment-edit-pro-license-show-hide"
-									type="checkbox"
-									aria-label={ __(
-										'Click to Show or Hide the License',
-										'comment-edit-pro'
-									) }
-									onClick={ () => {
-										if ( showSecret ) {
-											setShowSecret( false );
-										} else {
-											setShowSecret( true );
-										}
-									} }
-									title={
-										showSecret
-											? __( 'Hide License', 'comment-edit-pro' )
-											: __( 'Show License', 'comment-edit-pro' )
-									}
-								/>
-								<label htmlFor="comment-edit-pro-license-show-hide not-is-required">
-									<span className="comment-edit-pro-license-show-hide--label">
-										{ __( 'Click to Show or Hide the License', 'comment-edit-pro' ) }
-									</span>
-									<span className="comment-edit-pro-license-show-hide--icon">
-										{ ! showSecret ? (
-											<Button
-												label={ __( 'Show License', 'comment-edit-pro' ) }
-												size={ 20 }
-												icon={ EyeIcon }
-												className="button-reset"
-											/>
-										) : (
-											<Button
-												label={ __( 'Hide License', 'comment-edit-pro' ) }
-												size={ 20 }
-												icon={ EyeSlashRegular }
-												className="button-reset"
-											/>
+								{ isSaved && (
+									<Notice
+										message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
+										status="success"
+										politeness="assertive"
+									/>
+								) }
+								{ isRevoked && (
+									<Notice
+										message={ __(
+											'Your license has been deactivated for this site.',
+											'comment-edit-pro'
 										) }
-									</span>
-								</label>
+										status="success"
+										politeness="assertive"
+									/>
+								) }
 							</div>
-							{ 'required' === errors.quotesdlxLicense?.type && (
-								<Notice
-									message={ __( 'This field is a required field.' ) }
-									status="error"
-									politeness="assertive"
-									inline={ true }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-							{ 'pattern' === errors.quotesdlxLicense?.type && (
-								<Notice
-									message={ __(
-										'It appears there are invalid characters in the license.'
-									) }
-									status="error"
-									politeness="assertive"
-									inline={ true }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-							{ 'validate' === errors.quotesdlxLicense?.type && (
-								<Notice
-									message={ errors.quotesdlxLicense.message }
-									status="error"
-									politeness="assertive"
-									inline={ true }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
 						</div>
-						<div className="sce-admin__tabs--content-actions sce-admin-buttons">
-							{ ! licenseActivated && getSaveButton() }
-							{ licenseActivated && (
-								<Button
-									className={ classNames(
-										'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
-										{ 'has-icon': revokingLicense },
-										{ 'is-resetting': { revokingLicense } }
-									) }
-									type="button"
-									text={
-										revokingLicense
-											? __( 'Revoking License…', 'comment-edit-pro' )
-											: __( 'Revoke License', 'comment-edit-pro' )
-									}
-									icon={ revokingLicense ? Spinner : false }
-									iconSize="18"
-									iconPosition="right"
-									disabled={ saving || revokingLicense }
-									onClick={ ( e ) => {
-										setRevokingLicense( true );
-										revokeLicense( e );
-									} }
-								/>
-							) }
-						</div>
-						{ hasErrors() && (
-							<Notice
-								message={ __(
-									'There are form validation errors. Please correct them above.',
-									'comment-edit-pro'
-								) }
-								status="error"
-								politeness="polite"
-							/>
-						) }
-						{ isSaved && (
-							<Notice
-								message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
-								status="success"
-								politeness="assertive"
-							/>
-						) }
-						{ isRevoked && (
-							<Notice
-								message={ __(
-									'Your license has been deactivated for this site.',
-									'comment-edit-pro'
-								) }
-								status="success"
-								politeness="assertive"
-							/>
-						) }
 					</div>
 				</div>
-			</form>
-			{ licenseActivated && (
-				<>
-					<div className="sce-admin__tabs--content-wrap">
-						<div className="sce-admin__tabs--content-panel">
-							<div className="sce-admin__tabs--content-heading">
-								<h1>
-									<CircularInfo width={ 48 } height={ 48 } aria-hidden="true" />
-									<span className="sce-admin__heading--text">
-										{ __( 'License Information', 'comment-edit-pro' ) }
-									</span>
-								</h1>
-							</div>
-							<div className="sce-admin__tabs--content-inner">
-								<table className="comment-edit-pro-table comment-edit-pro-table--responsive comment-edit-pro-table--license-ui">
-									<thead>
-										<tr>
-											<th scope="col">{ __( 'Item Name', 'comment-edit-pro' ) }</th>
-											<th scope="col">{ __( 'License Type', 'comment-edit-pro' ) }</th>
-											<th scope="col">
-												{ __( 'License Activations', 'comment-edit-pro' ) }
-											</th>
-											<th scope="col">{ __( 'Expires On', 'comment-edit-pro' ) }</th>
-											<th scope="col">{ __( 'Days Left', 'comment-edit-pro' ) }</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td data-header="Item Name">
-												<p>{ licenseData.item_name }</p>
-											</td>
-											<td data-header="License Type">
-												<p>{ getLicenseType() }</p>
-											</td>
-											<td data-header="License Activations">
-												<p>
-													<span className="">
-														{ licenseData.site_count } of{ ' ' }
-														{ licenseData.license_limit === 0
-															? __( 'Unlimited', 'comment-edit-pro' )
-															: licenseData.license_limit }
-													</span>
-												</p>
-											</td>
-											<td data-header="Expires On">
-												<p>{ licenseData.expires }</p>
-											</td>
-											<td data-header="Days Left">
-												<p>{ licenseData.expires_human_time_diff }</p>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div className="sce-admin__tabs--content-wrap">
-						<div className="sce-admin__tabs--content-panel">
-							<div className="sce-admin__tabs--content-heading">
-								<h1>
-									<VialIcon width={ 48 } height={ 48 } aria-hidden="true" />
-									<span className="sce-admin__heading--text">
-										{ __( 'Beta Releases', 'comment-edit-pro' ) }
-									</span>
-								</h1>
-								<p className="description">
-									You can enable Beta Releases by checking this option.
-								</p>
-							</div>
-							{ betaEnabled && (
-								<Notice
-									message={ __(
-										'Beta Updates are enabled. You will receive beta updates for this plugin.',
-										'comment-edit-pro'
-									) }
-									status="info"
-									politeness="assertive"
-									icon={ CodeBranchIcon }
-								/>
-							) }
-							<div className="sce-admin__tabs--content-inner">
-								{ betaSaving && (
-									<div className="sce-admin__license-beta-saving">
-										<Spinner />
+				{ licenseActivated && (
+					<>
+						<div className="sce-admin-panel-area">
+							<div className="sce-panel-row">
+								<div className="sce-admin__tabs--content-wrap">
+									<div className="sce-admin__tabs--content-panel">
+										<div className="sce-admin__tabs--content-heading">
+											<h2>
+												<CircularInfo width={ 48 } height={ 48 } aria-hidden="true" />
+												<span className="sce-admin__heading--text">
+													{ __( 'License Information', 'comment-edit-pro' ) }
+												</span>
+											</h2>
+										</div>
+										<div className="sce-admin__tabs--content-inner">
+											<table className="comment-edit-pro-table comment-edit-pro-table--responsive comment-edit-pro-table--license-ui">
+												<thead>
+													<tr>
+														<th scope="col">{ __( 'Item Name', 'comment-edit-pro' ) }</th>
+														<th scope="col">{ __( 'License Type', 'comment-edit-pro' ) }</th>
+														<th scope="col">
+															{ __( 'License Activations', 'comment-edit-pro' ) }
+														</th>
+														<th scope="col">{ __( 'Expires On', 'comment-edit-pro' ) }</th>
+														<th scope="col">{ __( 'Days Left', 'comment-edit-pro' ) }</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td data-header="Item Name">
+															<p>{ licenseData.item_name }</p>
+														</td>
+														<td data-header="License Type">
+															<p>{ getLicenseType() }</p>
+														</td>
+														<td data-header="License Activations">
+															<p>
+																<span className="">
+																	{ licenseData.site_count } of{ ' ' }
+																	{ licenseData.license_limit === 0
+																		? __( 'Unlimited', 'comment-edit-pro' )
+																		: licenseData.license_limit }
+																</span>
+															</p>
+														</td>
+														<td data-header="Expires On">
+															<p>{ licenseData.expires }</p>
+														</td>
+														<td data-header="Days Left">
+															<p>{ licenseData.expires_human_time_diff }</p>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
-								) }
-								{ ! betaSaving && (
-									<ToggleControl
-										label={ __( 'Enable Beta Releases', 'comment-edit-pro' ) }
-										className="sce-admin__toggle-control"
-										checked={ betaEnabled }
-										onChange={ ( boolValue ) => {
-											onBetaToggle( boolValue );
-										} }
-										help={ __(
-											'If enabled, any betas available for release will show up in Dashboard->Updates.',
-											'comment-edit-pro'
-										) }
-									/>
-								) }
+								</div>
 							</div>
 						</div>
-					</div>
-				</>
-			) }
+						<div className="sce-admin-panel-area">
+							<div className="sce-panel-row">
+								<div className="sce-admin__tabs--content-wrap">
+									<div className="sce-admin__tabs--content-panel">
+										<div className="sce-admin__tabs--content-heading">
+											<h2>
+												<VialIcon width={ 48 } height={ 48 } aria-hidden="true" />
+												<span className="sce-admin__heading--text">
+													{ __( 'Beta Releases', 'comment-edit-pro' ) }
+												</span>
+											</h2>
+											<p className="description">
+												You can enable Beta Releases by checking this option.
+											</p>
+										</div>
+										{ betaEnabled && (
+											<Notice
+												message={ __(
+													'Beta Updates are enabled. You will receive beta updates for this plugin.',
+													'comment-edit-pro'
+												) }
+												status="info"
+												politeness="assertive"
+												icon={ CodeBranchIcon }
+											/>
+										) }
+										<div className="sce-admin__tabs--content-inner">
+											{ betaSaving && (
+												<div className="sce-admin__license-beta-saving">
+													<Spinner />
+												</div>
+											) }
+											{ ! betaSaving && (
+												<ToggleControl
+													label={ __( 'Enable Beta Releases', 'comment-edit-pro' ) }
+													className="sce-admin__toggle-control"
+													checked={ betaEnabled }
+													onChange={ ( boolValue ) => {
+														onBetaToggle( boolValue );
+													} }
+													help={ __(
+														'If enabled, any betas available for release will show up in Dashboard->Updates.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</>
+				) }
+
+			</form>
 		</>
 	);
 };
