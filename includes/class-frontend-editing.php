@@ -130,8 +130,27 @@ class Frontend_Editing {
 		if ( ! is_singular() ) {
 			return;
 		}
-		wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
-		wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), COMMENTEDITPRO_VERSION, 'all' );
+		wp_enqueue_script(
+			'fancybox',
+			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.js' ),
+			array( 'jquery' ),
+			Functions::get_plugin_version(),
+			true
+		);
+		wp_enqueue_style(
+			'fancybox',
+			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
+		);
+		// wp_enqueue_script(
+		// 	'sce-frontend-editing',
+		// 	plugins_url( '/js/front-end-editing.js', dirname( __FILE__ ) ),
+		// 	array( 'jquery', 'fancybox' ),
+		// 	Functions::get_plugin_version(),
+		// 	true
+		// );
 	}
 
 	/**
@@ -271,7 +290,7 @@ class Frontend_Editing {
 			admin_url( 'admin-ajax.php' )
 		);
 		$html  = sprintf(
-			'<a data-fancybox data-type="iframe" data-src="%s" href="javascript:;">%s</a>',
+			'<a data-fancybox data-type="iframe" data-src="%s" href="#">%s</a>',
 			esc_url( $url ),
 			__( 'Edit', 'comment-edit-pro' )
 		);
