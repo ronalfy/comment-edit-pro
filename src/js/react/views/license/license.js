@@ -166,7 +166,7 @@ const Interface = ( props ) => {
 						type: 'validate',
 						message: __(
 							'Revoking the license resulted in an error and could not be deactivated. Please reactivate the license and try again.',
-							'quotes-dlx'
+							'comment-edit-pro'
 						),
 					} );
 					setLicenseActivated( false );
@@ -219,12 +219,12 @@ const Interface = ( props ) => {
 	};
 
 	const getSaveButton = () => {
-		let saveText = __( 'Save License', 'quotes-dlx' );
-		let saveTextLoading = __( 'Saving…', 'quotes-dlx' );
+		let saveText = __( 'Save License', 'comment-edit-pro' );
+		let saveTextLoading = __( 'Saving…', 'comment-edit-pro' );
 
 		if ( ! licenseActivated ) {
-			saveText = __( 'Activate License', 'quotes-dlx' );
-			saveTextLoading = __( 'Activating…', 'quotes-dlx' );
+			saveText = __( 'Activate License', 'comment-edit-pro' );
+			saveTextLoading = __( 'Activating…', 'comment-edit-pro' );
 		}
 		return (
 			<>
@@ -258,22 +258,22 @@ const Interface = ( props ) => {
 
 	const getSaveText = () => {
 		if ( saving ) {
-			return __( 'Saving…', 'quotes-dlx' );
+			return __( 'Saving…', 'comment-edit-pro' );
 		}
 		if ( isSaved ) {
-			return __( 'Saved', 'quotes-dlx' );
+			return __( 'Saved', 'comment-edit-pro' );
 		}
-		return __( 'Save License', 'quotes-dlx' );
+		return __( 'Save License', 'comment-edit-pro' );
 	};
 
 	const getResetText = () => {
 		if ( resetting ) {
-			return __( 'Revoking…', 'quotes-dlx' );
+			return __( 'Revoking…', 'comment-edit-pro' );
 		}
 		if ( isReset ) {
-			return __( 'Revoked', 'quotes-dlx' );
+			return __( 'Revoked', 'comment-edit-pro' );
 		}
-		return __( 'Revoke License', 'quotes-dlx' );
+		return __( 'Revoke License', 'comment-edit-pro' );
 	};
 
 	const getLicenseHeader = () => {
@@ -304,23 +304,11 @@ const Interface = ( props ) => {
 		<>
 			{ getLicenseHeader() }
 			<form onSubmit={ handleSubmit( onSubmit ) }>
-				<div className="qdlx-admin__tabs--content-panel">
-					<div className="qdlx-admin__tabs--content-heading">
-						<h1>
-							<KeyIcon width={ 48 } height={ 48 } aria-hidden="true" />
-							<span className="qdlx-admin__heading--text">
-								{ __( 'License', 'quotes-dlx' ) }
-							</span>
-						</h1>
-						<p className="description">
-							{ __(
-								'Add a license key to receive support and updates.',
-								'quotes-dlx'
-							) }
-						</p>
+				<div className="sce-admin__tabs--content-panel">
+					<div className="sce-admin__tabs--content-heading">
 						{ licenseActivated && (
 							<Notice
-								message={ __( 'Your license is valid.', 'quotes-dlx' ) }
+								message={ __( 'Your license is valid.', 'comment-edit-pro' ) }
 								status="success"
 								politeness="polite"
 							/>
@@ -329,15 +317,15 @@ const Interface = ( props ) => {
 							<Notice
 								message={ __(
 									'Please enter a valid license to receive support and updates',
-									'quotes-dlx'
+									'comment-edit-pro'
 								) }
 								status="warning"
 								politeness="polite"
 							/>
 						) }
 					</div>
-					<div className="qdlx-admin__license--wrapper is-required">
-						<div className="qdlx-admin__license--input-wrapper">
+					<div className="sce-admin__license--wrapper is-required">
+						<div className="sce-admin__license--input-wrapper">
 							<Controller
 								name="sceLicense"
 								control={ control }
@@ -349,15 +337,14 @@ const Interface = ( props ) => {
 								render={ ( { field } ) => (
 									<TextControl
 										{ ...field }
-										label={ __( 'License Key', 'quotes-dlx' ) }
-										id="search-quotes-dlx-license-secret"
+										label={ __( 'License Key', 'comment-edit-pro' ) }
+										id="search-comment-edit-pro-license-secret"
 										className={ classNames(
-											'qdlx-admin__text-control',
-											'qdlx-admin__text-control-license',
+											'sce-admin__text-control-license',
 											{
 												'has-error':
-													'pattern' === errors.quotesdlxLicense?.type ||
-													'required' === errors.quotesdlxLicense?.type,
+													'pattern' === errors.sceLicense?.type ||
+													'required' === errors.sceLicense?.type,
 												'is-required': true,
 											}
 										) }
@@ -365,19 +352,19 @@ const Interface = ( props ) => {
 										aria-required="true"
 										help={ __(
 											'Entering a license will enable support and updates.',
-											'quotes-dlx'
+											'comment-edit-pro'
 										) }
 										type={ showSecret ? 'text' : 'password' }
 									/>
 								) }
 							/>
-							<div className="qdlx-admin__license--input-preview">
+							<div className="sce-admin__license--input-preview">
 								<input
-									id="quotes-dlx-license-show-hide"
+									id="comment-edit-pro-license-show-hide"
 									type="checkbox"
 									aria-label={ __(
 										'Click to Show or Hide the License',
-										'quotes-dlx'
+										'comment-edit-pro'
 									) }
 									onClick={ () => {
 										if ( showSecret ) {
@@ -388,26 +375,28 @@ const Interface = ( props ) => {
 									} }
 									title={
 										showSecret
-											? __( 'Hide License', 'quotes-dlx' )
-											: __( 'Show License', 'quotes-dlx' )
+											? __( 'Hide License', 'comment-edit-pro' )
+											: __( 'Show License', 'comment-edit-pro' )
 									}
 								/>
-								<label htmlFor="quotes-dlx-license-show-hide not-is-required">
-									<span className="quotes-dlx-license-show-hide--label">
-										{ __( 'Click to Show or Hide the License', 'quotes-dlx' ) }
+								<label htmlFor="comment-edit-pro-license-show-hide not-is-required">
+									<span className="comment-edit-pro-license-show-hide--label">
+										{ __( 'Click to Show or Hide the License', 'comment-edit-pro' ) }
 									</span>
-									<span className="quotes-dlx-license-show-hide--icon">
+									<span className="comment-edit-pro-license-show-hide--icon">
 										{ ! showSecret ? (
 											<Button
 												label={ __( 'Show License', 'comment-edit-pro' ) }
 												size={ 20 }
 												icon={ EyeIcon }
+												className="button-reset"
 											/>
 										) : (
 											<Button
 												label={ __( 'Hide License', 'comment-edit-pro' ) }
 												size={ 20 }
 												icon={ EyeSlashRegular }
+												className="button-reset"
 											/>
 										) }
 									</span>
@@ -443,7 +432,7 @@ const Interface = ( props ) => {
 								/>
 							) }
 						</div>
-						<div className="qdlx-admin__tabs--content-actions">
+						<div className="sce-admin__tabs--content-actions sce-admin-buttons">
 							{ ! licenseActivated && getSaveButton() }
 							{ licenseActivated && (
 								<Button
@@ -455,8 +444,8 @@ const Interface = ( props ) => {
 									type="button"
 									text={
 										revokingLicense
-											? __( 'Revoking License…', 'quotes-dlx' )
-											: __( 'Revoke License', 'quotes-dlx' )
+											? __( 'Revoking License…', 'comment-edit-pro' )
+											: __( 'Revoke License', 'comment-edit-pro' )
 									}
 									icon={ revokingLicense ? Spinner : false }
 									iconSize="18"
@@ -473,7 +462,7 @@ const Interface = ( props ) => {
 							<Notice
 								message={ __(
 									'There are form validation errors. Please correct them above.',
-									'quotes-dlx'
+									'comment-edit-pro'
 								) }
 								status="error"
 								politeness="polite"
@@ -481,7 +470,7 @@ const Interface = ( props ) => {
 						) }
 						{ isSaved && (
 							<Notice
-								message={ __( 'Your settings have been saved.', 'quotes-dlx' ) }
+								message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
 								status="success"
 								politeness="assertive"
 							/>
@@ -490,7 +479,7 @@ const Interface = ( props ) => {
 							<Notice
 								message={ __(
 									'Your license has been deactivated for this site.',
-									'quotes-dlx'
+									'comment-edit-pro'
 								) }
 								status="success"
 								politeness="assertive"
@@ -501,27 +490,27 @@ const Interface = ( props ) => {
 			</form>
 			{ licenseActivated && (
 				<>
-					<div className="qdlx-admin__tabs--content-wrap">
-						<div className="qdlx-admin__tabs--content-panel">
-							<div className="qdlx-admin__tabs--content-heading">
+					<div className="sce-admin__tabs--content-wrap">
+						<div className="sce-admin__tabs--content-panel">
+							<div className="sce-admin__tabs--content-heading">
 								<h1>
 									<CircularInfo width={ 48 } height={ 48 } aria-hidden="true" />
-									<span className="qdlx-admin__heading--text">
-										{ __( 'License Information', 'quotes-dlx' ) }
+									<span className="sce-admin__heading--text">
+										{ __( 'License Information', 'comment-edit-pro' ) }
 									</span>
 								</h1>
 							</div>
-							<div className="qdlx-admin__tabs--content-inner">
-								<table className="quotes-dlx-table quotes-dlx-table--responsive quotes-dlx-table--license-ui">
+							<div className="sce-admin__tabs--content-inner">
+								<table className="comment-edit-pro-table comment-edit-pro-table--responsive comment-edit-pro-table--license-ui">
 									<thead>
 										<tr>
-											<th scope="col">{ __( 'Item Name', 'quotes-dlx' ) }</th>
-											<th scope="col">{ __( 'License Type', 'quotes-dlx' ) }</th>
+											<th scope="col">{ __( 'Item Name', 'comment-edit-pro' ) }</th>
+											<th scope="col">{ __( 'License Type', 'comment-edit-pro' ) }</th>
 											<th scope="col">
-												{ __( 'License Activations', 'quotes-dlx' ) }
+												{ __( 'License Activations', 'comment-edit-pro' ) }
 											</th>
-											<th scope="col">{ __( 'Expires On', 'quotes-dlx' ) }</th>
-											<th scope="col">{ __( 'Days Left', 'quotes-dlx' ) }</th>
+											<th scope="col">{ __( 'Expires On', 'comment-edit-pro' ) }</th>
+											<th scope="col">{ __( 'Days Left', 'comment-edit-pro' ) }</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -537,7 +526,7 @@ const Interface = ( props ) => {
 													<span className="">
 														{ licenseData.site_count } of{ ' ' }
 														{ licenseData.license_limit === 0
-															? __( 'Unlimited', 'quotes-dlx' )
+															? __( 'Unlimited', 'comment-edit-pro' )
 															: licenseData.license_limit }
 													</span>
 												</p>
@@ -554,13 +543,13 @@ const Interface = ( props ) => {
 							</div>
 						</div>
 					</div>
-					<div className="qdlx-admin__tabs--content-wrap">
-						<div className="qdlx-admin__tabs--content-panel">
-							<div className="qdlx-admin__tabs--content-heading">
+					<div className="sce-admin__tabs--content-wrap">
+						<div className="sce-admin__tabs--content-panel">
+							<div className="sce-admin__tabs--content-heading">
 								<h1>
 									<VialIcon width={ 48 } height={ 48 } aria-hidden="true" />
-									<span className="qdlx-admin__heading--text">
-										{ __( 'Beta Releases', 'quotes-dlx' ) }
+									<span className="sce-admin__heading--text">
+										{ __( 'Beta Releases', 'comment-edit-pro' ) }
 									</span>
 								</h1>
 								<p className="description">
@@ -571,30 +560,30 @@ const Interface = ( props ) => {
 								<Notice
 									message={ __(
 										'Beta Updates are enabled. You will receive beta updates for this plugin.',
-										'quotes-dlx'
+										'comment-edit-pro'
 									) }
 									status="info"
 									politeness="assertive"
 									icon={ CodeBranchIcon }
 								/>
 							) }
-							<div className="qdlx-admin__tabs--content-inner">
+							<div className="sce-admin__tabs--content-inner">
 								{ betaSaving && (
-									<div className="qdlx-admin__license-beta-saving">
+									<div className="sce-admin__license-beta-saving">
 										<Spinner />
 									</div>
 								) }
 								{ ! betaSaving && (
 									<ToggleControl
-										label={ __( 'Enable Beta Releases', 'quotes-dlx' ) }
-										className="qdlx-admin__toggle-control"
+										label={ __( 'Enable Beta Releases', 'comment-edit-pro' ) }
+										className="sce-admin__toggle-control"
 										checked={ betaEnabled }
 										onChange={ ( boolValue ) => {
 											onBetaToggle( boolValue );
 										} }
 										help={ __(
 											'If enabled, any betas available for release will show up in Dashboard->Updates.',
-											'quotes-dlx'
+											'comment-edit-pro'
 										) }
 									/>
 								) }

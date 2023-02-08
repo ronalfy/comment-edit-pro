@@ -19744,7 +19744,7 @@ var License = function License(props) {
 };
 
 var Interface = function Interface(props) {
-  var _errors$quotesdlxLice3, _errors$quotesdlxLice4, _errors$quotesdlxLice5;
+  var _errors$quotesdlxLice, _errors$quotesdlxLice2, _errors$quotesdlxLice3;
 
   var defaults = props.defaults;
   var response = defaults();
@@ -19903,7 +19903,7 @@ var Interface = function Interface(props) {
       } else {
         setError('sceLicense', {
           type: 'validate',
-          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking the license resulted in an error and could not be deactivated. Please reactivate the license and try again.', 'quotes-dlx')
+          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking the license resulted in an error and could not be deactivated. Please reactivate the license and try again.', 'comment-edit-pro')
         });
         setLicenseActivated(false);
       }
@@ -19956,13 +19956,13 @@ var Interface = function Interface(props) {
   };
 
   var getSaveButton = function getSaveButton() {
-    var saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save License', 'quotes-dlx');
+    var saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save License', 'comment-edit-pro');
 
-    var saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'quotes-dlx');
+    var saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'comment-edit-pro');
 
     if (!licenseActivated) {
-      saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activate License', 'quotes-dlx');
-      saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activating…', 'quotes-dlx');
+      saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activate License', 'comment-edit-pro');
+      saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activating…', 'comment-edit-pro');
     }
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
@@ -19998,26 +19998,26 @@ var Interface = function Interface(props) {
 
   var getSaveText = function getSaveText() {
     if (saving) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'comment-edit-pro');
     }
 
     if (isSaved) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'comment-edit-pro');
     }
 
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save License', 'quotes-dlx');
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save License', 'comment-edit-pro');
   };
 
   var getResetText = function getResetText() {
     if (resetting) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking…', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking…', 'comment-edit-pro');
     }
 
     if (isReset) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoked', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoked', 'comment-edit-pro');
     }
 
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoke License', 'quotes-dlx');
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoke License', 'comment-edit-pro');
   };
 
   var getLicenseHeader = function getLicenseHeader() {
@@ -20034,29 +20034,21 @@ var Interface = function Interface(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getLicenseHeader(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-panel"
+    className: "sce-admin__tabs--content-panel"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-heading"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_KeyIcon__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    width: 48,
-    height: 48,
-    "aria-hidden": "true"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "qdlx-admin__heading--text"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License', 'quotes-dlx'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    className: "description"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add a license key to receive support and updates.', 'quotes-dlx')), licenseActivated && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your license is valid.', 'quotes-dlx'),
+    className: "sce-admin__tabs--content-heading"
+  }, licenseActivated && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your license is valid.', 'comment-edit-pro'),
     status: "success",
     politeness: "polite"
   }), !licenseActivated && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please enter a valid license to receive support and updates', 'quotes-dlx'),
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please enter a valid license to receive support and updates', 'comment-edit-pro'),
     status: "warning",
     politeness: "polite"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__license--wrapper is-required"
+    className: "sce-admin__license--wrapper is-required"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__license--input-wrapper"
+    className: "sce-admin__license--input-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_16__.Controller, {
     name: "sceLicense",
     control: control,
@@ -20066,28 +20058,28 @@ var Interface = function Interface(props) {
       validate: true
     },
     render: function render(_ref) {
-      var _errors$quotesdlxLice, _errors$quotesdlxLice2;
+      var _errors$sceLicense, _errors$sceLicense2;
 
       var field = _ref.field;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], _extends({}, field, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Key', 'quotes-dlx'),
-        id: "search-quotes-dlx-license-secret",
-        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx-admin__text-control', 'qdlx-admin__text-control-license', {
-          'has-error': 'pattern' === ((_errors$quotesdlxLice = errors.quotesdlxLicense) === null || _errors$quotesdlxLice === void 0 ? void 0 : _errors$quotesdlxLice.type) || 'required' === ((_errors$quotesdlxLice2 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice2 === void 0 ? void 0 : _errors$quotesdlxLice2.type),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Key', 'comment-edit-pro'),
+        id: "search-comment-edit-pro-license-secret",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control-license', {
+          'has-error': 'pattern' === ((_errors$sceLicense = errors.sceLicense) === null || _errors$sceLicense === void 0 ? void 0 : _errors$sceLicense.type) || 'required' === ((_errors$sceLicense2 = errors.sceLicense) === null || _errors$sceLicense2 === void 0 ? void 0 : _errors$sceLicense2.type),
           'is-required': true
         }),
         disabled: licenseActivated,
         "aria-required": "true",
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Entering a license will enable support and updates.', 'quotes-dlx'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Entering a license will enable support and updates.', 'comment-edit-pro'),
         type: showSecret ? 'text' : 'password'
       }));
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__license--input-preview"
+    className: "sce-admin__license--input-preview"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    id: "quotes-dlx-license-show-hide",
+    id: "comment-edit-pro-license-show-hide",
     type: "checkbox",
-    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Show or Hide the License', 'quotes-dlx'),
+    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Show or Hide the License', 'comment-edit-pro'),
     onClick: function onClick() {
       if (showSecret) {
         setShowSecret(false);
@@ -20095,41 +20087,43 @@ var Interface = function Interface(props) {
         setShowSecret(true);
       }
     },
-    title: showSecret ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide License', 'quotes-dlx') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show License', 'quotes-dlx')
+    title: showSecret ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide License', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show License', 'comment-edit-pro')
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "quotes-dlx-license-show-hide not-is-required"
+    htmlFor: "comment-edit-pro-license-show-hide not-is-required"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "quotes-dlx-license-show-hide--label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Show or Hide the License', 'quotes-dlx')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "quotes-dlx-license-show-hide--icon"
+    className: "comment-edit-pro-license-show-hide--label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Show or Hide the License', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "comment-edit-pro-license-show-hide--icon"
   }, !showSecret ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show License', 'comment-edit-pro'),
     size: 20,
-    icon: _components_icons_EyeIcon__WEBPACK_IMPORTED_MODULE_12__["default"]
+    icon: _components_icons_EyeIcon__WEBPACK_IMPORTED_MODULE_12__["default"],
+    className: "button-reset"
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide License', 'comment-edit-pro'),
     size: 20,
-    icon: _components_icons_EyeSlashRegular__WEBPACK_IMPORTED_MODULE_13__["default"]
-  })))), 'required' === ((_errors$quotesdlxLice3 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice3 === void 0 ? void 0 : _errors$quotesdlxLice3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    icon: _components_icons_EyeSlashRegular__WEBPACK_IMPORTED_MODULE_13__["default"],
+    className: "button-reset"
+  })))), 'required' === ((_errors$quotesdlxLice = errors.quotesdlxLicense) === null || _errors$quotesdlxLice === void 0 ? void 0 : _errors$quotesdlxLice.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
     status: "error",
     politeness: "assertive",
     inline: true,
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_9__["default"]
-  }), 'pattern' === ((_errors$quotesdlxLice4 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice4 === void 0 ? void 0 : _errors$quotesdlxLice4.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }), 'pattern' === ((_errors$quotesdlxLice2 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice2 === void 0 ? void 0 : _errors$quotesdlxLice2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('It appears there are invalid characters in the license.'),
     status: "error",
     politeness: "assertive",
     inline: true,
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_9__["default"]
-  }), 'validate' === ((_errors$quotesdlxLice5 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice5 === void 0 ? void 0 : _errors$quotesdlxLice5.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }), 'validate' === ((_errors$quotesdlxLice3 = errors.quotesdlxLicense) === null || _errors$quotesdlxLice3 === void 0 ? void 0 : _errors$quotesdlxLice3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
     message: errors.quotesdlxLicense.message,
     status: "error",
     politeness: "assertive",
     inline: true,
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_9__["default"]
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-actions"
+    className: "sce-admin__tabs--content-actions sce-admin-buttons"
   }, !licenseActivated && getSaveButton(), licenseActivated && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
       'has-icon': revokingLicense
@@ -20139,7 +20133,7 @@ var Interface = function Interface(props) {
       }
     }),
     type: "button",
-    text: revokingLicense ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking License…', 'quotes-dlx') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoke License', 'quotes-dlx'),
+    text: revokingLicense ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoking License…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Revoke License', 'comment-edit-pro'),
     icon: revokingLicense ? _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_8__["default"] : false,
     iconSize: "18",
     iconPosition: "right",
@@ -20149,44 +20143,44 @@ var Interface = function Interface(props) {
       revokeLicense(e);
     }
   })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'quotes-dlx'),
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
     status: "error",
     politeness: "polite"
   }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'quotes-dlx'),
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
     status: "success",
     politeness: "assertive"
   }), isRevoked && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your license has been deactivated for this site.', 'quotes-dlx'),
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your license has been deactivated for this site.', 'comment-edit-pro'),
     status: "success",
     politeness: "assertive"
   })))), licenseActivated && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-wrap"
+    className: "sce-admin__tabs--content-wrap"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-panel"
+    className: "sce-admin__tabs--content-panel"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-heading"
+    className: "sce-admin__tabs--content-heading"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_CircularInfo__WEBPACK_IMPORTED_MODULE_10__["default"], {
     width: 48,
     height: 48,
     "aria-hidden": "true"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "qdlx-admin__heading--text"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Information', 'quotes-dlx')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-inner"
+    className: "sce-admin__heading--text"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Information', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__tabs--content-inner"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
-    className: "quotes-dlx-table quotes-dlx-table--responsive quotes-dlx-table--license-ui"
+    className: "comment-edit-pro-table comment-edit-pro-table--responsive comment-edit-pro-table--license-ui"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "col"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Item Name', 'quotes-dlx')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Item Name', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "col"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Type', 'quotes-dlx')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Type', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "col"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Activations', 'quotes-dlx')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Activations', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "col"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Expires On', 'quotes-dlx')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Expires On', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "col"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Days Left', 'quotes-dlx')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Days Left', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
     "data-header": "Item Name"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, licenseData.item_name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
     "data-header": "License Type"
@@ -20194,41 +20188,41 @@ var Interface = function Interface(props) {
     "data-header": "License Activations"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
     className: ""
-  }, licenseData.site_count, " of", ' ', licenseData.license_limit === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Unlimited', 'quotes-dlx') : licenseData.license_limit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+  }, licenseData.site_count, " of", ' ', licenseData.license_limit === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Unlimited', 'comment-edit-pro') : licenseData.license_limit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
     "data-header": "Expires On"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, licenseData.expires)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
     "data-header": "Days Left"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, licenseData.expires_human_time_diff)))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-wrap"
+    className: "sce-admin__tabs--content-wrap"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-panel"
+    className: "sce-admin__tabs--content-panel"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-heading"
+    className: "sce-admin__tabs--content-heading"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_VialIcon__WEBPACK_IMPORTED_MODULE_7__["default"], {
     width: 48,
     height: 48,
     "aria-hidden": "true"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "qdlx-admin__heading--text"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Beta Releases', 'quotes-dlx'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "sce-admin__heading--text"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Beta Releases', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "description"
   }, "You can enable Beta Releases by checking this option.")), betaEnabled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Beta Updates are enabled. You will receive beta updates for this plugin.', 'quotes-dlx'),
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Beta Updates are enabled. You will receive beta updates for this plugin.', 'comment-edit-pro'),
     status: "info",
     politeness: "assertive",
     icon: _components_icons_CodeBranchIcon__WEBPACK_IMPORTED_MODULE_11__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__tabs--content-inner"
+    className: "sce-admin__tabs--content-inner"
   }, betaSaving && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "qdlx-admin__license-beta-saving"
+    className: "sce-admin__license-beta-saving"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_Spinner__WEBPACK_IMPORTED_MODULE_8__["default"], null)), !betaSaving && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Beta Releases', 'quotes-dlx'),
-    className: "qdlx-admin__toggle-control",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Beta Releases', 'comment-edit-pro'),
+    className: "sce-admin__toggle-control",
     checked: betaEnabled,
     onChange: function onChange(boolValue) {
       onBetaToggle(boolValue);
     },
-    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('If enabled, any betas available for release will show up in Dashboard->Updates.', 'quotes-dlx')
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('If enabled, any betas available for release will show up in Dashboard->Updates.', 'comment-edit-pro')
   }))))));
 };
 
