@@ -18,6 +18,7 @@ require_once 'autoloader.php';
 
 use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Plugin_Updater as Plugin_Updater;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
@@ -396,17 +397,16 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function sce_plugin_updater() {
-		require_once Functions::get_plugin_dir( '/includes/EDD_SL_Plugin_Updater.php' );
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options' );
 		} else {
 			$options = get_option( 'sce_options' );
 		}
 
-		$license_status = get_site_option( 'comment_edit_pro_license_status', false );
-		if ( isset( $options['license'] ) && false !== $license_status ) {
+		$license_valid = $options['license_valid'];
+		if ( isset( $options['license'] ) && 'valid' === $license_valid ) {
 			// setup the updater.
-			$edd_updater = new \EDD_SL_Plugin_Updater(
+			$edd_updater = new Plugin_Updater(
 				'https://dlxplugins.com',
 				__FILE__,
 				array(
