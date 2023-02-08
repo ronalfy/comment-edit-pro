@@ -131,14 +131,21 @@ class Frontend_Editing {
 			return;
 		}
 		wp_enqueue_script(
-			'fancybox',
+			'sce-frontend-fancybox-js',
 			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.js' ),
 			array( 'jquery' ),
 			Functions::get_plugin_version(),
 			true
 		);
 		wp_enqueue_style(
-			'fancybox',
+			'sce-frontend',
+			Functions::get_plugin_url( 'dist/sce-frontend.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
+		);
+		wp_enqueue_style(
+			'sce-frontend-fancybox-css',
 			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.css' ),
 			array(),
 			Functions::get_plugin_version(),
