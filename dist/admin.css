@@ -956,4 +956,11 @@ h2 a.sce-admin-heading-docs {
   text-align: left;
 }
 
+/* For the Help Screen Options Tab */
+#screen-meta-links {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 /*# sourceMappingURL=admin.css.map*/
