@@ -154,7 +154,7 @@ class Frontend_Editing {
 		wp_enqueue_script(
 			'comment-edit-pro',
 			Functions::get_plugin_url( '/js/simple-comment-editing-options.js' ),
-			array( 'jquery', 'fancybox' ),
+			array( 'jquery', 'sce-frontend-fancybox-js' ),
 			Functions::get_plugin_version(),
 			true
 		);
