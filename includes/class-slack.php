@@ -69,10 +69,12 @@ class Slack {
 		$comment_author_email = $comment['comment_author_email'];
 		$comment_author_url   = $comment['comment_author_url'];
 		$post_id              = $comment['comment_post_ID'];
-		$post_title           = htmlspecialchars( get_the_title( $post_id ) );
+		$post = get_post( $post_id );
+		$post_title           = stripslashes_deep( $post->post_title );
 
 		// Get comment text.
-		$comment_content = esc_textarea( $comment['comment_content'] );
+		$edited_content = stripslashes_deep( $comment['comment_content'] );
+		$original_content = stripslashes_deep( $original_comment['comment_content'] );
 
 		// Comment action links.
 		$approve_link   = add_query_arg(
@@ -96,9 +98,9 @@ class Slack {
 
 		// Comment status label.
 		$comment_status = $comment['comment_approved'];
-		if ( '1' === $comment_status ) {
+		if ( '1' === $comment_status || 1 === $comment_status ) {
 			$comment_status = __( 'Approved', 'comment-edit-pro' );
-		} elseif ( '0' === $comment_status ) {
+		} elseif ( '0' === $comment_status || 0 === $comment_status ) {
 			$comment_status = __( 'Unapproved', 'comment-edit-pro' );
 		} elseif ( 'spam' === $comment_status ) {
 			$comment_status = __( 'Spam', 'comment-edit-pro' );
@@ -125,7 +127,7 @@ class Slack {
 								__( '*There is an <%1$s|edited comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
 							esc_url( get_comment_link( $comment ) ),
 							esc_html( $comment_author ),
-							wp_kses_post( addslashes( $post_title ) ),
+							$post_title,
 							esc_url( get_permalink( $post_id ) )
 						),
 					),
@@ -180,7 +182,7 @@ class Slack {
 					'type' => 'section',
 					'text' => array(
 						'type' => 'mrkdwn',
-						'text' => $comment_content,
+						'text' => $edited_content,
 					),
 				),
 				array(
@@ -197,7 +199,7 @@ class Slack {
 					'type' => 'section',
 					'text' => array(
 						'type' => 'mrkdwn',
-						'text' => esc_textarea( $original_comment['comment_content'] ),
+						'text' => $original_content,
 					),
 				),
 				array(
@@ -395,12 +397,11 @@ class Slack {
 		$comment_author_email = $comment->comment_author_email;
 		$comment_author_url   = $comment->comment_author_url;
 		$post_id              = $comment->comment_post_ID;
-		$post_title           = htmlspecialchars( get_the_title( $post_id ) );
-		// Get avatar for commenter.
-		$avatar = get_avatar_url( $comment_author_email, 32 );
+		$post = get_post( $post_id );
+		$post_title           = stripslashes_deep( $post->post_title ); // Can't escape entities unfortunately.
 
 		// Get comment text.
-		$comment_content = esc_textarea( $comment->comment_content );
+		$comment_content = stripslashes_deep( $comment->comment_content );
 
 		// Comment action links.
 		$approve_link   = add_query_arg(
@@ -439,7 +440,7 @@ class Slack {
 					/* translators: %s: Comment author name. */
 					__( 'There is a new comment by %1$s on %2$s', 'comment-edit-pro' ),
 					esc_html( $comment_author ),
-					wp_kses_post( addslashes( $post_title ) )
+					$post_title
 				)
 			),
 			'blocks' => array(
@@ -453,7 +454,7 @@ class Slack {
 								__( '*There is a <%1$s|new comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
 							esc_url( get_comment_link( $comment ) ),
 							esc_html( $comment_author ),
-							wp_kses_post( addslashes( $post_title ) ),
+							stripslashes_deep( $post_title ),
 							esc_url( get_permalink( $post_id ) )
 						),
 					),
