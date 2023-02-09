@@ -34,6 +34,229 @@ class Slack {
 			return;
 		}
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+		if ( (bool) $options['slack_edit_comments_enabled'] ) {
+			add_action( 'sce_save_after', array( $this, 'send_edit_slack' ), 10, 4 );
+		}
+	}
+
+	/**
+	 * Slack when a comment has been edited.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $saved_comment    The saved comment.
+	 * @param int   $post_id          The post ID.
+	 * @param int   $comment_id       The comment ID.
+	 * @param array $original_comment The original comment.
+	 */
+	public function send_edit_slack( $saved_comment, $post_id, $comment_id, $original_comment ) {
+		$options = Options::get_options();
+		// Check for webhook.
+		$webhook_url = $options['slack_webhook_url'];
+		if ( empty( $webhook_url ) ) {
+			return;
+		}
+
+		// Get comment.
+		$comment = $saved_comment;
+		if ( ! $comment ) {
+			return;
+		}
+
+		// Get comment vars.
+		$comment_author       = $comment['comment_author'];
+		$comment_author_email = $comment['comment_author_email'];
+		$comment_author_url   = $comment['comment_author_url'];
+		$post_id              = $comment['comment_post_ID'];
+		$post_title           = htmlspecialchars( get_the_title( $post_id ) );
+
+		// Get comment text.
+		$comment_content = esc_textarea( $comment['comment_content'] );
+
+		// Comment action links.
+		$approve_link   = add_query_arg(
+			array(
+				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ),
+			),
+			admin_url( 'comment.php?action=approvecomment&c=' . $comment_id )
+		);
+		$unapprove_link = add_query_arg(
+			array(
+				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ), /* both approve and unapprove use the same nonce */
+			),
+			admin_url( 'comment.php?action=unapprovecomment&c=' . $comment_id )
+		);
+		$spam_link      = add_query_arg(
+			array(
+				'_wpnonce' => wp_create_nonce( 'delete-comment_' . $comment_id ), /* spam uses the delete nonce */
+			),
+			admin_url( 'comment.php?action=spamcomment&c=' . $comment_id )
+		);
+
+		// Comment status label.
+		$comment_status = $comment['comment_approved'];
+		if ( '1' === $comment_status ) {
+			$comment_status = __( 'Approved', 'comment-edit-pro' );
+		} elseif ( '0' === $comment_status ) {
+			$comment_status = __( 'Unapproved', 'comment-edit-pro' );
+		} elseif ( 'spam' === $comment_status ) {
+			$comment_status = __( 'Spam', 'comment-edit-pro' );
+		}
+
+		// Begin message.
+		$message_array = array(
+			'text'   => esc_html(
+				sprintf(
+					/* translators: %s: Comment author name. */
+					__( 'There is an edited comment by %1$s on %2$s', 'comment-edit-pro' ),
+					esc_html( $comment_author ),
+					wp_kses_post( addslashes( $post_title ) )
+				)
+			),
+			'blocks' => array(
+				array(
+					'type'     => 'section',
+					'block_id' => 'section1',
+					'text'     => array(
+						'type' => 'mrkdwn',
+						'text' => sprintf(
+							/* translators: %s: Comment author name. */
+								__( '*There is an <%1$s|edited comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
+							esc_url( get_comment_link( $comment ) ),
+							esc_html( $comment_author ),
+							wp_kses_post( addslashes( $post_title ) ),
+							esc_url( get_permalink( $post_id ) )
+						),
+					),
+					// 'accessory' => array(
+					// 'type'      => 'image',
+					// 'image_url' => esc_url( $avatar ),
+					// 'alt_text'  => esc_html( $comment_author ),
+					// ),
+				),
+				array(
+					'type' => 'header',
+					'text' => array(
+						'type' => 'plain_text',
+						'text' => esc_html__( 'Comment Details', 'comment-edit-pro' ),
+					),
+				),
+				array(
+					'type' => 'divider',
+				),
+				array(
+					'type'   => 'section',
+					'fields' => array(
+						array(
+							'type' => 'mrkdwn',
+							'text' => __( '*Commenter:*', 'comment-edit-pro' ) . ' ' . esc_html( $comment_author ) . "\n\n",
+						),
+						array(
+							'type' => 'mrkdwn',
+							'text' => __( '*Comment Status:*', 'comment-edit-pro' ) . ' ' . $comment_status . "\n",
+						),
+						array(
+							'type' => 'mrkdwn',
+							'text' => __( '*Email Address:*', 'comment-edit-pro' ) . ' ' . '<' . esc_url( 'mailto:' . $comment_author_email ) . '|' . esc_html( $comment_author_email ) . '>' . "\n\n",
+						),
+						array(
+							'type' => 'mrkdwn',
+							'text' => __( '*URL:*', 'comment-edit-pro' ) . ' ' . ( ! empty( $comment_author_url ) ? esc_url( $comment_author_url ) : __( 'None', 'comment-edit-pro' ) ) . "\n",
+						),
+					),
+				),
+				array(
+					'type' => 'divider',
+				),
+				array(
+					'type' => 'header',
+					'text' => array(
+						'type' => 'plain_text',
+						'text' => esc_html__( 'Edited Comment', 'comment-edit-pro' ),
+					),
+				),
+				array(
+					'type' => 'section',
+					'text' => array(
+						'type' => 'mrkdwn',
+						'text' => $comment_content,
+					),
+				),
+				array(
+					'type' => 'divider',
+				),
+				array(
+					'type' => 'header',
+					'text' => array(
+						'type' => 'plain_text',
+						'text' => esc_html__( 'Original Comment', 'comment-edit-pro' ),
+					),
+				),
+				array(
+					'type' => 'section',
+					'text' => array(
+						'type' => 'mrkdwn',
+						'text' => esc_textarea( $original_comment['comment_content'] ),
+					),
+				),
+				array(
+					'type' => 'divider',
+				),
+				array(
+					'type'     => 'actions',
+					'elements' => array(
+						array(
+							'type'      => 'button',
+							'text'      => array(
+								'type'  => 'plain_text',
+								'text'  => esc_html__( 'Approve', 'comment-edit-pro' ),
+								'emoji' => true,
+							),
+							'style'     => 'primary',
+							'value'     => 'approve',
+							'action_id' => 'approval',
+							'url'       => esc_url_raw( $approve_link ),
+						),
+						array(
+							'type'      => 'button',
+							'text'      => array(
+								'type'  => 'plain_text',
+								'text'  => esc_html__( 'Unapprove', 'comment-edit-pro' ),
+								'emoji' => true,
+							),
+							'value'     => 'unapprove',
+							'action_id' => 'unapprove',
+							'url'       => esc_url_raw( $unapprove_link ),
+						),
+						array(
+							'type'      => 'button',
+							'text'      => array(
+								'type'  => 'plain_text',
+								'text'  => esc_html__( 'Mark as Spam', 'comment-edit-pro' ),
+								'emoji' => true,
+							),
+							'style'     => 'danger',
+							'value'     => 'spam',
+							'action_id' => 'spam',
+							'url'       => esc_url_raw( $spam_link ),
+						),
+
+					),
+				),
+			),
+		);
+
+		$json = wp_json_encode( $message_array );
+
+		$response = wp_remote_post(
+			esc_url( $webhook_url ),
+			array(
+				'body'    => $json,
+				'headers' => array( 'Content-Type' => 'application/json; charset=utf-8' ),
+			)
+		);
+		return;
 	}
 
 	/**
