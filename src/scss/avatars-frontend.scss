@@ -87,10 +87,9 @@
 #sce-avatar-form-modal,
 .sce-avatars-popover {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 25fr 25fr 25fr 25fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-	max-width: 400px;
 	max-height: 210px;
 	overflow-y: scroll;
 	padding: 20px;
