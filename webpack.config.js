@@ -30,6 +30,7 @@ module.exports = ( env ) => {
 				'mentions-admin': [ './src/js/react/views/mentions/index.js' ],
 				'mentions-frontend': [ './src/js/mentions/index.js' ],
 				'sce-frontend': [ './src/scss/frontend.scss' ],
+				'sce-frontend-editing': [ './src/scss/frontend-editing.scss' ],
 				'sce-mentions-theme-white': [ './src/scss/sce-mentions-theme-white.scss' ],
 				'sce-license': [ './src/js/react/views/license/index.js' ],
 			},
