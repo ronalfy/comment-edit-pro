@@ -27,6 +27,9 @@ button.button-reset.show-cursor, a.button-reset.show-cursor {
   text-decoration: none;
 }
 
+/* Responsive styles - In hindsight, should've used mobile-first */
+/* Mixin from: https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/ */
+/* It's only used here, so no external file for mixin? */
 /* CSS reboot from: https://www.joshwcomeau.com/css/custom-css-reset/ */
 /*
   1. Use a more-intuitive box-sizing model.
@@ -168,13 +171,29 @@ h6 {
 .sce-form-button-grid-items {
   margin-top: 1.5em;
   display: grid;
-  grid-template-columns: 175px 175px 1fr 175px;
+  grid-template-columns: 1fr;
   column-gap: 15px;
+  row-gap: 15px;
+}
+.sce-form-button-grid-items .empty-div {
+  display: none;
+}
+@media (min-width: 48em) {
+  .sce-form-button-grid-items {
+    grid-template-columns: 175px 175px 1fr 175px;
+  }
+  .sce-form-button-grid-items .empty-div {
+    display: block;
+  }
 }
 
 .sce-delete-comment {
   align-self: end;
-  max-width: 175px;
+}
+@media (min-width: 48em) {
+  .sce-delete-comment {
+    max-width: 175px;
+  }
 }
 
 .sce-button {
