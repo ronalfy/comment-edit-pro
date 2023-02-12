@@ -141,9 +141,9 @@ class Comment_Edit_Pro {
 	 */
 	public function admin_notice_insufficient_sce() {
 		$this->show_admin_warning(
-			__( 'Higher Simple Comment Editing version required', 'comment-edit-pro' ),
+			__( 'Higher Comment Edit Lite version required', 'comment-edit-pro' ),
 			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'Simple Comment Editing', SCE_MIN_VERSION, SCE_VERSION ),
+			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'Comment Edit Lite', SCE_MIN_VERSION, SCE_VERSION ),
 			'notice-error'
 		);
 	}
@@ -158,8 +158,8 @@ class Comment_Edit_Pro {
 	 */
 	public function admin_notice_sce_not_installed() {
 		$this->show_admin_warning(
-			__( 'Simple Comment Editing is required.', 'comment-edit-pro' ),
-			__( 'The Simple Comment Editing plugin is required for Comment Edit Pro to function.', 'comment-edit-pro' ),
+			__( 'Comment Edit Lite is required.', 'comment-edit-pro' ),
+			__( 'The Comment Edit Lite plugin is required for Comment Edit Pro to function.', 'comment-edit-pro' ),
 			'notice-error'
 		);
 	}
@@ -490,3 +490,43 @@ function comment_edit_pro() {
 	return Comment_Edit_Pro::get_instance();
 }
 comment_edit_pro();
+
+
+register_activation_hook( Functions::get_plugin_file(), __NAMESPACE__ . '\comment_edit_pro_plugin_activate' );
+add_action( 'admin_init', __NAMESPACE__ . '\comment_edit_pro_plugin_activate_redirect' );
+
+/**
+ * Add an option upon activation to read in later when redirecting.
+ */
+function comment_edit_pro_plugin_activate() {
+	if ( ! Functions::is_multisite( true ) ) {
+		add_option( 'comment-edit-pro-activate', sanitize_text_field( Functions::get_plugin_file() ) );
+	}
+}
+
+/**
+ * Redirect to Comment Edit Lite settings page upon activation.
+ */
+function comment_edit_pro_plugin_activate_redirect() {
+
+	// If on multisite, bail.
+	if ( Functions::is_multisite( true ) ) {
+		return;
+	}
+
+	// Make sure we're in the admin and that the option is available.
+	if ( is_admin() && Functions::get_plugin_file() === get_option( 'comment-edit-pro-activate' ) ) {
+		delete_option( 'comment-edit-pro-activate' );
+		// GEt bulk activation variable if it exists.
+		$maybe_multi = filter_input( INPUT_GET, 'activate-multi', FILTER_VALIDATE_BOOLEAN );
+
+		// Return early if it's a bulk activation.
+		if ( $maybe_multi ) {
+			return;
+		}
+
+		$settings_url = Functions::get_settings_url();
+		wp_safe_redirect( esc_url( $settings_url ) );
+		exit;
+	}
+}

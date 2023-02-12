@@ -13,13 +13,32 @@ namespace CommentEditPro\Includes;
 class Functions {
 
 	/**
-	 * Check whether site is multisite or not.
+	 * Checks if the plugin is on a multisite install.
 	 *
-	 * @return bool True if multisite, false if not.
+	 * @since 1.0.0
+	 *
+	 * @param bool $network_admin Check if in network admin.
+	 *
+	 * @return true if multisite, false if not.
 	 */
-	public static function is_multisite() {
-		$sce = \Simple_Comment_Editing::get_instance();
-		return $sce::is_multisite();
+	public static function is_multisite( $network_admin = false ) {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		}
+		$is_network_admin = false;
+		if ( $network_admin ) {
+			if ( is_network_admin() ) {
+				if ( is_multisite() && is_plugin_active_for_network( self::get_plugin_slug() ) ) {
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+		if ( is_multisite() && is_plugin_active_for_network( self::get_plugin_slug() ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
