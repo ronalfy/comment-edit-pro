@@ -289,7 +289,7 @@ const Interface = ( props ) => {
 					className="sce-admin-heading-docs"
 					target="_blank"
 					rel="noreferrer"
-					href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support"
+					href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/slack-integration"
 				>
 					({ __( 'Docs', 'comment-edit-pro' ) })
 				</a>
