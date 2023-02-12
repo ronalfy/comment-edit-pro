@@ -120,10 +120,10 @@ const Interface = ( props ) => {
 				if ( ajaxSuccess ) {
 					setIsReset( true );
 					reset( {
-						recaptchaEnabled: false,
-						recaptchaSiteKey: '',
-						recaptchaSecretKey: '',
-						recaptchaLoggedInUsersEnabled: true,
+						slackEnabled: false,
+						slackWebhookUrl: '',
+						slackModerationEnabled: false,
+						slackEditCommentsEnabled: false,
 					} );
 					setTimeout( () => {
 						setIsReset( false );
@@ -268,7 +268,7 @@ const Interface = ( props ) => {
 		if ( isSaved ) {
 			return __( 'Saved', 'quotes-dlx' );
 		}
-		return __( 'Save Recaptcha Options', 'quotes-dlx' );
+		return __( 'Save Slack Options', 'quotes-dlx' );
 	};
 
 	const getResetText = () => {
@@ -278,7 +278,7 @@ const Interface = ( props ) => {
 		if ( isReset ) {
 			return __( 'Disconnected', 'quotes-dlx' );
 		}
-		return __( 'Disconnect From Recaptcha', 'quotes-dlx' );
+		return __( 'Disconnect From Slack', 'quotes-dlx' );
 	};
 
 	return (
@@ -356,7 +356,7 @@ const Interface = ( props ) => {
 						iconPosition="right"
 						disabled={ saving }
 					/>
-					{ getValues( 'recaptchaEnabled' ) && (
+					{ getValues( 'slackEnabled' ) && (
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',

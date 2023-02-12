@@ -1,16 +1,16 @@
 import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 const Mailchimp = lazy( () =>
-	import( './Mailchimp' )
+	import( /* webpackChunkName: "Mailchimp0.0.1" */ './Mailchimp' )
 );
 const Akismet = lazy( () =>
-	import( './Akismet' )
+	import( /* webpackChunkName: "Akismet0.0.1" */ './Akismet' )
 );
 const Recaptcha = lazy( () =>
-	import( './Recapcha' )
+	import( /* webpackChunkName: "Recaptcha0.0.1" */ './Recapcha' )
 );
 const Slack = lazy( () =>
-	import( './Slack' )
+	import( /* webpackChunkName: "Slack0.0.1" */ './Slack' )
 );
 
 const container = document.getElementById( 'sce-tab-mailchimp' );
