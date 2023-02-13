@@ -94,6 +94,29 @@ class Functions {
 	}
 
 	/**
+	 * Take a _ separated field and convert to camelcase.
+	 *
+	 * @param string $field Field to convert to camelcase.
+	 *
+	 * @return string camelCased field.
+	 */
+	public static function to_camelcase( string $field ) {
+		return str_replace( '_', '', lcfirst( ucwords( $field, '_' ) ) );
+	}
+
+	/**
+	 * Take a camelcase field and converts it to underline case.
+	 *
+	 * @param string $field Field to convert to camelcase.
+	 *
+	 * @return string $field Field name in camelCase..
+	 */
+	public static function to_underlines( string $field ) {
+		$field = strtolower( preg_replace( '/([a-z])([A-Z])/', '$1_$2', $field ) );
+		return $field;
+	}
+
+	/**
 	 * Return the plugin slug.
 	 *
 	 * @return string plugin slug.

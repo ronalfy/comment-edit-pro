@@ -145,7 +145,7 @@ class Options {
 	 *
 	 * @return array default options
 	 */
-	private static function get_defaults() {
+	public static function get_defaults() {
 		$defaults = array(
 			'enable_comment_editing'             => true,
 			'timer'                              => 5,

@@ -21829,7 +21829,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var retrieveCommentEditingOptions = function retrieveCommentEditingOptions() {
   return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_comment_editing_options', {
     nonce: sceCommentEditing.get_nonce
@@ -21882,8 +21881,6 @@ var Interface = function Interface(props) {
       isReset = _useState8[0],
       setIsReset = _useState8[1];
 
-  console.log(data);
-
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useForm)({
     defaultValues: {
       timer: data.timer,
@@ -21933,16 +21930,9 @@ var Interface = function Interface(props) {
       errors = _useFormState.errors,
       isDirty = _useFormState.isDirty,
       dirtyFields = _useFormState.dirtyFields,
-      touchedFields = _useFormState.touchedFields; // useEffect( () => {
-  // 	// Determine if jQuery Fancybox is available.
-  // 	if ( typeof jQuery.fancybox !== 'undefined' ) {
-  // 		console.log( 'blah' );
-  // 		jQuery( '.fancybox-preview a' ).fancybox( {
-  // 			type: 'image',
-  // 		} );
-  // 	}
-  // }, [] );
+      touchedFields = _useFormState.touchedFields;
 
+  console.log(data);
 
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
@@ -21976,13 +21966,7 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         setIsReset(true);
-        reset({
-          akismetApiValid: getValues('akismetApiValid'),
-          akismetActive: getValues('akismetActive'),
-          akismetEnabled: true,
-          akismetEditCommentsEnabled: true,
-          akismetLoggedInUsersEnabled: true
-        });
+        reset(ajaxData);
         setTimeout(function () {
           setIsReset(false);
         }, 3000);
@@ -22018,11 +22002,11 @@ var Interface = function Interface(props) {
 
   var getResetText = function getResetText() {
     if (resetting) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restoring Defaults…', 'quotes-dlx');
     }
 
     if (isReset) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Defaults Restored', 'quotes-dlx');
     }
 
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restore Comment Editing Defaults', 'quotes-dlx');
@@ -22390,7 +22374,7 @@ var Interface = function Interface(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Timer Appearance', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the timer should appear to the user.', 'comment-edit-pro'),
-        selected: value,
+        value: value,
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Words', 'comment-edit-pro'),
           value: 'words'
@@ -22416,7 +22400,7 @@ var Interface = function Interface(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Choose a Button Theme', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a button theme for editing interface.', 'comment-edit-pro'),
-        selected: value,
+        value: value,
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('None', 'comment-edit-pro'),
           value: 'default'
@@ -22517,7 +22501,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref19) {
-      var _errors$saveText2;
+      var _errors$cancelText;
 
       var _ref19$field = _ref19.field,
           onChange = _ref19$field.onChange,
@@ -22526,7 +22510,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cancel Button Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText2 = errors.saveText) === null || _errors$saveText2 === void 0 ? void 0 : _errors$saveText2.type),
+          'has-error': 'required' === ((_errors$cancelText = errors.cancelText) === null || _errors$cancelText === void 0 ? void 0 : _errors$cancelText.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22541,7 +22525,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref20) {
-      var _errors$saveText3;
+      var _errors$deleteText;
 
       var _ref20$field = _ref20.field,
           onChange = _ref20$field.onChange,
@@ -22550,7 +22534,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Delete Button Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText3 = errors.saveText) === null || _errors$saveText3 === void 0 ? void 0 : _errors$saveText3.type),
+          'has-error': 'required' === ((_errors$deleteText = errors.deleteText) === null || _errors$deleteText === void 0 ? void 0 : _errors$deleteText.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22565,7 +22549,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref21) {
-      var _errors$saveText4;
+      var _errors$stopTimerText;
 
       var _ref21$field = _ref21.field,
           onChange = _ref21$field.onChange,
@@ -22574,7 +22558,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Stop Timer Button Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText4 = errors.saveText) === null || _errors$saveText4 === void 0 ? void 0 : _errors$saveText4.type),
+          'has-error': 'required' === ((_errors$stopTimerText = errors.stopTimerText) === null || _errors$stopTimerText === void 0 ? void 0 : _errors$stopTimerText.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22589,7 +22573,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref22) {
-      var _errors$saveText5;
+      var _errors$clickToEditTe;
 
       var _ref22$field = _ref22.field,
           onChange = _ref22$field.onChange,
@@ -22598,7 +22582,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Edit Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText5 = errors.saveText) === null || _errors$saveText5 === void 0 ? void 0 : _errors$saveText5.type),
+          'has-error': 'required' === ((_errors$clickToEditTe = errors.clickToEditText) === null || _errors$clickToEditTe === void 0 ? void 0 : _errors$clickToEditTe.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22613,7 +22597,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref23) {
-      var _errors$saveText6;
+      var _errors$confirmDelete;
 
       var _ref23$field = _ref23.field,
           onChange = _ref23$field.onChange,
@@ -22622,7 +22606,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deletion Confirmation Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText6 = errors.saveText) === null || _errors$saveText6 === void 0 ? void 0 : _errors$saveText6.type),
+          'has-error': 'required' === ((_errors$confirmDelete = errors.confirmDelete) === null || _errors$confirmDelete === void 0 ? void 0 : _errors$confirmDelete.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22637,7 +22621,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref24) {
-      var _errors$saveText7;
+      var _errors$commentDelete;
 
       var _ref24$field = _ref24.field,
           onChange = _ref24$field.onChange,
@@ -22646,7 +22630,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText7 = errors.saveText) === null || _errors$saveText7 === void 0 ? void 0 : _errors$saveText7.type),
+          'has-error': 'required' === ((_errors$commentDelete = errors.commentDeleted) === null || _errors$commentDelete === void 0 ? void 0 : _errors$commentDelete.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22661,7 +22645,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref25) {
-      var _errors$saveText8;
+      var _errors$commentDelete2;
 
       var _ref25$field = _ref25.field,
           onChange = _ref25$field.onChange,
@@ -22670,7 +22654,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Error Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText8 = errors.saveText) === null || _errors$saveText8 === void 0 ? void 0 : _errors$saveText8.type),
+          'has-error': 'required' === ((_errors$commentDelete2 = errors.commentDeletedError) === null || _errors$commentDelete2 === void 0 ? void 0 : _errors$commentDelete2.type),
           'is-required': true
         }),
         "aria-required": "true",
@@ -22685,7 +22669,7 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref26) {
-      var _errors$saveText9;
+      var _errors$commentEmptyE;
 
       var _ref26$field = _ref26.field,
           onChange = _ref26$field.onChange,
@@ -22694,7 +22678,7 @@ var Interface = function Interface(props) {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Empty Error Text', 'quotes-dlx'),
         type: "text",
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === ((_errors$saveText9 = errors.saveText) === null || _errors$saveText9 === void 0 ? void 0 : _errors$saveText9.type),
+          'has-error': 'required' === ((_errors$commentEmptyE = errors.commentEmptyError) === null || _errors$commentEmptyE === void 0 ? void 0 : _errors$commentEmptyE.type),
           'is-required': true
         }),
         "aria-required": "true",

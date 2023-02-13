@@ -55,32 +55,32 @@ class Comment_Editing {
 		$options = Options::get_options();
 
 		$json_array = array(
-			'timer'       => absint( $options['timer'] ),
-			'enableCommentEditing' => (bool) $options['enable_comment_editing'],
-			'allowCommentLogging' => (bool) $options['allow_comment_logging'],
-			'allowFrontEndEditing' => (bool) $options['allow_front_end_editing'],
-			'allowUnlimitedEditing' => (bool) $options['allow_unlimited_editing'],
-			'showStopTimer' => (bool) $options['show_stop_timer'],
-			'allowDelete' => (bool) $options['allow_delete'],
-			'deleteOnly' => (bool) $options['delete_only'],
+			'timer'                   => absint( $options['timer'] ),
+			'enableCommentEditing'    => (bool) $options['enable_comment_editing'],
+			'allowCommentLogging'     => (bool) $options['allow_comment_logging'],
+			'allowFrontEndEditing'    => (bool) $options['allow_front_end_editing'],
+			'allowUnlimitedEditing'   => (bool) $options['allow_unlimited_editing'],
+			'showStopTimer'           => (bool) $options['show_stop_timer'],
+			'allowDelete'             => (bool) $options['allow_delete'],
+			'deleteOnly'              => (bool) $options['delete_only'],
 			'allowDeleteConfirmation' => (bool) $options['allow_delete_confirmation'],
-			'allowEditNotification' => (bool) $options['allow_edit_notification'],
-			'editNotificationTo' => sanitize_text_field( $options['edit_notification_to'] ),
-			'editNotificationFrom' => sanitize_text_field( $options['edit_notification_from'] ),
+			'allowEditNotification'   => (bool) $options['allow_edit_notification'],
+			'editNotificationTo'      => sanitize_text_field( $options['edit_notification_to'] ),
+			'editNotificationFrom'    => sanitize_text_field( $options['edit_notification_from'] ),
 			'editNotificationSubject' => sanitize_text_field( $options['edit_notification_subject'] ),
-			'showTimer' => (bool) $options['show_timer'],
-			'buttonTheme' => sanitize_text_field( $options['button_theme'] ),
-			'showIcons' => (bool) $options['show_icons'],
-			'timerAppearance' => sanitize_text_field( $options['timer_appearance'] ),
-			'saveText' => sanitize_text_field( $options['save_text'] ),
-			'cancelText' => sanitize_text_field( $options['cancel_text'] ),
-			'deleteText' => sanitize_text_field( $options['delete_text'] ),
-			'stopTimerText' => sanitize_text_field( $options['stop_timer_text'] ),
-			'clickToEditText' => sanitize_text_field( $options['click_to_edit_text'] ),
-			'confirmDelete' => sanitize_text_field( $options['confirm_delete'] ),
-			'commentDeleted' => sanitize_text_field( $options['comment_deleted'] ),
-			'commentDeletedError' => sanitize_text_field( $options['comment_deleted_error'] ),
-			'commentEmptyError' => sanitize_text_field( $options['comment_empty_error'] ),
+			'showTimer'               => (bool) $options['show_timer'],
+			'buttonTheme'             => sanitize_text_field( $options['button_theme'] ),
+			'showIcons'               => (bool) $options['show_icons'],
+			'timerAppearance'         => sanitize_text_field( $options['timer_appearance'] ),
+			'saveText'                => sanitize_text_field( $options['save_text'] ),
+			'cancelText'              => sanitize_text_field( $options['cancel_text'] ),
+			'deleteText'              => sanitize_text_field( $options['delete_text'] ),
+			'stopTimerText'           => sanitize_text_field( $options['stop_timer_text'] ),
+			'clickToEditText'         => sanitize_text_field( $options['click_to_edit_text'] ),
+			'confirmDelete'           => sanitize_text_field( $options['confirm_delete'] ),
+			'commentDeleted'          => sanitize_text_field( $options['comment_deleted'] ),
+			'commentDeletedError'     => sanitize_text_field( $options['comment_deleted_error'] ),
+			'commentEmptyError'       => sanitize_text_field( $options['comment_empty_error'] ),
 		);
 
 		// Exit gracefully.
@@ -94,7 +94,7 @@ class Comment_Editing {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-comment-editing-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -102,124 +102,43 @@ class Comment_Editing {
 			);
 		}
 
-		// Nonce passed, let's get post vars.
-		$mailchimp_enabled          = (bool) filter_input( INPUT_POST, 'enableMailchimp', FILTER_VALIDATE_BOOLEAN );
-		$api_token                  = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_server_prefix          = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
-		$selected_list              = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
-		$mailchimp_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
-		$signup_label               = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
+		$options                              = array();
+		$options['timer']                     = absint( filter_input( INPUT_POST, 'timer', FILTER_DEFAULT ) );
+		$options['enable_comment_editing']    = (bool) filter_input( INPUT_POST, 'enableCommentEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_comment_logging']     = (bool) filter_input( INPUT_POST, 'allowCommentLogging', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_front_end_editing']   = (bool) filter_input( INPUT_POST, 'allowFrontEndEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_unlimited_editing']   = (bool) filter_input( INPUT_POST, 'allowUnlimitedEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['show_stop_timer']           = (bool) filter_input( INPUT_POST, 'showStopTimer', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_delete']              = (bool) filter_input( INPUT_POST, 'allowDelete', FILTER_VALIDATE_BOOLEAN );
+		$options['delete_only']               = (bool) filter_input( INPUT_POST, 'deleteOnly', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_delete_confirmation'] = (bool) filter_input( INPUT_POST, 'allowDeleteConfirmation', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_edit_notification']   = (bool) filter_input( INPUT_POST, 'allowEditNotification', FILTER_VALIDATE_BOOLEAN );
+		$options['edit_notification_to']      = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationTo', FILTER_DEFAULT ) );
+		$options['edit_notification_from']    = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationFrom', FILTER_DEFAULT ) );
+		$options['edit_notification_subject'] = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationSubject', FILTER_DEFAULT ) );
+		$options['show_timer']                = (bool) filter_input( INPUT_POST, 'showTimer', FILTER_VALIDATE_BOOLEAN );
+		$options['button_theme']              = sanitize_text_field( filter_input( INPUT_POST, 'buttonTheme', FILTER_DEFAULT ) );
+		$options['show_icons']                = (bool) filter_input( INPUT_POST, 'showIcons', FILTER_VALIDATE_BOOLEAN );
+		$options['timer_appearance']          = sanitize_text_field( filter_input( INPUT_POST, 'timerAppearance', FILTER_DEFAULT ) );
+		$options['save_text']                 = sanitize_text_field( filter_input( INPUT_POST, 'saveText', FILTER_DEFAULT ) );
+		$options['cancel_text']               = sanitize_text_field( filter_input( INPUT_POST, 'cancelText', FILTER_DEFAULT ) );
+		$options['delete_text']               = sanitize_text_field( filter_input( INPUT_POST, 'deleteText', FILTER_DEFAULT ) );
+		$options['stop_timer_text']           = sanitize_text_field( filter_input( INPUT_POST, 'stopTimerText', FILTER_DEFAULT ) );
+		$options['click_to_edit_text']        = sanitize_text_field( filter_input( INPUT_POST, 'clickToEditText', FILTER_DEFAULT ) );
+		$options['confirm_delete']            = sanitize_text_field( filter_input( INPUT_POST, 'confirmDelete', FILTER_DEFAULT ) );
+		$options['comment_deleted']           = sanitize_text_field( filter_input( INPUT_POST, 'commentDeleted', FILTER_DEFAULT ) );
+		$options['comment_deleted_error']     = sanitize_text_field( filter_input( INPUT_POST, 'commentDeletedError', FILTER_DEFAULT ) );
+		$options['comment_empty_error']       = sanitize_text_field( filter_input( INPUT_POST, 'commentEmptyError', FILTER_DEFAULT ) );
 
-		// If mailchimp is disabled, let's clear out some keys.
-		if ( ! $mailchimp_enabled ) {
-			$options_to_save = array(
-				'enable_mailchimp'                => false,
-				'mailchimp_api_key'               => '',
-				'mailchimp_api_key_server_prefix' => '',
-				'mailchimp_selected_list'         => '',
-				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'mailchimp_checkbox_enabled'      => true,
-			);
-			if ( Functions::is_multisite() ) {
-				delete_site_option( 'sce_mailchimp_lists' );
-			} else {
-				delete_option( 'sce_mailchimp_lists' );
-			}
+		// Save options.
+		Options::update_options( $options );
 
-			// todo: clear mailchimp lists option.
-
-			Options::update_options( $options_to_save );
-			wp_send_json_success( array( 'list' => false ) );
-			exit;
-		}
-
-		// Now let's save options.
-		$options_to_save = array(
-			'enable_mailchimp'                => $mailchimp_enabled,
-			'mailchimp_api_key'               => $api_token,
-			'mailchimp_api_key_server_prefix' => $api_server_prefix,
-			'mailchimp_selected_list'         => $selected_list,
-			'mailchimp_signup_label'          => $signup_label,
-			'mailchimp_checkbox_enabled'      => $mailchimp_checkbox_enabled,
-		);
-		Options::update_options( $options_to_save );
-
-		// Let's check if mailchimp key has changed and if so, let's grab the list again.
-		$needs_refresh = false;
-		$options       = Options::get_options();
-		if ( '' === $options['mailchimp_selected_list'] ) {
-			$needs_refresh = true;
-		}
-
-		// If we don't need to refresh the list, let's not do it.
-		if ( ! $needs_refresh ) {
-			// Exit gracefully.
-			if ( Functions::is_multisite() ) {
-				$mailchimp_lists = get_site_option( 'sce_mailchimp_lists', array() );
-			} else {
-				$mailchimp_lists = get_option( 'sce_mailchimp_lists', array() );
-			}
-			$options_to_save['lists'] = $mailchimp_lists;
-			wp_send_json_success( $options_to_save );
-			exit;
-		}
-
-		// Format API url for a server prefix..
-		$mailchimp_api_url = str_replace(
-			'<sp>',
-			$api_server_prefix,
-			$this->mailchimp_api
-		);
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_token,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-
-		// Get lists endpoint.
-		$lists_api_url = esc_url_raw( $mailchimp_api_url . '/lists' );
-
-		// Make API call.
-		$response = wp_remote_get( $lists_api_url, $http_args );
-
-		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not connect to Mailchimp.', 'comment-edit-pro' ) ) );
-		}
-
-		// Now format response from JSON.
-		$lists_raw        = json_decode( wp_remote_retrieve_body( $response ), true );
-		$lists            = $lists_raw['lists'] ?? array();
-		$sanitized_values = array();
-		foreach ( $lists as $index => $values ) {
-			$sanitized_values[ $index ] = array(
-				'label' => sanitize_text_field( $lists[ $index ]['name'] ),
-				'value' => sanitize_text_field( $lists[ $index ]['id'] ),
-			);
-		}
-
-		// Save list in option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailchimp_lists', $sanitized_values );
-		} else {
-			update_option( 'sce_mailchimp_lists', $sanitized_values );
-		}
-
-		// When no lists were found, return error.
-		if ( empty( $sanitized_values ) ) {
-			wp_send_json_error( array( 'message' => __( 'There are no Mailchimp lists that were found.', 'comment-edit-pro' ) ) );
-			exit;
-		}
-
+		// Return success.
 		wp_send_json_success(
 			array(
-				'list'          => true,
-				'lists'         => $sanitized_values,
-				'selected_list' => $options['mailchimp_selected_list'],
+				'message' => __( 'Options saved.', 'comment-edit-pro' ),
 			)
 		);
-		exit;
 	}
 
 	/**
@@ -227,7 +146,7 @@ class Comment_Editing {
 	 */
 	public function ajax_reset_comment_editing_options() {
 		// Security.
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-comment-editing-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -235,30 +154,46 @@ class Comment_Editing {
 			);
 		}
 
-		// Remove list options.
-		if ( Functions::is_multisite() ) {
-			delete_site_option( 'sce_mailchimp_lists' );
-		} else {
-			delete_option( 'sce_mailchimp_lists' );
+		$defaults = Options::get_defaults();
+
+		// Populate defaults.
+		$return = array(
+			'timer'                   => absint( $defaults['timer'] ),
+			'enableCommentEditing'    => (bool) $defaults['enable_comment_editing'],
+			'allowCommentLogging'     => (bool) $defaults['allow_comment_logging'],
+			'allowFrontEndEditing'    => (bool) $defaults['allow_front_end_editing'],
+			'allowUnlimitedEditing'   => (bool) $defaults['allow_unlimited_editing'],
+			'showStopTimer'           => (bool) $defaults['show_stop_timer'],
+			'allowDelete'             => (bool) $defaults['allow_delete'],
+			'deleteOnly'              => (bool) $defaults['delete_only'],
+			'allowDeleteConfirmation' => (bool) $defaults['allow_delete_confirmation'],
+			'allowEditNotification'   => (bool) $defaults['allow_edit_notification'],
+			'editNotificationTo'      => sanitize_text_field( $defaults['edit_notification_to'] ),
+			'editNotificationFrom'    => sanitize_text_field( $defaults['edit_notification_from'] ),
+			'editNotificationSubject' => sanitize_text_field( $defaults['edit_notification_subject'] ),
+			'showTimer'               => (bool) $defaults['show_timer'],
+			'buttonTheme'             => sanitize_text_field( $defaults['button_theme'] ),
+			'showIcons'               => (bool) $defaults['show_icons'],
+			'timerAppearance'         => sanitize_text_field( $defaults['timer_appearance'] ),
+			'saveText'                => sanitize_text_field( $defaults['save_text'] ),
+			'cancelText'              => sanitize_text_field( $defaults['cancel_text'] ),
+			'deleteText'              => sanitize_text_field( $defaults['delete_text'] ),
+			'stopTimerText'           => sanitize_text_field( $defaults['stop_timer_text'] ),
+			'clickToEditText'         => sanitize_text_field( $defaults['click_to_edit_text'] ),
+			'confirmDelete'           => sanitize_text_field( $defaults['confirm_delete'] ),
+			'commentDeleted'          => sanitize_text_field( $defaults['comment_deleted'] ),
+			'commentDeletedError'     => sanitize_text_field( $defaults['comment_deleted_error'] ),
+			'commentEmptyError'       => sanitize_text_field( $defaults['comment_empty_error'] ),
+		);
+
+		// Go through return defaults and format into options.
+		$options_to_save = array();
+		foreach ( $return as $key => $value ) {
+			$options_to_save[ Functions::to_underlines( $key ) ] = $value;
 		}
+		Options::update_options( $options_to_save );
 
-		// Clear options.
-		Options::update_options(
-			array(
-				'enable_mailchimp'                => false,
-				'mailchimp_api_key'               => '',
-				'mailchimp_api_key_server_prefix' => '',
-				'mailchimp_selected_list'         => '',
-				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'mailchimp_checkbox_enabled'      => false,
-			)
-		);
-
-		wp_send_json_success(
-			array(
-				'message' => __( 'Mailchimp options have been reset.', 'comment-edit-pro' ),
-			)
-		);
+		wp_send_json_success( $return );
 
 	}
 
@@ -282,13 +217,13 @@ class Comment_Editing {
 				'sce-comment-editing',
 				'sceCommentEditing',
 				array(
-					'save_nonce'  => wp_create_nonce( 'sce-save-comment-editing-options' ),
-					'get_nonce'   => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
-					'reset_nonce' => wp_create_nonce( 'sce-reset-comment-editing-options' ),
-					'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'save_nonce'    => wp_create_nonce( 'sce-save-comment-editing-options' ),
+					'get_nonce'     => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
+					'reset_nonce'   => wp_create_nonce( 'sce-reset-comment-editing-options' ),
+					'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
 					'default_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
-					'light_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
-					'dark_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
+					'light_theme'   => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
+					'dark_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
 				)
 			);
 		}

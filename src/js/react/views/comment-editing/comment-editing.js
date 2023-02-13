@@ -2,7 +2,6 @@
 import React, { useState, Suspense, useEffect } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
-import { escapeAttribute } from '@wordpress/escape-html';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -10,7 +9,6 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	RadioControl,
 	ToggleControl,
 	SelectControl,
 } from '@wordpress/components';
@@ -61,8 +59,6 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
-	console.log( data );
-
 	const {
 		register,
 		control,
@@ -107,15 +103,7 @@ const Interface = ( props ) => {
 		control,
 	} );
 
-	// useEffect( () => {
-	// 	// Determine if jQuery Fancybox is available.
-	// 	if ( typeof jQuery.fancybox !== 'undefined' ) {
-	// 		console.log( 'blah' );
-	// 		jQuery( '.fancybox-preview a' ).fancybox( {
-	// 			type: 'image',
-	// 		} );
-	// 	}
-	// }, [] );
+	console.log( data );
 
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
@@ -153,13 +141,7 @@ const Interface = ( props ) => {
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					setIsReset( true );
-					reset( {
-						akismetApiValid: getValues( 'akismetApiValid' ),
-						akismetActive: getValues( 'akismetActive' ),
-						akismetEnabled: true,
-						akismetEditCommentsEnabled: true,
-						akismetLoggedInUsersEnabled: true,
-					} );
+					reset( ajaxData );
 					setTimeout( () => {
 						setIsReset( false );
 					}, 3000 );
@@ -193,10 +175,10 @@ const Interface = ( props ) => {
 
 	const getResetText = () => {
 		if ( resetting ) {
-			return __( 'Disconnecting…', 'quotes-dlx' );
+			return __( 'Restoring Defaults…', 'quotes-dlx' );
 		}
 		if ( isReset ) {
-			return __( 'Disconnected', 'quotes-dlx' );
+			return __( 'Defaults Restored', 'quotes-dlx' );
 		}
 		return __( 'Restore Comment Editing Defaults', 'quotes-dlx' );
 	};
@@ -653,7 +635,7 @@ const Interface = ( props ) => {
 														'Select how the timer should appear to the user.',
 														'comment-edit-pro'
 													) }
-													selected={ value }
+													value={ value }
 													options={ [
 														{
 															label: __( 'Words', 'comment-edit-pro' ),
@@ -683,7 +665,7 @@ const Interface = ( props ) => {
 												'Select a button theme for editing interface.',
 												'comment-edit-pro'
 											) }
-											selected={ value }
+											value={ value }
 											options={ [
 												{
 													label: __( 'None', 'comment-edit-pro' ),
@@ -810,7 +792,7 @@ const Interface = ( props ) => {
 											label={ __( 'Cancel Button Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.cancelText?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -828,7 +810,7 @@ const Interface = ( props ) => {
 											label={ __( 'Delete Button Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.deleteText?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -846,7 +828,7 @@ const Interface = ( props ) => {
 											label={ __( 'Stop Timer Button Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.stopTimerText?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -864,7 +846,7 @@ const Interface = ( props ) => {
 											label={ __( 'Click to Edit Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.clickToEditText?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -882,7 +864,7 @@ const Interface = ( props ) => {
 											label={ __( 'Comment Deletion Confirmation Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.confirmDelete?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -900,7 +882,7 @@ const Interface = ( props ) => {
 											label={ __( 'Comment Deleted Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.commentDeleted?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -918,7 +900,7 @@ const Interface = ( props ) => {
 											label={ __( 'Comment Deleted Error Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.commentDeletedError?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
@@ -936,7 +918,7 @@ const Interface = ( props ) => {
 											label={ __( 'Comment Empty Error Text', 'quotes-dlx' ) }
 											type="text"
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
+												'has-error': 'required' === errors.commentEmptyError?.type,
 												'is-required': true,
 											} ) }
 											aria-required="true"
