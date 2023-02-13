@@ -7,7 +7,8 @@
 		"document": true,
 		"sceAvatars": "readonly",
 		"sceIntegrations": "readonly",
-		"sceMentions": "readonly"
+		"sceMentions": "readonly",
+		"sceCommentEditing": "readonly"
 	},
 	"env": {
 		"browser": true,

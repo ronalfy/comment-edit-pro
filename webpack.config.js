@@ -33,6 +33,7 @@ module.exports = ( env ) => {
 				'sce-frontend-editing': [ './src/scss/frontend-editing.scss' ],
 				'sce-mentions-theme-white': [ './src/scss/sce-mentions-theme-white.scss' ],
 				'sce-license': [ './src/js/react/views/license/index.js' ],
+				'sce-comment-editing': [ './src/js/react/views/comment-editing/index.js' ],
 			},
 			module: {
 				rules: [
