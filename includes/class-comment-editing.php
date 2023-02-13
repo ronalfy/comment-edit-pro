@@ -68,6 +68,10 @@ class Comment_Editing {
 			'editNotificationTo' => sanitize_text_field( $options['edit_notification_to'] ),
 			'editNotificationFrom' => sanitize_text_field( $options['edit_notification_from'] ),
 			'editNotificationSubject' => sanitize_text_field( $options['edit_notification_subject'] ),
+			'showTimer' => (bool) $options['show_timer'],
+			'buttonTheme' => sanitize_text_field( $options['button_theme'] ),
+			'showIcons' => (bool) $options['show_icons'],
+			'timerAppearance' => sanitize_text_field( $options['timer_appearance'] ),
 		);
 
 		// Exit gracefully.
@@ -273,6 +277,9 @@ class Comment_Editing {
 					'get_nonce'   => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
 					'reset_nonce' => wp_create_nonce( 'sce-reset-comment-editing-options' ),
 					'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'default_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
+					'light_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
+					'dark_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
 				)
 			);
 		}

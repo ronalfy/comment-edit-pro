@@ -12,6 +12,7 @@ import {
 	Button,
 	RadioControl,
 	ToggleControl,
+	SelectControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
@@ -27,7 +28,10 @@ const retrieveCommentEditingOptions = () => {
 };
 
 const CommentEditing = ( props ) => {
-	const [ defaults, getDefaults ] = useAsyncResource( retrieveCommentEditingOptions, [] );
+	const [ defaults, getDefaults ] = useAsyncResource(
+		retrieveCommentEditingOptions,
+		[]
+	);
 	return (
 		<Suspense
 			fallback={
@@ -83,12 +87,26 @@ const Interface = ( props ) => {
 			editNotificationTo: data.editNotificationTo,
 			editNotificationFrom: data.editNotificationFrom,
 			editNotificationSubject: data.editNotificationSubject,
+			showTimer: data.showTimer,
+			buttonTheme: data.buttonTheme,
+			showIcons: data.showIcons,
+			timerAppearance: data.timerAppearance,
 		},
 	} );
 	const formValues = useWatch( { control } );
 	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
 		control,
 	} );
+
+	// useEffect( () => {
+	// 	// Determine if jQuery Fancybox is available.
+	// 	if ( typeof jQuery.fancybox !== 'undefined' ) {
+	// 		console.log( 'blah' );
+	// 		jQuery( '.fancybox-preview a' ).fancybox( {
+	// 			type: 'image',
+	// 		} );
+	// 	}
+	// }, [] );
 
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
@@ -177,7 +195,17 @@ const Interface = ( props ) => {
 	const getCommentEditingHeader = () => {
 		return (
 			<>
-				<h2>{ __( 'Comment Editing', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+				<h2>
+					{ __( 'Comment Editing', 'comment-edit-pro' ) }{ ' ' }
+					<a
+						className="sce-admin-heading-docs"
+						target="_blank"
+						rel="noreferrer"
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection"
+					>
+						({ __( 'Docs', 'comment-edit-pro' ) })
+					</a>
+				</h2>
 				<p className="description">
 					{ __(
 						'Comment editing is a great way to allow your users to fix their own comments.',
@@ -195,19 +223,14 @@ const Interface = ( props ) => {
 				<table className="form-table form-table-row-sections">
 					<tbody>
 						<tr>
-							<th scope="row">
-								{ __( 'Comment Editing', 'comment-edit-pro' ) }
-							</th>
+							<th scope="row">{ __( 'Comment Editing', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
 									name="enableCommentEditing"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											label={ __(
-												'Enable or disable comment editing.',
-												'comment-edit-pro'
-											) }
+											label={ __( 'Enable Comment Editing.', 'comment-edit-pro' ) }
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
@@ -224,9 +247,34 @@ const Interface = ( props ) => {
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">
-								{ __( 'Countdown Timer', 'comment-edit-pro' ) }
-							</th>
+							<th scope="row">{ __( 'Frontend Editing', 'comment-edit-pro' ) }</th>
+							<td>
+								<Controller
+									name="allowFrontEndEditing"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable Frontend Editing For Admins.',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will allow you to edit comments from the frontend of your site.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Countdown Timer', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
 									name="timer"
@@ -297,9 +345,7 @@ const Interface = ( props ) => {
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">
-								{ __( 'Editing Options', 'comment-edit-pro' ) }
-							</th>
+							<th scope="row">{ __( 'Logging', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
 									name="allowCommentLogging"
@@ -307,7 +353,7 @@ const Interface = ( props ) => {
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
 											label={ __(
-												'Enable or disable comment logging for edited comments.',
+												'Enable Comment Logging for Edited Comments.',
 												'comment-edit-pro'
 											) }
 											className="sce-admin__toggle-control"
@@ -323,28 +369,11 @@ const Interface = ( props ) => {
 										/>
 									) }
 								/>
-								<Controller
-									name="allowFrontEndEditing"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable or disable Frontend Editing for admins.',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will allow you to edit comments from the frontend of your site.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Comment Deletion', 'comment-edit-pro' ) }</th>
+							<td>
 								<Controller
 									name="allowDelete"
 									control={ control }
@@ -452,23 +481,32 @@ const Interface = ( props ) => {
 													value={ value }
 													onChange={ ( newValue ) => {
 														if ( ! ValidateEmail( newValue ) ) {
-															setError( 'editNotificationTo', { shouldFocus: true } );
+															setError( 'editNotificationTo', {
+																shouldFocus: true,
+															} );
 														} else {
 															clearErrors( 'editNotificationTo' );
 														}
 														onChange( newValue );
 													} }
 													className={ classNames( 'sce-admin__text-control', {
-														'has-error': 'required' === errors.editNotificationTo?.type,
+														'has-error':
+															'required' === errors.editNotificationTo?.type,
 														'is-required': true,
 													} ) }
-													help={ __( 'The email address to send the notification to.', 'comment-edit-pro' ) }
+													help={ __(
+														'The email address to send the notification to.',
+														'comment-edit-pro'
+													) }
 												/>
 											) }
 										/>
 										{ errors.editNotificationTo && (
 											<Notice
-												message={ __( 'This does not appear to be a valid email address.', 'comment-edit-pro' ) }
+												message={ __(
+													'This does not appear to be a valid email address.',
+													'comment-edit-pro'
+												) }
 												status="error"
 												politeness="assertive"
 												inline={ false }
@@ -481,27 +519,39 @@ const Interface = ( props ) => {
 											rules={ { required: true } }
 											render={ ( { field: { onChange, value } } ) => (
 												<TextControl
-													label={ __( 'From Email Address', 'highlight-and-share' ) }
+													label={ __(
+														'From Email Address',
+														'highlight-and-share'
+													) }
 													value={ value }
 													onChange={ ( newValue ) => {
 														if ( ! ValidateEmail( newValue ) ) {
-															setError( 'editNotificationFrom', { shouldFocus: true } );
+															setError( 'editNotificationFrom', {
+																shouldFocus: true,
+															} );
 														} else {
 															clearErrors( 'editNotificationFrom' );
 														}
 														onChange( newValue );
 													} }
 													className={ classNames( 'sce-admin__text-control', {
-														'has-error': 'required' === errors.editNotificationFrom?.type,
+														'has-error':
+															'required' === errors.editNotificationFrom?.type,
 														'is-required': true,
 													} ) }
-													help={ __( 'The email address that notifications should be sent from.', 'comment-edit-pro' ) }
+													help={ __(
+														'The email address that notifications should be sent from.',
+														'comment-edit-pro'
+													) }
 												/>
 											) }
 										/>
 										{ errors.editNotificationFrom && (
 											<Notice
-												message={ __( 'This does not appear to be a valid email address.', 'comment-edit-pro' ) }
+												message={ __(
+													'This does not appear to be a valid email address.',
+													'comment-edit-pro'
+												) }
 												status="error"
 												politeness="assertive"
 												inline={ false }
@@ -520,16 +570,24 @@ const Interface = ( props ) => {
 														onChange( newValue );
 													} }
 													className={ classNames( 'sce-admin__text-control', {
-														'has-error': 'required' === errors.editNotificationSubject?.type,
+														'has-error':
+															'required' ===
+															errors.editNotificationSubject?.type,
 														'is-required': true,
 													} ) }
-													help={ __( 'The subject of the email when someone edits their comment.', 'comment-edit-pro' ) }
+													help={ __(
+														'The subject of the email when someone edits their comment.',
+														'comment-edit-pro'
+													) }
 												/>
 											) }
 										/>
 										{ errors.editNotificationSubject && (
 											<Notice
-												message={ __( 'This is a required field.', 'comment-edit-pro' ) }
+												message={ __(
+													'This is a required field.',
+													'comment-edit-pro'
+												) }
 												status="error"
 												politeness="assertive"
 												inline={ false }
@@ -538,7 +596,167 @@ const Interface = ( props ) => {
 										) }
 									</>
 								) }
-
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Appearance', 'comment-edit-pro' ) }</th>
+							<td>
+								<Controller
+									name="showTimer"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __( 'Show the timer', 'comment-edit-pro' ) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will show the timer to the user when editing.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								{ getValues( 'showTimer' ) && (
+									<>
+										<Controller
+											name="timerAppearance"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Timer Appearance', 'comment-edit-pro' ) }
+													help={ __(
+														'Select how the timer should appear to the user.',
+														'comment-edit-pro'
+													) }
+													selected={ value }
+													options={ [
+														{
+															label: __( 'Words', 'comment-edit-pro' ),
+															value: 'words',
+														},
+														{
+															label: __( 'Compact', 'comment-edit-pro' ),
+															value: 'compact',
+														},
+													] }
+													onChange={ ( timerAppearanceValue ) => {
+														onChange( timerAppearanceValue );
+													} }
+												/>
+											) }
+										/>
+									</>
+								) }
+								<Controller
+									name="buttonTheme"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<SelectControl
+											label={ __( 'Choose a Button Theme', 'comment-edit-pro' ) }
+											help={ __(
+												'Select a button theme for editing interface.',
+												'comment-edit-pro'
+											) }
+											selected={ value }
+											options={ [
+												{
+													label: __( 'None', 'comment-edit-pro' ),
+													value: 'default',
+												},
+												{
+													label: __( 'Regular', 'comment-edit-pro' ),
+													value: 'regular',
+												},
+												{
+													label: __( 'Light', 'comment-edit-pro' ),
+													value: 'light',
+												},
+												{
+													label: __( 'Dark', 'comment-edit-pro' ),
+													value: 'dark',
+												},
+											] }
+											onChange={ ( buttonThemeValue ) => {
+												onChange( buttonThemeValue );
+											} }
+										/>
+									) }
+								/>
+								{ 'default' !== getValues( 'buttonTheme' ) && (
+									<>
+										<Controller
+											name="showIcons"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Show Icons on Buttons',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Allow icons for the buttons. Recommended if you have selected a button theme.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</>
+								) }
+								<p className="sce-admin__theme-preview fancybox-previews">
+									<strong>{ __( 'Preview:', 'comment-edit-pro' ) }</strong>
+									{ ` ` }
+									<a
+										href={ sceCommentEditing.default_theme }
+										className="sce-admin__theme-preview-link"
+										onClick={ ( e ) => {
+											e.preventDefault();
+											jQuery.fancybox.open( {
+												src: e.target.href,
+												type: 'image',
+											} );
+										} }
+									>
+										{ __( 'Default Theme', 'comment-edit-pro' ) }
+									</a>
+									{ ` | ` }
+									<a
+										href={ sceCommentEditing.light_theme }
+										className="sce-admin__theme-preview-link"
+										onClick={ ( e ) => {
+											e.preventDefault();
+											jQuery.fancybox.open( {
+												src: e.target.href,
+												type: 'image',
+											} );
+										} }
+									>
+										{ __( 'Light Theme', 'comment-edit-pro' ) }
+									</a>
+									{ ` | ` }
+									<a
+										href={ sceCommentEditing.dark_theme }
+										className="sce-admin__theme-preview-link"
+										onClick={ ( e ) => {
+											e.preventDefault();
+											jQuery.fancybox.open( {
+												src: e.target.href,
+												type: 'image',
+											} );
+										} }
+									>
+										{ __( 'Dark Theme', 'comment-edit-pro' ) }
+									</a>
+								</p>
 							</td>
 						</tr>
 					</tbody>
@@ -589,20 +807,14 @@ const Interface = ( props ) => {
 				) }
 				{ isSaved && (
 					<Notice
-						message={ __(
-							'Your settings have been saved.',
-							'comment-edit-pro'
-						) }
+						message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
 						status="success"
 						politeness="assertive"
 					/>
 				) }
 				{ isReset && (
 					<Notice
-						message={ __(
-							'Your settings have been reset.',
-							'comment-edit-pro'
-						) }
+						message={ __( 'Your settings have been reset.', 'comment-edit-pro' ) }
 						status="success"
 						politeness="assertive"
 					/>
