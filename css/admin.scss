@@ -723,7 +723,8 @@ h3.sce-panel-heading {
 		label {
 			font-weight: 700;
 		}
-		input[type='text'] {
+		input[type='text'],
+		input[type='number'] {
 			position: relative;
 			display: block;
 			min-width: 200px;

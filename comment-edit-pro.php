@@ -371,6 +371,8 @@ class Comment_Edit_Pro {
 		$this->license_ajax->run();
 		$this->help = new \CommentEditPro\Includes\Help();
 		$this->help->run();
+		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
+		$this->comment_editing->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

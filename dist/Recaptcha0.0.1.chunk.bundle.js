@@ -1,1 +1,801 @@
-(self.webpackChunksimple_comment_editing_options=self.webpackChunksimple_comment_editing_options||[]).push([[818],{6191:(e,t,r)=>{"use strict";r.d(t,{Z:()=>i});var n=r(9669),a=r.n(n),c=r(129),o=r.n(c);function i(e,t){var r={action:e},n={nonce:!1,action:e};for(var c in void 0===t&&(t={}),n)t.hasOwnProperty(c)||(t[c]=n[c]);var i={method:"post",url:ajaxurl,params:r,paramsSerializer:function(e){return o().stringify(e,{arrayFormat:"brackets"})},data:o().stringify(t)};return a()(i)}},7202:(e,t,r)=>{"use strict";r.d(t,{Z:()=>p});var n=r(7294),a=r(5697),c=r.n(a),o=r(4364),i=r(4244),l=r(4184),s=r.n(l);function u(){return u=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e},u.apply(this,arguments)}function m(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}var d=function(e){var t,r=e.message,a=e.status,c=e.politeness,l=e.icon,d=e.className,p=e.inline,h=e.children;(0,n.useEffect)((function(){(0,o.D)(r,c)}),[r,a,c]);var f,_=function(){return null!==l},g=s()(d,"sce-admin__notice",(m(t={"sce-admin__notice--has-icon":_()},"sce-admin__notice-type--".concat(a),!0),m(t,"sce-admin__notice-appearance--inline",p),m(t,"sce-admin__notice-appearance--block",!p),t));return n.createElement("div",{className:g},n.createElement(i.Z,u({isDismissible:!1,spokenMessage:r,actions:[]},e),_()&&n.createElement("div",{className:"sce-admin__notice-icon"},(f=l,n.createElement(f,{width:16,height:16,fill:"#6c757d"}))),n.createElement("div",{className:"sce-admin__notice-message"},n.createElement(n.Fragment,null,r," ",h," "))))};d.defaultProps={message:"",status:"info",politeness:"polite",icon:null,className:"",inline:!1},d.propTypes={message:c().string.isRequired,status:c().oneOf(["info","warning","success","error"]),politeness:c().oneOf(["assertive","polite"]),icon:c().func,className:c().string,inline:c().bool};const p=d},8194:(e,t,r)=>{"use strict";r.d(t,{Z:()=>i});var n=r(7294),a=r(5697),c=r.n(a),o=function(e){return n.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 512 512",width:e.width,height:e.height},n.createElement("path",{fill:"var( ".concat(e.var,")"),d:"M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"}))};o.defaultProps={width:16,height:16,fill:"#333333"},o.propTypes={width:c().number,height:c().number,fill:c().string};const i=o},419:(e,t,r)=>{"use strict";r.d(t,{Z:()=>c});var n=r(7294);function a(){return a=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e},a.apply(this,arguments)}const c=function(e){return n.createElement("svg",a({"aria-hidden":"true","data-prefix":"fas","data-icon":"clipboard-check",className:"prefix__svg-inline--fa prefix__fa-clipboard-check prefix__fa-w-12",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 384 512",width:"16",height:"16"},e),n.createElement("path",{fill:"currentColor",d:"M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"}))}},6937:(e,t,r)=>{"use strict";r.d(t,{Z:()=>i});var n=r(7294),a=r(5697),c=r.n(a),o=function(e){return n.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 576 512",width:e.width,height:e.height},n.createElement("path",{className:"fa-primary",fill:e.primaryColor,d:"M256 32c0-17.67 14.3-32 32-32 141.4 0 256 114.6 256 256 0 46.6-12.5 90.4-34.3 128-8.8 15.3-28.4 20.6-44.6 11.7-14.4-8.8-19.6-28.4-10.8-44.6 16.3-27.3 25.7-60.1 25.7-96 0-106-86-192-192-192-17.7 0-32-13.43-32-32v.9z"}),n.createElement("path",{d:"M287.1 64c-106 0-192 85.1-192 192 0 106 86 192 192 192 71 0 132.2-37.5 165.8-93.6l.1.1c-6.9 14.9-1.5 32.8 12.1 41.2 16.2 8.9 35.8 3.6 44.6-11.7.2-.3.4-.6.5-.9C466.1 460.1 383.1 512 288 512 146.6 512 32 397.4 32 256S146.6 0 288 0c-17.7 0-32 14.33-32 32s14.3 32 32 32h-.9z",fill:e.secondaryColor,style:{opacity:.4}}))};o.defaultProps={width:24,height:24,primaryColor:"currentColor",secondaryColor:"currentColor"},o.propTypes={width:c().number,height:c().number,primaryColor:c().string.isRequired,secondaryColor:c().string.isRequired};const i=o},9012:(e,t,r)=>{"use strict";r.r(t),r.d(t,{default:()=>x});var n=r(7294),a=r(7536),c=r(4184),o=r.n(c),i=r(5302),l=r(2304),s=r(8498),u=r.n(s),m=r(9545),d=r(314),p=r(3830),h=r(2248),f=r(6937),_=r(419),g=r(6191),b=r(8194),v=r(7202);function E(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function y(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function w(){return w=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e},w.apply(this,arguments)}function S(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var r=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=r){var n,a,c=[],o=!0,i=!1;try{for(r=r.call(e);!(o=(n=r.next()).done)&&(c.push(n.value),!t||c.length!==t);o=!0);}catch(e){i=!0,a=e}finally{try{o||null==r.return||r.return()}finally{if(i)throw a}}return c}}(e,t)||function(e,t){if(e){if("string"==typeof e)return C(e,t);var r=Object.prototype.toString.call(e).slice(8,-1);return"Object"===r&&e.constructor&&(r=e.constructor.name),"Map"===r||"Set"===r?Array.from(e):"Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?C(e,t):void 0}}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function C(e,t){(null==t||t>e.length)&&(t=e.length);for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r];return n}var q=function(){return(0,g.Z)("sce_get_recaptcha_options",{nonce:sceIntegrations.get_nonce})},O=function(e){var t,r,c,i,s=(0,e.defaults)().data,u=s.data,C=(s.success,S((0,n.useState)(!1),2)),q=C[0],O=C[1],x=S((0,n.useState)(!1),2),Z=x[0],j=x[1],I=S((0,n.useState)(!1),2),P=I[0],T=I[1],N=S((0,n.useState)(!1),2),R=N[0],K=N[1],k=(0,a.cI)({defaultValues:{recaptchaEnabled:u.recaptchaEnabled,recaptchaSiteKey:u.recaptchaSiteKey,recaptchaSecretKey:u.recaptchaSecretKey,recaptchaLoggedInUsersEnabled:u.recaptchaLoggedInUsersEnabled,recaptchaCommentFormId:u.recaptchaCommentFormId,recaptchaCommentSubmitButtonId:u.recaptchaCommentSubmitButtonId,recaptchaScoreThreshold:u.recaptchaScoreThreshold}}),D=(k.register,k.control),F=k.handleSubmit,A=(k.setValue,k.getValues),z=k.reset,M=(k.setError,(0,a.qo)({control:D}),(0,a.cl)({control:D})),B=M.errors,L=(M.isDirty,M.dirtyFields,M.touchedFields,function(){return Object.keys(B).length>0});return n.createElement(n.Fragment,null,n.createElement("h2",null,(0,l.__)("Recaptcha","comment-edit-pro")," ",n.createElement("a",{className:"sce-admin-heading-docs",target:"_blank",rel:"noreferrer",href:"https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support"},"(",(0,l.__)("Docs","comment-edit-pro"),")")),n.createElement("p",{className:"description"},(0,l.__)("Using Recaptcha 3, you can further protect from bots and spam.","comment-edit-pro")),n.createElement("form",{onSubmit:F((function(e){O(!0),(0,g.Z)("sce_save_recaptcha_options",function(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?E(Object(r),!0).forEach((function(t){y(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):E(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}({nonce:sceIntegrations.save_nonce},e)).then((function(e){e.data.data,e.data.success&&(j(!0),setTimeout((function(){j(!1)}),3e3))})).catch((function(e){})).then((function(e){O(!1)}))}))},n.createElement("table",{className:"form-table"},n.createElement("tbody",null,n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Recaptcha","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaEnabled",control:D,render:function(e){var t=e.field,r=t.onChange,a=t.value;return n.createElement(d.Z,{label:(0,l.__)("Enable Recaptcha 3","comment-edit-pro"),className:"sce-admin__toggle-control",checked:a,onChange:function(e){r(e)},help:(0,l.__)("Enable or disable Recaptcha 3 support.","comment-edit-pro")})}}))),A("recaptchaEnabled")&&n.createElement(n.Fragment,null,n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Site Key","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaSiteKey",control:D,rules:{required:!0},render:function(e){var t,r=e.field;return n.createElement(m.Z,w({label:(0,l.__)("Recaptcha 3 Site Key","quotes-dlx")},r,{className:o()("sce-admin__text-control",{"has-error":"required"===(null===(t=B.recaptchaSiteKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter your Recaptcha 3 Site Key","comment-edit-pro"),"aria-required":"true"}))}}),"required"===(null===(i=B.recaptchaSiteKey)||void 0===i?void 0:i.type)&&n.createElement(v.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:b.Z}))),n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Secret Key","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaSecretKey",control:D,rules:{required:!0},render:function(e){var t,r=e.field;return n.createElement(m.Z,w({label:(0,l.__)("Recaptcha 3 Secret Key","quotes-dlx")},r,{className:o()("sce-admin__text-control",{"has-error":"required"===(null===(t=B.recaptchaSiteKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter your Recaptcha 3 Secret Key","comment-edit-pro"),"aria-required":"true"}))}}),"required"===(null===(c=B.recaptchaSecretKey)||void 0===c?void 0:c.type)&&n.createElement(v.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:b.Z}))),n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Logged-in Users","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaLoggedInUsersEnabled",control:D,render:function(e){var t=e.field,r=t.onChange,a=t.value;return n.createElement(d.Z,{label:(0,l.__)("Enable Recaptcha for Logged-in Users","comment-edit-pro"),className:"sce-admin__toggle-control",checked:a,onChange:function(e){r(e)},help:(0,l.__)("You can exclude logged-in users from Recaptcha with this setting.","comment-edit-pro")})}}))),n.createElement(n.Fragment,null,n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Comment Form ID","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaCommentFormId",control:D,rules:{required:!0},render:function(e){var t,r=e.field;return n.createElement(m.Z,w({label:(0,l.__)("Comment Form ID","quotes-dlx")},r,{className:o()("sce-admin__text-control",{"has-error":"required"===(null===(t=B.recaptchaSiteKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter the CSS/HTML ID for the comment form so Recaptcha can target the correct comment form.","comment-edit-pro"),"aria-required":"true"}))}}),"required"===(null===(t=B.recaptchaCommentFormId)||void 0===t?void 0:t.type)&&n.createElement(v.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:b.Z}))),n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("Comment Submit Button ID","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaCommentSubmitButtonId",control:D,rules:{required:!0},render:function(e){var t,r=e.field;return n.createElement(m.Z,w({label:(0,l.__)("Submit Comment Button ID","quotes-dlx")},r,{className:o()("sce-admin__text-control",{"has-error":"required"===(null===(t=B.recaptchaCommentSubmitButtonId)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter the CSS/HTML ID for the comment form button so Recaptcha can target the correct button.","comment-edit-pro"),"aria-required":"true"}))}}),"required"===(null===(r=B.recaptchaCommentSubmitButtonId)||void 0===r?void 0:r.type)&&n.createElement(v.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:b.Z})))),n.createElement("tr",null,n.createElement("th",{scope:"row"},(0,l.__)("reCAPTCHA Threshold","comment-edit-pro")),n.createElement("td",null,n.createElement(a.Qr,{name:"recaptchaScoreThreshold",control:D,render:function(e){var t=e.field,r=t.onChange,a=t.value;return n.createElement(n.Fragment,null,n.createElement(p.Z,{label:(0,l.__)("Set reCAPTCHA Minimum Threshold","comment-edit-pro"),step:.05,value:a,max:1,min:0,currentInput:a,initialPosition:a,allowReset:!0,className:"sce-admin__range-control",onChange:function(e){r(e)},help:(0,l.__)("The threshold score is between 0 and 1. The higher the score, the higher the chance of a successful reCAPTCHA challenge. The default value is 0.5. Meaning that the reCAPTCHA challenge will succeed if the score is greater than or equal to 0.5.","comment-edit-pro"),trackColor:"#8019c4",railColor:"#dad4eb"}))}})))))),n.createElement("div",{className:"sce-admin-buttons"},n.createElement(h.Z,{className:o()("qdlx__btn qdlx__btn-primary qdlx__btn--icon-right",{"has-error":L()},{"has-icon":q||Z},{"is-saving":q&&!Z},{"is-saved":Z}),type:"submit",text:q?(0,l.__)("Saving…","quotes-dlx"):Z?(0,l.__)("Saved","quotes-dlx"):(0,l.__)("Save Recaptcha Options","quotes-dlx"),icon:q?f.Z:!!Z&&_.Z,iconSize:"18",iconPosition:"right",disabled:q}),A("recaptchaEnabled")&&n.createElement(h.Z,{className:o()("qdlx__btn qdlx__btn-danger qdlx__btn--icon-right",{"has-icon":P},{"is-resetting":{resetting:P}}),type:"button",text:P?(0,l.__)("Disconnecting…","quotes-dlx"):R?(0,l.__)("Disconnected","quotes-dlx"):(0,l.__)("Disconnect From Recaptcha","quotes-dlx"),icon:!!P&&f.Z,iconSize:"18",iconPosition:"right",disabled:q||P,onClick:function(e){T(!0),T(!0),(0,g.Z)("sce_reset_recaptcha_options",{nonce:sceIntegrations.reset_nonce}).then((function(e){e.data.data,e.data.success&&(K(!0),z({recaptchaEnabled:!1,recaptchaSiteKey:"",recaptchaSecretKey:"",recaptchaLoggedInUsersEnabled:!0}),setTimeout((function(){K(!1)}),3e3))})).catch((function(e){})).then((function(e){T(!1)}))}})),L()&&n.createElement(v.Z,{message:(0,l.__)("There are form validation errors. Please correct them above.","comment-edit-pro"),status:"error",politeness:"polite"}),Z&&n.createElement(v.Z,{message:(0,l.__)("Your settings have been saved.","comment-edit-pro"),status:"success",politeness:"assertive"}),R&&n.createElement(v.Z,{message:(0,l.__)("Your settings have been reset.","comment-edit-pro"),status:"success",politeness:"assertive"})))};const x=function(e){var t=S((0,i.useAsyncResource)(q,[]),2),r=t[0];return t[1],n.createElement(n.Suspense,{fallback:n.createElement(n.Fragment,null,n.createElement("h2",null,(0,l.__)("Recaptcha","comment-edit-pro")),n.createElement(u(),{color:"#9c68b0",loading:!0,cssOverride:!0,size:25,speedMultiplier:.65}))},n.createElement(O,w({defaults:r},e)))}},4654:()=>{}}]);
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Recaptcha0.0.1"],{
+
+/***/ "./src/js/SendCommand.js":
+/*!*******************************!*\
+  !*** ./src/js/SendCommand.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ sendCommand)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
+/* eslint-disable no-undef */
+
+/* eslint-disable camelcase */
+
+
+function sendCommand(action, data) {
+  var params = {
+    action: action
+  };
+  var default_data = {
+    nonce: false,
+    action: action
+  };
+
+  if ('undefined' === typeof data) {
+    data = {};
+  }
+
+  for (var opt in default_data) {
+    if (!data.hasOwnProperty(opt)) {
+      data[opt] = default_data[opt];
+    }
+  }
+
+  var options = {
+    method: 'post',
+    url: ajaxurl,
+    params: params,
+    paramsSerializer: function paramsSerializer(jsparams) {
+      return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {
+        arrayFormat: 'brackets'
+      });
+    },
+    data: qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(data)
+  };
+  return axios__WEBPACK_IMPORTED_MODULE_0___default()(options);
+}
+
+/***/ }),
+
+/***/ "./src/js/react/components/Notice/index.js":
+/*!*************************************************!*\
+  !*** ./src/js/react/components/Notice/index.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/a11y */ "./node_modules/@wordpress/a11y/build-module/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/notice/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// eslint-disable-next-line no-unused-vars
+
+ // ES6
+
+
+
+
+
+var Notice = function Notice(props) {
+  var _classNames;
+
+  var message = props.message,
+      status = props.status,
+      politeness = props.politeness,
+      icon = props.icon,
+      className = props.className,
+      inline = props.inline,
+      children = props.children;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__.speak)(message, politeness);
+  }, [message, status, politeness]);
+
+  var hasIcon = function hasIcon() {
+    return icon !== null;
+  };
+
+  var getIcon = function getIcon(Icon) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Icon, {
+      width: 16,
+      height: 16,
+      fill: "#6c757d"
+    });
+  };
+
+  var containerClasses = classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, 'sce-admin__notice', (_classNames = {
+    'sce-admin__notice--has-icon': hasIcon()
+  }, _defineProperty(_classNames, "sce-admin__notice-type--".concat(status), true), _defineProperty(_classNames, "sce-admin__notice-appearance--inline", inline), _defineProperty(_classNames, "sce-admin__notice-appearance--block", !inline), _classNames));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: containerClasses
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+    isDismissible: false,
+    spokenMessage: message,
+    actions: []
+  }, props), hasIcon() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__notice-icon"
+  }, getIcon(icon)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__notice-message"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, message, " ", children, " "))));
+};
+
+Notice.defaultProps = {
+  message: '',
+  status: 'info',
+  politeness: 'polite',
+  icon: null,
+  className: '',
+  inline: false
+};
+Notice.propTypes = {
+  message: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().string.isRequired),
+  status: prop_types__WEBPACK_IMPORTED_MODULE_4___default().oneOf(['info', 'warning', 'success', 'error']),
+  politeness: prop_types__WEBPACK_IMPORTED_MODULE_4___default().oneOf(['assertive', 'polite']),
+  icon: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().func),
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().string),
+  inline: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().bool)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Notice);
+
+/***/ }),
+
+/***/ "./src/js/react/components/icons/CircularExplanation.js":
+/*!**************************************************************!*\
+  !*** ./src/js/react/components/icons/CircularExplanation.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+
+ // ES6
+
+var CircularExclamationIcon = function CircularExclamationIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 512 512",
+    width: props.width,
+    height: props.height
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    fill: "var( ".concat(props["var"], ")"),
+    d: "M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"
+  }));
+};
+
+CircularExclamationIcon.defaultProps = {
+  width: 16,
+  height: 16,
+  fill: '#333333'
+};
+CircularExclamationIcon.propTypes = {
+  width: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  height: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  fill: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CircularExclamationIcon);
+
+/***/ }),
+
+/***/ "./src/js/react/components/icons/ClipboardCheck.js":
+/*!*********************************************************!*\
+  !*** ./src/js/react/components/icons/ClipboardCheck.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+/* eslint-disable no-unused-vars */
+
+
+function ClipboardCheck(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", _extends({
+    "aria-hidden": "true",
+    "data-prefix": "fas",
+    "data-icon": "clipboard-check",
+    className: "prefix__svg-inline--fa prefix__fa-clipboard-check prefix__fa-w-12",
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 384 512",
+    width: "16",
+    height: "16"
+  }, props), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    fill: "currentColor",
+    d: "M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"
+  }));
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClipboardCheck);
+
+/***/ }),
+
+/***/ "./src/js/react/components/icons/Spinner.js":
+/*!**************************************************!*\
+  !*** ./src/js/react/components/icons/Spinner.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+
+ // ES6
+
+var Spinner = function Spinner(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 576 512",
+    width: props.width,
+    height: props.height
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    className: "fa-primary",
+    fill: props.primaryColor,
+    d: "M256 32c0-17.67 14.3-32 32-32 141.4 0 256 114.6 256 256 0 46.6-12.5 90.4-34.3 128-8.8 15.3-28.4 20.6-44.6 11.7-14.4-8.8-19.6-28.4-10.8-44.6 16.3-27.3 25.7-60.1 25.7-96 0-106-86-192-192-192-17.7 0-32-13.43-32-32v.9z"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M287.1 64c-106 0-192 85.1-192 192 0 106 86 192 192 192 71 0 132.2-37.5 165.8-93.6l.1.1c-6.9 14.9-1.5 32.8 12.1 41.2 16.2 8.9 35.8 3.6 44.6-11.7.2-.3.4-.6.5-.9C466.1 460.1 383.1 512 288 512 146.6 512 32 397.4 32 256S146.6 0 288 0c-17.7 0-32 14.33-32 32s14.3 32 32 32h-.9z",
+    fill: props.secondaryColor,
+    style: {
+      opacity: 0.4
+    }
+  }));
+};
+
+Spinner.defaultProps = {
+  width: 24,
+  height: 24,
+  primaryColor: 'currentColor',
+  secondaryColor: 'currentColor'
+};
+Spinner.propTypes = {
+  width: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  height: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  primaryColor: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired),
+  secondaryColor: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
+
+/***/ }),
+
+/***/ "./src/js/react/views/integrations/Recapcha.js":
+/*!*****************************************************!*\
+  !*** ./src/js/react/views/integrations/Recapcha.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! use-async-resource */ "./node_modules/use-async-resource/lib/index.js");
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(use_async_resource__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/range-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
+/* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
+/* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
+/* harmony import */ var _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/icons/CircularExplanation */ "./src/js/react/components/icons/CircularExplanation.js");
+/* harmony import */ var _components_Notice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/Notice */ "./src/js/react/components/Notice/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/* eslint-disable no-unused-vars */
+
+
+
+
+
+
+
+
+
+
+
+
+
+var retrieveRecaptchaSettings = function retrieveRecaptchaSettings() {
+  return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_recaptcha_options', {
+    nonce: sceIntegrations.get_nonce
+  });
+};
+
+var Recaptcha = function Recaptcha(props) {
+  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveRecaptchaSettings, []),
+      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+      defaults = _useAsyncResource2[0],
+      getDefaults = _useAsyncResource2[1];
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default()), {
+      color: '#9c68b0',
+      loading: true,
+      cssOverride: true,
+      size: 25,
+      speedMultiplier: 0.65
+    }))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Interface, _extends({
+    defaults: defaults
+  }, props)));
+};
+
+var Interface = function Interface(props) {
+  var defaults = props.defaults;
+  var response = defaults();
+  var _response$data = response.data,
+      data = _response$data.data,
+      success = _response$data.success;
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      saving = _useState2[0],
+      setSaving = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isSaved = _useState4[0],
+      setIsSaved = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      resetting = _useState6[0],
+      setResetting = _useState6[1];
+
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isReset = _useState8[0],
+      setIsReset = _useState8[1];
+
+  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
+    defaultValues: {
+      recaptchaEnabled: data.recaptchaEnabled,
+      recaptchaSiteKey: data.recaptchaSiteKey,
+      recaptchaSecretKey: data.recaptchaSecretKey,
+      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
+      recaptchaCommentFormId: data.recaptchaCommentFormId,
+      recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
+      recaptchaScoreThreshold: data.recaptchaScoreThreshold
+    }
+  }),
+      register = _useForm.register,
+      control = _useForm.control,
+      handleSubmit = _useForm.handleSubmit,
+      setValue = _useForm.setValue,
+      getValues = _useForm.getValues,
+      reset = _useForm.reset,
+      setError = _useForm.setError;
+
+  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useWatch)({
+    control: control
+  });
+
+  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useFormState)({
+    control: control
+  }),
+      errors = _useFormState.errors,
+      isDirty = _useFormState.isDirty,
+      dirtyFields = _useFormState.dirtyFields,
+      touchedFields = _useFormState.touchedFields;
+
+  var hasErrors = function hasErrors() {
+    return Object.keys(errors).length > 0;
+  };
+
+  var onSubmit = function onSubmit(formData) {
+    setSaving(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_recaptcha_options', _objectSpread({
+      nonce: sceIntegrations.save_nonce
+    }, formData)).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        setIsSaved(true);
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {}
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setSaving(false);
+    });
+  };
+
+  var handleReset = function handleReset() {
+    setResetting(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_recaptcha_options', {
+      nonce: sceIntegrations.reset_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        setIsReset(true);
+        reset({
+          recaptchaEnabled: false,
+          recaptchaSiteKey: '',
+          recaptchaSecretKey: '',
+          recaptchaLoggedInUsersEnabled: true
+        });
+        setTimeout(function () {
+          setIsReset(false);
+        }, 3000);
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setResetting(false);
+    });
+  };
+
+  var getSiteKey = function getSiteKey() {
+    var _errors$recaptchaSite2;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Site Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaSiteKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref) {
+        var _errors$recaptchaSite;
+
+        var field = _ref.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Site Key', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaSite = errors.recaptchaSiteKey) === null || _errors$recaptchaSite === void 0 ? void 0 : _errors$recaptchaSite.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Recaptcha 3 Site Key', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaSite2 = errors.recaptchaSiteKey) === null || _errors$recaptchaSite2 === void 0 ? void 0 : _errors$recaptchaSite2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSecretKey = function getSecretKey() {
+    var _errors$recaptchaSecr;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaSecretKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref2) {
+        var _errors$recaptchaSite3;
+
+        var field = _ref2.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Secret Key', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaSite3 = errors.recaptchaSiteKey) === null || _errors$recaptchaSite3 === void 0 ? void 0 : _errors$recaptchaSite3.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Recaptcha 3 Secret Key', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaSecr = errors.recaptchaSecretKey) === null || _errors$recaptchaSecr === void 0 ? void 0 : _errors$recaptchaSecr.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getCommentEntityIds = function getCommentEntityIds() {
+    var _errors$recaptchaComm, _errors$recaptchaComm3;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Form ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaCommentFormId",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref3) {
+        var _errors$recaptchaSite4;
+
+        var field = _ref3.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Form ID', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaSite4 = errors.recaptchaSiteKey) === null || _errors$recaptchaSite4 === void 0 ? void 0 : _errors$recaptchaSite4.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment form so Recaptcha can target the correct comment form.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaComm = errors.recaptchaCommentFormId) === null || _errors$recaptchaComm === void 0 ? void 0 : _errors$recaptchaComm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Submit Button ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaCommentSubmitButtonId",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref4) {
+        var _errors$recaptchaComm2;
+
+        var field = _ref4.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Submit Comment Button ID', 'quotes-dlx')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$recaptchaComm2 = errors.recaptchaCommentSubmitButtonId) === null || _errors$recaptchaComm2 === void 0 ? void 0 : _errors$recaptchaComm2.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment form button so Recaptcha can target the correct button.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$recaptchaComm3 = errors.recaptchaCommentSubmitButtonId) === null || _errors$recaptchaComm3 === void 0 ? void 0 : _errors$recaptchaComm3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }))));
+  };
+
+  var getLoggedInToggle = function getLoggedInToggle() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaLoggedInUsersEnabled",
+      control: control,
+      render: function render(_ref5) {
+        var _ref5$field = _ref5.field,
+            _onChange = _ref5$field.onChange,
+            value = _ref5$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha for Logged-in Users', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('You can exclude logged-in users from Recaptcha with this setting.', 'comment-edit-pro')
+        });
+      }
+    })));
+  };
+
+  var getRecaptchaThreshold = function getRecaptchaThreshold() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Threshold', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+      name: "recaptchaScoreThreshold",
+      control: control,
+      render: function render(_ref6) {
+        var _ref6$field = _ref6.field,
+            _onChange2 = _ref6$field.onChange,
+            value = _ref6$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set reCAPTCHA Minimum Threshold', 'comment-edit-pro'),
+          step: 0.05,
+          value: value,
+          max: 1,
+          min: 0,
+          currentInput: value,
+          initialPosition: value,
+          allowReset: true,
+          className: "sce-admin__range-control",
+          onChange: function onChange(recaptchaThreshold) {
+            _onChange2(recaptchaThreshold);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The threshold score is between 0 and 1. The higher the score, the higher the chance of a successful reCAPTCHA challenge. The default value is 0.5. Meaning that the reCAPTCHA challenge will succeed if the score is greater than or equal to 0.5.', 'comment-edit-pro'),
+          trackColor: "#8019c4",
+          railColor: "#dad4eb"
+        }));
+      }
+    })));
+  };
+
+  var getSaveIcon = function getSaveIcon() {
+    if (saving) {
+      return _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"];
+    }
+
+    if (isSaved) {
+      return _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__["default"];
+    }
+
+    return false;
+  };
+
+  var getSaveText = function getSaveText() {
+    if (saving) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'quotes-dlx');
+    }
+
+    if (isSaved) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'quotes-dlx');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Recaptcha Options', 'quotes-dlx');
+  };
+
+  var getResetText = function getResetText() {
+    if (resetting) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'quotes-dlx');
+    }
+
+    if (isReset) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Recaptcha', 'quotes-dlx');
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro'), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    className: "sce-admin-heading-docs",
+    target: "_blank",
+    rel: "noreferrer",
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support"
+  }, "(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "description"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Using Recaptcha 3, you can further protect from bots and spam.', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+    onSubmit: handleSubmit(onSubmit)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
+    className: "form-table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "recaptchaEnabled",
+    control: control,
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange3 = _ref7$field.onChange,
+          value = _ref7$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha 3', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange3(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha 3 support.', 'comment-edit-pro')
+      });
+    }
+  }))), getValues('recaptchaEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getSiteKey(), getSecretKey(), getLoggedInToggle(), getCommentEntityIds(), getRecaptchaThreshold()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin-buttons"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
+      'has-error': hasErrors()
+    }, {
+      'has-icon': saving || isSaved
+    }, {
+      'is-saving': saving && !isSaved
+    }, {
+      'is-saved': isSaved
+    }),
+    type: "submit",
+    text: getSaveText(),
+    icon: getSaveIcon(),
+    iconSize: "18",
+    iconPosition: "right",
+    disabled: saving
+  }), getValues('recaptchaEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
+      'has-icon': resetting
+    }, {
+      'is-resetting': {
+        resetting: resetting
+      }
+    }),
+    type: "button",
+    text: getResetText(),
+    icon: resetting ? _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"] : false,
+    iconSize: "18",
+    iconPosition: "right",
+    disabled: saving || resetting,
+    onClick: function onClick(e) {
+      setResetting(true);
+      handleReset(e);
+    }
+  })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "polite"
+  }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  }), isReset && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been reset.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  })));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Recaptcha);
+
+/***/ }),
+
+/***/ "?4f7e":
+/*!********************************!*\
+  !*** ./util.inspect (ignored) ***!
+  \********************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ })
+
+}]);
+//# sourceMappingURL=Recaptcha0.0.1.chunk.bundle.js.map

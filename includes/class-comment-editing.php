@@ -44,7 +44,7 @@ class Comment_Editing {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-comment-editing-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -53,21 +53,9 @@ class Comment_Editing {
 		}
 
 		$options = Options::get_options();
-		$lists   = array();
-		if ( Functions::is_multisite() ) {
-			$lists = get_site_option( 'sce_mailchimp_lists', array() );
-		} else {
-			$lists = get_option( 'sce_mailchimp_lists', array() );
-		}
 
 		$json_array = array(
-			'enableMailchimp'       => (bool) $options['enable_mailchimp'],
-			'apiKey'                => $options['mailchimp_api_key'],
-			'mailchimpServerPrefix' => $options['mailchimp_api_key_server_prefix'],
-			'mailchimpLists'        => $lists,
-			'selectedList'          => $options['mailchimp_selected_list'],
-			'signUpLabel'           => $options['mailchimp_signup_label'],
-			'checkboxEnabled'       => (bool) $options['mailchimp_checkbox_enabled'],
+			'timer'       => absint( $options['timer'] ),
 		);
 
 		// Exit gracefully.
@@ -260,7 +248,7 @@ class Comment_Editing {
 		if ( 'comment-editing' === $current_tab ) {
 			wp_enqueue_script(
 				'sce-comment-editing',
-				Functions::get_plugin_url( 'dist/comment-editing-admin.js' ),
+				Functions::get_plugin_url( 'dist/sce-comment-editing.js' ),
 				array(),
 				Functions::get_plugin_version(),
 				true

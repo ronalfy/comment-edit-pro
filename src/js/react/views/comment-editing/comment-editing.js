@@ -55,6 +55,8 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
+	console.log( data );
+
 	const {
 		register,
 		control,
@@ -65,7 +67,7 @@ const Interface = ( props ) => {
 		setError,
 	} = useForm( {
 		defaultValues: {
-			
+			timer: data.timer,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -175,180 +177,102 @@ const Interface = ( props ) => {
 		<>
 			{ getCommentEditingHeader() }
 			<form onSubmit={ handleSubmit( onSubmit ) }>
-				{ getValues( 'akismetActive' ) && getValues( 'akismetApiValid' ) && (
-					<>
-						<Notice
-							message={ __(
-								'Akismet is enabled and is protecting you from comment spam.',
-								'comment-edit-pro'
-							) }
-							status="success"
-							politeness="polite"
-						/>
-					</>
-				) }
 				<table className="form-table">
 					<tbody>
 						<tr>
 							<th scope="row">
-								{ __( 'Akismet Spam Protection', 'comment-edit-pro' ) }
+								{ __( 'Countdown Timer', 'comment-edit-pro' ) }
 							</th>
 							<td>
 								<Controller
-									name="akismetEnabled"
+									name="timer"
 									control={ control }
+									rules={ { required: true } }
 									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Akismet for Comments',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
+										<TextControl
+											label={ __( 'Timer Length', 'quotes-dlx' ) }
+											type="number"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.timer?.type,
+												'is-required': true,
+											} ) }
 											help={ __(
-												'Akismet protection is on by default for comments. Disabling this will prevent Akismet protection for new comments.',
+												'Enter the time that users have to edit their comments.',
 												'comment-edit-pro'
 											) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
 										/>
 									) }
 								/>
 							</td>
 						</tr>
-						{ getValues( 'akismetEnabled' ) && (
-							<>
-								<tr>
-									<th scope="row">
-										{ __( 'Logged-in Users ', 'comment-edit-pro' ) }
-									</th>
-									<td>
-										<Controller
-											name="akismetLoggedInUsersEnabled"
-											control={ control }
-											render={ ( { field: { onChange, value } } ) => (
-												<ToggleControl
-													label={ __(
-														'Enable Akismet for Logged-in Users',
-														'comment-edit-pro'
-													) }
-													className="sce-admin__toggle-control"
-													checked={ value }
-													onChange={ ( boolValue ) => {
-														//setShowButtonOptions( boolValue );
-														onChange( boolValue );
-													} }
-													help={ __(
-														'By default, Akismet protection is enabled for all logged-in users.',
-														'comment-edit-pro'
-													) }
-												/>
-											) }
-										/>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">
-										{ __( 'Edit Comments', 'comment-edit-pro' ) }
-									</th>
-									<td>
-										<Controller
-											name="akismetEditCommentsEnabled"
-											control={ control }
-											render={ ( { field: { onChange, value } } ) => (
-												<ToggleControl
-													label={ __(
-														'Enable Akismet for Edited Comments',
-														'comment-edit-pro'
-													) }
-													className="sce-admin__toggle-control"
-													checked={ value }
-													onChange={ ( boolValue ) => {
-														//setShowButtonOptions( boolValue );
-														onChange( boolValue );
-													} }
-													help={ __(
-														'By default, Akismet is enabled for edited comments.',
-														'comment-edit-pro'
-													) }
-												/>
-											) }
-										/>
-									</td>
-								</tr>
-							</>
-						) }
 					</tbody>
 				</table>
-				{ getValues( 'akismetActive' ) && (
-					<>
-						<div className="sce-admin-buttons">
-							<Button
-								className={ classNames(
-									'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
-									{ 'has-error': hasErrors() },
-									{ 'has-icon': saving || isSaved },
-									{ 'is-saving': saving && ! isSaved },
-									{ 'is-saved': isSaved }
-								) }
-								type="submit"
-								text={ getSaveText() }
-								icon={ getSaveIcon() }
-								iconSize="18"
-								iconPosition="right"
-								disabled={ saving }
-							/>
-							<Button
-								className={ classNames(
-									'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
-									{ 'has-icon': resetting },
-									{ 'is-resetting': { resetting } }
-								) }
-								type="button"
-								text={ getResetText() }
-								icon={ resetting ? Spinner : false }
-								iconSize="18"
-								iconPosition="right"
-								disabled={ saving || resetting }
-								onClick={ ( e ) => {
-									setResetting( true );
-									handleReset( e );
-								} }
-							/>
-						</div>
-						{ hasErrors() && (
-							<Notice
-								message={ __(
-									'There are form validation errors. Please correct them above.',
-									'comment-edit-pro'
-								) }
-								status="error"
-								politeness="polite"
-							/>
+				<div className="sce-admin-buttons">
+					<Button
+						className={ classNames(
+							'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
+							{ 'has-error': hasErrors() },
+							{ 'has-icon': saving || isSaved },
+							{ 'is-saving': saving && ! isSaved },
+							{ 'is-saved': isSaved }
 						) }
-						{ isSaved && (
-							<Notice
-								message={ __(
-									'Your settings have been saved.',
-									'comment-edit-pro'
-								) }
-								status="success"
-								politeness="assertive"
-							/>
+						type="submit"
+						text={ getSaveText() }
+						icon={ getSaveIcon() }
+						iconSize="18"
+						iconPosition="right"
+						disabled={ saving }
+					/>
+					<Button
+						className={ classNames(
+							'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
+							{ 'has-icon': resetting },
+							{ 'is-resetting': { resetting } }
 						) }
-						{ isReset && (
-							<Notice
-								message={ __(
-									'Your settings have been reset.',
-									'comment-edit-pro'
-								) }
-								status="success"
-								politeness="assertive"
-							/>
+						type="button"
+						text={ getResetText() }
+						icon={ resetting ? Spinner : false }
+						iconSize="18"
+						iconPosition="right"
+						disabled={ saving || resetting }
+						onClick={ ( e ) => {
+							setResetting( true );
+							handleReset( e );
+						} }
+					/>
+				</div>
+				{ hasErrors() && (
+					<Notice
+						message={ __(
+							'There are form validation errors. Please correct them above.',
+							'comment-edit-pro'
 						) }
-					</>
+						status="error"
+						politeness="polite"
+					/>
+				) }
+				{ isSaved && (
+					<Notice
+						message={ __(
+							'Your settings have been saved.',
+							'comment-edit-pro'
+						) }
+						status="success"
+						politeness="assertive"
+					/>
+				) }
+				{ isReset && (
+					<Notice
+						message={ __(
+							'Your settings have been reset.',
+							'comment-edit-pro'
+						) }
+						status="success"
+						politeness="assertive"
+					/>
 				) }
 			</form>
 		</>
