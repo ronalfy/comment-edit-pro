@@ -56,6 +56,18 @@ class Comment_Editing {
 
 		$json_array = array(
 			'timer'       => absint( $options['timer'] ),
+			'enableCommentEditing' => (bool) $options['enable_comment_editing'],
+			'allowCommentLogging' => (bool) $options['allow_comment_logging'],
+			'allowFrontEndEditing' => (bool) $options['allow_front_end_editing'],
+			'allowUnlimitedEditing' => (bool) $options['allow_unlimited_editing'],
+			'showStopTimer' => (bool) $options['show_stop_timer'],
+			'allowDelete' => (bool) $options['allow_delete'],
+			'deleteOnly' => (bool) $options['delete_only'],
+			'allowDeleteConfirmation' => (bool) $options['allow_delete_confirmation'],
+			'allowEditNotification' => (bool) $options['allow_edit_notification'],
+			'editNotificationTo' => sanitize_text_field( $options['edit_notification_to'] ),
+			'editNotificationFrom' => sanitize_text_field( $options['edit_notification_from'] ),
+			'editNotificationSubject' => sanitize_text_field( $options['edit_notification_subject'] ),
 		);
 
 		// Exit gracefully.

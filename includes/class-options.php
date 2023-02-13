@@ -147,6 +147,7 @@ class Options {
 	 */
 	private static function get_defaults() {
 		$defaults = array(
+			'enable_comment_editing'             => true,
 			'timer'                              => 5,
 			'show_timer'                         => true,
 			'loading_image'                      => \Simple_Comment_Editing::get_instance()->get_plugin_url( '/images/loading.gif' ),
@@ -174,7 +175,7 @@ class Options {
 			'confirm_delete'                     => __( 'Do you want to delete this comment?', 'comment-edit-pro' ),
 			'comment_deleted'                    => __( 'Your comment has been removed.', 'comment-edit-pro' ),
 			'comment_deleted_error'              => __( 'Your comment could not be deleted', 'comment-edit-pro' ),
-			'comment_empty_error'                => \Simple_Comment_Editing::get_instance()->errors->get_error_message( 'comment_empty' ),
+			'comment_empty_error'                => __( 'Your comment appears to be empty.', 'comment-edit-pro' ),
 			'require_comment_length'             => false,
 			'min_comment_length'                 => 50,
 			'require_comment_length_max'         => false,

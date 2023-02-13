@@ -2,6 +2,7 @@
 import React, { useState, Suspense, useEffect } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
+import { escapeAttribute } from '@wordpress/escape-html';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -17,6 +18,7 @@ import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
+import ValidateEmail from '../../validation/ValidateEmail';
 
 const retrieveCommentEditingOptions = () => {
 	return sendCommand( 'sce_get_comment_editing_options', {
@@ -65,9 +67,22 @@ const Interface = ( props ) => {
 		getValues,
 		reset,
 		setError,
+		clearErrors,
 	} = useForm( {
 		defaultValues: {
 			timer: data.timer,
+			enableCommentEditing: data.enableCommentEditing,
+			allowCommentLogging: data.allowCommentLogging,
+			allowFrontEndEditing: data.allowFrontEndEditing,
+			allowUnlimitedEditing: data.allowUnlimitedEditing,
+			showStopTimer: data.showStopTimer,
+			allowDelete: data.allowDelete,
+			deleteOnly: data.deleteOnly,
+			allowDeleteConfirmation: data.allowDeleteConfirmation,
+			allowEditNotification: data.allowEditNotification,
+			editNotificationTo: data.editNotificationTo,
+			editNotificationFrom: data.editNotificationFrom,
+			editNotificationSubject: data.editNotificationSubject,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -181,6 +196,35 @@ const Interface = ( props ) => {
 					<tbody>
 						<tr>
 							<th scope="row">
+								{ __( 'Comment Editing', 'comment-edit-pro' ) }
+							</th>
+							<td>
+								<Controller
+									name="enableCommentEditing"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable or disable comment editing.',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Comment editing is enabled by default, but you can disable it here.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
 								{ __( 'Countdown Timer', 'comment-edit-pro' ) }
 							</th>
 							<td>
@@ -206,6 +250,290 @@ const Interface = ( props ) => {
 										/>
 									) }
 								/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								{ __( 'Editing Options', 'comment-edit-pro' ) }
+							</th>
+							<td>
+								<Controller
+									name="allowCommentLogging"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable or disable comment logging.',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will allow you to restore edited comments and view an edit history for comments.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="allowFrontEndEditing"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable or disable Frontend Editing for admins.',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will allow you to edit comments from the frontend of your site.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="allowUnlimitedEditing"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Unlimited Timer for Logged-in Users.',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will allow unlimited editing for logged-in users.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="showStopTimer"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Allow Timer To Be Canceled by Users',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will show an extra button that will allow users to cancel their edit timer.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="allowDelete"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Allow Comment Deletion for Users',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this option will allow users to delete their own comments.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="deleteOnly"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Allow Comment Deletion Only',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will hide the editing options and only allows the user to delete comments only.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="allowDeleteConfirmation"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable Comment Deletion Confirmation',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will show a confirmation before the user is allowed to delete their own comments.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								{ __( 'Email Notifications', 'comment-edit-pro' ) }
+							</th>
+							<td>
+								<Controller
+									name="allowEditNotification"
+									control={ control }
+									render={ ( { field: { onChange, value } } ) => (
+										<ToggleControl
+											label={ __(
+												'Enable Email Notifications for Edited Comments',
+												'comment-edit-pro'
+											) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												//setShowButtonOptions( boolValue );
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Enabling this will send an email notification when someone edits their comment.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
+								<Controller
+									name="editNotificationTo"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'To Email Address', 'highlight-and-share' ) }
+											value={ value }
+											onChange={ ( newValue ) => {
+												if ( ! ValidateEmail( newValue ) ) {
+													setError( 'editNotificationTo', { shouldFocus: true } );
+												} else {
+													clearErrors( 'editNotificationTo' );
+												}
+												onChange( newValue );
+											} }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.editNotificationTo?.type,
+												'is-required': true,
+											} ) }
+											help={ __( 'The email address to send the notification to.', 'comment-edit-pro' ) }
+										/>
+									) }
+								/>
+								{ errors.editNotificationTo && (
+									<Notice
+										message={ __( 'This does not appear to be a valid email address.', 'comment-edit-pro' ) }
+										status="error"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
+								<Controller
+									name="editNotificationFrom"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'From Email Address', 'highlight-and-share' ) }
+											value={ value }
+											onChange={ ( newValue ) => {
+												if ( ! ValidateEmail( newValue ) ) {
+													setError( 'editNotificationFrom', { shouldFocus: true } );
+												} else {
+													clearErrors( 'editNotificationFrom' );
+												}
+												onChange( newValue );
+											} }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.editNotificationFrom?.type,
+												'is-required': true,
+											} ) }
+											help={ __( 'The email address that notifications should be sent from.', 'comment-edit-pro' ) }
+										/>
+									) }
+								/>
+								{ errors.editNotificationFrom && (
+									<Notice
+										message={ __( 'This does not appear to be a valid email address.', 'comment-edit-pro' ) }
+										status="error"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
+								<Controller
+									name="editNotificationSubject"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Email Subject', 'highlight-and-share' ) }
+											value={ value }
+											onChange={ ( newValue ) => {
+												onChange( newValue );
+											} }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.editNotificationSubject?.type,
+												'is-required': true,
+											} ) }
+											help={ __( 'The subject of the email when someone edits their comment.', 'comment-edit-pro' ) }
+										/>
+									) }
+								/>
+								{ errors.editNotificationSubject && (
+									<Notice
+										message={ __( 'This is a required field.', 'comment-edit-pro' ) }
+										status="error"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
 							</td>
 						</tr>
 					</tbody>
