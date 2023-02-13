@@ -7,6 +7,9 @@ const Akismet = lazy( () =>
 const Recaptcha = lazy( () =>
 	import( /* webpackChunkName: "Recaptcha0.0.1" */ './Recapcha' )
 );
+const Turnstile = lazy( () =>
+	import( /* webpackChunkName: "Turnstile0.0.1" */ './Turnstile' )
+);
 
 const akismetContainer = document.getElementById( 'sce-tab-akismet' );
 const akismetProtection = createRoot( akismetContainer );
@@ -21,6 +24,14 @@ const recaptchaProtection = createRoot( recaptchaContainer );
 recaptchaProtection.render(
 	<React.StrictMode>
 		<Recaptcha />
+	</React.StrictMode>
+);
+
+const turnstileContainer = document.getElementById( 'sce-tab-cloudflare-turnstile' );
+const turnstileProtection = createRoot( turnstileContainer );
+turnstileProtection.render(
+	<React.StrictMode>
+		<Turnstile />
 	</React.StrictMode>
 );
 

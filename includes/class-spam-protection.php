@@ -28,6 +28,10 @@ class Spam_Protection {
 		$recaptcha = new Recaptcha();
 		$recaptcha->run();
 
+		// Init cloudflare turnstile.
+		$cloudflare_turnstile = new Cloudflare_Turnstile();
+		$cloudflare_turnstile->run();
+
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 	}

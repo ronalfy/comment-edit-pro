@@ -78,6 +78,11 @@ class Spam_Protection {
 				</div>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
+						<div id="sce-tab-cloudflare-turnstile"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+					</div>
+				</div>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
 						<div id="sce-tab-recaptcha"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>

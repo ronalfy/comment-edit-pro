@@ -33674,12 +33674,18 @@ var Akismet = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function 
 var Recaptcha = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
   return Promise.all(/*! import() | Recaptcha0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_range-control_index_js-node_modules_wo-9f3a5d"), __webpack_require__.e("Recaptcha0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Recapcha */ "./src/js/react/views/spam-protection/Recapcha.js"));
 });
+var Turnstile = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
+  return Promise.all(/*! import() | Turnstile0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Turnstile0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Turnstile */ "./src/js/react/views/spam-protection/Turnstile.js"));
+});
 var akismetContainer = document.getElementById('sce-tab-akismet');
 var akismetProtection = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(akismetContainer);
 akismetProtection.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Akismet, null)));
 var recaptchaContainer = document.getElementById('sce-tab-recaptcha');
 var recaptchaProtection = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(recaptchaContainer);
 recaptchaProtection.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Recaptcha, null)));
+var turnstileContainer = document.getElementById('sce-tab-cloudflare-turnstile');
+var turnstileProtection = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(turnstileContainer);
+turnstileProtection.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Turnstile, null)));
 })();
 
 /******/ })()
