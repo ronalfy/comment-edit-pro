@@ -73,7 +73,9 @@ class Comment_Editing {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-comment-editing"></div>
+						<div id="sce-tab-comment-editing">
+							<?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?>
+						</div>
 					</div>
 				</div>
 				<?php

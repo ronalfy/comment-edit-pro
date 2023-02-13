@@ -90,7 +90,7 @@ class License {
 					)
 				);
 				?>
-				<div id="sce-tab-license"></div>
+				<div id="sce-tab-license"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 				<?php
 			}
 		}

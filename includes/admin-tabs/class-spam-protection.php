@@ -73,12 +73,12 @@ class Spam_Protection {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-akismet"></div>
+						<div id="sce-tab-akismet"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-recaptcha"></div>
+						<div id="sce-tab-recaptcha"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
 				<?php

@@ -1072,3 +1072,18 @@ h2 a.sce-admin-heading-docs {
 		padding-top: 20px;
 	}
 }
+
+/* Initial loading state for tab content */
+.sce-load-static-svg {
+	svg {
+		display: flex;
+		align-items: center;
+		width: 32px;
+		height: 32px;
+		animation: sce-rotate;
+		animation-duration: 1.5s;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+	}
+}
+
