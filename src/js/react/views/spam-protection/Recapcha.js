@@ -20,7 +20,7 @@ import Notice from '../../components/Notice';
 
 const retrieveRecaptchaSettings = () => {
 	return sendCommand( 'sce_get_recaptcha_options', {
-		nonce: sceIntegrations.get_nonce,
+		nonce: sceSpamProtection.get_nonce,
 	} );
 };
 
@@ -87,7 +87,7 @@ const Interface = ( props ) => {
 	const onSubmit = ( formData ) => {
 		setSaving( true );
 		sendCommand( 'sce_save_recaptcha_options', {
-			nonce: sceIntegrations.save_nonce,
+			nonce: sceSpamProtection.save_nonce,
 			...formData,
 		} )
 			.then( ( ajaxResponse ) => {
@@ -110,7 +110,7 @@ const Interface = ( props ) => {
 	const handleReset = () => {
 		setResetting( true );
 		sendCommand( 'sce_reset_recaptcha_options', {
-			nonce: sceIntegrations.reset_nonce,
+			nonce: sceSpamProtection.reset_nonce,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;

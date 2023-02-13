@@ -33671,24 +33671,12 @@ __webpack_require__.r(__webpack_exports__);
 var Mailchimp = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
   return Promise.all(/*! import() | Mailchimp0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Mailchimp0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Mailchimp */ "./src/js/react/views/integrations/Mailchimp.js"));
 });
-var Akismet = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.all(/*! import() | Akismet0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Akismet0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Akismet */ "./src/js/react/views/integrations/Akismet.js"));
-});
-var Recaptcha = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.all(/*! import() | Recaptcha0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_range-control_index_js-node_modules_wo-9f3a5d"), __webpack_require__.e("Recaptcha0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Recapcha */ "./src/js/react/views/integrations/Recapcha.js"));
-});
 var Slack = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
   return Promise.all(/*! import() | Slack0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Slack0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Slack */ "./src/js/react/views/integrations/Slack.js"));
 });
 var container = document.getElementById('sce-tab-mailchimp');
 var root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
 root.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Mailchimp, null)));
-var akismetContainer = document.getElementById('sce-tab-akismet');
-var akismetProtection = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(akismetContainer);
-akismetProtection.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Akismet, null)));
-var recaptchaContainer = document.getElementById('sce-tab-recaptcha');
-var recaptchaProtection = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(recaptchaContainer);
-recaptchaProtection.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Recaptcha, null)));
 var slackContainer = document.getElementById('sce-tab-slack');
 var slackIntegration = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(slackContainer);
 slackIntegration.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Slack, null)));

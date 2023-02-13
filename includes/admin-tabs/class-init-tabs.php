@@ -15,10 +15,8 @@ class Init_Tabs {
 	 * Class runner.
 	 */
 	public function run() {
-		new Main();
 		new Comment_Editing();
-		new Appearance();
-		new Translations();
+		new Spam_Protection();
 		new Avatars();
 		new Mentions();
 		// new Comment_Actions();

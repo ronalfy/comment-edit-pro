@@ -20,7 +20,7 @@ import Notice from '../../components/Notice';
 
 const retrieveAkismetOptions = () => {
 	return sendCommand( 'sce_get_akismet_options', {
-		nonce: sceIntegrations.get_nonce,
+		nonce: sceSpamProtection.get_nonce,
 	} );
 };
 
@@ -84,7 +84,7 @@ const Interface = ( props ) => {
 	const onSubmit = ( formData ) => {
 		setSaving( true );
 		sendCommand( 'sce_save_akismet_options', {
-			nonce: sceIntegrations.save_nonce,
+			nonce: sceSpamProtection.save_nonce,
 			...formData,
 		} )
 			.then( ( ajaxResponse ) => {
@@ -106,7 +106,7 @@ const Interface = ( props ) => {
 	const handleReset = () => {
 		setResetting( true );
 		sendCommand( 'sce_reset_akismet_options', {
-			nonce: sceIntegrations.reset_nonce,
+			nonce: sceSpamProtection.reset_nonce,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
@@ -153,10 +153,10 @@ const Interface = ( props ) => {
 
 	const getResetText = () => {
 		if ( resetting ) {
-			return __( 'Disconnecting…', 'quotes-dlx' );
+			return __( 'Restoring Defaults…', 'quotes-dlx' );
 		}
 		if ( isReset ) {
-			return __( 'Disconnected', 'quotes-dlx' );
+			return __( 'Restored.', 'quotes-dlx' );
 		}
 		return __( 'Restore Akismet Defaults', 'quotes-dlx' );
 	};

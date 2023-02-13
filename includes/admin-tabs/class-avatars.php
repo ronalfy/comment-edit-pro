@@ -41,7 +41,7 @@ class Avatars {
 			'action' => 'comment_edit_pro_output_avatars',
 			'url'    => Functions::get_settings_url( 'avatars' ),
 			'label'  => _x( 'Avatars', 'Tab label as Main', 'ultimate-auto-updates' ),
-			'icon'   => 'avatar',
+			'icon'   => 'users',
 		);
 		return $tabs;
 	}

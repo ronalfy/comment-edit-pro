@@ -222,7 +222,7 @@ class Recaptcha {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -252,7 +252,7 @@ class Recaptcha {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -295,7 +295,7 @@ class Recaptcha {
 	 */
 	public function ajax_reset_recaptcha_options() {
 		// Security.
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),

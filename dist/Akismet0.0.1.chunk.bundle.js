@@ -283,10 +283,10 @@ Spinner.propTypes = {
 
 /***/ }),
 
-/***/ "./src/js/react/views/integrations/Akismet.js":
-/*!****************************************************!*\
-  !*** ./src/js/react/views/integrations/Akismet.js ***!
-  \****************************************************/
+/***/ "./src/js/react/views/spam-protection/Akismet.js":
+/*!*******************************************************!*\
+  !*** ./src/js/react/views/spam-protection/Akismet.js ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -347,7 +347,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var retrieveAkismetOptions = function retrieveAkismetOptions() {
   return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_akismet_options', {
-    nonce: sceIntegrations.get_nonce
+    nonce: sceSpamProtection.get_nonce
   });
 };
 
@@ -433,7 +433,7 @@ var Interface = function Interface(props) {
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_akismet_options', _objectSpread({
-      nonce: sceIntegrations.save_nonce
+      nonce: sceSpamProtection.save_nonce
     }, formData)).then(function (ajaxResponse) {
       var ajaxSuccess = ajaxResponse.data.success;
 
@@ -451,7 +451,7 @@ var Interface = function Interface(props) {
   var handleReset = function handleReset() {
     setResetting(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_akismet_options', {
-      nonce: sceIntegrations.reset_nonce
+      nonce: sceSpamProtection.reset_nonce
     }).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
@@ -500,11 +500,11 @@ var Interface = function Interface(props) {
 
   var getResetText = function getResetText() {
     if (resetting) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restoring Defaults…', 'quotes-dlx');
     }
 
     if (isReset) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restored.', 'quotes-dlx');
     }
 
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restore Akismet Defaults', 'quotes-dlx');

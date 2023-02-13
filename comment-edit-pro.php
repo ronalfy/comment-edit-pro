@@ -373,6 +373,8 @@ class Comment_Edit_Pro {
 		$this->help->run();
 		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
 		$this->comment_editing->run();
+		$this->spam_protection = new \CommentEditPro\Includes\Spam_Protection();
+		$this->spam_protection->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

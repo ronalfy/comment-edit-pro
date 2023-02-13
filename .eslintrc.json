@@ -9,7 +9,8 @@
 		"sceIntegrations": "readonly",
 		"sceMentions": "readonly",
 		"sceCommentEditing": "readonly",
-		"jQuery": "readonly"
+		"jQuery": "readonly",
+		"sceSpamProtection": "readonly"
 	},
 	"env": {
 		"browser": true,

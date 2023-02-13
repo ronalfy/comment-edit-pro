@@ -24,14 +24,6 @@ class Integrations {
 		$mailchimp = new MailChimp();
 		$mailchimp->run();
 
-		// Init Akismet.
-		$akismet = new Akismet();
-		$akismet->run();
-
-		// Init reCAPTCHA.
-		$recaptcha = new Recaptcha();
-		$recaptcha->run();
-
 		// Init Slack.
 		$slack = new Slack();
 		$slack->run();

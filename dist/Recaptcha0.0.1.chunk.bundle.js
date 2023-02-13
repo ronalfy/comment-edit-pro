@@ -283,10 +283,10 @@ Spinner.propTypes = {
 
 /***/ }),
 
-/***/ "./src/js/react/views/integrations/Recapcha.js":
-/*!*****************************************************!*\
-  !*** ./src/js/react/views/integrations/Recapcha.js ***!
-  \*****************************************************/
+/***/ "./src/js/react/views/spam-protection/Recapcha.js":
+/*!********************************************************!*\
+  !*** ./src/js/react/views/spam-protection/Recapcha.js ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -349,7 +349,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var retrieveRecaptchaSettings = function retrieveRecaptchaSettings() {
   return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_recaptcha_options', {
-    nonce: sceIntegrations.get_nonce
+    nonce: sceSpamProtection.get_nonce
   });
 };
 
@@ -437,7 +437,7 @@ var Interface = function Interface(props) {
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_recaptcha_options', _objectSpread({
-      nonce: sceIntegrations.save_nonce
+      nonce: sceSpamProtection.save_nonce
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
@@ -456,7 +456,7 @@ var Interface = function Interface(props) {
   var handleReset = function handleReset() {
     setResetting(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_recaptcha_options', {
-      nonce: sceIntegrations.reset_nonce
+      nonce: sceSpamProtection.reset_nonce
     }).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
