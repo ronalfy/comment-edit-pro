@@ -9,7 +9,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	RangeControl,
+	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
@@ -55,6 +55,8 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
+	console.log( data );
+
 	const {
 		register,
 		control,
@@ -65,13 +67,12 @@ const Interface = ( props ) => {
 		setError,
 	} = useForm( {
 		defaultValues: {
-			recaptchaEnabled: data.recaptchaEnabled,
-			recaptchaSiteKey: data.recaptchaSiteKey,
-			recaptchaSecretKey: data.recaptchaSecretKey,
-			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
-			recaptchaCommentFormId: data.recaptchaCommentFormId,
-			recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
-			recaptchaScoreThreshold: data.recaptchaScoreThreshold,
+			turnstileEnabled: data.turnstileEnabled,
+			turnstileSitekey: data.turnstileSitekey,
+			turnstileSecret: data.turnstileSecret,
+			turnstileTheme: data.turnstileTheme,
+			turnstileLanguage: data.turnstileLanguage,
+			turnstileWidgetSize: data.turnstileWidgetSize,
 		},
 	} );
 
@@ -117,12 +118,7 @@ const Interface = ( props ) => {
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					setIsReset( true );
-					reset( {
-						recaptchaEnabled: false,
-						recaptchaSiteKey: '',
-						recaptchaSecretKey: '',
-						recaptchaLoggedInUsersEnabled: true,
-					} );
+					reset( ajaxData );
 					setTimeout( () => {
 						setIsReset( false );
 					}, 3000 );
@@ -180,18 +176,18 @@ const Interface = ( props ) => {
 							<th scope="row">{ __( 'Turnstile', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
-									name="recaptchaEnabled"
+									name="turnstileEnabled"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											label={ __( 'Enable Turnstile 3', 'comment-edit-pro' ) }
+											label={ __( 'Enable Cloudflare Turnstile', 'comment-edit-pro' ) }
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
 												onChange( boolValue );
 											} }
 											help={ __(
-												'Enable or disable Turnstile 3 support.',
+												'Enable or disable the Cloudflare Turnstile integration.',
 												'comment-edit-pro'
 											) }
 										/>
@@ -199,6 +195,174 @@ const Interface = ( props ) => {
 								/>
 							</td>
 						</tr>
+						{ getValues( 'turnstileEnabled' ) && (
+							<>
+								<tr>
+									<th scope="row">{ __( 'Keys', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="turnstileSitekey"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field } ) => (
+												<TextControl
+													label={ __( 'Sitekey', 'quotes-dlx' ) }
+													{ ...field }
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.turnstileSitekey?.type,
+														'is-required': true,
+													} ) }
+													help={ __(
+														'Enter your Turnstile sitekey.',
+														'comment-edit-pro'
+													) }
+													aria-required="true"
+												/>
+											) }
+										/>
+										{ 'required' === errors.turnstileSitekey?.type && (
+											<Notice
+												message={ __( 'This field is a required field.' ) }
+												status="error"
+												politeness="assertive"
+												inline={ true }
+												icon={ CircularExclamationIcon }
+											/>
+										) }
+										<Controller
+											name="turnstileSecret"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field } ) => (
+												<TextControl
+													label={ __( 'Secret Key', 'quotes-dlx' ) }
+													{ ...field }
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.turnstileSecret?.type,
+														'is-required': true,
+													} ) }
+													help={ __(
+														'Enter your Turnstile secret key.',
+														'comment-edit-pro'
+													) }
+													aria-required="true"
+												/>
+											) }
+										/>
+										{ 'required' === errors.turnstileSecret?.type && (
+											<Notice
+												message={ __( 'This field is a required field.' ) }
+												status="error"
+												politeness="assertive"
+												inline={ true }
+												icon={ CircularExclamationIcon }
+											/>
+										) }
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Language', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="turnstileTheme"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Widget Appearance', 'comment-edit-pro' ) }
+													help={ __(
+														'Select the theme for the widget.',
+														'comment-edit-pro'
+													) }
+													value={ value }
+													options={ [
+														/* auto, ar-eg, de, en, es, fa, fr, id, it, ja, ko, nl, pl, pt-br, ru, tr, zh-cn, zh-tw */
+														{ label: __( 'Auto', 'comment-edit-pro' ), value: 'auto' },
+														{ label: __( 'Arabic', 'comment-edit-pro' ), value: 'ar-eg' },
+														{ label: __( 'German', 'comment-edit-pro' ), value: 'de' },
+														{ label: __( 'English', 'comment-edit-pro' ), value: 'en' },
+														{ label: __( 'Spanish', 'comment-edit-pro' ), value: 'es' },
+														{ label: __( 'Persian', 'comment-edit-pro' ), value: 'fa' },
+														{ label: __( 'French', 'comment-edit-pro' ), value: 'fr' },
+														{ label: __( 'Indonesian', 'comment-edit-pro' ), value: 'id' },
+														{ label: __( 'Italian', 'comment-edit-pro' ), value: 'it' },
+														{ label: __( 'Japanese', 'comment-edit-pro' ), value: 'ja' },
+														{ label: __( 'Korean', 'comment-edit-pro' ), value: 'ko' },
+														{ label: __( 'Dutch', 'comment-edit-pro' ), value: 'nl' },
+														{ label: __( 'Polish', 'comment-edit-pro' ), value: 'pl' },
+														{ label: __( 'Portuguese', 'comment-edit-pro' ), value: 'pt-br' },
+														{ label: __( 'Russian', 'comment-edit-pro' ), value: 'ru' },
+														{ label: __( 'Turkish', 'comment-edit-pro' ), value: 'tr' },
+														{ label: __( 'Chinese (Simplified)', 'comment-edit-pro' ), value: 'zh-cn' },
+														{ label: __( 'Chinese (Traditional)', 'comment-edit-pro' ), value: 'zh-tw' },
+													] }
+													onChange={ ( widgetThemeValue ) => {
+														onChange( widgetThemeValue );
+													} }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Widget Appearance', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="turnstileTheme"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Widget Appearance', 'comment-edit-pro' ) }
+													help={ __(
+														'Select the theme for the widget.',
+														'comment-edit-pro'
+													) }
+													value={ value }
+													options={ [
+														/* light, dark, auto */
+														{ label: __( 'Auto', 'comment-edit-pro' ), value: 'auto' },
+														{ label: __( 'Light', 'comment-edit-pro' ), value: 'light' },
+														{ label: __( 'Dark', 'comment-edit-pro' ), value: 'dark' },
+													] }
+													onChange={ ( widgetThemeValue ) => {
+														onChange( widgetThemeValue );
+													} }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Widget Size', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="turnstileWidgetSize"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Widget Size', 'comment-edit-pro' ) }
+													help={ __(
+														'Select the size for the widget.',
+														'comment-edit-pro'
+													) }
+													value={ value }
+													options={ [
+														/* normal, compact */
+														{ label: __( 'Normal', 'comment-edit-pro' ), value: 'normal' },
+														{ label: __( 'Compact', 'comment-edit-pro' ), value: 'compact' },
+													] }
+													onChange={ ( widgetSizeValue ) => {
+														onChange( widgetSizeValue );
+													} }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+							</>
+						) }
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
@@ -217,7 +381,7 @@ const Interface = ( props ) => {
 						iconPosition="right"
 						disabled={ saving }
 					/>
-					{ getValues( 'recaptchaEnabled' ) && (
+					{ getValues( 'turnstileEnabled' ) && (
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',

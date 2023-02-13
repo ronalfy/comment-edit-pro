@@ -305,7 +305,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
@@ -371,6 +373,8 @@ var Turnstile = function Turnstile(props) {
 };
 
 var Interface = function Interface(props) {
+  var _errors$turnstileSite2, _errors$turnstileSecr2;
+
   var defaults = props.defaults;
   var response = defaults();
   var _response$data = response.data,
@@ -397,15 +401,16 @@ var Interface = function Interface(props) {
       isReset = _useState8[0],
       setIsReset = _useState8[1];
 
+  console.log(data);
+
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_10__.useForm)({
     defaultValues: {
-      recaptchaEnabled: data.recaptchaEnabled,
-      recaptchaSiteKey: data.recaptchaSiteKey,
-      recaptchaSecretKey: data.recaptchaSecretKey,
-      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
-      recaptchaCommentFormId: data.recaptchaCommentFormId,
-      recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
-      recaptchaScoreThreshold: data.recaptchaScoreThreshold
+      turnstileEnabled: data.turnstileEnabled,
+      turnstileSitekey: data.turnstileSitekey,
+      turnstileSecret: data.turnstileSecret,
+      turnstileTheme: data.turnstileTheme,
+      turnstileLanguage: data.turnstileLanguage,
+      turnstileWidgetSize: data.turnstileWidgetSize
     }
   }),
       register = _useForm.register,
@@ -461,12 +466,7 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         setIsReset(true);
-        reset({
-          recaptchaEnabled: false,
-          recaptchaSiteKey: '',
-          recaptchaSecretKey: '',
-          recaptchaLoggedInUsersEnabled: true
-        });
+        reset(ajaxData);
         setTimeout(function () {
           setIsReset(false);
         }, 3000);
@@ -526,25 +526,222 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Turnstile', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
-    name: "recaptchaEnabled",
+    name: "turnstileEnabled",
     control: control,
     render: function render(_ref) {
       var _ref$field = _ref.field,
           _onChange = _ref$field.onChange,
           value = _ref$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Turnstile 3', 'comment-edit-pro'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Cloudflare Turnstile', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           _onChange(boolValue);
         },
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Turnstile 3 support.', 'comment-edit-pro')
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable the Cloudflare Turnstile integration.', 'comment-edit-pro')
       });
     }
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getValues('turnstileEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Keys', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileSitekey",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref2) {
+      var _errors$turnstileSite;
+
+      var field = _ref2.field;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sitekey', 'quotes-dlx')
+      }, field, {
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$turnstileSite = errors.turnstileSitekey) === null || _errors$turnstileSite === void 0 ? void 0 : _errors$turnstileSite.type),
+          'is-required': true
+        }),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Turnstile sitekey.', 'comment-edit-pro'),
+        "aria-required": "true"
+      }));
+    }
+  }), 'required' === ((_errors$turnstileSite2 = errors.turnstileSitekey) === null || _errors$turnstileSite2 === void 0 ? void 0 : _errors$turnstileSite2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+    status: "error",
+    politeness: "assertive",
+    inline: true,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileSecret",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref3) {
+      var _errors$turnstileSecr;
+
+      var field = _ref3.field;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'quotes-dlx')
+      }, field, {
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$turnstileSecr = errors.turnstileSecret) === null || _errors$turnstileSecr === void 0 ? void 0 : _errors$turnstileSecr.type),
+          'is-required': true
+        }),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Turnstile secret key.', 'comment-edit-pro'),
+        "aria-required": "true"
+      }));
+    }
+  }), 'required' === ((_errors$turnstileSecr2 = errors.turnstileSecret) === null || _errors$turnstileSecr2 === void 0 ? void 0 : _errors$turnstileSecr2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+    status: "error",
+    politeness: "assertive",
+    inline: true,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Language', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileTheme",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref4) {
+      var _ref4$field = _ref4.field,
+          _onChange2 = _ref4$field.onChange,
+          value = _ref4$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Appearance', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the theme for the widget.', 'comment-edit-pro'),
+        value: value,
+        options: [
+        /* auto, ar-eg, de, en, es, fa, fr, id, it, ja, ko, nl, pl, pt-br, ru, tr, zh-cn, zh-tw */
+        {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Auto', 'comment-edit-pro'),
+          value: 'auto'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Arabic', 'comment-edit-pro'),
+          value: 'ar-eg'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('German', 'comment-edit-pro'),
+          value: 'de'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('English', 'comment-edit-pro'),
+          value: 'en'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Spanish', 'comment-edit-pro'),
+          value: 'es'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Persian', 'comment-edit-pro'),
+          value: 'fa'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('French', 'comment-edit-pro'),
+          value: 'fr'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Indonesian', 'comment-edit-pro'),
+          value: 'id'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Italian', 'comment-edit-pro'),
+          value: 'it'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Japanese', 'comment-edit-pro'),
+          value: 'ja'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Korean', 'comment-edit-pro'),
+          value: 'ko'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dutch', 'comment-edit-pro'),
+          value: 'nl'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Polish', 'comment-edit-pro'),
+          value: 'pl'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Portuguese', 'comment-edit-pro'),
+          value: 'pt-br'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Russian', 'comment-edit-pro'),
+          value: 'ru'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Turkish', 'comment-edit-pro'),
+          value: 'tr'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Chinese (Simplified)', 'comment-edit-pro'),
+          value: 'zh-cn'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Chinese (Traditional)', 'comment-edit-pro'),
+          value: 'zh-tw'
+        }],
+        onChange: function onChange(widgetThemeValue) {
+          _onChange2(widgetThemeValue);
+        }
+      });
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Appearance', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileTheme",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange3 = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Appearance', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the theme for the widget.', 'comment-edit-pro'),
+        value: value,
+        options: [
+        /* light, dark, auto */
+        {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Auto', 'comment-edit-pro'),
+          value: 'auto'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Light', 'comment-edit-pro'),
+          value: 'light'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dark', 'comment-edit-pro'),
+          value: 'dark'
+        }],
+        onChange: function onChange(widgetThemeValue) {
+          _onChange3(widgetThemeValue);
+        }
+      });
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Size', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileWidgetSize",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange4 = _ref6$field.onChange,
+          value = _ref6$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Size', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the size for the widget.', 'comment-edit-pro'),
+        value: value,
+        options: [
+        /* normal, compact */
+        {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Normal', 'comment-edit-pro'),
+          value: 'normal'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Compact', 'comment-edit-pro'),
+          value: 'compact'
+        }],
+        onChange: function onChange(widgetSizeValue) {
+          _onChange4(widgetSizeValue);
+        }
+      });
+    }
+  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {
@@ -560,7 +757,7 @@ var Interface = function Interface(props) {
     iconSize: "18",
     iconPosition: "right",
     disabled: saving
-  }), getValues('recaptchaEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+  }), getValues('turnstileEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
       'has-icon': resetting
     }, {

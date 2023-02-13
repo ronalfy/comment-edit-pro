@@ -235,6 +235,13 @@ class Options {
 			'slack_webhook_url'                  => '',
 			'slack_moderation_enabled'           => false,
 			'slack_edit_comments_enabled'        => false,
+			'turnstile_enabled'                  => false,
+			'turnstile_sitekey'                  => '',
+			'turnstile_secret'                   => '',
+			'turnstile_theme'                    => 'auto',
+			'turnstile_language'                 => 'auto',
+			'turnstile_widget_size'              => 'normal',
+
 		);
 		return $defaults;
 	}

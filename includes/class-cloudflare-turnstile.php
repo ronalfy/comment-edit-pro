@@ -33,26 +33,26 @@ class Cloudflare_Turnstile {
 
 		// Let's check that reCAPTCHA is enabled.
 		// if ( ! (bool) $options['turnstile_enabled'] ) {
-		// 	return;
+		// return;
 		// }
 
 		// // Let's check that the secret and site key are set.
 		// $site_key   = $options['turnstile_site_key'];
 		// $secret_key = $options['turnstile_secret_key'];
 		// if ( empty( $site_key ) || empty( $secret_key ) ) {
-		// 	return;
+		// return;
 		// }
 
 		// // Recaptcha options are below. Let's see if we can exclude people from them.
 
 		// // If user can moderate comments, no captcha.
 		// if ( current_user_can( 'moderate_comments' ) ) {
-		// 	return;
+		// return;
 		// }
 
 		// // If user is logged in and reCAPTCHA is disabled for logged-in users, exit.
 		// if ( is_user_logged_in() && ! (bool) $options['turnstile_logged_in_users_enabled'] ) {
-		// 	return;
+		// return;
 		// }
 
 		// // Enqueue recaptcha assets on the front-end.
@@ -71,7 +71,7 @@ class Cloudflare_Turnstile {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-turnstile-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -80,18 +80,15 @@ class Cloudflare_Turnstile {
 		}
 
 		$options    = Options::get_options();
-		// $json_array = array(
-		// 	'recaptchaEnabled'               => (bool) $options['turnstile_enabled'],
-		// 	'recaptchaSiteKey'               => $options['turnstile_site_key'],
-		// 	'recaptchaSecretKey'             => $options['turnstile_secret_key'],
-		// 	'recaptchaLoggedInUsersEnabled'  => (bool) $options['turnstile_logged_in_users_enabled'],
-		// 	'recaptchaCommentFormId'         => $options['turnstile_comment_form_id'],
-		// 	'recaptchaCommentSubmitButtonId' => $options['turnstile_comment_submit_button_id'],
-		// 	'recaptchaScoreThreshold'        => (float) $options['turnstile_score_threshold'],
-		// );
-
-		// Exit gracefully.
-		// wp_send_json_success( $json_array );
+		$json_array = array(
+			'turnstileEnabled'    => (bool) $options['turnstile_enabled'],
+			'turnstileSitekey'    => sanitize_text_field( $options['turnstile_sitekey'] ),
+			'turnstileSecret'     => sanitize_text_field( $options['turnstile_secret'] ),
+			'turnstileTheme'      => sanitize_text_field( $options['turnstile_theme'] ),
+			'turnstileLanguage'   => sanitize_text_field( $options['turnstile_language'] ),
+			'turnstileWidgetSize' => sanitize_text_field( $options['turnstile_widget_size'] ),
+		);
+		wp_send_json_success( $json_array );
 	}
 
 	/**
@@ -101,7 +98,7 @@ class Cloudflare_Turnstile {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-turnstile-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -109,28 +106,17 @@ class Cloudflare_Turnstile {
 			);
 		}
 
-		// Nonce passed, let's get post vars.
-		// $turnstile_enabled                  = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
-		// $turnstile_site_key                 = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
-		// $turnstile_secret_key               = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
-		// $turnstile_logged_in_users_enabled  = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
-		// $turnstile_comment_form_id          = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentFormId', FILTER_DEFAULT ) );
-		// $turnstile_comment_submit_button_id = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentSubmitButtonId', FILTER_DEFAULT ) );
-		// $turnstile_score_threshold          = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+		$options = Options::get_options();
+		$options = array(
+			'turnstile_enabled'     => (bool) filter_input( INPUT_POST, 'turnstileEnabled', FILTER_VALIDATE_BOOLEAN ),
+			'turnstile_sitekey'     => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSitekey', FILTER_DEFAULT ) ),
+			'turnstile_secret'      => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSecret', FILTER_DEFAULT ) ),
+			'turnstile_theme'       => sanitize_text_field( filter_input( INPUT_POST, 'turnstileTheme', FILTER_DEFAULT ) ),
+			'turnstile_language'    => sanitize_text_field( filter_input( INPUT_POST, 'turnstileLanguage', FILTER_DEFAULT ) ),
+			'turnstile_widget_size' => sanitize_text_field( filter_input( INPUT_POST, 'turnstileWidgetSize', FILTER_DEFAULT ) ),
+		);
 
-		// // Now let's save options.
-		// $options_to_save = array(
-		// 	'turnstile_enabled'                  => $turnstile_enabled,
-		// 	'turnstile_site_key'                 => $turnstile_site_key,
-		// 	'turnstile_secret_key'               => $turnstile_secret_key,
-		// 	'turnstile_logged_in_users_enabled'  => $turnstile_logged_in_users_enabled,
-		// 	'turnstile_comment_form_id'          => $turnstile_comment_form_id,
-		// 	'turnstile_comment_submit_button_id' => $turnstile_comment_submit_button_id,
-		// 	'turnstile_score_threshold'          => $turnstile_score_threshold,
-		// );
-
-		// Options::update_options( $options_to_save );
-
+		Options::update_options( $options );
 		wp_send_json_success(
 			array(
 				'message' => __( 'Options saved.', 'comment-edit-pro' ),
@@ -144,7 +130,7 @@ class Cloudflare_Turnstile {
 	 */
 	public function ajax_reset_turnstile_options() {
 		// Security.
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-turnstile-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-spam-protection-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -152,24 +138,26 @@ class Cloudflare_Turnstile {
 			);
 		}
 
-		// Clear options.
-		// Options::update_options(
-		// 	array(
-		// 		'turnstile_enabled'                  => false,
-		// 		'turnstile_site_key'                 => '',
-		// 		'turnstile_secret_key'               => '',
-		// 		'turnstile_logged_in_users_enabled'  => true,
-		// 		'turnstile_comment_form_id'          => 'commentform',
-		// 		'turnstile_comment_submit_button_id' => 'submit',
-		// 		'turnstile_score_threshold'          => 0.5,
-		// 	)
-		// );
+		$defaults = Options::get_defaults();
 
-		wp_send_json_success(
-			array(
-				'message' => __( 'Recaptcha options have been reset to defaults.', 'comment-edit-pro' ),
-			)
+		// Populate defaults.
+		$return = array(
+			'turnstileEnabled'    => (bool) $defaults['turnstile_enabled'],
+			'turnstileSitekey'    => sanitize_text_field( $defaults['turnstile_sitekey'] ),
+			'turnstileSecret'     => sanitize_text_field( $defaults['turnstile_secret'] ),
+			'turnstileTheme'      => sanitize_text_field( $defaults['turnstile_theme'] ),
+			'turnstileLanguage'   => sanitize_text_field( $defaults['turnstile_language'] ),
+			'turnstileWidgetSize' => sanitize_text_field( $defaults['turnstile_widget_size'] ),
 		);
+
+		// Go through return defaults and format into options.
+		$options_to_save = array();
+		foreach ( $return as $key => $value ) {
+			$options_to_save[ Functions::to_underlines( $key ) ] = $value;
+		}
+		Options::update_options( $options_to_save );
+
+		wp_send_json_success( $return );
 
 	}
 }
