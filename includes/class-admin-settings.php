@@ -47,7 +47,7 @@ class Admin_Settings {
 	 */
 	public static function get_settings_header() {
 		?>
-		<header id="comment-edit-pro-header" style="background-image: url(<?php echo esc_url( Functions::get_plugin_url( 'images/admin-header-bg.jpg' ) ); ?>); background-size: cover; background-repeat: no-repeat;">
+		<header id="comment-edit-pro-header">
 			<div id="comment-edit-pro-header-content">
 				<div class="sce-admin-header-logo">
 					<h1>
