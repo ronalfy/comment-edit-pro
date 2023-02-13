@@ -72,6 +72,15 @@ class Comment_Editing {
 			'buttonTheme' => sanitize_text_field( $options['button_theme'] ),
 			'showIcons' => (bool) $options['show_icons'],
 			'timerAppearance' => sanitize_text_field( $options['timer_appearance'] ),
+			'saveText' => sanitize_text_field( $options['save_text'] ),
+			'cancelText' => sanitize_text_field( $options['cancel_text'] ),
+			'deleteText' => sanitize_text_field( $options['delete_text'] ),
+			'stopTimerText' => sanitize_text_field( $options['stop_timer_text'] ),
+			'clickToEditText' => sanitize_text_field( $options['click_to_edit_text'] ),
+			'confirmDelete' => sanitize_text_field( $options['confirm_delete'] ),
+			'commentDeleted' => sanitize_text_field( $options['comment_deleted'] ),
+			'commentDeletedError' => sanitize_text_field( $options['comment_deleted_error'] ),
+			'commentEmptyError' => sanitize_text_field( $options['comment_empty_error'] ),
 		);
 
 		// Exit gracefully.

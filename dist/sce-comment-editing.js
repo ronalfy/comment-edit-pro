@@ -21902,7 +21902,16 @@ var Interface = function Interface(props) {
       showTimer: data.showTimer,
       buttonTheme: data.buttonTheme,
       showIcons: data.showIcons,
-      timerAppearance: data.timerAppearance
+      timerAppearance: data.timerAppearance,
+      saveText: data.saveText,
+      cancelText: data.cancelText,
+      deleteText: data.deleteText,
+      stopTimerText: data.stopTimerText,
+      clickToEditText: data.clickToEditText,
+      confirmDelete: data.confirmDelete,
+      commentDeleted: data.commentDeleted,
+      commentDeletedError: data.commentDeletedError,
+      commentEmptyError: data.commentEmptyError
     }
   }),
       register = _useForm.register,
@@ -22080,7 +22089,8 @@ var Interface = function Interface(props) {
     name: "timer",
     control: control,
     rules: {
-      required: true
+      required: true,
+      pattern: '\d+'
     },
     render: function render(_ref3) {
       var _errors$timer;
@@ -22101,6 +22111,12 @@ var Interface = function Interface(props) {
         onChange: onChange
       });
     }
+  }), errors.timer && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The value for the timer is invalid.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "assertive",
+    inline: false,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowUnlimitedEditing",
     control: control,
@@ -22468,7 +22484,225 @@ var Interface = function Interface(props) {
         type: 'image'
       });
     }
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dark Theme', 'comment-edit-pro'))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dark Theme', 'comment-edit-pro'))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Translations', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "saveText",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref18) {
+      var _errors$saveText;
+
+      var _ref18$field = _ref18.field,
+          onChange = _ref18$field.onChange,
+          value = _ref18$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Button Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText = errors.saveText) === null || _errors$saveText === void 0 ? void 0 : _errors$saveText.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "cancelText",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref19) {
+      var _errors$saveText2;
+
+      var _ref19$field = _ref19.field,
+          onChange = _ref19$field.onChange,
+          value = _ref19$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cancel Button Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText2 = errors.saveText) === null || _errors$saveText2 === void 0 ? void 0 : _errors$saveText2.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "deleteText",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref20) {
+      var _errors$saveText3;
+
+      var _ref20$field = _ref20.field,
+          onChange = _ref20$field.onChange,
+          value = _ref20$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Delete Button Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText3 = errors.saveText) === null || _errors$saveText3 === void 0 ? void 0 : _errors$saveText3.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "stopTimerText",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref21) {
+      var _errors$saveText4;
+
+      var _ref21$field = _ref21.field,
+          onChange = _ref21$field.onChange,
+          value = _ref21$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Stop Timer Button Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText4 = errors.saveText) === null || _errors$saveText4 === void 0 ? void 0 : _errors$saveText4.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "clickToEditText",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref22) {
+      var _errors$saveText5;
+
+      var _ref22$field = _ref22.field,
+          onChange = _ref22$field.onChange,
+          value = _ref22$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Edit Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText5 = errors.saveText) === null || _errors$saveText5 === void 0 ? void 0 : _errors$saveText5.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "confirmDelete",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref23) {
+      var _errors$saveText6;
+
+      var _ref23$field = _ref23.field,
+          onChange = _ref23$field.onChange,
+          value = _ref23$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deletion Confirmation Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText6 = errors.saveText) === null || _errors$saveText6 === void 0 ? void 0 : _errors$saveText6.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "commentDeleted",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref24) {
+      var _errors$saveText7;
+
+      var _ref24$field = _ref24.field,
+          onChange = _ref24$field.onChange,
+          value = _ref24$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText7 = errors.saveText) === null || _errors$saveText7 === void 0 ? void 0 : _errors$saveText7.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "commentDeletedError",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref25) {
+      var _errors$saveText8;
+
+      var _ref25$field = _ref25.field,
+          onChange = _ref25$field.onChange,
+          value = _ref25$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Error Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText8 = errors.saveText) === null || _errors$saveText8 === void 0 ? void 0 : _errors$saveText8.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "commentEmptyError",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref26) {
+      var _errors$saveText9;
+
+      var _ref26$field = _ref26.field,
+          onChange = _ref26$field.onChange,
+          value = _ref26$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Empty Error Text', 'quotes-dlx'),
+        type: "text",
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$saveText9 = errors.saveText) === null || _errors$saveText9 === void 0 ? void 0 : _errors$saveText9.type),
+          'is-required': true
+        }),
+        "aria-required": "true",
+        value: value,
+        onChange: onChange
+      });
+    }
+  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

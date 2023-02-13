@@ -91,6 +91,15 @@ const Interface = ( props ) => {
 			buttonTheme: data.buttonTheme,
 			showIcons: data.showIcons,
 			timerAppearance: data.timerAppearance,
+			saveText: data.saveText,
+			cancelText: data.cancelText,
+			deleteText: data.deleteText,
+			stopTimerText: data.stopTimerText,
+			clickToEditText: data.clickToEditText,
+			confirmDelete: data.confirmDelete,
+			commentDeleted: data.commentDeleted,
+			commentDeletedError: data.commentDeletedError,
+			commentEmptyError: data.commentEmptyError,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -279,7 +288,7 @@ const Interface = ( props ) => {
 								<Controller
 									name="timer"
 									control={ control }
-									rules={ { required: true } }
+									rules={ { required: true, pattern: '\d+' } }
 									render={ ( { field: { onChange, value } } ) => (
 										<TextControl
 											label={ __( 'Timer Length', 'quotes-dlx' ) }
@@ -293,11 +302,23 @@ const Interface = ( props ) => {
 												'comment-edit-pro'
 											) }
 											aria-required="true"
-											value={ value }
+											value={value }
 											onChange={ onChange }
 										/>
 									) }
 								/>
+								{ errors.timer && (
+									<Notice
+										message={ __(
+											'The value for the timer is invalid.',
+											'comment-edit-pro'
+										) }
+										status="error"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
 								<Controller
 									name="allowUnlimitedEditing"
 									control={ control }
@@ -757,6 +778,173 @@ const Interface = ( props ) => {
 										{ __( 'Dark Theme', 'comment-edit-pro' ) }
 									</a>
 								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Translations', 'comment-edit-pro' ) }</th>
+							<td>
+								<Controller
+									name="saveText"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Save Button Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="cancelText"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Cancel Button Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="deleteText"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Delete Button Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="stopTimerText"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Stop Timer Button Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="clickToEditText"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Click to Edit Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="confirmDelete"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Comment Deletion Confirmation Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="commentDeleted"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Comment Deleted Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="commentDeletedError"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Comment Deleted Error Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
+								<Controller
+									name="commentEmptyError"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											label={ __( 'Comment Empty Error Text', 'quotes-dlx' ) }
+											type="text"
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.saveText?.type,
+												'is-required': true,
+											} ) }
+											aria-required="true"
+											value={ value }
+											onChange={ onChange }
+										/>
+									) }
+								/>
 							</td>
 						</tr>
 					</tbody>
