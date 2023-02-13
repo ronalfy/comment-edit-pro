@@ -966,4 +966,15 @@ h2 a.sce-admin-heading-docs {
   right: 0;
 }
 
+/* Table Styles when rows are sections */
+.form-table-row-sections tr {
+  border-bottom: 1px solid #EEE;
+}
+.form-table-row-sections tr:last-child {
+  border-bottom: 0;
+}
+.form-table-row-sections td {
+  padding-top: 20px;
+}
+
 /*# sourceMappingURL=admin.css.map*/

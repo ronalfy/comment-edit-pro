@@ -19656,7 +19656,7 @@ var Interface = function Interface(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getCommentEditingHeader(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
-    className: "form-table"
+    className: "form-table form-table-row-sections"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Editing', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
@@ -19704,58 +19704,20 @@ var Interface = function Interface(props) {
         onChange: onChange
       });
     }
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
-    scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Editing Options', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
-    name: "allowCommentLogging",
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "allowUnlimitedEditing",
     control: control,
     render: function render(_ref3) {
       var _ref3$field = _ref3.field,
           _onChange2 = _ref3$field.onChange,
           value = _ref3$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable comment logging.', 'comment-edit-pro'),
-        className: "sce-admin__toggle-control",
-        checked: value,
-        onChange: function onChange(boolValue) {
-          //setShowButtonOptions( boolValue );
-          _onChange2(boolValue);
-        },
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to restore edited comments and view an edit history for comments.', 'comment-edit-pro')
-      });
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
-    name: "allowFrontEndEditing",
-    control: control,
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange3 = _ref4$field.onChange,
-          value = _ref4$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Frontend Editing for admins.', 'comment-edit-pro'),
-        className: "sce-admin__toggle-control",
-        checked: value,
-        onChange: function onChange(boolValue) {
-          //setShowButtonOptions( boolValue );
-          _onChange3(boolValue);
-        },
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to edit comments from the frontend of your site.', 'comment-edit-pro')
-      });
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
-    name: "allowUnlimitedEditing",
-    control: control,
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-          _onChange4 = _ref5$field.onChange,
-          value = _ref5$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Unlimited Timer for Logged-in Users.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange4(boolValue);
+          _onChange2(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow unlimited editing for logged-in users.', 'comment-edit-pro')
       });
@@ -19763,19 +19725,57 @@ var Interface = function Interface(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "showStopTimer",
     control: control,
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-          _onChange5 = _ref6$field.onChange,
-          value = _ref6$field.value;
+    render: function render(_ref4) {
+      var _ref4$field = _ref4.field,
+          _onChange3 = _ref4$field.onChange,
+          value = _ref4$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow Timer To Be Canceled by Users', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange5(boolValue);
+          _onChange3(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show an extra button that will allow users to cancel their edit timer.', 'comment-edit-pro')
+      });
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Editing Options', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "allowCommentLogging",
+    control: control,
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange4 = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable comment logging for edited comments.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          //setShowButtonOptions( boolValue );
+          _onChange4(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to restore edited comments and view an edit history for comments.', 'comment-edit-pro')
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "allowFrontEndEditing",
+    control: control,
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange5 = _ref6$field.onChange,
+          value = _ref6$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Frontend Editing for admins.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          //setShowButtonOptions( boolValue );
+          _onChange5(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to edit comments from the frontend of your site.', 'comment-edit-pro')
       });
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
@@ -19852,7 +19852,7 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will send an email notification when someone edits their comment.', 'comment-edit-pro')
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+  }), getValues('allowEditNotification') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "editNotificationTo",
     control: control,
     rules: {
@@ -19961,7 +19961,7 @@ var Interface = function Interface(props) {
     politeness: "assertive",
     inline: false,
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
