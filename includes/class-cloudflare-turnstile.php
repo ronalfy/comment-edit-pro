@@ -29,7 +29,10 @@ class Cloudflare_Turnstile {
 		add_action( 'wp_ajax_sce_save_turnstile_options', array( $this, 'ajax_save_turnstile_options' ) );
 		add_action( 'wp_ajax_sce_reset_turnstile_options', array( $this, 'ajax_reset_turnstile_options' ) );
 
+		// Initializes comment actions.
 		add_action( 'wp', array( $this, 'action_wp' ) );
+
+		// Verify the token when there's a new comment.
 		add_action( 'pre_comment_on_post', array( $this, 'verify_turnstile_token' ), 10, 1 );
 	}
 
@@ -42,7 +45,7 @@ class Cloudflare_Turnstile {
 		}
 		// If user can moderate comments, no captcha.
 		if ( current_user_can( 'moderate_comments' ) ) {
-			// return;
+			return;
 		}
 
 		$options = Options::get_options();
@@ -60,6 +63,8 @@ class Cloudflare_Turnstile {
 			// Enqueue the turnstile scripts.
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_turnstile_scripts' ) );
 			add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
+
+			// Add the turnstile widget container.
 			add_filter( 'comment_form_defaults', array( $this, 'add_cloudflare_widget_container' ), 10, 1 );
 		}
 	}
