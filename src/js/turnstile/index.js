@@ -41,13 +41,15 @@ window.sceInitTurnstile = () => {
 		const widgetId = turnstile.render( '#sce-turnstile', {
 			sitekey: sceTurnstileLocal.sitekey,
 			callback: ( token ) => {
-				console.log( token );
+				setTimeout( () => {
+					// Reset the widget.
+					turnstile.reset( widgetId );
+				}, 300000 ); // 300 seconds (5 mins).
 			},
 			size: sceTurnstileLocal.size,
 			theme: sceTurnstileLocal.theme,
 			language: sceTurnstileLocal.language,
 		} );
-		console.log( widgetId );
 	};
 
 	// Set up the textarea event. Only load turnstile if the user has begun filling out the textarea.

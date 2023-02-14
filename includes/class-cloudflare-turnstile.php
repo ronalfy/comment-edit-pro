@@ -30,6 +30,7 @@ class Cloudflare_Turnstile {
 		add_action( 'wp_ajax_sce_reset_turnstile_options', array( $this, 'ajax_reset_turnstile_options' ) );
 
 		add_action( 'wp', array( $this, 'action_wp' ) );
+		add_action( 'pre_comment_on_post', array( $this, 'verify_turnstile_token' ), 10, 1 );
 	}
 
 	/**
@@ -61,6 +62,43 @@ class Cloudflare_Turnstile {
 			add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
 			add_filter( 'comment_form_defaults', array( $this, 'add_cloudflare_widget_container' ), 10, 1 );
 		}
+	}
+
+	/**
+	 * Verify the turnstile token.
+	 *
+	 * @param int $comment_id The comment ID to check.
+	 */
+	public function verify_turnstile_token( $comment_id ) {
+		$options = Options::get_options();
+		if ( ! (bool) $options['turnstile_enabled'] ) {
+			return;
+		}
+		$token = sanitize_text_field( filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT ) );
+		if ( ! $token ) {
+			wp_die( esc_html__( 'Could not verify Cloudflare Turnstile token.', 'comment-edit-pro' ) );
+		}
+		$secret_key = $options['turnstile_secret'];
+		$url        = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+		$data       = array(
+			'secret'   => $secret_key,
+			'response' => $token,
+		);
+		$args       = array(
+			'body'      => $data,
+			'method'    => 'POST',
+			'sslverify' => true,
+		);
+		$response   = wp_remote_post( esc_url( $url ), $args );
+		if ( is_wp_error( $response ) ) {
+			wp_die( esc_html__( 'Cloudflare Turnstile could not be verified.', 'comment-edit-pro' ) );
+		}
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( ! $body['success'] ) {
+			wp_die( esc_html__( 'Cloudflare Turnstile security challenge has failed.', 'comment-edit-pro' ) );
+		}
+
+		// Now silently exit as all is well now.
 	}
 
 	/**
