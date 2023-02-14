@@ -78,6 +78,8 @@ class Options {
 				case 'slack_moderation_enabled':
 				case 'slack_edit_comments_enabled':
 				case 'license_activated':
+				case 'turnstile_enabled':
+				case 'turnstile_logged_in_users_enabled':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -241,6 +243,8 @@ class Options {
 			'turnstile_theme'                    => 'auto',
 			'turnstile_language'                 => 'auto',
 			'turnstile_widget_size'              => 'normal',
+			'turnstile_comment_submit_button_id' => 'submit',
+			'turnstile_logged_in_users_enabled'  => true,
 
 		);
 		return $defaults;

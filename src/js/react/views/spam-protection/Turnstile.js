@@ -73,6 +73,8 @@ const Interface = ( props ) => {
 			turnstileTheme: data.turnstileTheme,
 			turnstileLanguage: data.turnstileLanguage,
 			turnstileWidgetSize: data.turnstileWidgetSize,
+			turnstileCommentSubmitButtonId: data.turnstileCommentSubmitButtonId,
+			turnstileLoggedInUsersEnabled: data.turnstileLoggedInUsersEnabled,
 		},
 	} );
 
@@ -198,6 +200,30 @@ const Interface = ( props ) => {
 						{ getValues( 'turnstileEnabled' ) && (
 							<>
 								<tr>
+									<th scope="row">{ __( 'Logged-in Users', 'comment-edit-pro' ) }</th>
+									<td>
+										{ getValues( 'turnstileLoggedInUsersEnabled' ) }
+										<Controller
+											name="turnstileLoggedInUsersEnabled"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'Enable Cloudflare Turnstile for Logged-in Users', 'comment-edit-pro' ) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'You can exclude logged-in users from Cloudflare Turnstile with this setting.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
 									<th scope="row">{ __( 'Keys', 'comment-edit-pro' ) }</th>
 									<td>
 										<Controller
@@ -269,9 +295,9 @@ const Interface = ( props ) => {
 											rules={ { required: true } }
 											render={ ( { field: { onChange, value } } ) => (
 												<SelectControl
-													label={ __( 'Widget Appearance', 'comment-edit-pro' ) }
+													label={ __( 'Widget Language', 'comment-edit-pro' ) }
 													help={ __(
-														'Select the theme for the widget.',
+														'Select the language of the widget.',
 														'comment-edit-pro'
 													) }
 													value={ value }
@@ -359,6 +385,40 @@ const Interface = ( props ) => {
 												/>
 											) }
 										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Comment Submit Button ID', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="turnstileCommentSubmitButtonId"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field } ) => (
+												<TextControl
+													label={ __( 'Submit Comment Button ID', 'quotes-dlx' ) }
+													{ ...field }
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.turnstileCommentSubmitButtonId?.type,
+														'is-required': true,
+													} ) }
+													help={ __(
+														'Enter the CSS/HTML ID for the comment form button so Cloudflare Turnstile can target the correct button.',
+														'comment-edit-pro'
+													) }
+													aria-required="true"
+												/>
+											) }
+										/>
+										{ 'required' === errors.turnstileCommentSubmitButtonId?.type && (
+											<Notice
+												message={ __( 'This field is a required field.' ) }
+												status="error"
+												politeness="assertive"
+												inline={ true }
+												icon={ CircularExclamationIcon }
+											/>
+										) }
 									</td>
 								</tr>
 							</>

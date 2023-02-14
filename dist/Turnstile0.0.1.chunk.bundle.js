@@ -373,7 +373,7 @@ var Turnstile = function Turnstile(props) {
 };
 
 var Interface = function Interface(props) {
-  var _errors$turnstileSite2, _errors$turnstileSecr2;
+  var _errors$turnstileSite2, _errors$turnstileSecr2, _errors$turnstileComm2;
 
   var defaults = props.defaults;
   var response = defaults();
@@ -410,7 +410,9 @@ var Interface = function Interface(props) {
       turnstileSecret: data.turnstileSecret,
       turnstileTheme: data.turnstileTheme,
       turnstileLanguage: data.turnstileLanguage,
-      turnstileWidgetSize: data.turnstileWidgetSize
+      turnstileWidgetSize: data.turnstileWidgetSize,
+      turnstileCommentSubmitButtonId: data.turnstileCommentSubmitButtonId,
+      turnstileLoggedInUsersEnabled: data.turnstileLoggedInUsersEnabled
     }
   }),
       register = _useForm.register,
@@ -544,16 +546,35 @@ var Interface = function Interface(props) {
     }
   }))), getValues('turnstileEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logged-in Users', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, getValues('turnstileLoggedInUsersEnabled'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileLoggedInUsersEnabled",
+    control: control,
+    render: function render(_ref2) {
+      var _ref2$field = _ref2.field,
+          _onChange2 = _ref2$field.onChange,
+          value = _ref2$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Cloudflare Turnstile for Logged-in Users', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange2(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('You can exclude logged-in users from Cloudflare Turnstile with this setting.', 'comment-edit-pro')
+      });
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Keys', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
     name: "turnstileSitekey",
     control: control,
     rules: {
       required: true
     },
-    render: function render(_ref2) {
+    render: function render(_ref3) {
       var _errors$turnstileSite;
 
-      var field = _ref2.field;
+      var field = _ref3.field;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sitekey', 'quotes-dlx')
       }, field, {
@@ -577,10 +598,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref3) {
+    render: function render(_ref4) {
       var _errors$turnstileSecr;
 
-      var field = _ref3.field;
+      var field = _ref4.field;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'quotes-dlx')
       }, field, {
@@ -606,13 +627,13 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange2 = _ref4$field.onChange,
-          value = _ref4$field.value;
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange3 = _ref5$field.onChange,
+          value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Appearance', 'comment-edit-pro'),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the theme for the widget.', 'comment-edit-pro'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Language', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the language of the widget.', 'comment-edit-pro'),
         value: value,
         options: [
         /* auto, ar-eg, de, en, es, fa, fr, id, it, ja, ko, nl, pl, pt-br, ru, tr, zh-cn, zh-tw */
@@ -672,7 +693,7 @@ var Interface = function Interface(props) {
           value: 'zh-tw'
         }],
         onChange: function onChange(widgetThemeValue) {
-          _onChange2(widgetThemeValue);
+          _onChange3(widgetThemeValue);
         }
       });
     }
@@ -684,10 +705,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-          _onChange3 = _ref5$field.onChange,
-          value = _ref5$field.value;
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange4 = _ref6$field.onChange,
+          value = _ref6$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Appearance', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the theme for the widget.', 'comment-edit-pro'),
@@ -705,7 +726,7 @@ var Interface = function Interface(props) {
           value: 'dark'
         }],
         onChange: function onChange(widgetThemeValue) {
-          _onChange3(widgetThemeValue);
+          _onChange4(widgetThemeValue);
         }
       });
     }
@@ -717,10 +738,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-          _onChange4 = _ref6$field.onChange,
-          value = _ref6$field.value;
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange5 = _ref7$field.onChange,
+          value = _ref7$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Widget Size', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select the size for the widget.', 'comment-edit-pro'),
@@ -735,10 +756,39 @@ var Interface = function Interface(props) {
           value: 'compact'
         }],
         onChange: function onChange(widgetSizeValue) {
-          _onChange4(widgetSizeValue);
+          _onChange5(widgetSizeValue);
         }
       });
     }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Submit Button ID', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_10__.Controller, {
+    name: "turnstileCommentSubmitButtonId",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref8) {
+      var _errors$turnstileComm;
+
+      var field = _ref8.field;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Submit Comment Button ID', 'quotes-dlx')
+      }, field, {
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === ((_errors$turnstileComm = errors.turnstileCommentSubmitButtonId) === null || _errors$turnstileComm === void 0 ? void 0 : _errors$turnstileComm.type),
+          'is-required': true
+        }),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter the CSS/HTML ID for the comment form button so Cloudflare Turnstile can target the correct button.', 'comment-edit-pro'),
+        "aria-required": "true"
+      }));
+    }
+  }), 'required' === ((_errors$turnstileComm2 = errors.turnstileCommentSubmitButtonId) === null || _errors$turnstileComm2 === void 0 ? void 0 : _errors$turnstileComm2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+    status: "error",
+    politeness: "assertive",
+    inline: true,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
