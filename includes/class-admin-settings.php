@@ -46,6 +46,26 @@ class Admin_Settings {
 	 * Output Generic Settings Place holder for React goodness.
 	 */
 	public static function get_settings_header() {
+		$options   = Options::get_options();
+		$user      = wp_get_current_user();
+		$user_id   = $user->ID;
+		$firstname = get_user_meta( $user_id, 'first_name', true );
+		$lastname  = get_user_meta( $user_id, 'last_name', true );
+		$website   = home_url();
+
+		$support_url = add_query_arg(
+			array(
+				'firstname' => $firstname,
+				'lastname'  => $lastname,
+				'site'      => $website,
+				'email'     => $user->data->user_email,
+				'license'   => $options['license'],
+				'product'   => 'Comment Edit Pro',
+				'subject'   => 'Comment Edit Pro support',
+				'support'   => 'Yes',
+			),
+			'https://dlxplugins.com/support/'
+		);
 		?>
 		<header id="comment-edit-pro-header">
 			<div id="comment-edit-pro-header-content">
@@ -57,7 +77,7 @@ class Admin_Settings {
 				</div>
 				<div class="sce-admin-header-links">
 					<a href="https://docs.dlxplugins.com/v/comment-edit-pro/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Documentation', 'comment-edit-pro' ); ?></a>
-					<a href="https://dlxplugins.com/support/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
+					<a href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
 				</div>
 			</div>
 		</header>

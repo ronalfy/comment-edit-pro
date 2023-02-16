@@ -1087,3 +1087,55 @@ h2 a.sce-admin-heading-docs {
 	}
 }
 
+/* Admin Cards on Main tab */
+.sce-admin-panel-cards {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 40px;
+	row-gap: 40px;
+	max-width: 100%;
+}
+.sce-admin-panel-card {
+	background: #fff;
+	border-radius: 15px;
+	box-shadow: 0 1px 3px rgba(156,104,176,.45);
+	padding: 20px;
+	overflow: hidden;
+	.sce-admin-panel-card-body {
+		margin-bottom: 20px;
+		h3 {
+			font-size: 1.6em;
+			font-weight: 500;
+			margin: 0;
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+		p {
+			margin: 0;
+			font-size: 1.3em;
+			line-height: 1.3;
+		}
+	}
+	.sce-admin-panel-card-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 20px;
+		a {
+			font-size: 1.2em;
+			color: #9c68b0;
+			text-decoration: none;
+			transition: background-color 0.5s ease;
+			&:hover {
+				text-decoration: none;
+				color: darken( #9c68b0, 10% );
+			}
+		}
+	}
+}
+.sce-admin-panel-card-header {
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}

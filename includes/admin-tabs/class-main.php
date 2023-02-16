@@ -70,240 +70,80 @@ class Main {
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'main' === $tab ) {
 			if ( empty( $sub_tab ) || 'main' === $sub_tab ) {
-				if ( isset( $_POST['submit'] ) && isset( $_POST['options'] ) ) {
-					check_admin_referer( 'save_sce_options' );
-					$options = Options::get_options();
-					$options = wp_parse_args( $_POST['options'], $options ); // phpcs:ignore
-					Options::update_options( $options );
-					printf( '<div class="updated"><p><strong>%s</strong></p></div>', esc_html__( 'Your options have been saved.', 'comment-edit-pro' ) );
-				}
-				// Get options and defaults.
 				$options = Options::get_options();
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<form action="" method="POST">
-							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Main Options', 'comment-edit-pro' ); ?></h2>
-							<?php
-							$version = get_site_option( 'sce_table_version', '0' );
-							if ( COMMENTEDITPRO_TABLE_VERSION === $version && true === $options['allow_comment_logging'] ) {
-								global $wpdb;
-								$tablename = $wpdb->base_prefix . 'sce_comments';
-								$blog_id   = get_current_blog_id();
-
-								$edit_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $tablename WHERE blog_id = %d", $blog_id ) ); // phpcs:ignore
-								?>
-								<p class="sce-edit-count"><?php esc_html_e( 'Your users have edited their comments', 'comment-edit-pro' ); ?> <?php echo number_format( $edit_count ); ?> <?php echo esc_html( _n( 'time', 'times', $edit_count, 'comment-edit-pro' ) ); ?>.</p>
-								<div class="sce-main-help">
-									<?php
-									$options   = Options::get_options();
-									$user      = wp_get_current_user();
-									$user_id   = $user->ID;
-									$firstname = get_user_meta( $user_id, 'first_name', true );
-									$lastname  = get_user_meta( $user_id, 'last_name', true );
-									$website   = home_url();
-			
-									$support_url = add_query_arg(
-										array(
-											'firstname' => $firstname,
-											'lastname'  => $lastname,
-											'site'      => $website,
-											'email'     => $user->data->user_email,
-											'license'   => $options['license'],
-											'product'   => 'Comment Edit Pro',
-											'subject'   => 'Comment Edit Pro support',
-											'support'   => 'Yes',
-										),
-										'https://dlxplugins.com/support/'
-									);
-									?>
-									Need help? Please <a href="https://commenteditpro.dlxplugins.com/">visit our thorough documentation</a> and/or <a href="<?php echo esc_url_raw( $support_url ); ?>">reach out for support</a>.
-								</div>
-								<?php
-							}
+						<h2><?php esc_html_e( 'Welcome to Comment Edit Pro', 'comment-edit-pro' ); ?></h2>
+						<p><?php esc_html_e( 'Comment Edit Pro is a powerful comment plugin that allows you to edit comments, add avatars, mentions, spam protection, and several useful integrations.', 'comment-edit-pro' ); ?></p>
+						<?php
+						if ( 'valid' === $options['license_valid'] ) {
 							?>
-							<table class="form-table">
-								<tbody>
-									<tr>
-										<th scope="row"><label for="sce-timer"><?php esc_html_e( 'Edit Timer in Minutes', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input id="sce-timer" class="regular-text" type="number" value="<?php echo esc_attr( absint( $options['timer'] ) ); ?>" name="options[timer]" />
-										</td>
-									</tr>
-									<tr>
-										<th scope="row"><label for="allow-comment-logging"><?php esc_html_e( 'Allow Comment Logging and Stats', 'comment-edit-pro' ); ?></label></th>
-										<td>
-										<input type="hidden" value="false" name="options[allow_comment_logging]" />
-										<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="allow-comment-logging" type="checkbox" <?php checked( true, $options['allow_comment_logging'] ); ?> name="options[allow_comment_logging]" />
-														<label for="allow-comment-logging"></label>
-													</div>
-												</div>
-											</div>
-											<p class="description"><?php esc_html_e( 'Enabling this will allow you to restore edited comments and view an edit history for comments.', 'comment-edit-pro' ); ?></p>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row"><label for="sce-allow-front-end-editing"><?php esc_html_e( 'Enable Front End Editing for Admins', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[allow_front_end_editing]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-allow-front-end-editing" type="checkbox" <?php checked( true, $options['allow_front_end_editing'] ); ?> name="options[allow_front_end_editing]" />
-														<label for="sce-allow-front-end-editing"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row"><label for="sce-unlimited-timer"><?php esc_html_e( 'Unlimited Timer for Logged-in Users', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[allow_unlimited_editing]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-unlimited-timer" type="checkbox" <?php checked( true, $options['allow_unlimited_editing'] ); ?> name="options[allow_unlimited_editing]" />
-														<label for="sce-unlimited-timer"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-									
-									<tr>
-										<th scope="row"><label for="sce-show-stop-timer"><?php esc_html_e( 'Allow Timer To Be Canceled by Users', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[show_stop_timer]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-show-stop-timer" type="checkbox" <?php checked( true, $options['show_stop_timer'] ); ?>name="options[show_stop_timer]"  />
-														<label for="sce-show-stop-timer"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-									
-									<tr>
-										<th scope="row"><label for="sce-allow-deletion"><?php esc_html_e( 'Allow Comment Deletion for Users', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[allow_delete]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-allow-deletion" type="checkbox" <?php checked( true, $options['allow_delete'] ); ?> name="options[allow_delete]" />
-														<label for="sce-allow-deletion"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row"><label for="sce-allow-deletion-only"><?php esc_html_e( 'Allow Comment Deletion Only', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[delete_only]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-allow-deletion-only" type="checkbox" <?php checked( true, $options['delete_only'] ); ?> name="options[delete_only]" />
-														<label for="sce-allow-deletion-only"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row"><label for="sce-allow-deletion-confirmation"><?php esc_html_e( 'Allow Comment Deletion Confirmation', 'comment-edit-pro' ); ?></label></th>
-										<td>
-											<input type="hidden" value="false" name="options[allow_delete_confirmation]" />
-											<div class="toggle-checkboxes">
-												<div class="flex">
-													<div class="toggle-container">
-														<input id="sce-allow-deletion-confirmation" type="checkbox" <?php checked( true, $options['allow_delete_confirmation'] ); ?> name="options[allow_delete_confirmation]" />
-														<label for="sce-allow-deletion-confirmation"></label>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
-						</form>
+							<div class="sce-admin__notice sce-admin__notice-type--success sce-admin__notice-appearance--block">
+								<p class="components-notice"><?php esc_html_e( 'Thank you for supporting Comment Edit Pro. Your license key is active and you are receiving updates and support.', 'comment-edit-pro' ); ?></p>
+							</div>
+							<?php
+						} else {
+							?>
+							<div class="sce-admin__notice sce-admin__notice-type--warning sce-admin__notice-appearance--block">
+								<div class="components-notice">
+									<p><?php esc_html_e( 'Please enter a license key to receive updates and support for Comment Edit Pro.', 'comment-edit-pro' ); ?></p>
+									<p><a href="<?php echo esc_url( Functions::get_settings_url( 'license' ) ); ?>"><?php esc_html_e( 'View License Settings', 'comment-edit-pro' ); ?></a></p>
+								</div>
+							</div>
+							<?php
+						}
+						?>
 					</div>
 				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<form action="" method="POST">
-							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Email Settings', 'comment-edit-pro' ); ?></h2>
-							<table class="form-table">
-								<tbody>
-									<tr>
-										<th scope="row"><?php esc_html_e( 'Email Notifications', 'comment-edit-pro' ); ?></th>
-										<td>
-											<p><?php esc_html_e( 'Receive an email notification each time a user edits or deletes their comment.', 'comment-edit-pro' ); ?></p>
-											<br />
-											<input type="hidden" value="false" name="options[allow_edit_notification]" />
-											<input id="sce-allow-email-notifications" type="checkbox" value="true" name="options[allow_edit_notification]" <?php checked( true, $options['allow_edit_notification'] ); ?> /> <label for="sce-allow-email-notifications"><?php esc_html_e( 'Allow email notifications.', 'comment-edit-pro' ); ?></label>
-											<br /><br />
-											<label for="sce-email-notifications_to"><?php esc_html_e( 'To Email Address', 'comment-edit-pro' ); ?></label><br />
-												<input id="sce-email-notifications_to" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_to'] ); ?>" name="options[edit_notification_to]" />
-											<br /><br />
-											<label for="sce-email-notifications-from"><?php esc_html_e( 'From Email Address', 'comment-edit-pro' ); ?></label><br />
-												<input id="sce-email-notifications-from" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_from'] ); ?>" name="options[edit_notification_from]" />
-											<br /><br />
-											<label for="sce-email-notifications-subject"><?php esc_html_e( 'Email Subject', 'comment-edit-pro' ); ?></label><br />
-												<input id="sce-email-notifications-subject" class="regular-text" type="text" value="<?php echo esc_attr( $options['edit_notification_subject'] ); ?>" name="options[edit_notification_subject]" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<?php submit_button( __( 'Save Email Settings', 'comment-edit-pro' ) ); ?>
-						</form>
+				<div class="sce-admin-panel-cards">
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/avatars.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Avatars', 'comment-edit-pro' ); ?>" />
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Comment Avatars', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Comment Avatars are a great way to give your commenters some personality. With this colorful and diverse set of avatars, you will find it a fun way to boost interaction.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'avatars' ) ); ?>"><?php esc_html_e( 'View Avatar Settings', 'comment-edit-pro' ); ?></a>
+						</div>
 					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<form action="" method="POST">
-							<?php wp_nonce_field( 'save_sce_options' ); ?>
-							<h2><?php esc_html_e( 'Comment Character Control', 'comment-edit-pro' ); ?></h2>
-							<p class="description"><?php esc_html_e( 'Enabling Comment Character Control will set a minimum and maximum length for comments.', 'comment-edit-pro' ); ?></p>
-							<table class="form-table">
-								<tbody>
-									<tr>
-										<th scope="row"><?php esc_html_e( 'Comment Length', 'comment-edit-pro' ); ?></th>
-										<td>
-											<p><?php esc_html_e( 'Allow front-end comment character control', 'comment-edit-pro' ); ?></p>
-											<br />
-											<input type="radio" value="false" name="options[allow_front_end_character_limit]" id="disable-ccc" <?php checked( false, $options['allow_front_end_character_limit'] ); ?> /> <label for="disable-ccc"><?php esc_html_e( 'Disable Comment Character Control', 'comment-edit-pro' ); ?></label><br />
-											<input type="radio" value="true" name="options[allow_front_end_character_limit]" id="enable-ccc" <?php checked( true, $options['allow_front_end_character_limit'] ); ?> /> <label for="enable-ccc"><?php esc_html_e( 'Enable Comment Character Control', 'comment-edit-pro' ); ?></label><br /><br /><br />
-											<input type="hidden" value="false" name="options[require_comment_length]" />
-											<input id="sce-allow-comment-length" type="checkbox" value="true" name="options[require_comment_length]" <?php checked( true, $options['require_comment_length'] ); ?> /> <label for="sce-allow-comment-length"><?php esc_html_e( 'Ensure an edited comment has a minimum length in characters.', 'comment-edit-pro' ); ?></label>
-											<br /><br />
-											<label for="sce-comment-length"><?php esc_html_e( 'Minimum Comment Length', 'comment-edit-pro' ); ?></label><br />
-											<input id="sce-comment-length" class="regular-text" type="number" value="<?php echo esc_attr( $options['min_comment_length'] ); ?>" name="options[min_comment_length]" />
-											<br /><br />
-											<input type="hidden" value="false" name="options[require_comment_length_max]" />
-											<input id="sce-allow-comment-length-max" type="checkbox" value="true" name="options[require_comment_length_max]" <?php checked( true, $options['require_comment_length_max'] ); ?> /> <label for="sce-allow-comment-length-max"><?php esc_html_e( 'Ensure an edited comment has a maximum length in characters.', 'comment-edit-pro' ); ?></label>
-											<br /><br />
-											<label for="sce-comment-length-max"><?php esc_html_e( 'Maximum Comment Length', 'comment-edit-pro' ); ?></label><br />
-											<input id="sce-comment-length-max" class="regular-text" type="number" value="<?php echo esc_attr( $options['max_comment_length'] ); ?>" name="options[max_comment_length]" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<?php submit_button( __( 'Save Options', 'comment-edit-pro' ) ); ?>
-						</form>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/slack.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Slack Notification', 'comment-edit-pro' ); ?>" />
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Slack Integration', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Keep track of your comments by receiving a Slack notification when users leave a comment.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><?php esc_html_e( 'View Integration Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/turnstile.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Cloudflare Turnstile', 'comment-edit-pro' ); ?>" />
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Cloudflare Turnstile', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'An alternative form of a Captcha, Turnstile provides extra protection from bots and malicious users.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'spam-protection' ) ); ?>"><?php esc_html_e( 'View Spam Protection Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mentions.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Mentions feature', 'comment-edit-pro' ); ?>" />
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( '@ Mentions', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Allow your commenters to interact with eachother through mentions. Users can also choose to be notified when they are mentioned', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'mentions' ) ); ?>"><?php esc_html_e( 'View Mention Settings', 'comment-edit-pro' ); ?></a>
+						</div>
 					</div>
 				</div>
 				<?php
