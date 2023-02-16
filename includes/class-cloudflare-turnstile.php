@@ -79,6 +79,9 @@ class Cloudflare_Turnstile {
 		if ( ! (bool) $options['turnstile_enabled'] ) {
 			return;
 		}
+		if ( current_user_can( 'moderate_comments' ) ) {
+			return;
+		}
 		$token = sanitize_text_field( filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT ) );
 		if ( ! $token ) {
 			wp_die( esc_html__( 'Could not verify Cloudflare Turnstile token.', 'comment-edit-pro' ) );

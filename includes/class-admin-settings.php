@@ -230,6 +230,9 @@ class Admin_Settings {
 			<symbol aria-hidden="true" data-prefix="fas" data-icon="users" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="users">
 				<path class="fa-primary" fill="currentColor"  d="M319.9 320c57.41 0 103.1-46.56 103.1-104c0-57.44-46.54-104-103.1-104c-57.41 0-103.1 46.56-103.1 104C215.9 273.4 262.5 320 319.9 320zM369.9 352H270.1C191.6 352 128 411.7 128 485.3C128 500.1 140.7 512 156.4 512h327.2C499.3 512 512 500.1 512 485.3C512 411.7 448.4 352 369.9 352z"/><path fill="currentColor" opacity="0.4" class="fa-secondary" d="M128 160c44.18 0 80-35.82 80-80S172.2 0 128 0C83.82 0 48 35.82 48 80S83.82 160 128 160zM512 160c44.18 0 80-35.82 80-80S556.2 0 512 0c-44.18 0-80 35.82-80 80S467.8 160 512 160zM551.9 192h-61.84c-12.8 0-24.88 3.037-35.86 8.24C454.8 205.5 455.8 210.6 455.8 216c0 33.71-12.78 64.21-33.16 88h199.7C632.1 304 640 295.6 640 285.3C640 233.8 600.6 192 551.9 192zM185.5 200.1C174.6 194.1 162.6 192 149.9 192H88.08C39.44 192 0 233.8 0 285.3C0 295.6 7.887 304 17.62 304h199.5c-20.38-23.79-33.16-54.29-33.16-88C183.9 210.6 184.9 205.4 185.5 200.1z"/>
 			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="text">
+				<path class="fa-primary" fill="currentColor" opacity="0.4" d="M608 224h-256c-17.67 0-32 14.31-32 31.1v32c0 17.69 14.33 32 32 32s32-14.31 32-32h64v128h-16c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H512v-128h64c0 17.69 14.33 32 32 32s32-14.31 32-32v-32C640 238.3 625.7 224 608 224z"/><path fill="currentColor" class="fa-secondary" d="M256 416H224v-320h96v32c0 17.69 14.33 32 32 32s32-14.31 32-32v-64c0-17.69-14.33-32-32-32H32c-17.67 0-32 14.31-32 32v64c0 17.69 14.33 32 32 32s32-14.31 32-32v-32h96v320H128c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S273.7 416 256 416z"/>
+			</symbol>
 		</svg>
 		<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>
 		<?php
@@ -242,7 +245,7 @@ class Admin_Settings {
 		$tabs = new Admin_Tabs\Init_Tabs();
 		$tabs->run();
 
-		$settings_url_base = Functions::get_settings_url( 'main' )
+		$settings_url_base = Functions::get_settings_url( 'home' )
 		?>
 			<?php
 			$tabs = array();
@@ -261,11 +264,11 @@ class Admin_Settings {
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
 				$active_tab = Functions::get_admin_tab();
 				if ( null === $active_tab ) {
-					$active_tab = 'main';
+					$active_tab = 'home';
 				}
 				$is_tab_match = false;
-				if ( 'main' === $active_tab ) {
-					$active_tab = 'main';
+				if ( 'home' === $active_tab ) {
+					$active_tab = 'home';
 				} else {
 					foreach ( $tabs as $tab ) {
 						$tab_get = isset( $tab['get'] ) ? $tab['get'] : '';
@@ -274,7 +277,7 @@ class Admin_Settings {
 						}
 					}
 					if ( ! $is_tab_match ) {
-						$active_tab = 'main';
+						$active_tab = 'home';
 					}
 				}
 				$do_action = false;
@@ -284,7 +287,7 @@ class Admin_Settings {
 					if ( $active_tab === $tab_get ) {
 						$classes[] = 'nav-tab-active';
 						$do_action = isset( $tab['action'] ) ? $tab['action'] : false;
-					} elseif ( ! $is_tab_match && 'main' === $tab_get ) {
+					} elseif ( ! $is_tab_match && 'home' === $tab_get ) {
 						$classes[] = 'nav-tab-active';
 						$do_action = isset( $tab['action'] ) ? $tab['action'] : false;
 					}
@@ -322,7 +325,7 @@ class Admin_Settings {
 
 				// Check to see if no tabs are available for this view.
 				if ( null === $current_tab && null === $current_sub_tab ) {
-					$current_tab = 'main';
+					$current_tab = 'home';
 				}
 				if ( $sub_tabs && ! empty( $sub_tabs ) && is_array( $sub_tabs ) ) {
 					if ( null === $current_sub_tab ) {
