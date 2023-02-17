@@ -493,6 +493,11 @@ function comment_edit_pro_plugin_activate_redirect() {
 		// GEt bulk activation variable if it exists.
 		$maybe_multi = filter_input( INPUT_GET, 'activate-multi', FILTER_VALIDATE_BOOLEAN );
 
+		// Skip debug.
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			return;
+		}
+
 		// Return early if it's a bulk activation.
 		if ( $maybe_multi ) {
 			return;
