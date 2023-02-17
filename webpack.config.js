@@ -36,6 +36,7 @@ module.exports = ( env ) => {
 				'sce-comment-editing': [ './src/js/react/views/comment-editing/index.js' ],
 				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
 				'sce-cloudflare-turnstile': [ './src/js/turnstile/index.js' ],
+				'sce-character-control': [ './src/js/react/views/character-control/index.js' ],
 			},
 			module: {
 				rules: [

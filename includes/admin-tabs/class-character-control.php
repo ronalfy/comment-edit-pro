@@ -71,9 +71,13 @@ class Character_Control {
 		if ( 'character-control' === $tab ) {
 			if ( empty( $sub_tab ) || 'character-control' === $sub_tab ) {
 				?>
-				<div id="sce-tab-character-control">
-					<?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?>
-				</div>	
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<div id="sce-tab-character-control">
+							<?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?>
+						</div>
+					</div>
+				</div>
 				<?php
 			}
 		}

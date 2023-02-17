@@ -12,7 +12,8 @@
 		"jQuery": "readonly",
 		"sceSpamProtection": "readonly",
 		"turnstile": "readonly",
-		"sceTurnstileLocal": "readonly"
+		"sceTurnstileLocal": "readonly",
+		"sceCharacterControl": "readonly"
 	},
 	"env": {
 		"browser": true,

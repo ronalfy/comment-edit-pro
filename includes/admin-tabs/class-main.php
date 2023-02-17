@@ -135,11 +135,23 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
+							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" />
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Character Control', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Set a minimum and maximum length for a comment.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><?php esc_html_e( 'View Character Control Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
 							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-editing.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Editing', 'comment-edit-pro' ); ?>" />
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Comment Editing', 'comment-edit-pro' ); ?></h3>
-							<p><?php esc_html_e( 'Comment editing is a great way to let your users correct their own mistakes. ', 'comment-edit-pro' ); ?></p>
+							<p><?php esc_html_e( 'Comment editing is a great way to let your users correct their own mistakes.', 'comment-edit-pro' ); ?></p>
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-editing' ) ); ?>"><?php esc_html_e( 'View Comment Editing Settings', 'comment-edit-pro' ); ?></a>
@@ -163,7 +175,7 @@ class Main {
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Mailchimp', 'comment-edit-pro' ); ?></h3>
-							<p><?php esc_html_e( 'Add a checkbox next to your comment form so that users can subscribe to Mailchimp when leaving a comment. ', 'comment-edit-pro' ); ?></p>
+							<p><?php esc_html_e( 'Add a checkbox next to your comment form so users can subscribe to your newsletter when leaving a comment. ', 'comment-edit-pro' ); ?></p>
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><?php esc_html_e( 'View Mailchimp Settings', 'comment-edit-pro' ); ?></a>
@@ -175,7 +187,7 @@ class Main {
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( '@ Mentions', 'comment-edit-pro' ); ?></h3>
-							<p><?php esc_html_e( 'Allow your commenters to interact with eachother through mentions. Users can also choose to be notified when they are mentioned', 'comment-edit-pro' ); ?></p>
+							<p><?php esc_html_e( 'Allow your commenters to interact with eachother through mentions. Users can also choose to be notified when they are mentioned.', 'comment-edit-pro' ); ?></p>
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'mentions' ) ); ?>"><?php esc_html_e( 'View Mention Settings', 'comment-edit-pro' ); ?></a>

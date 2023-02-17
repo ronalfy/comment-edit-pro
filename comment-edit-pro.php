@@ -236,32 +236,6 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Add scripts for comment character control.
-	 */
-	public function add_scripts_ccc() {
-		if ( ! is_singular() || ! comments_open() ) {
-			return;
-		}
-		$options            = Options::get_options();
-		$min_comment_option = filter_var( $options['require_comment_length'], FILTER_VALIDATE_BOOLEAN );
-		$max_comment_option = filter_var( $options['require_comment_length_max'], FILTER_VALIDATE_BOOLEAN );
-		if ( $min_comment_option && $max_comment_option ) {
-			wp_enqueue_style( 'sce-ccc', plugins_url( '/dist/sce-ccc-progress-bar.css', __FILE__ ), array(), COMMENTEDITPRO_VERSION, 'all' );
-			wp_enqueue_script( 'sce-ccc', plugins_url( '/js/comment-character-control.js', __FILE__ ), array(), COMMENTEDITPRO_VERSION, true );
-			wp_localize_script(
-				'sce-ccc',
-				'sce_ccc',
-				array(
-					'min_length' => $options['min_comment_length'],
-					'max_length' => $options['max_comment_length'],
-					'min_option' => $options['require_comment_length'],
-					'max_option' => $options['require_comment_length_max'],
-				)
-			);
-		}
-	}
-
-	/**
 	 * Checks if the plugin is on a multisite install.
 	 *
 	 * @return true if multisite, false if not.
@@ -375,15 +349,10 @@ class Comment_Edit_Pro {
 		$this->comment_editing->run();
 		$this->spam_protection = new \CommentEditPro\Includes\Spam_Protection();
 		$this->spam_protection->run();
+		$this->character_control = new \CommentEditPro\Includes\Character_Control();
+		$this->character_control->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
-
-		$functions = Functions::get_plugin_version();
-		$options   = Options::get_options();
-
-		if ( isset( $options['allow_front_end_character_limit'] ) && true === filter_var( $options['allow_front_end_character_limit'], FILTER_VALIDATE_BOOLEAN ) ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_ccc' ) );
-		}
 
 		add_action( 'init', array( $this, 'setup_ajax_calls' ) );
 
