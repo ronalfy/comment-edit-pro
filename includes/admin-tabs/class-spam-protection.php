@@ -71,21 +71,7 @@ class Spam_Protection {
 		if ( 'spam-protection' === $tab ) {
 			if ( empty( $sub_tab ) || 'spam-protection' === $sub_tab ) {
 				?>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-akismet"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
-					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-cloudflare-turnstile"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
-					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-recaptcha"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
-					</div>
-				</div>
+				<div id="sce-tab-spam-protection"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 				<?php
 			}
 		}

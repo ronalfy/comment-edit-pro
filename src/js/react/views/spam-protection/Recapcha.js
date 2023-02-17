@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { useState, Suspense, useEffect, useContext } from 'react';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
@@ -18,6 +18,7 @@ import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import SpamProtectionContext from './Context';
 
 const retrieveRecaptchaSettings = () => {
 	return sendCommand( 'sce_get_recaptcha_options', {
@@ -72,6 +73,12 @@ const Interface = ( props ) => {
 	const [ isSaved, setIsSaved ] = useState( false );
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
+
+	const { turnstileEnabled, setRecaptchaEnabled } = useContext( SpamProtectionContext );
+
+	useEffect( () => {
+		setRecaptchaEnabled( data.recaptchaEnabled );
+	}, [ data.recaptchaEnabled ] );
 
 	const {
 		register,
@@ -425,6 +432,7 @@ const Interface = ( props ) => {
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
+												setRecaptchaEnabled( boolValue );
 												onChange( boolValue );
 											} }
 											help={ __(
@@ -434,6 +442,18 @@ const Interface = ( props ) => {
 										/>
 									) }
 								/>
+								{ ( turnstileEnabled && getValues( 'recaptchaEnabled' ) ) && (
+									<>
+										<Notice
+											message={ __(
+												'It is not recommended to have both reCAPTCHA 3 and Cloudflare Turnstile enabled.',
+												'comment-edit-pro'
+											) }
+											status="warning"
+											politeness="polite"
+										/>
+									</>
+								) }
 							</td>
 						</tr>
 						{ getValues( 'recaptchaEnabled' ) && (

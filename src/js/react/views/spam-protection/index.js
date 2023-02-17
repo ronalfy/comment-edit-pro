@@ -1,5 +1,6 @@
-import React, { lazy } from 'react';
+import React, { lazy, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import SpamProtectionContext from './Context';
 
 const Akismet = lazy( () =>
 	import( /* webpackChunkName: "Akismet0.0.2" */ './Akismet' )
@@ -11,27 +12,42 @@ const Turnstile = lazy( () =>
 	import( /* webpackChunkName: "Turnstile0.0.2" */ './Turnstile' )
 );
 
-const akismetContainer = document.getElementById( 'sce-tab-akismet' );
-const akismetProtection = createRoot( akismetContainer );
-akismetProtection.render(
+const SpamProtectionInterface = () => {
+	const [ recaptchaEnabled, setRecaptchaEnabled ] = useState( false );
+	const [ turnstileEnabled, setTurnstileEnabled ] = useState( false );
+
+	return (
+		<SpamProtectionContext.Provider
+			value={ {
+				recaptchaEnabled,
+				setRecaptchaEnabled,
+				turnstileEnabled,
+				setTurnstileEnabled,
+			} }
+		>
+			<div className="sce-admin-panel-area">
+				<div className="sce-panel-row">
+					<Akismet />
+				</div>
+			</div>
+			<div className="sce-admin-panel-area">
+				<div className="sce-panel-row">
+					<Recaptcha />
+				</div>
+			</div>
+			<div className="sce-admin-panel-area">
+				<div className="sce-panel-row">
+					<Turnstile />
+				</div>
+			</div>
+		</SpamProtectionContext.Provider>
+	);
+};
+
+const spamProtectionContainer = document.getElementById( 'sce-tab-spam-protection' );
+const spamProtection = createRoot( spamProtectionContainer );
+spamProtection.render(
 	<React.StrictMode>
-		<Akismet />
+		<SpamProtectionInterface />
 	</React.StrictMode>
 );
-
-const recaptchaContainer = document.getElementById( 'sce-tab-recaptcha' );
-const recaptchaProtection = createRoot( recaptchaContainer );
-recaptchaProtection.render(
-	<React.StrictMode>
-		<Recaptcha />
-	</React.StrictMode>
-);
-
-const turnstileContainer = document.getElementById( 'sce-tab-cloudflare-turnstile' );
-const turnstileProtection = createRoot( turnstileContainer );
-turnstileProtection.render(
-	<React.StrictMode>
-		<Turnstile />
-	</React.StrictMode>
-);
-
