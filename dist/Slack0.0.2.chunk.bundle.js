@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Slack0.0.1"],{
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Slack0.0.2"],{
 
 /***/ "./node_modules/@wordpress/components/build-module/text-control/index.js":
 /*!*******************************************************************************!*\
@@ -555,4 +555,4 @@ var Interface = function Interface(props) {
 /***/ })
 
 }]);
-//# sourceMappingURL=Slack0.0.1.chunk.bundle.js.map
+//# sourceMappingURL=Slack0.0.2.chunk.bundle.js.map

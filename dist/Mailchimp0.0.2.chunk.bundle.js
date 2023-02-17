@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Mailchimp0.0.1"],{
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Mailchimp0.0.2"],{
 
 /***/ "./node_modules/@wordpress/components/build-module/radio-control/index.js":
 /*!********************************************************************************!*\
@@ -873,4 +873,4 @@ var Interface = function Interface(props) {
 /***/ })
 
 }]);
-//# sourceMappingURL=Mailchimp0.0.1.chunk.bundle.js.map
+//# sourceMappingURL=Mailchimp0.0.2.chunk.bundle.js.map

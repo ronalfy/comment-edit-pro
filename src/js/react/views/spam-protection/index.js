@@ -2,13 +2,13 @@ import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const Akismet = lazy( () =>
-	import( /* webpackChunkName: "Akismet0.0.1" */ './Akismet' )
+	import( /* webpackChunkName: "Akismet0.0.2" */ './Akismet' )
 );
 const Recaptcha = lazy( () =>
-	import( /* webpackChunkName: "Recaptcha0.0.1" */ './Recapcha' )
+	import( /* webpackChunkName: "Recaptcha0.0.2" */ './Recapcha' )
 );
 const Turnstile = lazy( () =>
-	import( /* webpackChunkName: "Turnstile0.0.1" */ './Turnstile' )
+	import( /* webpackChunkName: "Turnstile0.0.2" */ './Turnstile' )
 );
 
 const akismetContainer = document.getElementById( 'sce-tab-akismet' );

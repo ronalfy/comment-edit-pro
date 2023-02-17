@@ -1,10 +1,10 @@
 import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 const Mailchimp = lazy( () =>
-	import( /* webpackChunkName: "Mailchimp0.0.1" */ './Mailchimp' )
+	import( /* webpackChunkName: "Mailchimp0.0.2" */ './Mailchimp' )
 );
 const Slack = lazy( () =>
-	import( /* webpackChunkName: "Slack0.0.1" */ './Slack' )
+	import( /* webpackChunkName: "Slack0.0.2" */ './Slack' )
 );
 
 const container = document.getElementById( 'sce-tab-mailchimp' );

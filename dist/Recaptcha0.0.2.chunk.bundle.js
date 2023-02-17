@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Recaptcha0.0.1"],{
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Recaptcha0.0.2"],{
 
 /***/ "./src/js/react/views/spam-protection/Recapcha.js":
 /*!********************************************************!*\
@@ -513,4 +513,4 @@ var Interface = function Interface(props) {
 /***/ })
 
 }]);
-//# sourceMappingURL=Recaptcha0.0.1.chunk.bundle.js.map
+//# sourceMappingURL=Recaptcha0.0.2.chunk.bundle.js.map
