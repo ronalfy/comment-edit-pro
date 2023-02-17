@@ -21932,8 +21932,6 @@ var Interface = function Interface(props) {
       dirtyFields = _useFormState.dirtyFields,
       touchedFields = _useFormState.touchedFields;
 
-  console.log(data);
-
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
   };
@@ -22047,6 +22045,18 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment editing is enabled by default, but you can disable it here.', 'comment-edit-pro')
       });
     }
+  }), !sceCommentEditing.is_sce_installed && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Edit Lite is not installed and is needed to enable comment editing.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "assertive",
+    inline: false,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+  }), sceCommentEditing.is_sce_installed && !getValues('enableCommentEditing') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The Comment Edit Lite plugin is no longer needed when comment editing is disabled.', 'comment-edit-pro'),
+    status: "info",
+    politeness: "assertive",
+    inline: false,
+    icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Frontend Editing', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
@@ -22067,7 +22077,7 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to edit comments from the frontend of your site.', 'comment-edit-pro')
       });
     }
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  }))), getValues('enableCommentEditing') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Countdown Timer', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "timer",
@@ -22686,7 +22696,7 @@ var Interface = function Interface(props) {
         onChange: onChange
       });
     }
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

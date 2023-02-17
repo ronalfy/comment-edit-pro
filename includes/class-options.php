@@ -80,6 +80,7 @@ class Options {
 				case 'license_activated':
 				case 'turnstile_enabled':
 				case 'turnstile_logged_in_users_enabled':
+				case 'enable_comment_editing':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':

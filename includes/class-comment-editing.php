@@ -35,6 +35,25 @@ class Comment_Editing {
 
 		// Load comment editing admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+
+		// Maybe disable comment editing.
+		add_action( 'wp', array( $this, 'maybe_disable_comment_editing' ) );
+	}
+
+	/**
+	 * Maybe disable comment editing based on settings.
+	 */
+	public function maybe_disable_comment_editing() {
+		$options = Options::get_options();
+		if ( class_exists( 'Simple_Comment_Editing' ) && ! (bool) $options['enable_comment_editing'] ) {
+			$sce = \Simple_Comment_Editing::get_instance();
+			remove_action( 'comment_post', array( $sce, 'comment_posted' ), 100, 1 );
+			remove_filter( 'comment_excerpt', array( $sce, 'add_edit_interface' ), 1000, 2 );
+			remove_filter( 'comment_text', array( $sce, 'add_edit_interface' ), 1000, 2 );
+			remove_filter( 'thesis_comment_text', array( $sce, 'add_edit_interface' ), 1000, 2 );
+			add_filter( 'sce_can_edit', '__return_false' );
+			add_filter( 'sce_can_edit_pre', '__return_false' );
+		}
 	}
 
 	/**
@@ -213,17 +232,19 @@ class Comment_Editing {
 				Functions::get_plugin_version(),
 				true
 			);
+			$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
 			wp_localize_script(
 				'sce-comment-editing',
 				'sceCommentEditing',
 				array(
-					'save_nonce'    => wp_create_nonce( 'sce-save-comment-editing-options' ),
-					'get_nonce'     => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
-					'reset_nonce'   => wp_create_nonce( 'sce-reset-comment-editing-options' ),
-					'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
-					'default_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
-					'light_theme'   => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
-					'dark_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
+					'save_nonce'       => wp_create_nonce( 'sce-save-comment-editing-options' ),
+					'get_nonce'        => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
+					'reset_nonce'      => wp_create_nonce( 'sce-reset-comment-editing-options' ),
+					'ajaxurl'          => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'default_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
+					'light_theme'      => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
+					'dark_theme'       => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
+					'is_sce_installed' => $comment_edit_pro->is_sce_enabled(),
 				)
 			);
 		}

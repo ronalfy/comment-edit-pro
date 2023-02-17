@@ -103,8 +103,6 @@ const Interface = ( props ) => {
 		control,
 	} );
 
-	console.log( data );
-
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
 	};
@@ -235,6 +233,30 @@ const Interface = ( props ) => {
 										/>
 									) }
 								/>
+								{ ! sceCommentEditing.is_sce_installed && (
+									<Notice
+										message={ __(
+											'Comment Edit Lite is not installed and is needed to enable comment editing.',
+											'comment-edit-pro'
+										) }
+										status="error"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
+								{ ( sceCommentEditing.is_sce_installed && ! getValues( 'enableCommentEditing' ) ) && (
+									<Notice
+										message={ __(
+											'The Comment Edit Lite plugin is no longer needed when comment editing is disabled.',
+											'comment-edit-pro'
+										) }
+										status="info"
+										politeness="assertive"
+										inline={ false }
+										icon={ CircularExclamationIcon }
+									/>
+								) }
 							</td>
 						</tr>
 						<tr>
@@ -264,250 +286,37 @@ const Interface = ( props ) => {
 								/>
 							</td>
 						</tr>
-						<tr>
-							<th scope="row">{ __( 'Countdown Timer', 'comment-edit-pro' ) }</th>
-							<td>
-								<Controller
-									name="timer"
-									control={ control }
-									rules={ { required: true, pattern: '\d+' } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Timer Length', 'quotes-dlx' ) }
-											type="number"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.timer?.type,
-												'is-required': true,
-											} ) }
-											help={ __(
-												'Enter the time that users have to edit their comments.',
-												'comment-edit-pro'
-											) }
-											aria-required="true"
-											value={value }
-											onChange={ onChange }
-										/>
-									) }
-								/>
-								{ errors.timer && (
-									<Notice
-										message={ __(
-											'The value for the timer is invalid.',
-											'comment-edit-pro'
-										) }
-										status="error"
-										politeness="assertive"
-										inline={ false }
-										icon={ CircularExclamationIcon }
-									/>
-								) }
-								<Controller
-									name="allowUnlimitedEditing"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Unlimited Timer for Logged-in Users.',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will allow unlimited editing for logged-in users.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-								<Controller
-									name="showStopTimer"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Allow Timer To Be Canceled by Users',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will show an extra button that will allow users to cancel their edit timer.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">{ __( 'Logging', 'comment-edit-pro' ) }</th>
-							<td>
-								<Controller
-									name="allowCommentLogging"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Comment Logging for Edited Comments.',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will allow you to restore edited comments and view an edit history for comments.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">{ __( 'Comment Deletion', 'comment-edit-pro' ) }</th>
-							<td>
-								<Controller
-									name="allowDelete"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Allow Comment Deletion for Users',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this option will allow users to delete their own comments.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-								<Controller
-									name="deleteOnly"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Allow Comment Deletion Only',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will hide the editing options and only allows the user to delete comments only.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-								<Controller
-									name="allowDeleteConfirmation"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Comment Deletion Confirmation',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will show a confirmation before the user is allowed to delete their own comments.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								{ __( 'Email Notifications', 'comment-edit-pro' ) }
-							</th>
-							<td>
-								<Controller
-									name="allowEditNotification"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Email Notifications for Edited Comments',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will send an email notification when someone edits their comment.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-								{ getValues( 'allowEditNotification' ) && (
-									<>
+						{ getValues( 'enableCommentEditing' ) && (
+							<>
+								<tr>
+									<th scope="row">{ __( 'Countdown Timer', 'comment-edit-pro' ) }</th>
+									<td>
 										<Controller
-											name="editNotificationTo"
+											name="timer"
 											control={ control }
-											rules={ { required: true } }
+											rules={ { required: true, pattern: '\d+' } }
 											render={ ( { field: { onChange, value } } ) => (
 												<TextControl
-													label={ __( 'To Email Address', 'highlight-and-share' ) }
-													value={ value }
-													onChange={ ( newValue ) => {
-														if ( ! ValidateEmail( newValue ) ) {
-															setError( 'editNotificationTo', {
-																shouldFocus: true,
-															} );
-														} else {
-															clearErrors( 'editNotificationTo' );
-														}
-														onChange( newValue );
-													} }
+													label={ __( 'Timer Length', 'quotes-dlx' ) }
+													type="number"
 													className={ classNames( 'sce-admin__text-control', {
-														'has-error':
-															'required' === errors.editNotificationTo?.type,
+														'has-error': 'required' === errors.timer?.type,
 														'is-required': true,
 													} ) }
 													help={ __(
-														'The email address to send the notification to.',
+														'Enter the time that users have to edit their comments.',
 														'comment-edit-pro'
 													) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
 												/>
 											) }
 										/>
-										{ errors.editNotificationTo && (
+										{ errors.timer && (
 											<Notice
 												message={ __(
-													'This does not appear to be a valid email address.',
+													'The value for the timer is invalid.',
 													'comment-edit-pro'
 												) }
 												status="error"
@@ -517,418 +326,635 @@ const Interface = ( props ) => {
 											/>
 										) }
 										<Controller
-											name="editNotificationFrom"
-											control={ control }
-											rules={ { required: true } }
-											render={ ( { field: { onChange, value } } ) => (
-												<TextControl
-													label={ __(
-														'From Email Address',
-														'highlight-and-share'
-													) }
-													value={ value }
-													onChange={ ( newValue ) => {
-														if ( ! ValidateEmail( newValue ) ) {
-															setError( 'editNotificationFrom', {
-																shouldFocus: true,
-															} );
-														} else {
-															clearErrors( 'editNotificationFrom' );
-														}
-														onChange( newValue );
-													} }
-													className={ classNames( 'sce-admin__text-control', {
-														'has-error':
-															'required' === errors.editNotificationFrom?.type,
-														'is-required': true,
-													} ) }
-													help={ __(
-														'The email address that notifications should be sent from.',
-														'comment-edit-pro'
-													) }
-												/>
-											) }
-										/>
-										{ errors.editNotificationFrom && (
-											<Notice
-												message={ __(
-													'This does not appear to be a valid email address.',
-													'comment-edit-pro'
-												) }
-												status="error"
-												politeness="assertive"
-												inline={ false }
-												icon={ CircularExclamationIcon }
-											/>
-										) }
-										<Controller
-											name="editNotificationSubject"
-											control={ control }
-											rules={ { required: true } }
-											render={ ( { field: { onChange, value } } ) => (
-												<TextControl
-													label={ __( 'Email Subject', 'highlight-and-share' ) }
-													value={ value }
-													onChange={ ( newValue ) => {
-														onChange( newValue );
-													} }
-													className={ classNames( 'sce-admin__text-control', {
-														'has-error':
-															'required' ===
-															errors.editNotificationSubject?.type,
-														'is-required': true,
-													} ) }
-													help={ __(
-														'The subject of the email when someone edits their comment.',
-														'comment-edit-pro'
-													) }
-												/>
-											) }
-										/>
-										{ errors.editNotificationSubject && (
-											<Notice
-												message={ __(
-													'This is a required field.',
-													'comment-edit-pro'
-												) }
-												status="error"
-												politeness="assertive"
-												inline={ false }
-												icon={ CircularExclamationIcon }
-											/>
-										) }
-									</>
-								) }
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">{ __( 'Appearance', 'comment-edit-pro' ) }</th>
-							<td>
-								<Controller
-									name="showTimer"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __( 'Show the timer', 'comment-edit-pro' ) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will show the timer to the user when editing.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
-								{ getValues( 'showTimer' ) && (
-									<>
-										<Controller
-											name="timerAppearance"
-											control={ control }
-											rules={ { required: true } }
-											render={ ( { field: { onChange, value } } ) => (
-												<SelectControl
-													label={ __( 'Timer Appearance', 'comment-edit-pro' ) }
-													help={ __(
-														'Select how the timer should appear to the user.',
-														'comment-edit-pro'
-													) }
-													value={ value }
-													options={ [
-														{
-															label: __( 'Words', 'comment-edit-pro' ),
-															value: 'words',
-														},
-														{
-															label: __( 'Compact', 'comment-edit-pro' ),
-															value: 'compact',
-														},
-													] }
-													onChange={ ( timerAppearanceValue ) => {
-														onChange( timerAppearanceValue );
-													} }
-												/>
-											) }
-										/>
-									</>
-								) }
-								<Controller
-									name="buttonTheme"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<SelectControl
-											label={ __( 'Choose a Button Theme', 'comment-edit-pro' ) }
-											help={ __(
-												'Select a button theme for editing interface.',
-												'comment-edit-pro'
-											) }
-											value={ value }
-											options={ [
-												{
-													label: __( 'None', 'comment-edit-pro' ),
-													value: 'default',
-												},
-												{
-													label: __( 'Regular', 'comment-edit-pro' ),
-													value: 'regular',
-												},
-												{
-													label: __( 'Light', 'comment-edit-pro' ),
-													value: 'light',
-												},
-												{
-													label: __( 'Dark', 'comment-edit-pro' ),
-													value: 'dark',
-												},
-											] }
-											onChange={ ( buttonThemeValue ) => {
-												onChange( buttonThemeValue );
-											} }
-										/>
-									) }
-								/>
-								{ 'default' !== getValues( 'buttonTheme' ) && (
-									<>
-										<Controller
-											name="showIcons"
+											name="allowUnlimitedEditing"
 											control={ control }
 											render={ ( { field: { onChange, value } } ) => (
 												<ToggleControl
 													label={ __(
-														'Show Icons on Buttons',
+														'Unlimited Timer for Logged-in Users.',
 														'comment-edit-pro'
 													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will allow unlimited editing for logged-in users.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										<Controller
+											name="showStopTimer"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Allow Timer To Be Canceled by Users',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will show an extra button that will allow users to cancel their edit timer.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Logging', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="allowCommentLogging"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Comment Logging for Edited Comments.',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will allow you to restore edited comments and view an edit history for comments.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Comment Deletion', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="allowDelete"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Allow Comment Deletion for Users',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this option will allow users to delete their own comments.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										<Controller
+											name="deleteOnly"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Allow Comment Deletion Only',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will hide the editing options and only allows the user to delete comments only.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										<Controller
+											name="allowDeleteConfirmation"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Comment Deletion Confirmation',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will show a confirmation before the user is allowed to delete their own comments.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										{ __( 'Email Notifications', 'comment-edit-pro' ) }
+									</th>
+									<td>
+										<Controller
+											name="allowEditNotification"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Email Notifications for Edited Comments',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														//setShowButtonOptions( boolValue );
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enabling this will send an email notification when someone edits their comment.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										{ getValues( 'allowEditNotification' ) && (
+											<>
+												<Controller
+													name="editNotificationTo"
+													control={ control }
+													rules={ { required: true } }
+													render={ ( { field: { onChange, value } } ) => (
+														<TextControl
+															label={ __( 'To Email Address', 'highlight-and-share' ) }
+															value={ value }
+															onChange={ ( newValue ) => {
+																if ( ! ValidateEmail( newValue ) ) {
+																	setError( 'editNotificationTo', {
+																		shouldFocus: true,
+																	} );
+																} else {
+																	clearErrors( 'editNotificationTo' );
+																}
+																onChange( newValue );
+															} }
+															className={ classNames( 'sce-admin__text-control', {
+																'has-error':
+															'required' === errors.editNotificationTo?.type,
+																'is-required': true,
+															} ) }
+															help={ __(
+																'The email address to send the notification to.',
+																'comment-edit-pro'
+															) }
+														/>
+													) }
+												/>
+												{ errors.editNotificationTo && (
+													<Notice
+														message={ __(
+															'This does not appear to be a valid email address.',
+															'comment-edit-pro'
+														) }
+														status="error"
+														politeness="assertive"
+														inline={ false }
+														icon={ CircularExclamationIcon }
+													/>
+												) }
+												<Controller
+													name="editNotificationFrom"
+													control={ control }
+													rules={ { required: true } }
+													render={ ( { field: { onChange, value } } ) => (
+														<TextControl
+															label={ __(
+																'From Email Address',
+																'highlight-and-share'
+															) }
+															value={ value }
+															onChange={ ( newValue ) => {
+																if ( ! ValidateEmail( newValue ) ) {
+																	setError( 'editNotificationFrom', {
+																		shouldFocus: true,
+																	} );
+																} else {
+																	clearErrors( 'editNotificationFrom' );
+																}
+																onChange( newValue );
+															} }
+															className={ classNames( 'sce-admin__text-control', {
+																'has-error':
+															'required' === errors.editNotificationFrom?.type,
+																'is-required': true,
+															} ) }
+															help={ __(
+																'The email address that notifications should be sent from.',
+																'comment-edit-pro'
+															) }
+														/>
+													) }
+												/>
+												{ errors.editNotificationFrom && (
+													<Notice
+														message={ __(
+															'This does not appear to be a valid email address.',
+															'comment-edit-pro'
+														) }
+														status="error"
+														politeness="assertive"
+														inline={ false }
+														icon={ CircularExclamationIcon }
+													/>
+												) }
+												<Controller
+													name="editNotificationSubject"
+													control={ control }
+													rules={ { required: true } }
+													render={ ( { field: { onChange, value } } ) => (
+														<TextControl
+															label={ __( 'Email Subject', 'highlight-and-share' ) }
+															value={ value }
+															onChange={ ( newValue ) => {
+																onChange( newValue );
+															} }
+															className={ classNames( 'sce-admin__text-control', {
+																'has-error':
+															'required' ===
+															errors.editNotificationSubject?.type,
+																'is-required': true,
+															} ) }
+															help={ __(
+																'The subject of the email when someone edits their comment.',
+																'comment-edit-pro'
+															) }
+														/>
+													) }
+												/>
+												{ errors.editNotificationSubject && (
+													<Notice
+														message={ __(
+															'This is a required field.',
+															'comment-edit-pro'
+														) }
+														status="error"
+														politeness="assertive"
+														inline={ false }
+														icon={ CircularExclamationIcon }
+													/>
+												) }
+											</>
+										) }
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Appearance', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="showTimer"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'Show the timer', 'comment-edit-pro' ) }
 													className="sce-admin__toggle-control"
 													checked={ value }
 													onChange={ ( boolValue ) => {
 														onChange( boolValue );
 													} }
 													help={ __(
-														'Allow icons for the buttons. Recommended if you have selected a button theme.',
+														'Enabling this will show the timer to the user when editing.',
 														'comment-edit-pro'
 													) }
 												/>
 											) }
 										/>
-									</>
-								) }
-								<p className="sce-admin__theme-preview fancybox-previews">
-									<strong>{ __( 'Preview:', 'comment-edit-pro' ) }</strong>
-									{ ` ` }
-									<a
-										href={ sceCommentEditing.default_theme }
-										className="sce-admin__theme-preview-link"
-										onClick={ ( e ) => {
-											e.preventDefault();
-											jQuery.fancybox.open( {
-												src: e.target.href,
-												type: 'image',
-											} );
-										} }
-									>
-										{ __( 'Default Theme', 'comment-edit-pro' ) }
-									</a>
-									{ ` | ` }
-									<a
-										href={ sceCommentEditing.light_theme }
-										className="sce-admin__theme-preview-link"
-										onClick={ ( e ) => {
-											e.preventDefault();
-											jQuery.fancybox.open( {
-												src: e.target.href,
-												type: 'image',
-											} );
-										} }
-									>
-										{ __( 'Light Theme', 'comment-edit-pro' ) }
-									</a>
-									{ ` | ` }
-									<a
-										href={ sceCommentEditing.dark_theme }
-										className="sce-admin__theme-preview-link"
-										onClick={ ( e ) => {
-											e.preventDefault();
-											jQuery.fancybox.open( {
-												src: e.target.href,
-												type: 'image',
-											} );
-										} }
-									>
-										{ __( 'Dark Theme', 'comment-edit-pro' ) }
-									</a>
-								</p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">{ __( 'Translations', 'comment-edit-pro' ) }</th>
-							<td>
-								<Controller
-									name="saveText"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Save Button Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.saveText?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										{ getValues( 'showTimer' ) && (
+											<>
+												<Controller
+													name="timerAppearance"
+													control={ control }
+													rules={ { required: true } }
+													render={ ( { field: { onChange, value } } ) => (
+														<SelectControl
+															label={ __( 'Timer Appearance', 'comment-edit-pro' ) }
+															help={ __(
+																'Select how the timer should appear to the user.',
+																'comment-edit-pro'
+															) }
+															value={ value }
+															options={ [
+																{
+																	label: __( 'Words', 'comment-edit-pro' ),
+																	value: 'words',
+																},
+																{
+																	label: __( 'Compact', 'comment-edit-pro' ),
+																	value: 'compact',
+																},
+															] }
+															onChange={ ( timerAppearanceValue ) => {
+																onChange( timerAppearanceValue );
+															} }
+														/>
+													) }
+												/>
+											</>
+										) }
+										<Controller
+											name="buttonTheme"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Choose a Button Theme', 'comment-edit-pro' ) }
+													help={ __(
+														'Select a button theme for editing interface.',
+														'comment-edit-pro'
+													) }
+													value={ value }
+													options={ [
+														{
+															label: __( 'None', 'comment-edit-pro' ),
+															value: 'default',
+														},
+														{
+															label: __( 'Regular', 'comment-edit-pro' ),
+															value: 'regular',
+														},
+														{
+															label: __( 'Light', 'comment-edit-pro' ),
+															value: 'light',
+														},
+														{
+															label: __( 'Dark', 'comment-edit-pro' ),
+															value: 'dark',
+														},
+													] }
+													onChange={ ( buttonThemeValue ) => {
+														onChange( buttonThemeValue );
+													} }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="cancelText"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Cancel Button Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.cancelText?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										{ 'default' !== getValues( 'buttonTheme' ) && (
+											<>
+												<Controller
+													name="showIcons"
+													control={ control }
+													render={ ( { field: { onChange, value } } ) => (
+														<ToggleControl
+															label={ __(
+																'Show Icons on Buttons',
+																'comment-edit-pro'
+															) }
+															className="sce-admin__toggle-control"
+															checked={ value }
+															onChange={ ( boolValue ) => {
+																onChange( boolValue );
+															} }
+															help={ __(
+																'Allow icons for the buttons. Recommended if you have selected a button theme.',
+																'comment-edit-pro'
+															) }
+														/>
+													) }
+												/>
+											</>
+										) }
+										<p className="sce-admin__theme-preview fancybox-previews">
+											<strong>{ __( 'Preview:', 'comment-edit-pro' ) }</strong>
+											{ ` ` }
+											<a
+												href={ sceCommentEditing.default_theme }
+												className="sce-admin__theme-preview-link"
+												onClick={ ( e ) => {
+													e.preventDefault();
+													jQuery.fancybox.open( {
+														src: e.target.href,
+														type: 'image',
+													} );
+												} }
+											>
+												{ __( 'Default Theme', 'comment-edit-pro' ) }
+											</a>
+											{ ` | ` }
+											<a
+												href={ sceCommentEditing.light_theme }
+												className="sce-admin__theme-preview-link"
+												onClick={ ( e ) => {
+													e.preventDefault();
+													jQuery.fancybox.open( {
+														src: e.target.href,
+														type: 'image',
+													} );
+												} }
+											>
+												{ __( 'Light Theme', 'comment-edit-pro' ) }
+											</a>
+											{ ` | ` }
+											<a
+												href={ sceCommentEditing.dark_theme }
+												className="sce-admin__theme-preview-link"
+												onClick={ ( e ) => {
+													e.preventDefault();
+													jQuery.fancybox.open( {
+														src: e.target.href,
+														type: 'image',
+													} );
+												} }
+											>
+												{ __( 'Dark Theme', 'comment-edit-pro' ) }
+											</a>
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Translations', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="saveText"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Save Button Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.saveText?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="deleteText"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Delete Button Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.deleteText?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="cancelText"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Cancel Button Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.cancelText?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="stopTimerText"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Stop Timer Button Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.stopTimerText?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="deleteText"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Delete Button Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.deleteText?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="clickToEditText"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Click to Edit Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.clickToEditText?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="stopTimerText"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Stop Timer Button Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.stopTimerText?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="confirmDelete"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Comment Deletion Confirmation Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.confirmDelete?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="clickToEditText"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Click to Edit Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.clickToEditText?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="commentDeleted"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Comment Deleted Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.commentDeleted?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="confirmDelete"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Comment Deletion Confirmation Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.confirmDelete?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="commentDeletedError"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Comment Deleted Error Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.commentDeletedError?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="commentDeleted"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Comment Deleted Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.commentDeleted?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-								<Controller
-									name="commentEmptyError"
-									control={ control }
-									rules={ { required: true } }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											label={ __( 'Comment Empty Error Text', 'quotes-dlx' ) }
-											type="text"
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.commentEmptyError?.type,
-												'is-required': true,
-											} ) }
-											aria-required="true"
-											value={ value }
-											onChange={ onChange }
+										<Controller
+											name="commentDeletedError"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Comment Deleted Error Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.commentDeletedError?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
 										/>
-									) }
-								/>
-							</td>
-						</tr>
+										<Controller
+											name="commentEmptyError"
+											control={ control }
+											rules={ { required: true } }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													label={ __( 'Comment Empty Error Text', 'quotes-dlx' ) }
+													type="text"
+													className={ classNames( 'sce-admin__text-control', {
+														'has-error': 'required' === errors.commentEmptyError?.type,
+														'is-required': true,
+													} ) }
+													aria-required="true"
+													value={ value }
+													onChange={ onChange }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+							</>
+						) }
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
