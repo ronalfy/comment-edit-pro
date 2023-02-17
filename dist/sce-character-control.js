@@ -19600,7 +19600,7 @@ var Interface = function Interface(props) {
     className: "sce-admin-heading-docs",
     target: "_blank",
     rel: "noreferrer",
-    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection"
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-character-control"
   }, "(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "description"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set a minimum and maximum character limit for comments.', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {

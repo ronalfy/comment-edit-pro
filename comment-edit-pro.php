@@ -322,8 +322,6 @@ class Comment_Edit_Pro {
 		$this->comment_mentions->run();
 		$this->license_ajax = new \CommentEditPro\Includes\Plugin_License_Ajax();
 		$this->license_ajax->run();
-		$this->help = new \CommentEditPro\Includes\Help();
-		$this->help->run();
 		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
 		$this->comment_editing->run();
 		$this->spam_protection = new \CommentEditPro\Includes\Spam_Protection();

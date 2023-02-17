@@ -157,7 +157,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Character Control', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Character Control', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-character-control">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
 			<p className="description">
 				{ __(
 					'Set a minimum and maximum character limit for comments.',

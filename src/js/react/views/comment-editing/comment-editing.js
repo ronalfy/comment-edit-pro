@@ -185,15 +185,7 @@ const Interface = ( props ) => {
 		return (
 			<>
 				<h2>
-					{ __( 'Comment Editing', 'comment-edit-pro' ) }{ ' ' }
-					<a
-						className="sce-admin-heading-docs"
-						target="_blank"
-						rel="noreferrer"
-						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection"
-					>
-						({ __( 'Docs', 'comment-edit-pro' ) })
-					</a>
+					{ __( 'Comment Editing', 'comment-edit-pro' ) }
 				</h2>
 				<p className="description">
 					{ __(
