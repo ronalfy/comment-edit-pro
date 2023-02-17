@@ -132,39 +132,6 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Checks for SCE version.
-	 *
-	 * Checks if SCE version is sufficient.
-	 *
-	 * @since 1.0.3
-	 * @access public
-	 */
-	public function admin_notice_insufficient_sce() {
-		$this->show_admin_warning(
-			__( 'Higher Comment Edit Lite version required', 'comment-edit-pro' ),
-			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'Comment Edit Lite', SCE_MIN_VERSION, SCE_VERSION ),
-			'notice-error'
-		);
-	}
-
-	/**
-	 * Checks for SCE is installed.
-	 *
-	 * Checks for SCE is installed.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 */
-	public function admin_notice_sce_not_installed() {
-		$this->show_admin_warning(
-			__( 'Comment Edit Lite is required.', 'comment-edit-pro' ),
-			__( 'The Comment Edit Lite plugin is required for Comment Edit Pro to function.', 'comment-edit-pro' ),
-			'notice-error'
-		);
-	}
-
-	/**
 	 * Checks for SCE Options is installed.
 	 *
 	 * Checks for SCE Options is installed.
@@ -244,7 +211,36 @@ class Comment_Edit_Pro {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
-		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) && is_plugin_active_for_network( SCE_SLUG ) ) {
+		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) && is_plugin_active_for_network( 'simple-comment-editing' ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the plugin is on a multisite install.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $network_admin Check if in network admin.
+	 *
+	 * @return true if multisite, false if not.
+	 */
+	public function is_multisite( $network_admin = false ) {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		}
+		$is_network_admin = false;
+		if ( $network_admin ) {
+			if ( is_network_admin() ) {
+				if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) ) {
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) ) {
 			return true;
 		}
 		return false;
@@ -258,13 +254,13 @@ class Comment_Edit_Pro {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	private function is_sce_enabled() {
+	public function is_sce_enabled() {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 		if ( self::is_plugin_activated_multisite() ) {
 			return true;
-		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'comment-edit-pro' ) ) {
+		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'simple-comment-editing' ) ) {
 			return false;
 		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
 			return true;
@@ -275,7 +271,7 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Checks for Simple Comment Editing.
+	 * Checks for Simple Comment Editing Options (old version).
 	 *
 	 * Checks if SCE is installed
 	 *
@@ -302,15 +298,6 @@ class Comment_Edit_Pro {
 		// Prevent double loading admin/classnames.
 		add_filter( 'sce_show_admin', '__return_false' );
 
-		// Check to see if SCE is installed.
-		if ( ! $this->is_sce_enabled() ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_sce_not_installed' ) );
-			if ( is_multisite() ) {
-				add_action( 'network_admin_notices', array( $this, 'admin_notice_sce_not_installed' ) );
-			}
-			return;
-		}
-
 		// Check if SCE Options is installed.
 		if ( $this->is_comment_edit_pro_enabled() ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_comment_edit_pro_installed' ) );
@@ -320,14 +307,6 @@ class Comment_Edit_Pro {
 			return;
 		}
 
-		// Check to see SCE Minimum is installed.
-		if ( version_compare( SCE_VERSION, SCE_MIN_VERSION, '<' ) ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
-			if ( is_multisite() ) {
-				add_action( 'network_admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
-			}
-			return;
-		}
 		if ( is_admin() ) {
 			$this->admin = new \CommentEditPro\Includes\Admin();
 		}

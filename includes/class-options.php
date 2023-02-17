@@ -151,7 +151,7 @@ class Options {
 		$defaults = array(
 			'enable_comment_editing'             => true,
 			'timer'                              => 5,
-			'loading_image'                      => \Simple_Comment_Editing::get_instance()->get_plugin_url( '/images/loading.gif' ),
+			'loading_image'                      => Functions::get_plugin_url( 'images/loading.gif' ),
 			'allow_delete'                       => true,
 			'delete_only'                        => false,
 			'button_theme'                       => 'default',

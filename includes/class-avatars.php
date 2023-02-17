@@ -240,7 +240,7 @@ class Avatars {
 		}
 
 		// One last try for editing privs.
-		if ( ! $can_edit ) {
+		if ( ! $can_edit && class_exists( 'Simple_Comment_Editing' ) ) {
 			$sce      = \Simple_Comment_Editing::get_instance();
 			$can_edit = $sce->can_edit( $comment_id, $post_id );
 		}
@@ -617,7 +617,6 @@ class Avatars {
 		);
 
 		// See if user can edit comment.
-		$sce      = \Simple_Comment_Editing::get_instance();
 		$post_id  = $post->ID ?? 0;
 		$can_edit = false;
 		if ( $comment_id && $post_id ) {
@@ -638,7 +637,8 @@ class Avatars {
 			}
 
 			// Can edit is still false. Check cookie values.
-			if ( ! $can_edit ) {
+			if ( ! $can_edit && class_exists( 'Simple_Comment_Editing' ) ) {
+				$sce      = \Simple_Comment_Editing::get_instance();
 				$can_edit = $sce->can_edit( $comment_id, $post_id );
 			}
 		}
