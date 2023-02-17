@@ -33669,10 +33669,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Mailchimp = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.all(/*! import() | Mailchimp0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Mailchimp0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Mailchimp */ "./src/js/react/views/integrations/Mailchimp.js"));
+  return Promise.all(/*! import() | Mailchimp0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("src_js_SendCommand_js-src_js_react_components_ErrorBoundary_index_js-src_js_react_components_-879414"), __webpack_require__.e("Mailchimp0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Mailchimp */ "./src/js/react/views/integrations/Mailchimp.js"));
 });
 var Slack = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.all(/*! import() | Slack0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("Slack0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Slack */ "./src/js/react/views/integrations/Slack.js"));
+  return Promise.all(/*! import() | Slack0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_notice_index_js-node_modules_wordpress-08dec3"), __webpack_require__.e("src_js_SendCommand_js-src_js_react_components_ErrorBoundary_index_js-src_js_react_components_-879414"), __webpack_require__.e("Slack0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./Slack */ "./src/js/react/views/integrations/Slack.js"));
 });
 var container = document.getElementById('sce-tab-mailchimp');
 var root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);

@@ -17,6 +17,7 @@ import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 const retrieveRecaptchaSettings = () => {
 	return sendCommand( 'sce_get_recaptcha_options', {
@@ -27,22 +28,39 @@ const retrieveRecaptchaSettings = () => {
 const Recaptcha = ( props ) => {
 	const [ defaults, getDefaults ] = useAsyncResource( retrieveRecaptchaSettings, [] );
 	return (
-		<Suspense
+		<ErrorBoundary
 			fallback={
-				<>
-					<h2>{ __( 'Recaptcha', 'comment-edit-pro' ) }</h2>
-					<BeatLoader
-						color={ '#9c68b0' }
-						loading={ true }
-						cssOverride={ true }
-						size={ 25 }
-						speedMultiplier={ 0.65 }
-					/>
-				</>
+				<p>
+					{ __( 'Could not load reCAPTCHA 3 Settings.', 'comment-edit-pro' ) }
+					<br />
+					<a
+						href="https://dlxplugins.com/support/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						DLX Plugins Support
+					</a>
+				</p>
 			}
 		>
-			<Interface defaults={ defaults } { ...props } />
-		</Suspense>
+			<Suspense
+				fallback={
+					<>
+						<h2>{ __( 'Recaptcha', 'comment-edit-pro' ) }</h2>
+						<BeatLoader
+							color={ '#9c68b0' }
+							loading={ true }
+							cssOverride={ true }
+							size={ 25 }
+							speedMultiplier={ 0.65 }
+						/>
+					</>
+				}
+			>
+				<Interface defaults={ defaults } { ...props } />
+			</Suspense>
+		</ErrorBoundary>
+
 	);
 };
 
