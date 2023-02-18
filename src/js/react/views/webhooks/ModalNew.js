@@ -48,7 +48,7 @@ const ModalNew = ( props ) => {
 			webhookUrl: '',
 			requestMethod: 'POST',
 			requestFormat: 'JSON',
-			requestHeaders: [ { label: '', value: '' } ],
+			requestHeaders: [ { label: '', value: '', customName: '', customValue: '' } ],
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -251,49 +251,96 @@ const ModalNew = ( props ) => {
 									{ requestHeadersFields.map( ( item, index ) => (
 										<div className="sce-admin__values-repeater__row" key={ item.id }>
 											<div className="sce-admin__values-repeater__row__key">
-												<Controller
-													name={ `requestHeaders[${ index }].name` }
-													control={ control }
-													rules={ { required: true } }
-													render={ ( { field: { onChange, value } } ) => (
-														<SelectControl
-															label={ __( 'Name', 'comment-edit-pro' ) }
-															value={ value }
-															options={ RequestHeadersValues }
-															onChange={ ( methodValue ) => {
-																onChange( methodValue );
-															} }
-														/>
-													) }
-												/>
+												{ 'custom' === getValues( `requestHeaders[${ index }].name` ) && (
+													<Controller
+														name={ `requestHeaders[${ index }].customName` }
+														control={ control }
+														rules={ { required: true } }
+														render={ ( { field: { onChange, value } } ) => (
+															<TextControl
+																value={ value ?? '' }
+																label={ __( 'Name', 'comment-edit-pro' ) }
+																className={ classNames( 'sce-admin__text-control', {
+																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customName?.type,
+																	'is-required': true,
+																} ) }
+																aria-required="true"
+																onChange={ ( methodValue ) => {
+																	onChange( methodValue );
+																} }
+															/>
+														) }
+													/>
+												) }
+												{ 'custom' !== getValues( `requestHeaders[${ index }].name` ) && (
+													<Controller
+														name={ `requestHeaders[${ index }].name` }
+														control={ control }
+														rules={ { required: true } }
+														render={ ( { field: { onChange, value } } ) => (
+															<SelectControl
+																label={ __( 'Name', 'comment-edit-pro' ) }
+																value={ value }
+																options={ RequestHeadersValues }
+																onChange={ ( methodValue ) => {
+																	onChange( methodValue );
+																} }
+															/>
+														) }
+													/>
+												) }
 											</div>
 											<div className="sce-admin__values-repeater__row__value">
-												<Controller
-													name={ `requestHeaders[${ index }].value` }
-													control={ control }
-													rules={ { required: true } }
-													render={ ( { field: { onChange, value } } ) => (
-														<SelectControl
-															label={ __( 'Value', 'comment-edit-pro' ) }
-															value={ value }
-															options={ RequestHeaderFields }
-															onChange={ ( methodValue ) => {
-																onChange( methodValue );
-															} }
-														/>
-													) }
-												/>
+												{ 'custom' === getValues( `requestHeaders[${ index }].value` ) && (
+													<Controller
+														name={ `requestHeaders[${ index }].customValue` }
+														control={ control }
+														rules={ { required: true } }
+														render={ ( { field: { onChange, value } } ) => (
+															<TextControl
+																value={ value ?? '' }
+																label={ __( 'Value', 'comment-edit-pro' ) }
+																className={ classNames( 'sce-admin__text-control', {
+																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customValue?.type,
+																	'is-required': true,
+																} ) }
+																aria-required="true"
+																onChange={ ( methodValue ) => {
+																	onChange( methodValue );
+																} }
+															/>
+														) }
+													/>
+												) }
+												{ 'custom' !== getValues( `requestHeaders[${ index }].value` ) && (
+													<Controller
+														name={ `requestHeaders[${ index }].value` }
+														control={ control }
+														rules={ { required: true } }
+														render={ ( { field: { onChange, value } } ) => (
+															<SelectControl
+																label={ __( 'Value', 'comment-edit-pro' ) }
+																value={ value }
+																options={ RequestHeaderFields }
+																onChange={ ( methodValue ) => {
+																	onChange( methodValue );
+																} }
+															/>
+														) }
+													/>
+												) }
+
 											</div>
 											<div className="sce-admin__values-repeater__row__actions">
 												<Button
-													className="sce-admin__values-repeater-remove"
-													icon="minus"
+													className="sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset"
+													icon="plus"
 													label={ __(
-														'Remove Request Header',
+														'Add Request Header',
 														'comment-edit-pro'
 													) }
 													onClick={ () => {
-														removeRequestHeaders( index );
+														appendRequestHeaders( index );
 													} }
 												/>
 											</div>

@@ -63,7 +63,7 @@ const RequestHeaderFields = [
 	},
 	{
 		label: __( 'Custom Value', 'comment-edit-pro' ),
-		value: 'sce_custom',
+		value: 'custom',
 	},
 ];
 export default RequestHeaderFields;

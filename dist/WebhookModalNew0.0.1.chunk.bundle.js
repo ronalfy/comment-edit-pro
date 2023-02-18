@@ -175,7 +175,9 @@ var ModalNew = function ModalNew(props) {
       requestFormat: 'JSON',
       requestHeaders: [{
         label: '',
-        value: ''
+        value: '',
+        customName: '',
+        customValue: ''
       }]
     }
   }),
@@ -381,29 +383,33 @@ var ModalNew = function ModalNew(props) {
       key: item.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__key"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "requestHeaders[".concat(index, "].name"),
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestHeaders[".concat(index, "].customName"),
       control: control,
       rules: {
         required: true
       },
       render: function render(_ref5) {
+        var _errors$requestHeader, _errors$requestHeader2, _errors$requestHeader3;
+
         var _ref5$field = _ref5.field,
             _onChange3 = _ref5$field.onChange,
             value = _ref5$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          value: value !== null && value !== void 0 ? value : '',
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro'),
-          value: value,
-          options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$requestHeader = errors.requestHeaders) === null || _errors$requestHeader === void 0 ? void 0 : (_errors$requestHeader2 = _errors$requestHeader[index]) === null || _errors$requestHeader2 === void 0 ? void 0 : (_errors$requestHeader3 = _errors$requestHeader2.customName) === null || _errors$requestHeader3 === void 0 ? void 0 : _errors$requestHeader3.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
           onChange: function onChange(methodValue) {
             _onChange3(methodValue);
           }
         });
       }
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "sce-admin__values-repeater__row__value"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "requestHeaders[".concat(index, "].value"),
+    }), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestHeaders[".concat(index, "].name"),
       control: control,
       rules: {
         required: true
@@ -413,22 +419,68 @@ var ModalNew = function ModalNew(props) {
             _onChange4 = _ref6$field.onChange,
             value = _ref6$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro'),
           value: value,
-          options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
+          options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
           onChange: function onChange(methodValue) {
             _onChange4(methodValue);
           }
         });
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin__values-repeater__row__value"
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestHeaders[".concat(index, "].customValue"),
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref7) {
+        var _errors$requestHeader4, _errors$requestHeader5, _errors$requestHeader6;
+
+        var _ref7$field = _ref7.field,
+            _onChange5 = _ref7$field.onChange,
+            value = _ref7$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          value: value !== null && value !== void 0 ? value : '',
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$requestHeader4 = errors.requestHeaders) === null || _errors$requestHeader4 === void 0 ? void 0 : (_errors$requestHeader5 = _errors$requestHeader4[index]) === null || _errors$requestHeader5 === void 0 ? void 0 : (_errors$requestHeader6 = _errors$requestHeader5.customValue) === null || _errors$requestHeader6 === void 0 ? void 0 : _errors$requestHeader6.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          onChange: function onChange(methodValue) {
+            _onChange5(methodValue);
+          }
+        });
+      }
+    }), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestHeaders[".concat(index, "].value"),
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref8) {
+        var _ref8$field = _ref8.field,
+            _onChange6 = _ref8$field.onChange,
+            value = _ref8$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'),
+          value: value,
+          options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
+          onChange: function onChange(methodValue) {
+            _onChange6(methodValue);
+          }
+        });
+      }
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__actions"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: "sce-admin__values-repeater-remove",
-      icon: "minus",
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Header', 'comment-edit-pro'),
+      className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
+      icon: "plus",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Header', 'comment-edit-pro'),
       onClick: function onClick() {
-        removeRequestHeaders(index);
+        appendRequestHeaders(index);
       }
     })));
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -547,7 +599,7 @@ var RequestHeaderFields = [{
   value: 'comment_type'
 }, {
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom Value', 'comment-edit-pro'),
-  value: 'sce_custom'
+  value: 'custom'
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RequestHeaderFields);
 
@@ -665,8 +717,8 @@ var RequestHeadersValues = [{
   label: 'Warning',
   value: 'Warning'
 }, {
-  label: 'sce_custom',
-  value: 'sce_custom'
+  label: 'Custom Name',
+  value: 'custom'
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RequestHeadersValues);
 

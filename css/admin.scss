@@ -1206,3 +1206,30 @@ h2 a.sce-admin-heading-docs {
 		}
 	}
 }
+
+/* Webhooks Modal */
+.sce-admin__values-repeater__row {
+	display: grid;
+	grid-template-columns: 45fr 45fr 10fr;
+	grid-gap: 20px;
+	row-gap: 20px;
+	align-items: center;
+
+	.sce-admin__values-repeater-button {
+		min-width: 30px;
+		min-height: 30px;
+		border-radius: 100%;
+		border: 1px solid #ddd;
+		background: #fff;
+		color: #9c68b0;
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		span {
+			line-height: unset;
+		}
+		&:hover {
+			background: #9c68b0;
+			color: #fff;
+		}
+	}
+}

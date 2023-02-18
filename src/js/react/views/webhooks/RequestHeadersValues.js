@@ -130,8 +130,8 @@ const RequestHeadersValues = [
 		value: 'Warning',
 	},
 	{
-		label: 'sce_custom',
-		value: 'sce_custom',
+		label: 'Custom Name',
+		value: 'custom',
 	},
 ];
 export default RequestHeadersValues;
