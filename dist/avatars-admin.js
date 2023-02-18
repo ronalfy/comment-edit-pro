@@ -1284,7 +1284,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var pkg = {
 	name: "@emotion/react",
-	version: "11.10.5",
+	version: "11.10.6",
 	main: "dist/emotion-react.cjs.js",
 	module: "dist/emotion-react.esm.js",
 	browser: {
@@ -1347,7 +1347,7 @@ var pkg = {
 	},
 	dependencies: {
 		"@babel/runtime": "^7.18.3",
-		"@emotion/babel-plugin": "^11.10.5",
+		"@emotion/babel-plugin": "^11.10.6",
 		"@emotion/cache": "^11.10.5",
 		"@emotion/serialize": "^1.1.1",
 		"@emotion/use-insertion-effect-with-fallbacks": "^1.0.0",
@@ -1356,24 +1356,19 @@ var pkg = {
 		"hoist-non-react-statics": "^3.3.1"
 	},
 	peerDependencies: {
-		"@babel/core": "^7.0.0",
 		react: ">=16.8.0"
 	},
 	peerDependenciesMeta: {
-		"@babel/core": {
-			optional: true
-		},
 		"@types/react": {
 			optional: true
 		}
 	},
 	devDependencies: {
-		"@babel/core": "^7.18.5",
 		"@definitelytyped/dtslint": "0.0.112",
-		"@emotion/css": "11.10.5",
+		"@emotion/css": "11.10.6",
 		"@emotion/css-prettifier": "1.1.1",
 		"@emotion/server": "11.10.0",
-		"@emotion/styled": "11.10.5",
+		"@emotion/styled": "11.10.6",
 		"html-tag-names": "^1.1.2",
 		react: "16.14.0",
 		"svg-tag-names": "^1.1.1",
@@ -2606,8 +2601,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Positions an inner element of the floating element such that it is centered
- * to the reference element.
+ * A data provider that provides data to position an inner element of the
+ * floating element (usually a triangle or caret) so that it is centered to the
+ * reference element.
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
@@ -2700,6 +2696,10 @@ function useLatestRef(value) {
   return ref;
 }
 
+/**
+ * Provides data to position a floating element.
+ * @see https://floating-ui.com/docs/react
+ */
 function useFloating(options) {
   if (options === void 0) {
     options = {};
@@ -2708,6 +2708,7 @@ function useFloating(options) {
     placement = 'bottom',
     strategy = 'absolute',
     middleware = [],
+    platform,
     whileElementsMounted,
     open
   } = options;
@@ -2727,6 +2728,7 @@ function useFloating(options) {
   const floatingRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(null);
   const dataRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(data);
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+  const platformRef = useLatestRef(platform);
   const [reference, _setReference] = react__WEBPACK_IMPORTED_MODULE_2__.useState(null);
   const [floating, _setFloating] = react__WEBPACK_IMPORTED_MODULE_2__.useState(null);
   const setReference = react__WEBPACK_IMPORTED_MODULE_2__.useCallback(node => {
@@ -2745,11 +2747,15 @@ function useFloating(options) {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
-    (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_1__.computePosition)(referenceRef.current, floatingRef.current, {
-      middleware: latestMiddleware,
+    const config = {
       placement,
-      strategy
-    }).then(data => {
+      strategy,
+      middleware: latestMiddleware
+    };
+    if (platformRef.current) {
+      config.platform = platformRef.current;
+    }
+    (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_1__.computePosition)(referenceRef.current, floatingRef.current, config).then(data => {
       const fullData = {
         ...data,
         isPositioned: true
@@ -2761,7 +2767,7 @@ function useFloating(options) {
         });
       }
     });
-  }, [latestMiddleware, placement, strategy]);
+  }, [latestMiddleware, placement, strategy, platformRef]);
   index(() => {
     if (open === false && dataRef.current.isPositioned) {
       dataRef.current.isPositioned = false;
@@ -3165,26 +3171,26 @@ function postfix( expression ) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ConfigResolverMap": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.C),
-/* harmony export */   "EngineMap": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.E),
-/* harmony export */   "dragAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.e),
-/* harmony export */   "hoverAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.h),
-/* harmony export */   "moveAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.m),
-/* harmony export */   "pinchAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.f),
-/* harmony export */   "registerAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.r),
-/* harmony export */   "scrollAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.s),
-/* harmony export */   "wheelAction": () => (/* reexport safe */ _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.w)
+/* harmony export */   "ConfigResolverMap": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.C),
+/* harmony export */   "EngineMap": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.E),
+/* harmony export */   "dragAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.e),
+/* harmony export */   "hoverAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.h),
+/* harmony export */   "moveAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.m),
+/* harmony export */   "pinchAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.f),
+/* harmony export */   "registerAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.r),
+/* harmony export */   "scrollAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.s),
+/* harmony export */   "wheelAction": () => (/* reexport safe */ _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.w)
 /* harmony export */ });
-/* harmony import */ var _dist_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dist/actions-e3d93fde.esm.js */ "./node_modules/@use-gesture/core/dist/actions-e3d93fde.esm.js");
+/* harmony import */ var _dist_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dist/actions-b1cc53c2.esm.js */ "./node_modules/@use-gesture/core/dist/actions-b1cc53c2.esm.js");
 
 
 
 
 /***/ }),
 
-/***/ "./node_modules/@use-gesture/core/dist/actions-e3d93fde.esm.js":
+/***/ "./node_modules/@use-gesture/core/dist/actions-b1cc53c2.esm.js":
 /*!*********************************************************************!*\
-  !*** ./node_modules/@use-gesture/core/dist/actions-e3d93fde.esm.js ***!
+  !*** ./node_modules/@use-gesture/core/dist/actions-b1cc53c2.esm.js ***!
   \*********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3210,10 +3216,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "t": () => (/* binding */ toDomEventType),
 /* harmony export */   "w": () => (/* binding */ wheelAction)
 /* harmony export */ });
-/* harmony import */ var _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./maths-b28d9b98.esm.js */ "./node_modules/@use-gesture/core/dist/maths-b28d9b98.esm.js");
+/* harmony import */ var _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./maths-0ab39ae9.esm.js */ "./node_modules/@use-gesture/core/dist/maths-0ab39ae9.esm.js");
 
+
+function _toPrimitive(input, hint) {
+  if (typeof input !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (typeof res !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+
+function _toPropertyKey(arg) {
+  var key = _toPrimitive(arg, "string");
+  return typeof key === "symbol" ? key : String(key);
+}
 
 function _defineProperty(obj, key, value) {
+  key = _toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -3352,7 +3375,6 @@ function pointerValues(event) {
   const valueEvent = getValueEvent(event);
   return [valueEvent.clientX, valueEvent.clientY];
 }
-
 const LINE_HEIGHT = 40;
 const PAGE_HEIGHT = 800;
 function wheelValues(event) {
@@ -3424,9 +3446,7 @@ function assignDefault(value, fallback) {
 }
 
 const BEFORE_LAST_KINEMATICS_DELAY = 32;
-
 class Engine {
-
   constructor(ctrl, args, key) {
     this.ctrl = ctrl;
     this.args = args;
@@ -3439,7 +3459,6 @@ class Engine {
       this.reset();
     }
   }
-
   get state() {
     return this.ctrl.state[this.key];
   }
@@ -3506,19 +3525,16 @@ class Engine {
     }
     state.startTime = state.timeStamp = event.timeStamp;
   }
-
   computeValues(values) {
     const state = this.state;
     state._values = values;
     state.values = this.config.transform(values);
   }
-
   computeInitial() {
     const state = this.state;
     state._initial = state._values;
     state.initial = state.values;
   }
-
   compute(event) {
     const {
       state,
@@ -3535,19 +3551,15 @@ class Engine {
       shared.locked = !!document.pointerLockElement;
       Object.assign(shared, getEventDetails(event));
       shared.down = shared.pressed = shared.buttons % 2 === 1 || shared.touches > 0;
-
       dt = event.timeStamp - state.timeStamp;
       state.timeStamp = event.timeStamp;
       state.elapsedTime = state.timeStamp - state.startTime;
     }
-
     if (state._active) {
       const _absoluteDelta = state._delta.map(Math.abs);
-      _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._distance, _absoluteDelta);
+      _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._distance, _absoluteDelta);
     }
-
     if (this.axisIntent) this.axisIntent(event);
-
     const [_m0, _m1] = state._movement;
     const [t0, t1] = config.threshold;
     const {
@@ -3591,18 +3603,16 @@ class Engine {
     const [ox, oy] = state.offset;
     const [[x0, x1], [y0, y1]] = state._bounds;
     state.overflow = [ox < x0 ? -1 : ox > x1 ? 1 : 0, oy < y0 ? -1 : oy > y1 ? 1 : 0];
-
     state._movementBound[0] = state.overflow[0] ? state._movementBound[0] === false ? state._movement[0] : state._movementBound[0] : false;
     state._movementBound[1] = state.overflow[1] ? state._movementBound[1] === false ? state._movement[1] : state._movementBound[1] : false;
-
     const rubberband = state._active ? config.rubberband || [0, 0] : [0, 0];
-    state.offset = (0,_maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.c)(state._bounds, state.offset, rubberband);
-    state.delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state.offset, previousOffset);
+    state.offset = (0,_maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.c)(state._bounds, state.offset, rubberband);
+    state.delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state.offset, previousOffset);
     this.computeMovement();
     if (gestureIsActive && (!state.last || dt > BEFORE_LAST_KINEMATICS_DELAY)) {
-      state.delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state.offset, previousOffset);
+      state.delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state.offset, previousOffset);
       const absoluteDelta = state.delta.map(Math.abs);
-      _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state.distance, absoluteDelta);
+      _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state.distance, absoluteDelta);
       state.direction = state.delta.map(Math.sign);
       state._direction = state._delta.map(Math.sign);
       if (!state.first && dt > 0) {
@@ -3615,13 +3625,10 @@ class Engine {
     const shared = this.shared;
     const config = this.config;
     if (!state._active) this.clean();
-
     if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return;
-
     const memo = this.handler(_objectSpread2(_objectSpread2(_objectSpread2({}, shared), state), {}, {
       [this.aliasKey]: state.values
     }));
-
     if (memo !== undefined) state.memo = memo;
   }
   clean() {
@@ -3655,10 +3662,10 @@ class CoordinatesEngine extends Engine {
     this.state.lastOffset = [0, 0];
   }
   computeOffset() {
-    this.state.offset = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.add(this.state.lastOffset, this.state.movement);
+    this.state.offset = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.add(this.state.lastOffset, this.state.movement);
   }
   computeMovement() {
-    this.state.movement = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(this.state.offset, this.state.lastOffset);
+    this.state.movement = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(this.state.offset, this.state.lastOffset);
   }
   axisIntent(event) {
     const state = this.state;
@@ -3667,7 +3674,6 @@ class CoordinatesEngine extends Engine {
       const threshold = typeof config.axisThreshold === 'object' ? config.axisThreshold[getPointerType(event)] : config.axisThreshold;
       state.axis = selectAxis(state._movement, threshold);
     }
-
     state._blocked = (config.lockDirection || !!config.axis) && !state.axis || !!config.axis && config.axis !== state.axis;
   }
   restrictToAxis(v) {
@@ -3706,12 +3712,12 @@ const commonConfigResolver = {
       case false:
         return [0, 0];
       default:
-        return _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value);
+        return _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value);
     }
   },
   from(value) {
     if (typeof value === 'function') return value;
-    if (value != null) return _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value);
+    if (value != null) return _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value);
   },
   transform(value, _k, config) {
     const transform = value || config.shared.transform;
@@ -3729,7 +3735,7 @@ const commonConfigResolver = {
     return transform || identity;
   },
   threshold(value) {
-    return _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, 0);
+    return _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, 0);
   }
 };
 if (true) {
@@ -3786,12 +3792,11 @@ const coordinatesConfigResolver = _objectSpread2(_objectSpread2({}, commonConfig
   }
 });
 
-const DISPLACEMENT = 10;
 const KEYS_DELTA_MAP = {
-  ArrowRight: (factor = 1) => [DISPLACEMENT * factor, 0],
-  ArrowLeft: (factor = 1) => [-DISPLACEMENT * factor, 0],
-  ArrowUp: (factor = 1) => [0, -DISPLACEMENT * factor],
-  ArrowDown: (factor = 1) => [0, DISPLACEMENT * factor]
+  ArrowRight: (displacement, factor = 1) => [displacement * factor, 0],
+  ArrowLeft: (displacement, factor = 1) => [-1 * displacement * factor, 0],
+  ArrowUp: (displacement, factor = 1) => [0, -1 * displacement * factor],
+  ArrowDown: (displacement, factor = 1) => [0, displacement * factor]
 };
 class DragEngine extends CoordinatesEngine {
   constructor(...args) {
@@ -3838,7 +3843,6 @@ class DragEngine extends CoordinatesEngine {
   setActive() {
     this.state._active = this.state._pointerActive || this.state._keyboardActive;
   }
-
   clean() {
     this.pointerClean();
     this.state._pointerActive = false;
@@ -3848,15 +3852,12 @@ class DragEngine extends CoordinatesEngine {
   pointerDown(event) {
     const config = this.config;
     const state = this.state;
-    if (event.buttons != null && (
-    Array.isArray(config.pointerButtons) ? !config.pointerButtons.includes(event.buttons) :
-    config.pointerButtons !== -1 && config.pointerButtons !== event.buttons)) return;
+    if (event.buttons != null && (Array.isArray(config.pointerButtons) ? !config.pointerButtons.includes(event.buttons) : config.pointerButtons !== -1 && config.pointerButtons !== event.buttons)) return;
     const ctrlIds = this.ctrl.setEventIds(event);
     if (config.pointerCapture) {
       event.target.setPointerCapture(event.pointerId);
     }
-    if (
-    ctrlIds && ctrlIds.size > 1 && state._pointerActive) return;
+    if (ctrlIds && ctrlIds.size > 1 && state._pointerActive) return;
     this.start(event);
     this.setupPointer(event);
     state._pointerId = pointerId(event);
@@ -3888,7 +3889,6 @@ class DragEngine extends CoordinatesEngine {
     const state = this.state;
     const config = this.config;
     if (!state._pointerActive) return;
-
     if (state.type === event.type && event.timeStamp === state.timeStamp) return;
     const id = pointerId(event);
     if (state._pointerId !== undefined && id !== state._pointerId) return;
@@ -3896,12 +3896,11 @@ class DragEngine extends CoordinatesEngine {
     if (document.pointerLockElement === event.target) {
       state._delta = [event.movementX, event.movementY];
     } else {
-      state._delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(_values, state._values);
+      state._delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(_values, state._values);
       this.computeValues(_values);
     }
-    _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
+    _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
     this.compute(event);
-
     if (state._delayed && state.intentional) {
       this.timeoutStore.remove('dragDelay');
       state.active = false;
@@ -4025,9 +4024,9 @@ class DragEngine extends CoordinatesEngine {
       const state = this.state;
       const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1;
       this.start(event);
-      state._delta = deltaFn(factor);
+      state._delta = deltaFn(this.config.keyboardDisplacement, factor);
       state._keyboardActive = true;
-      _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
+      _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
       this.compute(event);
       this.emit();
     }
@@ -4098,6 +4097,7 @@ const DEFAULT_DRAG_DELAY = 180;
 const DEFAULT_SWIPE_VELOCITY = 0.5;
 const DEFAULT_SWIPE_DISTANCE = 50;
 const DEFAULT_SWIPE_DURATION = 250;
+const DEFAULT_KEYBOARD_DISPLACEMENT = 10;
 const DEFAULT_DRAG_AXIS_THRESHOLD = {
   mouse: 0,
   touch: 0,
@@ -4141,7 +4141,7 @@ const dragConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigRe
     tapsThreshold = 3,
     axis = undefined
   }) {
-    const threshold = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, filterTaps ? tapsThreshold : axis ? 1 : 0);
+    const threshold = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, filterTaps ? tapsThreshold : axis ? 1 : 0);
     this.filterTaps = filterTaps;
     this.tapsThreshold = tapsThreshold;
     return threshold;
@@ -4152,8 +4152,8 @@ const dragConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigRe
     duration = DEFAULT_SWIPE_DURATION
   } = {}) {
     return {
-      velocity: this.transform(_maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(velocity)),
-      distance: this.transform(_maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(distance)),
+      velocity: this.transform(_maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(velocity)),
+      distance: this.transform(_maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(distance)),
       duration
     };
   },
@@ -4170,6 +4170,9 @@ const dragConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigRe
   axisThreshold(value) {
     if (!value) return DEFAULT_DRAG_AXIS_THRESHOLD;
     return _objectSpread2(_objectSpread2({}, DEFAULT_DRAG_AXIS_THRESHOLD), value);
+  },
+  keyboardDisplacement(value = DEFAULT_KEYBOARD_DISPLACEMENT) {
+    return value;
   }
 });
 if (true) {
@@ -4232,7 +4235,6 @@ class PinchEngine extends Engine {
     this.state.lastOffset = [1, 0];
     this.state._pointerEvents = new Map();
   }
-
   reset() {
     super.reset();
     const state = this.state;
@@ -4248,7 +4250,7 @@ class PinchEngine extends Engine {
       lastOffset
     } = this.state;
     if (type === 'wheel') {
-      this.state.offset = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.add(movement, lastOffset);
+      this.state.offset = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.add(movement, lastOffset);
     } else {
       this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]];
     }
@@ -4290,7 +4292,6 @@ class PinchEngine extends Engine {
     if (state._active) {
       if (state._touchIds.every(id => ctrlTouchIds.has(id))) return;
     }
-
     if (ctrlTouchIds.size < 2) return;
     this.start(event);
     state._touchIds = Array.from(ctrlTouchIds).slice(0, 2);
@@ -4312,7 +4313,6 @@ class PinchEngine extends Engine {
     }
     if (state._pointerEvents.size < 2) return;
     this.start(event);
-
     const payload = distanceAngle(...Array.from(_pointerEvents.values()));
     this.pinchStart(event, payload);
   }
@@ -4394,7 +4394,7 @@ class PinchEngine extends Engine {
     state.origin = [event.clientX, event.clientY];
     const _previousMovement = state._movement;
     state._movement = [event.scale - 1, event.rotation];
-    state._delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state._movement, _previousMovement);
+    state._delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(state._movement, _previousMovement);
     this.compute(event);
     this.emit();
   }
@@ -4426,8 +4426,7 @@ class PinchEngine extends Engine {
     }
     const state = this.state;
     state._delta = [-wheelValues(event)[1] / PINCH_WHEEL_RATIO * state.offset[0], 0];
-    _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
-
+    _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
     clampStateInternalMovementToBounds(state);
     this.state.origin = [event.clientX, event.clientY];
     this.compute(event);
@@ -4470,7 +4469,6 @@ const pinchConfigResolver = _objectSpread2(_objectSpread2({}, commonConfigResolv
       if (SUPPORT.touch) return 'touch';
     }
   },
-
   bounds(_v, _k, {
     scaleBounds = {},
     angleBounds = {}
@@ -4494,7 +4492,7 @@ const pinchConfigResolver = _objectSpread2(_objectSpread2({}, commonConfigResolv
   },
   threshold(value, _k, config) {
     this.lockDirection = config.axis === 'lock';
-    const threshold = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, this.lockDirection ? [0.1, 3] : 0);
+    const threshold = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.toVector(value, this.lockDirection ? [0.1, 3] : 0);
     return threshold;
   },
   modifierKey(value) {
@@ -4527,8 +4525,8 @@ class MoveEngine extends CoordinatesEngine {
     if (!this.state._active) return;
     const values = pointerValues(event);
     const state = this.state;
-    state._delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
-    _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
+    state._delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
+    _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
     this.computeValues(values);
     this.compute(event);
     this.emit();
@@ -4563,8 +4561,8 @@ class ScrollEngine extends CoordinatesEngine {
     if (event.cancelable) event.preventDefault();
     const state = this.state;
     const values = scrollValues(event);
-    state._delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
-    _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
+    state._delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
+    _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
     this.computeValues(values);
     this.compute(event);
     this.emit();
@@ -4595,8 +4593,7 @@ class WheelEngine extends CoordinatesEngine {
   wheelChange(event) {
     const state = this.state;
     state._delta = wheelValues(event);
-    _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
-
+    _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.addTo(state._movement, state._delta);
     clampStateInternalMovementToBounds(state);
     this.compute(event);
     this.emit();
@@ -4632,7 +4629,7 @@ class HoverEngine extends CoordinatesEngine {
     if (!state._active) return;
     state._active = false;
     const values = pointerValues(event);
-    state._movement = state._delta = _maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
+    state._movement = state._delta = _maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.V.sub(values, state._values);
     this.computeValues(values);
     this.compute(event);
     state.delta = state.movement;
@@ -4690,9 +4687,9 @@ const wheelAction = {
 
 /***/ }),
 
-/***/ "./node_modules/@use-gesture/core/dist/maths-b28d9b98.esm.js":
+/***/ "./node_modules/@use-gesture/core/dist/maths-0ab39ae9.esm.js":
 /*!*******************************************************************!*\
-  !*** ./node_modules/@use-gesture/core/dist/maths-b28d9b98.esm.js ***!
+  !*** ./node_modules/@use-gesture/core/dist/maths-0ab39ae9.esm.js ***!
   \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4726,7 +4723,6 @@ const V = {
     v1[1] -= v2[1];
   }
 };
-
 function rubberband(distance, dimension, constant) {
   if (dimension === 0 || Math.abs(dimension) === Infinity) return Math.pow(distance, constant * 5);
   return distance * dimension * constant / (dimension + constant * distance);
@@ -4759,7 +4755,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Controller": () => (/* binding */ Controller),
 /* harmony export */   "parseMergedHandlers": () => (/* binding */ parseMergedHandlers)
 /* harmony export */ });
-/* harmony import */ var _actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions-e3d93fde.esm.js */ "./node_modules/@use-gesture/core/dist/actions-e3d93fde.esm.js");
+/* harmony import */ var _actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions-b1cc53c2.esm.js */ "./node_modules/@use-gesture/core/dist/actions-b1cc53c2.esm.js");
 
 
 
@@ -4802,7 +4798,7 @@ const sharedConfigResolver = {
   enabled(value = true) {
     return value;
   },
-  window(value = _actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.S.isBrowser ? window : undefined) {
+  window(value = _actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.S.isBrowser ? window : undefined) {
     return value;
   },
   eventOptions({
@@ -4858,15 +4854,15 @@ function parse(newConfig, gestureKey, _config = {}) {
     transform
   }, sharedConfigResolver);
   if (gestureKey) {
-    const resolver = _actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.C.get(gestureKey);
-    _config[gestureKey] = resolveWith((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({
+    const resolver = _actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.C.get(gestureKey);
+    _config[gestureKey] = resolveWith((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({
       shared: _config.shared
     }, rest), resolver);
   } else {
     for (const key in rest) {
-      const resolver = _actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.C.get(key);
+      const resolver = _actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.C.get(key);
       if (resolver) {
-        _config[key] = resolveWith((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({
+        _config[key] = resolveWith((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({
           shared: _config.shared
         }, rest[key]), resolver);
       } else if (true) {
@@ -4884,15 +4880,15 @@ function parse(newConfig, gestureKey, _config = {}) {
 
 class EventStore {
   constructor(ctrl, gestureKey) {
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_listeners", new Set());
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_listeners", new Set());
     this._ctrl = ctrl;
     this._gestureKey = gestureKey;
   }
   add(element, device, action, handler, options) {
     const listeners = this._listeners;
-    const type = (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.t)(device, action);
+    const type = (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.t)(device, action);
     const _options = this._gestureKey ? this._ctrl.config[this._gestureKey].eventOptions : {};
-    const eventOptions = (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({}, _options), options);
+    const eventOptions = (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({}, _options), options);
     element.addEventListener(type, handler, eventOptions);
     const remove = () => {
       element.removeEventListener(type, handler, eventOptions);
@@ -4909,7 +4905,7 @@ class EventStore {
 
 class TimeoutStore {
   constructor() {
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_timeouts", new Map());
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_timeouts", new Map());
   }
   add(key, callback, ms = 140, ...args) {
     this.remove(key);
@@ -4926,17 +4922,16 @@ class TimeoutStore {
 }
 
 class Controller {
-
   constructor(handlers) {
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestures", new Set());
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_targetEventStore", new EventStore(this));
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestureEventStores", {});
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestureTimeoutStores", {});
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "handlers", {});
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "config", {});
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "pointerIds", new Set());
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "touchIds", new Set());
-    (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "state", {
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestures", new Set());
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "_targetEventStore", new EventStore(this));
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestureEventStores", {});
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "gestureTimeoutStores", {});
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "handlers", {});
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "config", {});
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "pointerIds", new Set());
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "touchIds", new Set());
+    (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.a)(this, "state", {
       shared: {
         shiftKey: false,
         metaKey: false,
@@ -4947,8 +4942,8 @@ class Controller {
     resolveGestures(this, handlers);
   }
   setEventIds(event) {
-    if ((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.i)(event)) {
-      this.touchIds = new Set((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.b)(event));
+    if ((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.i)(event)) {
+      this.touchIds = new Set((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.b)(event));
       return this.touchIds;
     } else if ('pointerId' in event) {
       if (event.type === 'pointerup' || event.type === 'pointercancel') this.pointerIds.delete(event.pointerId);else if (event.type === 'pointerdown') this.pointerIds.add(event.pointerId);
@@ -4986,33 +4981,28 @@ class Controller {
         const gestureConfig = this.config[gestureKey];
         const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target);
         if (gestureConfig.enabled) {
-          const Engine = _actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.E.get(gestureKey);
+          const Engine = _actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.E.get(gestureKey);
           new Engine(this, args, gestureKey).bind(bindFunction);
         }
       }
-
       const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target);
       for (const eventKey in this.nativeHandlers) {
-        nativeBindFunction(eventKey, '',
-        event => this.nativeHandlers[eventKey]((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)((0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({}, this.state.shared), {}, {
+        nativeBindFunction(eventKey, '', event => this.nativeHandlers[eventKey]((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)((0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__._)({}, this.state.shared), {}, {
           event,
           args
         })), undefined, true);
       }
     }
-
     for (const handlerProp in props) {
-      props[handlerProp] = (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.c)(...props[handlerProp]);
+      props[handlerProp] = (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.c)(...props[handlerProp]);
     }
-
     if (!target) return props;
-
     for (const handlerProp in props) {
       const {
         device,
         capture,
         passive
-      } = (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.p)(handlerProp);
+      } = (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.p)(handlerProp);
       this._targetEventStore.add(target, device, '', props[handlerProp], {
         capture,
         passive
@@ -5037,7 +5027,7 @@ const bindToProps = (props, eventOptions, withPassiveOption) => (device, action,
   var _options$capture, _options$passive;
   const capture = (_options$capture = options.capture) !== null && _options$capture !== void 0 ? _options$capture : eventOptions.capture;
   const passive = (_options$passive = options.passive) !== null && _options$passive !== void 0 ? _options$passive : eventOptions.passive;
-  let handlerProp = isNative ? device : (0,_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.d)(device, action, capture);
+  let handlerProp = isNative ? device : (0,_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.d)(device, action, capture);
   if (withPassiveOption && passive) handlerProp += 'Passive';
   props[handlerProp] = props[handlerProp] || [];
   props[handlerProp].push(handler);
@@ -5060,7 +5050,7 @@ function sortHandlers(_handlers) {
 }
 function registerGesture(actions, handlers, handlerKey, key, internalHandlers, config) {
   if (!actions.has(handlerKey)) return;
-  if (!_actions_e3d93fde_esm_js__WEBPACK_IMPORTED_MODULE_0__.E.has(key)) {
+  if (!_actions_b1cc53c2_esm_js__WEBPACK_IMPORTED_MODULE_0__.E.has(key)) {
     if (true) {
       console.warn(`[@use-gesture]: You've created a custom handler that that uses the \`${key}\` gesture but isn't properly configured.\n\nPlease add \`${key}Action\` when creating your handler.`);
     }
@@ -5119,9 +5109,9 @@ function parseMergedHandlers(mergedHandlers, mergedConfig) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "rubberbandIfOutOfBounds": () => (/* reexport safe */ _dist_maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__.r)
+/* harmony export */   "rubberbandIfOutOfBounds": () => (/* reexport safe */ _dist_maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__.r)
 /* harmony export */ });
-/* harmony import */ var _dist_maths_b28d9b98_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dist/maths-b28d9b98.esm.js */ "./node_modules/@use-gesture/core/dist/maths-b28d9b98.esm.js");
+/* harmony import */ var _dist_maths_0ab39ae9_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dist/maths-0ab39ae9.esm.js */ "./node_modules/@use-gesture/core/dist/maths-0ab39ae9.esm.js");
 
 
 
@@ -5180,7 +5170,6 @@ function useRecognizers(handlers, config = {}, gestureKey, nativeHandlers) {
   react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(() => {
     return ctrl.clean.bind(ctrl);
   }, []);
-
   if (config.target === undefined) {
     return ctrl.bind.bind(ctrl);
   }
@@ -5303,7 +5292,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ addIntroText)
 /* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/index.js");
 /**
  * WordPress dependencies
  */
@@ -5518,6 +5507,1540 @@ function speak(message, ariaLive) {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createAddHook.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback AddHook
+ *
+ * Adds the hook to the appropriate hooks container.
+ *
+ * @param {string}               hookName      Name of hook to add
+ * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
+ * @param {import('.').Callback} callback      Function to call when the hook is run
+ * @param {number}               [priority=10] Priority of this hook
+ */
+
+/**
+ * Returns a function which, when invoked, will add a hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {AddHook} Function that adds a new hook.
+ */
+
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback) {
+    let priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    }
+
+    if ('function' !== typeof callback) {
+      // eslint-disable-next-line no-console
+      console.error('The hook callback must be a function.');
+      return;
+    } // Validate numeric priority
+
+
+    if ('number' !== typeof priority) {
+      // eslint-disable-next-line no-console
+      console.error('If specified, the hook priority must be a number.');
+      return;
+    }
+
+    const handler = {
+      callback,
+      priority,
+      namespace
+    };
+
+    if (hooksStore[hookName]) {
+      // Find the correct insert index of the new hook.
+      const handlers = hooksStore[hookName].handlers;
+      /** @type {number} */
+
+      let i;
+
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
+      }
+
+      if (i === handlers.length) {
+        // If append, operate via direct assignment.
+        handlers[i] = handler;
+      } else {
+        // Otherwise, insert before index via splice.
+        handlers.splice(i, 0, handler);
+      } // We may also be currently executing this hook.  If the callback
+      // we're adding would come after the current callback, there's no
+      // problem; otherwise we need to increase the execution index of
+      // any other runs by 1 to account for the added element.
+
+
+      hooksStore.__current.forEach(hookInfo => {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      // This is the first hook of its type.
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
+      };
+    }
+
+    if (hookName !== 'hookAdded') {
+      hooks.doAction('hookAdded', hookName, namespace, callback, priority);
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAddHook);
+//# sourceMappingURL=createAddHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createCurrentHook.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createCurrentHook.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will return the name of the
+ * currently running hook, or `null` if no hook of the given type is currently
+ * running.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {() => string | null} Function that returns the current hook name or null.
+ */
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    var _hooksStore$__current, _hooksStore$__current2;
+
+    const hooksStore = hooks[storeKey];
+    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createCurrentHook);
+//# sourceMappingURL=createCurrentHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDidHook.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDidHook.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * @callback DidHook
+ *
+ * Returns the number of times an action has been fired.
+ *
+ * @param {string} hookName The hook name to check.
+ *
+ * @return {number | undefined} The number of times the hook has run.
+ */
+
+/**
+ * Returns a function which, when invoked, will return the number of times a
+ * hook has been called.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DidHook} Function that returns a hook's call count.
+ */
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_0__["default"])(hookName)) {
+      return;
+    }
+
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDidHook);
+//# sourceMappingURL=createDidHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDoingHook.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDoingHook.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback DoingHook
+ * Returns whether a hook is currently being executed.
+ *
+ * @param {string} [hookName] The name of the hook to check for.  If
+ *                            omitted, will check for any hook being executed.
+ *
+ * @return {boolean} Whether the hook is being executed.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether a hook is
+ * currently being executed.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DoingHook} Function that returns whether a hook is currently
+ *                     being executed.
+ */
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    const hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+
+    if ('undefined' === typeof hookName) {
+      return 'undefined' !== typeof hooksStore.__current[0];
+    } // Return the __current hook.
+
+
+    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDoingHook);
+//# sourceMappingURL=createDoingHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHasHook.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHasHook.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback HasHook
+ *
+ * Returns whether any handlers are attached for the given hookName and optional namespace.
+ *
+ * @param {string} hookName    The name of the hook to check for.
+ * @param {string} [namespace] Optional. The unique namespace identifying the callback
+ *                             in the form `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether there are handlers that are attached to the given hook.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether any handlers are
+ * attached to a particular hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {HasHook} Function that returns whether any handlers are
+ *                   attached to a particular hook and optional namespace.
+ */
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey]; // Use the namespace if provided.
+
+    if ('undefined' !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(hook => hook.namespace === namespace);
+    }
+
+    return hookName in hooksStore;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHasHook);
+//# sourceMappingURL=createHasHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHooks.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHooks.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "_Hooks": () => (/* binding */ _Hooks),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createAddHook__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createAddHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createAddHook.js");
+/* harmony import */ var _createRemoveHook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createRemoveHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRemoveHook.js");
+/* harmony import */ var _createHasHook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createHasHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHasHook.js");
+/* harmony import */ var _createRunHook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRunHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRunHook.js");
+/* harmony import */ var _createCurrentHook__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createCurrentHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createCurrentHook.js");
+/* harmony import */ var _createDoingHook__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createDoingHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDoingHook.js");
+/* harmony import */ var _createDidHook__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createDidHook */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createDidHook.js");
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal class for constructing hooks. Use `createHooks()` function
+ *
+ * Note, it is necessary to expose this class to make its type public.
+ *
+ * @private
+ */
+
+class _Hooks {
+  constructor() {
+    /** @type {import('.').Store} actions */
+    this.actions = Object.create(null);
+    this.actions.__current = [];
+    /** @type {import('.').Store} filters */
+
+    this.filters = Object.create(null);
+    this.filters.__current = [];
+    this.addAction = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'actions');
+    this.addFilter = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'filters');
+    this.removeAction = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions');
+    this.removeFilter = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters');
+    this.hasAction = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions');
+    this.hasFilter = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters');
+    this.removeAllActions = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions', true);
+    this.removeAllFilters = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters', true);
+    this.doAction = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'actions');
+    this.applyFilters = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'filters', true);
+    this.currentAction = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'actions');
+    this.currentFilter = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'filters');
+    this.doingAction = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'actions');
+    this.doingFilter = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'filters');
+    this.didAction = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'actions');
+    this.didFilter = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'filters');
+  }
+
+}
+/** @typedef {_Hooks} Hooks */
+
+/**
+ * Returns an instance of the hooks object.
+ *
+ * @return {Hooks} A Hooks instance.
+ */
+
+function createHooks() {
+  return new _Hooks();
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHooks);
+//# sourceMappingURL=createHooks.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRemoveHook.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRemoveHook.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback RemoveHook
+ * Removes the specified callback (or all callbacks) from the hook with a given hookName
+ * and namespace.
+ *
+ * @param {string} hookName  The name of the hook to modify.
+ * @param {string} namespace The unique namespace identifying the callback in the
+ *                           form `vendor/plugin/function`.
+ *
+ * @return {number | undefined} The number of callbacks removed.
+ */
+
+/**
+ * Returns a function which, when invoked, will remove a specified hook or all
+ * hooks by the given name.
+ *
+ * @param {import('.').Hooks}    hooks             Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                                                 without regard to namespace. Used to create
+ *                                                 `removeAll*` functions.
+ *
+ * @return {RemoveHook} Function that removes hooks.
+ */
+
+function createRemoveHook(hooks, storeKey) {
+  let removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function removeHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!removeAll && !(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    } // Bail if no hooks exist by this name.
+
+
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+
+    let handlersRemoved = 0;
+
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      // Try to find the specified callback to remove.
+      const handlers = hooksStore[hookName].handlers;
+
+      for (let i = handlers.length - 1; i >= 0; i--) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++; // This callback may also be part of a hook that is
+          // currently executing.  If the callback we're removing
+          // comes after the current callback, there's no problem;
+          // otherwise we need to decrease the execution index of any
+          // other runs by 1 to account for the removed element.
+
+          hooksStore.__current.forEach(hookInfo => {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
+      }
+    }
+
+    if (hookName !== 'hookRemoved') {
+      hooks.doAction('hookRemoved', hookName, namespace);
+    }
+
+    return handlersRemoved;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRemoveHook);
+//# sourceMappingURL=createRemoveHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRunHook.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createRunHook.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will execute all callbacks
+ * registered to a hook of the specified type, optionally returning the final
+ * value of the call chain.
+ *
+ * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
+ *                                                      return its first argument.
+ *
+ * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ */
+function createRunHook(hooks, storeKey) {
+  let returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function runHooks(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+
+    hooksStore[hookName].runs++;
+    const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+
+    if (true) {
+      // Handle any 'all' hooks registered.
+      if ('hookAdded' !== hookName && hooksStore.all) {
+        handlers.push(...hooksStore.all.handlers);
+      }
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : undefined;
+    }
+
+    const hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+
+    hooksStore.__current.push(hookInfo);
+
+    while (hookInfo.currentIndex < handlers.length) {
+      const handler = handlers[hookInfo.currentIndex];
+      const result = handler.callback.apply(null, args);
+
+      if (returnFirstArg) {
+        args[0] = result;
+      }
+
+      hookInfo.currentIndex++;
+    }
+
+    hooksStore.__current.pop();
+
+    if (returnFirstArg) {
+      return args[0];
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRunHook);
+//# sourceMappingURL=createRunHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/index.js":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/index.js ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "actions": () => (/* binding */ actions),
+/* harmony export */   "addAction": () => (/* binding */ addAction),
+/* harmony export */   "addFilter": () => (/* binding */ addFilter),
+/* harmony export */   "applyFilters": () => (/* binding */ applyFilters),
+/* harmony export */   "createHooks": () => (/* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "currentAction": () => (/* binding */ currentAction),
+/* harmony export */   "currentFilter": () => (/* binding */ currentFilter),
+/* harmony export */   "defaultHooks": () => (/* binding */ defaultHooks),
+/* harmony export */   "didAction": () => (/* binding */ didAction),
+/* harmony export */   "didFilter": () => (/* binding */ didFilter),
+/* harmony export */   "doAction": () => (/* binding */ doAction),
+/* harmony export */   "doingAction": () => (/* binding */ doingAction),
+/* harmony export */   "doingFilter": () => (/* binding */ doingFilter),
+/* harmony export */   "filters": () => (/* binding */ filters),
+/* harmony export */   "hasAction": () => (/* binding */ hasAction),
+/* harmony export */   "hasFilter": () => (/* binding */ hasFilter),
+/* harmony export */   "removeAction": () => (/* binding */ removeAction),
+/* harmony export */   "removeAllActions": () => (/* binding */ removeAllActions),
+/* harmony export */   "removeAllFilters": () => (/* binding */ removeAllFilters),
+/* harmony export */   "removeFilter": () => (/* binding */ removeFilter)
+/* harmony export */ });
+/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createHooks */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/createHooks.js");
+/**
+ * Internal dependencies
+ */
+
+/** @typedef {(...args: any[])=>any} Callback */
+
+/**
+ * @typedef Handler
+ * @property {Callback} callback  The callback
+ * @property {string}   namespace The namespace
+ * @property {number}   priority  The namespace
+ */
+
+/**
+ * @typedef Hook
+ * @property {Handler[]} handlers Array of handlers
+ * @property {number}    runs     Run counter
+ */
+
+/**
+ * @typedef Current
+ * @property {string} name         Hook name
+ * @property {number} currentIndex The index
+ */
+
+/**
+ * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ */
+
+/**
+ * @typedef {'actions' | 'filters'} StoreKey
+ */
+
+/**
+ * @typedef {import('./createHooks').Hooks} Hooks
+ */
+
+const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__["default"])();
+const {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  applyFilters,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateHookName.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateHookName.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a hookName string.
+ *
+ * @param {string} hookName The hook name to validate. Should be a non empty string containing
+ *                          only numbers, letters, dashes, periods and underscores. Also,
+ *                          the hook name cannot begin with `__`.
+ *
+ * @return {boolean} Whether the hook name is valid.
+ */
+function validateHookName(hookName) {
+  if ('string' !== typeof hookName || '' === hookName) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name must be a non-empty string.');
+    return false;
+  }
+
+  if (/^__/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name cannot begin with `__`.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateHookName);
+//# sourceMappingURL=validateHookName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateNamespace.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/validateNamespace.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a namespace string.
+ *
+ * @param {string} namespace The namespace to validate - should take the form
+ *                           `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether the namespace is valid.
+ */
+function validateNamespace(namespace) {
+  if ('string' !== typeof namespace || '' === namespace) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace must be a non-empty string.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateNamespace);
+//# sourceMappingURL=validateNamespace.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/create-i18n.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/create-i18n.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createI18n": () => (/* binding */ createI18n)
+/* harmony export */ });
+/* harmony import */ var tannin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tannin */ "./node_modules/tannin/index.js");
+/**
+ * External dependencies
+ */
+
+/**
+ * @typedef {Record<string,any>} LocaleData
+ */
+
+/**
+ * Default locale data to use for Tannin domain when not otherwise provided.
+ * Assumes an English plural forms expression.
+ *
+ * @type {LocaleData}
+ */
+
+const DEFAULT_LOCALE_DATA = {
+  '': {
+    /** @param {number} n */
+    plural_forms(n) {
+      return n === 1 ? 0 : 1;
+    }
+
+  }
+};
+/*
+ * Regular expression that matches i18n hooks like `i18n.gettext`, `i18n.ngettext`,
+ * `i18n.gettext_domain` or `i18n.ngettext_with_context` or `i18n.has_translation`.
+ */
+
+const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+/**
+ * @typedef {(domain?: string) => LocaleData} GetLocaleData
+ *
+ * Returns locale data by domain in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will overwrite the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} AddLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will also merge the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
+ *
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/** @typedef {() => void} SubscribeCallback */
+
+/** @typedef {() => void} UnsubscribeCallback */
+
+/**
+ * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
+ *
+ * Subscribes to changes of locale data
+ */
+
+/**
+ * @typedef {(domain?: string) => string} GetFilterDomain
+ * Retrieve the domain to use when calling domain-specific filters.
+ */
+
+/**
+ * @typedef {(text: string, domain?: string) => string} __
+ *
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ */
+
+/**
+ * @typedef {(text: string, context: string, domain?: string) => string} _x
+ *
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ */
+
+/**
+ * @typedef {() => boolean} IsRtl
+ *
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ */
+
+/**
+ * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
+ *
+ * Check if there is a translation for a given string in singular form.
+ */
+
+/** @typedef {import('@wordpress/hooks').Hooks} Hooks */
+
+/**
+ * An i18n instance
+ *
+ * @typedef I18n
+ * @property {GetLocaleData}   getLocaleData   Returns locale data by domain in a Jed-formatted JSON object shape.
+ * @property {SetLocaleData}   setLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will overwrite the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {AddLocaleData}   addLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will also merge the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {ResetLocaleData} resetLocaleData Resets all current Tannin instance locale data and sets the specified
+ *                                             locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ * @property {Subscribe}       subscribe       Subscribes to changes of Tannin locale data.
+ * @property {__}              __              Retrieve the translation of text.
+ * @property {_x}              _x              Retrieve translated string with gettext context.
+ * @property {_n}              _n              Translates and retrieves the singular or plural form based on the supplied
+ *                                             number.
+ * @property {_nx}             _nx             Translates and retrieves the singular or plural form based on the supplied
+ *                                             number, with gettext context.
+ * @property {IsRtl}           isRTL           Check if current locale is RTL.
+ * @property {HasTranslation}  hasTranslation  Check if there is a translation for a given string.
+ */
+
+/**
+ * Create an i18n instance
+ *
+ * @param {LocaleData} [initialData]   Locale data configuration.
+ * @param {string}     [initialDomain] Domain for which configuration applies.
+ * @param {Hooks}      [hooks]         Hooks implementation.
+ *
+ * @return {I18n} I18n instance.
+ */
+
+const createI18n = (initialData, initialDomain, hooks) => {
+  /**
+   * The underlying instance of Tannin to which exported functions interface.
+   *
+   * @type {Tannin}
+   */
+  const tannin = new tannin__WEBPACK_IMPORTED_MODULE_0__["default"]({});
+  const listeners = new Set();
+
+  const notifyListeners = () => {
+    listeners.forEach(listener => listener());
+  };
+  /**
+   * Subscribe to changes of locale data.
+   *
+   * @param {SubscribeCallback} callback Subscription callback.
+   * @return {UnsubscribeCallback} Unsubscribe callback.
+   */
+
+
+  const subscribe = callback => {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  };
+  /** @type {GetLocaleData} */
+
+
+  const getLocaleData = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return tannin.data[domain];
+  };
+  /**
+   * @param {LocaleData} [data]
+   * @param {string}     [domain]
+   */
+
+
+  const doSetLocaleData = function (data) {
+    var _tannin$data$domain;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data
+    }; // Populate default domain configuration (supported locale date which omits
+    // a plural forms expression).
+
+    tannin.data[domain][''] = { ...DEFAULT_LOCALE_DATA[''],
+      ...((_tannin$data$domain = tannin.data[domain]) === null || _tannin$data$domain === void 0 ? void 0 : _tannin$data$domain[''])
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+  };
+  /** @type {SetLocaleData} */
+
+
+  const setLocaleData = (data, domain) => {
+    doSetLocaleData(data, domain);
+    notifyListeners();
+  };
+  /** @type {AddLocaleData} */
+
+
+  const addLocaleData = function (data) {
+    var _tannin$data$domain2;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data,
+      // Populate default domain configuration (supported locale date which omits
+      // a plural forms expression).
+      '': { ...DEFAULT_LOCALE_DATA[''],
+        ...((_tannin$data$domain2 = tannin.data[domain]) === null || _tannin$data$domain2 === void 0 ? void 0 : _tannin$data$domain2['']),
+        ...(data === null || data === void 0 ? void 0 : data[''])
+      }
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+    notifyListeners();
+  };
+  /** @type {ResetLocaleData} */
+
+
+  const resetLocaleData = (data, domain) => {
+    // Reset all current Tannin locale data.
+    tannin.data = {}; // Reset cached plural forms functions cache.
+
+    tannin.pluralForms = {};
+    setLocaleData(data, domain);
+  };
+  /**
+   * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
+   * otherwise previously assigned.
+   *
+   * @param {string|undefined} domain   Domain to retrieve the translated text.
+   * @param {string|undefined} context  Context information for the translators.
+   * @param {string}           single   Text to translate if non-plural. Used as
+   *                                    fallback return value on a caught error.
+   * @param {string}           [plural] The text to be used if the number is
+   *                                    plural.
+   * @param {number}           [number] The number to compare against to use
+   *                                    either the singular or plural form.
+   *
+   * @return {string} The translated string.
+   */
+
+
+  const dcnpgettext = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    let context = arguments.length > 1 ? arguments[1] : undefined;
+    let single = arguments.length > 2 ? arguments[2] : undefined;
+    let plural = arguments.length > 3 ? arguments[3] : undefined;
+    let number = arguments.length > 4 ? arguments[4] : undefined;
+
+    if (!tannin.data[domain]) {
+      // Use `doSetLocaleData` to set silently, without notifying listeners.
+      doSetLocaleData(undefined, domain);
+    }
+
+    return tannin.dcnpgettext(domain, context, single, plural, number);
+  };
+  /** @type {GetFilterDomain} */
+
+
+  const getFilterDomain = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return domain;
+  };
+  /** @type {__} */
+
+
+  const __ = (text, domain) => {
+    let translation = dcnpgettext(domain, undefined, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
+    );
+  };
+  /** @type {_x} */
+
+
+  const _x = (text, context, domain) => {
+    let translation = dcnpgettext(domain, context, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation based on context information.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
+    );
+  };
+  /** @type {_n} */
+
+
+  const _n = (single, plural, number, domain) => {
+    let translation = dcnpgettext(domain, undefined, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
+    );
+  };
+  /** @type {_nx} */
+
+
+  const _nx = (single, plural, number, context, domain) => {
+    let translation = dcnpgettext(domain, context, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string with gettext context.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
+    );
+  };
+  /** @type {IsRtl} */
+
+
+  const isRTL = () => {
+    return 'rtl' === _x('ltr', 'text direction');
+  };
+  /** @type {HasTranslation} */
+
+
+  const hasTranslation = (single, context, domain) => {
+    var _tannin$data, _tannin$data2;
+
+    const key = context ? context + '\u0004' + single : single;
+    let result = !!((_tannin$data = tannin.data) !== null && _tannin$data !== void 0 && (_tannin$data2 = _tannin$data[domain !== null && domain !== void 0 ? domain : 'default']) !== null && _tannin$data2 !== void 0 && _tannin$data2[key]);
+
+    if (hooks) {
+      /**
+       * Filters the presence of a translation in the locale data.
+       *
+       * @param {boolean} hasTranslation Whether the translation is present or not..
+       * @param {string}  single         The singular form of the translated text (used as key in locale data)
+       * @param {string}  context        Context information for the translators.
+       * @param {string}  domain         Text domain. Unique identifier for retrieving translated strings.
+       */
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+    }
+
+    return result;
+  };
+
+  if (initialData) {
+    setLocaleData(initialData, initialDomain);
+  }
+
+  if (hooks) {
+    /**
+     * @param {string} hookName
+     */
+    const onHookAddedOrRemoved = hookName => {
+      if (I18N_HOOK_REGEXP.test(hookName)) {
+        notifyListeners();
+      }
+    };
+
+    hooks.addAction('hookAdded', 'core/i18n', onHookAddedOrRemoved);
+    hooks.addAction('hookRemoved', 'core/i18n', onHookAddedOrRemoved);
+  }
+
+  return {
+    getLocaleData,
+    setLocaleData,
+    addLocaleData,
+    resetLocaleData,
+    subscribe,
+    __,
+    _x,
+    _n,
+    _nx,
+    isRTL,
+    hasTranslation
+  };
+};
+//# sourceMappingURL=create-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/default-i18n.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/default-i18n.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* binding */ __),
+/* harmony export */   "_n": () => (/* binding */ _n),
+/* harmony export */   "_nx": () => (/* binding */ _nx),
+/* harmony export */   "_x": () => (/* binding */ _x),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "getLocaleData": () => (/* binding */ getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* binding */ hasTranslation),
+/* harmony export */   "isRTL": () => (/* binding */ isRTL),
+/* harmony export */   "resetLocaleData": () => (/* binding */ resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* binding */ setLocaleData),
+/* harmony export */   "subscribe": () => (/* binding */ subscribe)
+/* harmony export */ });
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/hooks/build-module/index.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+const i18n = (0,_create_i18n__WEBPACK_IMPORTED_MODULE_0__.createI18n)(undefined, undefined, _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__.defaultHooks);
+/**
+ * Default, singleton instance of `I18n`.
+ */
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (i18n);
+/*
+ * Comments in this file are duplicated from ./i18n due to
+ * https://github.com/WordPress/gutenberg/pull/20318#issuecomment-590837722
+ */
+
+/**
+ * @typedef {import('./create-i18n').LocaleData} LocaleData
+ * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
+ * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
+ */
+
+/**
+ * Returns locale data by domain in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {string} [domain] Domain for which to get the data.
+ * @return {LocaleData} Locale data.
+ */
+
+const getLocaleData = i18n.getLocaleData.bind(i18n);
+/**
+ * Merges locale data into the Tannin instance by domain. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const setLocaleData = i18n.setLocaleData.bind(i18n);
+/**
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const resetLocaleData = i18n.resetLocaleData.bind(i18n);
+/**
+ * Subscribes to changes of locale data
+ *
+ * @param {SubscribeCallback} callback Subscription callback
+ * @return {UnsubscribeCallback} Unsubscribe callback
+ */
+
+const subscribe = i18n.subscribe.bind(i18n);
+/**
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated text.
+ */
+
+const __ = i18n.__.bind(i18n);
+/**
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated context string without pipe.
+ */
+
+const _x = i18n._x.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _n = i18n._n.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _nx = i18n._nx.bind(i18n);
+/**
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ *
+ * @return {boolean} Whether locale is RTL.
+ */
+
+const isRTL = i18n.isRTL.bind(i18n);
+/**
+ * Check if there is a translation for a given string (in singular form).
+ *
+ * @param {string} single    Singular form of the string to look up.
+ * @param {string} [context] Context information for the translators.
+ * @param {string} [domain]  Domain to retrieve the translated text.
+ * @return {boolean} Whether the translation exists or not.
+ */
+
+const hasTranslation = i18n.hasTranslation.bind(i18n);
+//# sourceMappingURL=default-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/index.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/index.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.__),
+/* harmony export */   "_n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._n),
+/* harmony export */   "_nx": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._nx),
+/* harmony export */   "_x": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._x),
+/* harmony export */   "createI18n": () => (/* reexport safe */ _create_i18n__WEBPACK_IMPORTED_MODULE_1__.createI18n),
+/* harmony export */   "defaultI18n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   "getLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.hasTranslation),
+/* harmony export */   "isRTL": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.isRTL),
+/* harmony export */   "resetLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.setLocaleData),
+/* harmony export */   "sprintf": () => (/* reexport safe */ _sprintf__WEBPACK_IMPORTED_MODULE_0__.sprintf),
+/* harmony export */   "subscribe": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.subscribe)
+/* harmony export */ });
+/* harmony import */ var _sprintf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sprintf */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/sprintf.js");
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _default_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./default-i18n */ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/default-i18n.js");
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/sprintf.js":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@wordpress/a11y/node_modules/@wordpress/i18n/build-module/sprintf.js ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "sprintf": () => (/* binding */ sprintf)
+/* harmony export */ });
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! memize */ "./node_modules/memize/index.js");
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(memize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sprintf-js */ "./node_modules/sprintf-js/src/sprintf.js");
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sprintf_js__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Log to console, once per message; or more precisely, per referentially equal
+ * argument set. Because Jed throws errors, we log these to the console instead
+ * to avoid crashing the application.
+ *
+ * @param {...*} args Arguments to pass to `console.error`
+ */
+
+const logErrorOnce = memize__WEBPACK_IMPORTED_MODULE_0___default()(console.error); // eslint-disable-line no-console
+
+/**
+ * Returns a formatted string. If an error occurs in applying the format, the
+ * original format string is returned.
+ *
+ * @param {string} format The format of the string to generate.
+ * @param {...*}   args   Arguments to apply to the format.
+ *
+ * @see https://www.npmjs.com/package/sprintf-js
+ *
+ * @return {string} The formatted string.
+ */
+
+function sprintf(format) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return sprintf_js__WEBPACK_IMPORTED_MODULE_1___default().sprintf(format, ...args);
+  } catch (error) {
+    if (error instanceof Error) {
+      logErrorOnce('sprintf error: \n\n' + error.toString());
+    }
+
+    return format;
+  }
+}
+//# sourceMappingURL=sprintf.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/components/build-module/base-control/hooks.js":
 /*!*******************************************************************************!*\
   !*** ./node_modules/@wordpress/components/build-module/base-control/hooks.js ***!
@@ -5546,7 +7069,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Namely, it takes care of generating a unique `id`, properly associating it with the `label` and `help` elements.
  *
- * @param  props
+ * @param props
  */
 function useBaseControlProps(props) {
   const {
@@ -5793,6 +7316,7 @@ const StyledVisualLabel = (0,_emotion_styled_base__WEBPACK_IMPORTED_MODULE_0__["
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Button": () => (/* binding */ Button),
+/* harmony export */   "UnforwardedButton": () => (/* binding */ UnforwardedButton),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
@@ -5807,16 +7331,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _visually_hidden__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../visually-hidden */ "./node_modules/@wordpress/components/build-module/visually-hidden/component.js");
 
 
-// @ts-nocheck
 
 /**
  * External dependencies
  */
 
+
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -5881,12 +7404,10 @@ function useDeprecatedProps(_ref) {
   };
 }
 
-function Button(props, ref) {
+function UnforwardedButton(props, ref) {
   var _children$, _children$$props;
 
   const {
-    href,
-    target,
     isSmall,
     isPressed,
     isBusy,
@@ -5905,10 +7426,19 @@ function Button(props, ref) {
     variant,
     __experimentalIsFocusable: isFocusable,
     describedBy,
-    ...additionalProps
+    ...buttonOrAnchorProps
   } = useDeprecatedProps(props);
+  const {
+    href,
+    target,
+    ...additionalProps
+  } = 'href' in buttonOrAnchorProps ? buttonOrAnchorProps : {
+    href: undefined,
+    target: undefined,
+    ...buttonOrAnchorProps
+  };
   const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__["default"])(Button, 'components-button__description');
-  const hasChildren = (children === null || children === void 0 ? void 0 : children[0]) && children[0] !== null && // Tooltip should not considered as a child
+  const hasChildren = 'string' === typeof children && !!children || Array.isArray(children) && (children === null || children === void 0 ? void 0 : children[0]) && children[0] !== null && // Tooltip should not considered as a child
   (children === null || children === void 0 ? void 0 : (_children$ = children[0]) === null || _children$ === void 0 ? void 0 : (_children$$props = _children$.props) === null || _children$$props === void 0 ? void 0 : _children$$props.className) !== 'components-tooltip';
   const classes = classnames__WEBPACK_IMPORTED_MODULE_1___default()('components-button', className, {
     'is-secondary': variant === 'secondary',
@@ -5924,24 +7454,28 @@ function Button(props, ref) {
   });
   const trulyDisabled = disabled && !isFocusable;
   const Tag = href !== undefined && !trulyDisabled ? 'a' : 'button';
-  const tagProps = Tag === 'a' ? {
-    href,
-    target
-  } : {
+  const buttonProps = Tag === 'button' ? {
     type: 'button',
     disabled: trulyDisabled,
     'aria-pressed': isPressed
-  };
+  } : {};
+  const anchorProps = Tag === 'a' ? {
+    href,
+    target
+  } : {};
 
   if (disabled && isFocusable) {
     // In this case, the button will be disabled, but still focusable and
     // perceivable by screen reader users.
-    tagProps['aria-disabled'] = true;
+    buttonProps['aria-disabled'] = true;
+    anchorProps['aria-disabled'] = true;
 
     for (const disabledEvent of disabledEventsOnDisabledButton) {
       additionalProps[disabledEvent] = event => {
-        event.stopPropagation();
-        event.preventDefault();
+        if (event) {
+          event.stopPropagation();
+          event.preventDefault();
+        }
       };
     }
   } // Should show the tooltip if...
@@ -5953,20 +7487,22 @@ function Button(props, ref) {
   !!label && // The children are empty and...
   !(children !== null && children !== void 0 && children.length) && // The tooltip is not explicitly disabled.
   false !== showTooltip);
-  const descriptionId = describedBy ? instanceId : null;
+  const descriptionId = describedBy ? instanceId : undefined;
   const describedById = additionalProps['aria-describedby'] || descriptionId;
-  const element = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Tag, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, tagProps, additionalProps, {
+  const commonProps = {
     className: classes,
-    "aria-label": additionalProps['aria-label'] || label,
-    "aria-describedby": describedById,
-    ref: ref
-  }), icon && iconPosition === 'left' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    'aria-label': additionalProps['aria-label'] || label,
+    'aria-describedby': describedById,
+    ref
+  };
+  const elementChildren = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, icon && iconPosition === 'left' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
     icon: icon,
     size: iconSize
   }), text && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, text), icon && iconPosition === 'right' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
     icon: icon,
     size: iconSize
   }), children);
+  const element = Tag === 'a' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("a", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, anchorProps, additionalProps, commonProps), elementChildren) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("button", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, buttonProps, additionalProps, commonProps), elementChildren);
 
   if (!shouldShowTooltip) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, element, describedBy && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_visually_hidden__WEBPACK_IMPORTED_MODULE_6__["default"], null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)("span", {
@@ -5982,7 +7518,24 @@ function Button(props, ref) {
     id: descriptionId
   }, describedBy)));
 }
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.forwardRef)(Button));
+/**
+ * Lets users take actions and make choices with a single click or tap.
+ *
+ * ```jsx
+ * import { Button } from '@wordpress/components';
+ * const Mybutton = () => (
+ *   <Button
+ *     variant="primary"
+ *     onClick={ handleClick }
+ *   >
+ *     Click here
+ *   </Button>
+ * );
+ * ```
+ */
+
+const Button = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.forwardRef)(UnforwardedButton);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Button);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -6642,7 +8195,6 @@ function UnconnectedHStack(props, forwardedRef) {
  *
  * `HStack` can render anything inside.
  *
- * @example
  * ```jsx
  * import {
  * 	__experimentalHStack as HStack,
@@ -7542,8 +9094,10 @@ function InputField(_ref, ref) {
     onKeyDown: handleOnKeyDown,
     onMouseDown: handleOnMouseDown,
     ref: ref,
-    inputSize: size,
-    value: value,
+    inputSize: size // Fallback to `''` to avoid "uncontrolled to controlled" warning.
+    // See https://github.com/WordPress/gutenberg/pull/47250 for details.
+    ,
+    value: value !== null && value !== void 0 ? value : '',
     type: type
   }));
 }
@@ -7678,7 +9232,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Prepares initialState for the reducer.
  *
- * @param  initialState The initial state.
+ * @param initialState The initial state.
  * @return Prepared initialState for the reducer
  */
 function mergeInitialState() {
@@ -7698,7 +9252,7 @@ function mergeInitialState() {
  * exception for CONTROL actions is because they represent controlled updates
  * from props and no case has yet presented for their specialization.
  *
- * @param  composedStateReducers A reducer to specialize state changes.
+ * @param composedStateReducers A reducer to specialize state changes.
  * @return The reducer.
  */
 
@@ -7797,9 +9351,9 @@ function inputControlStateReducer(composedStateReducers) {
  * This technique uses the "stateReducer" design pattern:
  * https://kentcdodds.com/blog/the-state-reducer-pattern/
  *
- * @param  stateReducer    An external state reducer.
- * @param  initialState    The initial state for the reducer.
- * @param  onChangeHandler A handler for the onChange event.
+ * @param stateReducer    An external state reducer.
+ * @param initialState    The initial state for the reducer.
+ * @param onChangeHandler A handler for the onChange event.
  * @return State, dispatch, and a collection of actions.
  */
 
@@ -8263,7 +9817,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Gets a CSS cursor value based on a drag direction.
  *
- * @param  dragDirection The drag direction.
+ * @param dragDirection The drag direction.
  * @return  The CSS cursor value.
  */
 function getDragCursor(dragDirection) {
@@ -8362,12 +9916,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/@wordpress/components/node_modules/@wordpress/element/build-module/serialize.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/@wordpress/components/node_modules/@wordpress/element/build-module/raw-html.js");
 /* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/a11y */ "./node_modules/@wordpress/a11y/build-module/index.js");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../button */ "./node_modules/@wordpress/components/build-module/button/index.js");
 
 
 /**
@@ -8387,15 +9941,11 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-/** @typedef {import('@wordpress/element').WPElement} WPElement */
 
 const noop = () => {};
 /**
  * Custom hook which announces the message with the given politeness, if a
  * valid message is provided.
- *
- * @param {string|WPElement}     [message]  Message to announce.
- * @param {'polite'|'assertive'} politeness Politeness to announce.
  */
 
 
@@ -8407,15 +9957,6 @@ function useSpokenMessage(message, politeness) {
     }
   }, [spokenMessage, politeness]);
 }
-/**
- * Given a notice status, returns an assumed default politeness for the status.
- * Defaults to 'assertive'.
- *
- * @param {string} [status] Notice status.
- *
- * @return {'polite'|'assertive'} Notice politeness.
- */
-
 
 function getDefaultPoliteness(status) {
   switch (status) {
@@ -8429,6 +9970,18 @@ function getDefaultPoliteness(status) {
       return 'assertive';
   }
 }
+/**
+ * `Notice` is a component used to communicate feedback to the user.
+ *
+ *```jsx
+ * import { Notice } from `@wordpress/components`;
+ *
+ * const MyNotice = () => (
+ *   <Notice status="error">An unknown error occurred.</Notice>
+ * );
+ * ```
+ */
+
 
 function Notice(_ref) {
   let {
@@ -8451,7 +10004,7 @@ function Notice(_ref) {
     'is-dismissible': isDismissible
   });
 
-  if (__unstableHTML) {
+  if (__unstableHTML && typeof children === 'string') {
     children = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["default"], null, children);
   }
 
@@ -8489,14 +10042,14 @@ function Notice(_ref) {
       computedVariant = 'primary';
     }
 
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(___WEBPACK_IMPORTED_MODULE_6__["default"], {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_button__WEBPACK_IMPORTED_MODULE_6__["default"], {
       key: index,
       href: url,
       variant: computedVariant,
       onClick: url ? undefined : onClick,
       className: classnames__WEBPACK_IMPORTED_MODULE_0___default()('components-notice__action', buttonCustomClasses)
     }, label);
-  }))), isDismissible && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(___WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }))), isDismissible && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_button__WEBPACK_IMPORTED_MODULE_6__["default"], {
     className: "components-notice__dismiss",
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dismiss this notice'),
@@ -8527,7 +10080,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/plus.js");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/reset.js");
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-merge-refs/index.js");
@@ -8591,7 +10144,7 @@ function UnforwardedNumberControl(_ref, forwardedRef) {
   } = _ref;
 
   if (hideHTMLArrows) {
-    (0,_wordpress_deprecated__WEBPACK_IMPORTED_MODULE_3__["default"])('hideHTMLArrows', {
+    (0,_wordpress_deprecated__WEBPACK_IMPORTED_MODULE_3__["default"])('wp.components.NumberControl hideHTMLArrows prop ', {
       alternative: 'spinControls="none"',
       since: '6.2',
       version: '6.3'
@@ -8872,23 +10425,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs");
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.esm.js");
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.browser.mjs");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.esm.js");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.browser.mjs");
 /* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/utils/reduced-motion/use-reduced-motion.mjs");
 /* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.mjs");
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-viewport-match/index.js");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-dialog/index.js");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-merge-refs/index.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.js");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-dialog/index.js");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-merge-refs/index.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.js");
 /* harmony import */ var _wordpress_deprecated__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/deprecated */ "./node_modules/@wordpress/deprecated/build-module/index.js");
 /* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/primitives */ "./node_modules/@wordpress/primitives/build-module/svg/index.js");
-/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../button */ "./node_modules/@wordpress/components/build-module/button/index.js");
-/* harmony import */ var _scroll_lock__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../scroll-lock */ "./node_modules/@wordpress/components/build-module/scroll-lock/index.js");
-/* harmony import */ var _slot_fill__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../slot-fill */ "./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/use-slot.js");
-/* harmony import */ var _slot_fill__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../slot-fill */ "./node_modules/@wordpress/components/build-module/slot-fill/index.js");
+/* harmony import */ var _wordpress_dom__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/dom */ "./node_modules/@wordpress/dom/build-module/dom/get-scroll-container.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../button */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _scroll_lock__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../scroll-lock */ "./node_modules/@wordpress/components/build-module/scroll-lock/index.js");
+/* harmony import */ var _slot_fill__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../slot-fill */ "./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/use-slot.js");
+/* harmony import */ var _slot_fill__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../slot-fill */ "./node_modules/@wordpress/components/build-module/slot-fill/index.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./node_modules/@wordpress/components/build-module/popover/utils.js");
-/* harmony import */ var _limit_shift__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./limit-shift */ "./node_modules/@wordpress/components/build-module/popover/limit-shift.js");
+/* harmony import */ var _limit_shift__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./limit-shift */ "./node_modules/@wordpress/components/build-module/popover/limit-shift.js");
+/* harmony import */ var _overlay_middlewares__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./overlay-middlewares */ "./node_modules/@wordpress/components/build-module/popover/overlay-middlewares.js");
 
 
 
@@ -8908,9 +10463,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -9070,7 +10627,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
    */
 
   const frameOffsetRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)((0,_utils__WEBPACK_IMPORTED_MODULE_5__.getFrameOffset)(referenceOwnerDocument));
-  const middleware = [// Custom middleware which adjusts the popover's position by taking into
+  const middleware = [...(placementProp === 'overlay' ? (0,_overlay_middlewares__WEBPACK_IMPORTED_MODULE_9__.overlayMiddlewares)() : []), // Custom middleware which adjusts the popover's position by taking into
   // account the offset of the anchor's iframe (if any) compared to the page.
   {
     name: 'frameOffset',
@@ -9098,7 +10655,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
       };
     }
 
-  }, (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_9__.offset)(offsetProp), computedFlipProp ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_9__.flip)() : undefined, computedResizeProp ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_9__.size)({
+  }, (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_10__.offset)(offsetProp), computedFlipProp ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_10__.flip)() : undefined, computedResizeProp ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_10__.size)({
     apply(sizeProps) {
       var _refs$floating$curren;
 
@@ -9114,18 +10671,18 @@ const UnforwardedPopover = (props, forwardedRef) => {
       });
     }
 
-  }) : undefined, shift ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_9__.shift)({
+  }) : undefined, shift ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_10__.shift)({
     crossAxis: true,
-    limiter: (0,_limit_shift__WEBPACK_IMPORTED_MODULE_10__.limitShift)(),
+    limiter: (0,_limit_shift__WEBPACK_IMPORTED_MODULE_11__.limitShift)(),
     padding: 1 // Necessary to avoid flickering at the edge of the viewport.
 
-  }) : undefined, (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_11__.arrow)({
+  }) : undefined, (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_12__.arrow)({
     element: arrowRef
   })].filter(m => m !== undefined);
 
   const slotName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useContext)(slotNameContext) || __unstableSlotName;
 
-  const slot = (0,_slot_fill__WEBPACK_IMPORTED_MODULE_12__["default"])(slotName);
+  const slot = (0,_slot_fill__WEBPACK_IMPORTED_MODULE_13__["default"])(slotName);
   let onDialogClose;
 
   if (onClose || onFocusOutside) {
@@ -9140,7 +10697,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
     };
   }
 
-  const [dialogRef, dialogProps] = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_13__["default"])({
+  const [dialogRef, dialogProps] = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_14__["default"])({
     focusOnMount,
     __unstableOnClose: onDialogClose,
     // @ts-expect-error The __unstableOnClose property needs to be deprecated first (see https://github.com/WordPress/gutenberg/pull/27675)
@@ -9163,10 +10720,10 @@ const UnforwardedPopover = (props, forwardedRef) => {
     middlewareData: {
       arrow: arrowData
     }
-  } = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_11__.useFloating)({
-    placement: normalizedPlacementFromProps,
+  } = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_12__.useFloating)({
+    placement: normalizedPlacementFromProps === 'overlay' ? undefined : normalizedPlacementFromProps,
     middleware,
-    whileElementsMounted: (referenceParam, floatingParam, updateParam) => (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_14__.autoUpdate)(referenceParam, floatingParam, updateParam, {
+    whileElementsMounted: (referenceParam, floatingParam, updateParam) => (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_15__.autoUpdate)(referenceParam, floatingParam, updateParam, {
       animationFrame: true
     })
   });
@@ -9189,12 +10746,14 @@ const UnforwardedPopover = (props, forwardedRef) => {
       fallbackReferenceElement,
       fallbackDocument: document
     });
+    const scale = (0,_utils__WEBPACK_IMPORTED_MODULE_5__.getFrameScale)(resultingReferenceOwnerDoc);
     const resultingReferenceElement = (0,_utils__WEBPACK_IMPORTED_MODULE_5__.getReferenceElement)({
       anchor,
       anchorRef,
       anchorRect,
       getAnchorRect,
-      fallbackReferenceElement
+      fallbackReferenceElement,
+      scale
     });
     referenceCallbackRef(resultingReferenceElement);
     setReferenceOwnerDocument(resultingReferenceOwnerDoc);
@@ -9217,6 +10776,10 @@ const UnforwardedPopover = (props, forwardedRef) => {
     const {
       defaultView
     } = referenceOwnerDocument;
+    const {
+      frameElement
+    } = defaultView;
+    const scrollContainer = frameElement ? (0,_wordpress_dom__WEBPACK_IMPORTED_MODULE_16__["default"])(frameElement) : null;
 
     const updateFrameOffset = () => {
       frameOffsetRef.current = (0,_utils__WEBPACK_IMPORTED_MODULE_5__.getFrameOffset)(referenceOwnerDocument);
@@ -9224,12 +10787,14 @@ const UnforwardedPopover = (props, forwardedRef) => {
     };
 
     defaultView.addEventListener('resize', updateFrameOffset);
+    scrollContainer === null || scrollContainer === void 0 ? void 0 : scrollContainer.addEventListener('scroll', updateFrameOffset);
     updateFrameOffset();
     return () => {
       defaultView.removeEventListener('resize', updateFrameOffset);
+      scrollContainer === null || scrollContainer === void 0 ? void 0 : scrollContainer.removeEventListener('scroll', updateFrameOffset);
     };
   }, [referenceOwnerDocument, update, refs.floating]);
-  const mergedFloatingRef = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_15__["default"])([floating, dialogRef, forwardedRef]); // Disable reason: We care to capture the _bubbled_ events from inputs
+  const mergedFloatingRef = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_17__["default"])([floating, dialogRef, forwardedRef]); // Disable reason: We care to capture the _bubbled_ events from inputs
   // within popover as inferring close intent.
 
   let content = // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
@@ -9259,13 +10824,13 @@ const UnforwardedPopover = (props, forwardedRef) => {
       x: Math.round(x !== null && x !== void 0 ? x : 0) || undefined,
       y: Math.round(y !== null && y !== void 0 ? y : 0) || undefined
     }
-  }), isExpanded && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_scroll_lock__WEBPACK_IMPORTED_MODULE_16__["default"], null), isExpanded && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+  }), isExpanded && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_scroll_lock__WEBPACK_IMPORTED_MODULE_18__["default"], null), isExpanded && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
     className: "components-popover__header"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
     className: "components-popover__header-title"
-  }, headerTitle), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_button__WEBPACK_IMPORTED_MODULE_17__["default"], {
+  }, headerTitle), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_button__WEBPACK_IMPORTED_MODULE_19__["default"], {
     className: "components-popover__close",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_18__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_20__["default"],
     onClick: onClose
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
     className: "components-popover__content"
@@ -9279,7 +10844,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ArrowTriangle, null)));
 
   if (slot.ref) {
-    content = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_slot_fill__WEBPACK_IMPORTED_MODULE_19__.Fill, {
+    content = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_slot_fill__WEBPACK_IMPORTED_MODULE_21__.Fill, {
       name: slotName
     }, content);
   }
@@ -9323,7 +10888,7 @@ function PopoverSlot(_ref3, ref) {
   let {
     name = SLOT_NAME
   } = _ref3;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_slot_fill__WEBPACK_IMPORTED_MODULE_19__.Slot // @ts-expect-error Need to type `SlotFill`
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_slot_fill__WEBPACK_IMPORTED_MODULE_21__.Slot // @ts-expect-error Need to type `SlotFill`
   , {
     bubblesVirtually: true,
     name: name,
@@ -9491,6 +11056,59 @@ const limitShift = function () {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/components/build-module/popover/overlay-middlewares.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/popover/overlay-middlewares.js ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "overlayMiddlewares": () => (/* binding */ overlayMiddlewares)
+/* harmony export */ });
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs");
+/**
+ * External dependencies
+ */
+
+function overlayMiddlewares() {
+  return [{
+    name: 'overlay',
+
+    fn(_ref) {
+      let {
+        rects
+      } = _ref;
+      return rects.reference;
+    }
+
+  }, (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_0__.size)({
+    apply(_ref2) {
+      var _elements$floating;
+
+      let {
+        rects,
+        elements
+      } = _ref2;
+      const {
+        firstElementChild
+      } = (_elements$floating = elements.floating) !== null && _elements$floating !== void 0 ? _elements$floating : {}; // Only HTMLElement instances have the `style` property.
+
+      if (!(firstElementChild instanceof HTMLElement)) return; // Reduce the height of the popover to the available space.
+
+      Object.assign(firstElementChild.style, {
+        width: `${rects.reference.width}px`,
+        height: `${rects.reference.height}px`
+      });
+    }
+
+  })];
+}
+//# sourceMappingURL=overlay-middlewares.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/components/build-module/popover/utils.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/@wordpress/components/build-module/popover/utils.js ***!
@@ -9501,6 +11119,7 @@ const limitShift = function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getFrameOffset": () => (/* binding */ getFrameOffset),
+/* harmony export */   "getFrameScale": () => (/* binding */ getFrameScale),
 /* harmony export */   "getReferenceElement": () => (/* binding */ getReferenceElement),
 /* harmony export */   "getReferenceOwnerDocument": () => (/* binding */ getReferenceOwnerDocument),
 /* harmony export */   "placementToMotionAnimationProps": () => (/* binding */ placementToMotionAnimationProps),
@@ -9570,7 +11189,7 @@ const POSITION_TO_PLACEMENT = {
  * Converts the `Popover`'s legacy "position" prop to the new "placement" prop
  * (used by `floating-ui`).
  *
- * @param  position The legacy position
+ * @param position The legacy position
  * @return The corresponding placement
  */
 
@@ -9645,14 +11264,19 @@ const PLACEMENT_TO_ANIMATION_ORIGIN = {
   'left-end': {
     originX: 1,
     originY: 1
-  } // open from bottom, right
+  },
+  // open from bottom, right
+  overlay: {
+    originX: 0.5,
+    originY: 0.5
+  } // open from center, center
 
 };
 /**
  * Given the floating-ui `placement`, compute the framer-motion props for the
  * popover's entry animation.
  *
- * @param  placement A placement string from floating ui
+ * @param placement A placement string from floating ui
  * @return The object containing the motion props
  */
 
@@ -9680,7 +11304,7 @@ const placementToMotionAnimationProps = placement => {
 /**
  * Returns the offset of a document's frame element.
  *
- * @param  document The iframe's owner document.
+ * @param document The iframe's owner document.
  *
  * @return The offset of the document's frame element, or undefined if the
  * document has no frame element.
@@ -9699,6 +11323,24 @@ const getFrameOffset = document => {
   return {
     x: iframeRect.left,
     y: iframeRect.top
+  };
+};
+const getFrameScale = document => {
+  var _document$defaultView2;
+
+  const frameElement = document === null || document === void 0 ? void 0 : (_document$defaultView2 = document.defaultView) === null || _document$defaultView2 === void 0 ? void 0 : _document$defaultView2.frameElement;
+
+  if (!frameElement) {
+    return {
+      x: 1,
+      y: 1
+    };
+  }
+
+  const rect = frameElement.getBoundingClientRect();
+  return {
+    x: rect.width / frameElement.offsetWidth,
+    y: rect.height / frameElement.offsetHeight
   };
 };
 const getReferenceOwnerDocument = _ref => {
@@ -9750,7 +11392,8 @@ const getReferenceElement = _ref2 => {
     anchorRef,
     anchorRect,
     getAnchorRect,
-    fallbackReferenceElement
+    fallbackReferenceElement,
+    scale
   } = _ref2;
   let referenceElement = null;
 
@@ -9799,6 +11442,18 @@ const getReferenceElement = _ref2 => {
     // If no explicit ref is passed via props, fall back to
     // anchoring to the popover's parent node.
     referenceElement = fallbackReferenceElement.parentElement;
+  }
+
+  if (referenceElement && (scale.x !== 1 || scale.y !== 1)) {
+    // If the popover is inside an iframe, the coordinates of the
+    // reference element need to be scaled to match the iframe's scale.
+    const rect = referenceElement.getBoundingClientRect();
+    referenceElement = {
+      getBoundingClientRect() {
+        return new window.DOMRect(rect.x * scale.x, rect.y * scale.y, rect.width * scale.x, rect.height * scale.y);
+      }
+
+    };
   } // Convert any `undefined` value to `null`.
 
 
@@ -9825,7 +11480,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js");
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-merge-refs/index.js");
 /* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
@@ -10259,7 +11914,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js");
 /* harmony import */ var _mark__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mark */ "./node_modules/@wordpress/components/build-module/range-control/mark.js");
 /* harmony import */ var _styles_range_control_styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./styles/range-control-styles */ "./node_modules/@wordpress/components/build-module/range-control/styles/range-control-styles.js");
 
@@ -10781,9 +12436,9 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * A float supported clamp function for a specific value.
  *
- * @param  value The value to clamp.
- * @param  min   The minimum value.
- * @param  max   The maximum value.
+ * @param value The value to clamp.
+ * @param min   The minimum value.
+ * @param max   The maximum value.
  *
  * @return A (float) number
  */
@@ -10797,7 +12452,7 @@ function floatClamp(value, min, max) {
 /**
  * Hook to store a clamped value, derived from props.
  *
- * @param  settings
+ * @param settings
  * @return The controlled value and the value setter.
  */
 
@@ -11014,6 +12669,7 @@ function useForceUpdate() {
   const [, setState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)({});
   const mounted = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(true);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    mounted.current = true;
     return () => {
       mounted.current = false;
     };
@@ -11083,7 +12739,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var valtio_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! valtio/utils */ "./node_modules/valtio/esm/vanilla/utils.mjs");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/warning/build-module/index.js");
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js");
 // @ts-nocheck
 
 /**
@@ -11826,6 +13482,7 @@ class SlotComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Comp
     const {
       registerSlot
     } = this.props;
+    this.isUnmounted = false;
     registerSlot(this.props.name, this);
   }
 
@@ -11947,17 +13604,7 @@ const useSlot = name => {
     getSlot,
     subscribe
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context__WEBPACK_IMPORTED_MODULE_1__["default"]);
-  const [slot, setSlot] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(getSlot(name));
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    setSlot(getSlot(name));
-    const unsubscribe = subscribe(() => {
-      setSlot(getSlot(name));
-    });
-    return unsubscribe; // Ignore reason: Modifying this dep array could introduce unexpected changes in behavior,
-    // so we'll leave it as=is until the hook can be properly refactored for exhaustive-deps.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
-  return slot;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useSyncExternalStore)(subscribe, () => getSlot(name), () => getSlot(name));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useSlot);
@@ -13442,7 +15089,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/warning/build-module/index.js");
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ "./node_modules/@wordpress/components/build-module/ui/context/constants.js");
 /* harmony import */ var _get_styled_class_name_from_key__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./get-styled-class-name-from-key */ "./node_modules/@wordpress/components/build-module/ui/context/get-styled-class-name-from-key.js");
 /**
@@ -13465,8 +15112,8 @@ __webpack_require__.r(__webpack_exports__);
  * Forwards ref (React.ForwardRef) and "Connects" (or registers) a component
  * within the Context system under a specified namespace.
  *
- * @param  Component The component to register into the Context system.
- * @param  namespace The namespace to register the component under.
+ * @param Component The component to register into the Context system.
+ * @param namespace The namespace to register the component under.
  * @return The connected WordPressComponent
  */
 function contextConnect(Component, namespace) {
@@ -13478,8 +15125,8 @@ function contextConnect(Component, namespace) {
  * "Connects" (or registers) a component within the Context system under a specified namespace.
  * Does not forward a ref.
  *
- * @param  Component The component to register into the Context system.
- * @param  namespace The namespace to register the component under.
+ * @param Component The component to register into the Context system.
+ * @param namespace The namespace to register the component under.
  * @return The connected WordPressComponent
  */
 
@@ -13521,7 +15168,7 @@ function _contextConnect(Component, namespace, options) {
 /**
  * Attempts to retrieve the connected namespace from a component.
  *
- * @param  Component The component to retrieve a namespace from.
+ * @param Component The component to retrieve a namespace from.
  * @return The connected namespaces.
  */
 
@@ -13546,8 +15193,8 @@ function getConnectNamespace(Component) {
 /**
  * Checks to see if a component is connected within the Context system.
  *
- * @param  Component The component to retrieve a namespace from.
- * @param  match     The namespace to check.
+ * @param Component The component to retrieve a namespace from.
+ * @param match     The namespace to check.
  */
 
 function hasConnectNamespace(Component, match) {
@@ -13586,7 +15233,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fast_deep_equal_es6__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fast_deep_equal_es6__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/warning/build-module/index.js");
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils */ "./node_modules/@wordpress/components/build-module/utils/hooks/use-update-effect.js");
 
 
@@ -13711,7 +15358,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Generates the connected component CSS className based on the namespace.
  *
- * @param  namespace The name of the connected component.
+ * @param namespace The name of the connected component.
  * @return The generated CSS className.
  */
 
@@ -13736,7 +15383,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "useContextSystem": () => (/* binding */ useContextSystem)
 /* harmony export */ });
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/warning/build-module/index.js");
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/warning */ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js");
 /* harmony import */ var _context_system_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./context-system-provider */ "./node_modules/@wordpress/components/build-module/ui/context/context-system-provider.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./node_modules/@wordpress/components/build-module/ui/context/utils.js");
 /* harmony import */ var _get_styled_class_name_from_key__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./get-styled-class-name-from-key */ "./node_modules/@wordpress/components/build-module/ui/context/get-styled-class-name-from-key.js");
@@ -14077,7 +15724,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Gets a collection of available children elements from a React component's children prop.
  *
- * @param  children
+ * @param children
  *
  * @return An array of available children.
  */
@@ -14120,7 +15767,7 @@ const GRID_BASE = '4px';
  * When given a unit value or one of the named CSS values like `auto`,
  * it will simply return the value back.
  *
- * @param  value A number, numeric string, or a unit value.
+ * @param value A number, numeric string, or a unit value.
  */
 
 function space(value) {
@@ -14579,8 +16226,8 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * @template T
  * @typedef Options
- * @property {T | undefined} initial  Initial value
- * @property {T | ""}        fallback Fallback value
+ * @property {T}      [initial] Initial value
+ * @property {T | ""} fallback  Fallback value
  */
 
 /** @type {Readonly<{ initial: undefined, fallback: '' }>} */
@@ -14972,7 +16619,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "rtl": () => (/* binding */ rtl)
 /* harmony export */ });
 /* harmony import */ var _emotion_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @emotion/react */ "./node_modules/@emotion/react/dist/emotion-react.browser.esm.js");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js");
 /**
  * External dependencies
  */
@@ -15401,7 +17048,6 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Internal dependencies
  */
- // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
 
 /** @typedef {{children: string} & import('react').ComponentPropsWithoutRef<'div'>} RawHTMLProps */
 
@@ -15764,7 +17410,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-plain-object */ "./node_modules/@wordpress/components/node_modules/is-plain-object/dist/is-plain-object.mjs");
 /* harmony import */ var change_case__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! change-case */ "./node_modules/param-case/dist.es2015/index.js");
-/* harmony import */ var _wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/escape-html */ "./node_modules/@wordpress/escape-html/build-module/index.js");
+/* harmony import */ var _wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/escape-html */ "./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/index.js");
 /* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./react */ "./node_modules/react/index.js");
 /* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _raw_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./raw-html */ "./node_modules/@wordpress/components/node_modules/@wordpress/element/build-module/raw-html.js");
@@ -16350,6 +17996,1800 @@ const isEmptyElement = element => {
 
 /***/ }),
 
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/escape-greater.js":
+/*!***************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/escape-greater.js ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ __unstableEscapeGreaterThan)
+/* harmony export */ });
+/**
+ * Returns a string with greater-than sign replaced.
+ *
+ * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
+ * necessary for `__unstableEscapeGreaterThan` to exist.
+ *
+ * See: https://core.trac.wordpress.org/ticket/45387
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+function __unstableEscapeGreaterThan(value) {
+  return value.replace(/>/g, '&gt;');
+}
+//# sourceMappingURL=escape-greater.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/index.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/index.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "escapeAmpersand": () => (/* binding */ escapeAmpersand),
+/* harmony export */   "escapeAttribute": () => (/* binding */ escapeAttribute),
+/* harmony export */   "escapeEditableHTML": () => (/* binding */ escapeEditableHTML),
+/* harmony export */   "escapeHTML": () => (/* binding */ escapeHTML),
+/* harmony export */   "escapeLessThan": () => (/* binding */ escapeLessThan),
+/* harmony export */   "escapeQuotationMark": () => (/* binding */ escapeQuotationMark),
+/* harmony export */   "isValidAttributeName": () => (/* binding */ isValidAttributeName)
+/* harmony export */ });
+/* harmony import */ var _escape_greater__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./escape-greater */ "./node_modules/@wordpress/components/node_modules/@wordpress/escape-html/build-module/escape-greater.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Regular expression matching invalid attribute names.
+ *
+ * "Attribute names must consist of one or more characters other than controls,
+ * U+0020 SPACE, U+0022 ("), U+0027 ('), U+003E (>), U+002F (/), U+003D (=),
+ * and noncharacters."
+ *
+ * @see https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+ *
+ * @type {RegExp}
+ */
+
+const REGEXP_INVALID_ATTRIBUTE_NAME = /[\u007F-\u009F "'>/="\uFDD0-\uFDEF]/;
+/**
+ * Returns a string with ampersands escaped. Note that this is an imperfect
+ * implementation, where only ampersands which do not appear as a pattern of
+ * named, decimal, or hexadecimal character references are escaped. Invalid
+ * named references (i.e. ambiguous ampersand) are still permitted.
+ *
+ * @see https://w3c.github.io/html/syntax.html#character-references
+ * @see https://w3c.github.io/html/syntax.html#ambiguous-ampersand
+ * @see https://w3c.github.io/html/syntax.html#named-character-references
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeAmpersand(value) {
+  return value.replace(/&(?!([a-z0-9]+|#[0-9]+|#x[a-f0-9]+);)/gi, '&amp;');
+}
+/**
+ * Returns a string with quotation marks replaced.
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeQuotationMark(value) {
+  return value.replace(/"/g, '&quot;');
+}
+/**
+ * Returns a string with less-than sign replaced.
+ *
+ * @param {string} value Original string.
+ *
+ * @return {string} Escaped string.
+ */
+
+function escapeLessThan(value) {
+  return value.replace(/</g, '&lt;');
+}
+/**
+ * Returns an escaped attribute value.
+ *
+ * @see https://w3c.github.io/html/syntax.html#elements-attributes
+ *
+ * "[...] the text cannot contain an ambiguous ampersand [...] must not contain
+ * any literal U+0022 QUOTATION MARK characters (")"
+ *
+ * Note we also escape the greater than symbol, as this is used by wptexturize to
+ * split HTML strings. This is a WordPress specific fix
+ *
+ * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
+ * necessary for `__unstableEscapeGreaterThan` to be used.
+ *
+ * See: https://core.trac.wordpress.org/ticket/45387
+ *
+ * @param {string} value Attribute value.
+ *
+ * @return {string} Escaped attribute value.
+ */
+
+function escapeAttribute(value) {
+  return (0,_escape_greater__WEBPACK_IMPORTED_MODULE_0__["default"])(escapeQuotationMark(escapeAmpersand(value)));
+}
+/**
+ * Returns an escaped HTML element value.
+ *
+ * @see https://w3c.github.io/html/syntax.html#writing-html-documents-elements
+ *
+ * "the text must not contain the character U+003C LESS-THAN SIGN (<) or an
+ * ambiguous ampersand."
+ *
+ * @param {string} value Element value.
+ *
+ * @return {string} Escaped HTML element value.
+ */
+
+function escapeHTML(value) {
+  return escapeLessThan(escapeAmpersand(value));
+}
+/**
+ * Returns an escaped Editable HTML element value. This is different from
+ * `escapeHTML`, because for editable HTML, ALL ampersands must be escaped in
+ * order to render the content correctly on the page.
+ *
+ * @param {string} value Element value.
+ *
+ * @return {string} Escaped HTML element value.
+ */
+
+function escapeEditableHTML(value) {
+  return escapeLessThan(value.replace(/&/g, '&amp;'));
+}
+/**
+ * Returns true if the given attribute name is valid, or false otherwise.
+ *
+ * @param {string} name Attribute name to test.
+ *
+ * @return {boolean} Whether attribute is valid.
+ */
+
+function isValidAttributeName(name) {
+  return !REGEXP_INVALID_ATTRIBUTE_NAME.test(name);
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createAddHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback AddHook
+ *
+ * Adds the hook to the appropriate hooks container.
+ *
+ * @param {string}               hookName      Name of hook to add
+ * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
+ * @param {import('.').Callback} callback      Function to call when the hook is run
+ * @param {number}               [priority=10] Priority of this hook
+ */
+
+/**
+ * Returns a function which, when invoked, will add a hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {AddHook} Function that adds a new hook.
+ */
+
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback) {
+    let priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    }
+
+    if ('function' !== typeof callback) {
+      // eslint-disable-next-line no-console
+      console.error('The hook callback must be a function.');
+      return;
+    } // Validate numeric priority
+
+
+    if ('number' !== typeof priority) {
+      // eslint-disable-next-line no-console
+      console.error('If specified, the hook priority must be a number.');
+      return;
+    }
+
+    const handler = {
+      callback,
+      priority,
+      namespace
+    };
+
+    if (hooksStore[hookName]) {
+      // Find the correct insert index of the new hook.
+      const handlers = hooksStore[hookName].handlers;
+      /** @type {number} */
+
+      let i;
+
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
+      }
+
+      if (i === handlers.length) {
+        // If append, operate via direct assignment.
+        handlers[i] = handler;
+      } else {
+        // Otherwise, insert before index via splice.
+        handlers.splice(i, 0, handler);
+      } // We may also be currently executing this hook.  If the callback
+      // we're adding would come after the current callback, there's no
+      // problem; otherwise we need to increase the execution index of
+      // any other runs by 1 to account for the added element.
+
+
+      hooksStore.__current.forEach(hookInfo => {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      // This is the first hook of its type.
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
+      };
+    }
+
+    if (hookName !== 'hookAdded') {
+      hooks.doAction('hookAdded', hookName, namespace, callback, priority);
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAddHook);
+//# sourceMappingURL=createAddHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createCurrentHook.js":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createCurrentHook.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will return the name of the
+ * currently running hook, or `null` if no hook of the given type is currently
+ * running.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {() => string | null} Function that returns the current hook name or null.
+ */
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    var _hooksStore$__current, _hooksStore$__current2;
+
+    const hooksStore = hooks[storeKey];
+    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createCurrentHook);
+//# sourceMappingURL=createCurrentHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDidHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDidHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * @callback DidHook
+ *
+ * Returns the number of times an action has been fired.
+ *
+ * @param {string} hookName The hook name to check.
+ *
+ * @return {number | undefined} The number of times the hook has run.
+ */
+
+/**
+ * Returns a function which, when invoked, will return the number of times a
+ * hook has been called.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DidHook} Function that returns a hook's call count.
+ */
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_0__["default"])(hookName)) {
+      return;
+    }
+
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDidHook);
+//# sourceMappingURL=createDidHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDoingHook.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDoingHook.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback DoingHook
+ * Returns whether a hook is currently being executed.
+ *
+ * @param {string} [hookName] The name of the hook to check for.  If
+ *                            omitted, will check for any hook being executed.
+ *
+ * @return {boolean} Whether the hook is being executed.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether a hook is
+ * currently being executed.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DoingHook} Function that returns whether a hook is currently
+ *                     being executed.
+ */
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    const hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+
+    if ('undefined' === typeof hookName) {
+      return 'undefined' !== typeof hooksStore.__current[0];
+    } // Return the __current hook.
+
+
+    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDoingHook);
+//# sourceMappingURL=createDoingHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHasHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHasHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback HasHook
+ *
+ * Returns whether any handlers are attached for the given hookName and optional namespace.
+ *
+ * @param {string} hookName    The name of the hook to check for.
+ * @param {string} [namespace] Optional. The unique namespace identifying the callback
+ *                             in the form `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether there are handlers that are attached to the given hook.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether any handlers are
+ * attached to a particular hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {HasHook} Function that returns whether any handlers are
+ *                   attached to a particular hook and optional namespace.
+ */
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey]; // Use the namespace if provided.
+
+    if ('undefined' !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(hook => hook.namespace === namespace);
+    }
+
+    return hookName in hooksStore;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHasHook);
+//# sourceMappingURL=createHasHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHooks.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHooks.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "_Hooks": () => (/* binding */ _Hooks),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createAddHook__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createAddHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createAddHook.js");
+/* harmony import */ var _createRemoveHook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createRemoveHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRemoveHook.js");
+/* harmony import */ var _createHasHook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createHasHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHasHook.js");
+/* harmony import */ var _createRunHook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRunHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRunHook.js");
+/* harmony import */ var _createCurrentHook__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createCurrentHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createCurrentHook.js");
+/* harmony import */ var _createDoingHook__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createDoingHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDoingHook.js");
+/* harmony import */ var _createDidHook__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createDidHook */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createDidHook.js");
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal class for constructing hooks. Use `createHooks()` function
+ *
+ * Note, it is necessary to expose this class to make its type public.
+ *
+ * @private
+ */
+
+class _Hooks {
+  constructor() {
+    /** @type {import('.').Store} actions */
+    this.actions = Object.create(null);
+    this.actions.__current = [];
+    /** @type {import('.').Store} filters */
+
+    this.filters = Object.create(null);
+    this.filters.__current = [];
+    this.addAction = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'actions');
+    this.addFilter = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'filters');
+    this.removeAction = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions');
+    this.removeFilter = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters');
+    this.hasAction = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions');
+    this.hasFilter = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters');
+    this.removeAllActions = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions', true);
+    this.removeAllFilters = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters', true);
+    this.doAction = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'actions');
+    this.applyFilters = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'filters', true);
+    this.currentAction = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'actions');
+    this.currentFilter = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'filters');
+    this.doingAction = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'actions');
+    this.doingFilter = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'filters');
+    this.didAction = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'actions');
+    this.didFilter = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'filters');
+  }
+
+}
+/** @typedef {_Hooks} Hooks */
+
+/**
+ * Returns an instance of the hooks object.
+ *
+ * @return {Hooks} A Hooks instance.
+ */
+
+function createHooks() {
+  return new _Hooks();
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHooks);
+//# sourceMappingURL=createHooks.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRemoveHook.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRemoveHook.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback RemoveHook
+ * Removes the specified callback (or all callbacks) from the hook with a given hookName
+ * and namespace.
+ *
+ * @param {string} hookName  The name of the hook to modify.
+ * @param {string} namespace The unique namespace identifying the callback in the
+ *                           form `vendor/plugin/function`.
+ *
+ * @return {number | undefined} The number of callbacks removed.
+ */
+
+/**
+ * Returns a function which, when invoked, will remove a specified hook or all
+ * hooks by the given name.
+ *
+ * @param {import('.').Hooks}    hooks             Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                                                 without regard to namespace. Used to create
+ *                                                 `removeAll*` functions.
+ *
+ * @return {RemoveHook} Function that removes hooks.
+ */
+
+function createRemoveHook(hooks, storeKey) {
+  let removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function removeHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!removeAll && !(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    } // Bail if no hooks exist by this name.
+
+
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+
+    let handlersRemoved = 0;
+
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      // Try to find the specified callback to remove.
+      const handlers = hooksStore[hookName].handlers;
+
+      for (let i = handlers.length - 1; i >= 0; i--) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++; // This callback may also be part of a hook that is
+          // currently executing.  If the callback we're removing
+          // comes after the current callback, there's no problem;
+          // otherwise we need to decrease the execution index of any
+          // other runs by 1 to account for the removed element.
+
+          hooksStore.__current.forEach(hookInfo => {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
+      }
+    }
+
+    if (hookName !== 'hookRemoved') {
+      hooks.doAction('hookRemoved', hookName, namespace);
+    }
+
+    return handlersRemoved;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRemoveHook);
+//# sourceMappingURL=createRemoveHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRunHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createRunHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will execute all callbacks
+ * registered to a hook of the specified type, optionally returning the final
+ * value of the call chain.
+ *
+ * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
+ *                                                      return its first argument.
+ *
+ * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ */
+function createRunHook(hooks, storeKey) {
+  let returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function runHooks(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+
+    hooksStore[hookName].runs++;
+    const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+
+    if (true) {
+      // Handle any 'all' hooks registered.
+      if ('hookAdded' !== hookName && hooksStore.all) {
+        handlers.push(...hooksStore.all.handlers);
+      }
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : undefined;
+    }
+
+    const hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+
+    hooksStore.__current.push(hookInfo);
+
+    while (hookInfo.currentIndex < handlers.length) {
+      const handler = handlers[hookInfo.currentIndex];
+      const result = handler.callback.apply(null, args);
+
+      if (returnFirstArg) {
+        args[0] = result;
+      }
+
+      hookInfo.currentIndex++;
+    }
+
+    hooksStore.__current.pop();
+
+    if (returnFirstArg) {
+      return args[0];
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRunHook);
+//# sourceMappingURL=createRunHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/index.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/index.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "actions": () => (/* binding */ actions),
+/* harmony export */   "addAction": () => (/* binding */ addAction),
+/* harmony export */   "addFilter": () => (/* binding */ addFilter),
+/* harmony export */   "applyFilters": () => (/* binding */ applyFilters),
+/* harmony export */   "createHooks": () => (/* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "currentAction": () => (/* binding */ currentAction),
+/* harmony export */   "currentFilter": () => (/* binding */ currentFilter),
+/* harmony export */   "defaultHooks": () => (/* binding */ defaultHooks),
+/* harmony export */   "didAction": () => (/* binding */ didAction),
+/* harmony export */   "didFilter": () => (/* binding */ didFilter),
+/* harmony export */   "doAction": () => (/* binding */ doAction),
+/* harmony export */   "doingAction": () => (/* binding */ doingAction),
+/* harmony export */   "doingFilter": () => (/* binding */ doingFilter),
+/* harmony export */   "filters": () => (/* binding */ filters),
+/* harmony export */   "hasAction": () => (/* binding */ hasAction),
+/* harmony export */   "hasFilter": () => (/* binding */ hasFilter),
+/* harmony export */   "removeAction": () => (/* binding */ removeAction),
+/* harmony export */   "removeAllActions": () => (/* binding */ removeAllActions),
+/* harmony export */   "removeAllFilters": () => (/* binding */ removeAllFilters),
+/* harmony export */   "removeFilter": () => (/* binding */ removeFilter)
+/* harmony export */ });
+/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createHooks */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/createHooks.js");
+/**
+ * Internal dependencies
+ */
+
+/** @typedef {(...args: any[])=>any} Callback */
+
+/**
+ * @typedef Handler
+ * @property {Callback} callback  The callback
+ * @property {string}   namespace The namespace
+ * @property {number}   priority  The namespace
+ */
+
+/**
+ * @typedef Hook
+ * @property {Handler[]} handlers Array of handlers
+ * @property {number}    runs     Run counter
+ */
+
+/**
+ * @typedef Current
+ * @property {string} name         Hook name
+ * @property {number} currentIndex The index
+ */
+
+/**
+ * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ */
+
+/**
+ * @typedef {'actions' | 'filters'} StoreKey
+ */
+
+/**
+ * @typedef {import('./createHooks').Hooks} Hooks
+ */
+
+const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__["default"])();
+const {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  applyFilters,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateHookName.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateHookName.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a hookName string.
+ *
+ * @param {string} hookName The hook name to validate. Should be a non empty string containing
+ *                          only numbers, letters, dashes, periods and underscores. Also,
+ *                          the hook name cannot begin with `__`.
+ *
+ * @return {boolean} Whether the hook name is valid.
+ */
+function validateHookName(hookName) {
+  if ('string' !== typeof hookName || '' === hookName) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name must be a non-empty string.');
+    return false;
+  }
+
+  if (/^__/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name cannot begin with `__`.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateHookName);
+//# sourceMappingURL=validateHookName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateNamespace.js":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/validateNamespace.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a namespace string.
+ *
+ * @param {string} namespace The namespace to validate - should take the form
+ *                           `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether the namespace is valid.
+ */
+function validateNamespace(namespace) {
+  if ('string' !== typeof namespace || '' === namespace) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace must be a non-empty string.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateNamespace);
+//# sourceMappingURL=validateNamespace.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/create-i18n.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/create-i18n.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createI18n": () => (/* binding */ createI18n)
+/* harmony export */ });
+/* harmony import */ var tannin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tannin */ "./node_modules/tannin/index.js");
+/**
+ * External dependencies
+ */
+
+/**
+ * @typedef {Record<string,any>} LocaleData
+ */
+
+/**
+ * Default locale data to use for Tannin domain when not otherwise provided.
+ * Assumes an English plural forms expression.
+ *
+ * @type {LocaleData}
+ */
+
+const DEFAULT_LOCALE_DATA = {
+  '': {
+    /** @param {number} n */
+    plural_forms(n) {
+      return n === 1 ? 0 : 1;
+    }
+
+  }
+};
+/*
+ * Regular expression that matches i18n hooks like `i18n.gettext`, `i18n.ngettext`,
+ * `i18n.gettext_domain` or `i18n.ngettext_with_context` or `i18n.has_translation`.
+ */
+
+const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+/**
+ * @typedef {(domain?: string) => LocaleData} GetLocaleData
+ *
+ * Returns locale data by domain in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will overwrite the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} AddLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will also merge the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
+ *
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/** @typedef {() => void} SubscribeCallback */
+
+/** @typedef {() => void} UnsubscribeCallback */
+
+/**
+ * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
+ *
+ * Subscribes to changes of locale data
+ */
+
+/**
+ * @typedef {(domain?: string) => string} GetFilterDomain
+ * Retrieve the domain to use when calling domain-specific filters.
+ */
+
+/**
+ * @typedef {(text: string, domain?: string) => string} __
+ *
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ */
+
+/**
+ * @typedef {(text: string, context: string, domain?: string) => string} _x
+ *
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ */
+
+/**
+ * @typedef {() => boolean} IsRtl
+ *
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ */
+
+/**
+ * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
+ *
+ * Check if there is a translation for a given string in singular form.
+ */
+
+/** @typedef {import('@wordpress/hooks').Hooks} Hooks */
+
+/**
+ * An i18n instance
+ *
+ * @typedef I18n
+ * @property {GetLocaleData}   getLocaleData   Returns locale data by domain in a Jed-formatted JSON object shape.
+ * @property {SetLocaleData}   setLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will overwrite the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {AddLocaleData}   addLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will also merge the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {ResetLocaleData} resetLocaleData Resets all current Tannin instance locale data and sets the specified
+ *                                             locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ * @property {Subscribe}       subscribe       Subscribes to changes of Tannin locale data.
+ * @property {__}              __              Retrieve the translation of text.
+ * @property {_x}              _x              Retrieve translated string with gettext context.
+ * @property {_n}              _n              Translates and retrieves the singular or plural form based on the supplied
+ *                                             number.
+ * @property {_nx}             _nx             Translates and retrieves the singular or plural form based on the supplied
+ *                                             number, with gettext context.
+ * @property {IsRtl}           isRTL           Check if current locale is RTL.
+ * @property {HasTranslation}  hasTranslation  Check if there is a translation for a given string.
+ */
+
+/**
+ * Create an i18n instance
+ *
+ * @param {LocaleData} [initialData]   Locale data configuration.
+ * @param {string}     [initialDomain] Domain for which configuration applies.
+ * @param {Hooks}      [hooks]         Hooks implementation.
+ *
+ * @return {I18n} I18n instance.
+ */
+
+const createI18n = (initialData, initialDomain, hooks) => {
+  /**
+   * The underlying instance of Tannin to which exported functions interface.
+   *
+   * @type {Tannin}
+   */
+  const tannin = new tannin__WEBPACK_IMPORTED_MODULE_0__["default"]({});
+  const listeners = new Set();
+
+  const notifyListeners = () => {
+    listeners.forEach(listener => listener());
+  };
+  /**
+   * Subscribe to changes of locale data.
+   *
+   * @param {SubscribeCallback} callback Subscription callback.
+   * @return {UnsubscribeCallback} Unsubscribe callback.
+   */
+
+
+  const subscribe = callback => {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  };
+  /** @type {GetLocaleData} */
+
+
+  const getLocaleData = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return tannin.data[domain];
+  };
+  /**
+   * @param {LocaleData} [data]
+   * @param {string}     [domain]
+   */
+
+
+  const doSetLocaleData = function (data) {
+    var _tannin$data$domain;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data
+    }; // Populate default domain configuration (supported locale date which omits
+    // a plural forms expression).
+
+    tannin.data[domain][''] = { ...DEFAULT_LOCALE_DATA[''],
+      ...((_tannin$data$domain = tannin.data[domain]) === null || _tannin$data$domain === void 0 ? void 0 : _tannin$data$domain[''])
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+  };
+  /** @type {SetLocaleData} */
+
+
+  const setLocaleData = (data, domain) => {
+    doSetLocaleData(data, domain);
+    notifyListeners();
+  };
+  /** @type {AddLocaleData} */
+
+
+  const addLocaleData = function (data) {
+    var _tannin$data$domain2;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data,
+      // Populate default domain configuration (supported locale date which omits
+      // a plural forms expression).
+      '': { ...DEFAULT_LOCALE_DATA[''],
+        ...((_tannin$data$domain2 = tannin.data[domain]) === null || _tannin$data$domain2 === void 0 ? void 0 : _tannin$data$domain2['']),
+        ...(data === null || data === void 0 ? void 0 : data[''])
+      }
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+    notifyListeners();
+  };
+  /** @type {ResetLocaleData} */
+
+
+  const resetLocaleData = (data, domain) => {
+    // Reset all current Tannin locale data.
+    tannin.data = {}; // Reset cached plural forms functions cache.
+
+    tannin.pluralForms = {};
+    setLocaleData(data, domain);
+  };
+  /**
+   * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
+   * otherwise previously assigned.
+   *
+   * @param {string|undefined} domain   Domain to retrieve the translated text.
+   * @param {string|undefined} context  Context information for the translators.
+   * @param {string}           single   Text to translate if non-plural. Used as
+   *                                    fallback return value on a caught error.
+   * @param {string}           [plural] The text to be used if the number is
+   *                                    plural.
+   * @param {number}           [number] The number to compare against to use
+   *                                    either the singular or plural form.
+   *
+   * @return {string} The translated string.
+   */
+
+
+  const dcnpgettext = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    let context = arguments.length > 1 ? arguments[1] : undefined;
+    let single = arguments.length > 2 ? arguments[2] : undefined;
+    let plural = arguments.length > 3 ? arguments[3] : undefined;
+    let number = arguments.length > 4 ? arguments[4] : undefined;
+
+    if (!tannin.data[domain]) {
+      // Use `doSetLocaleData` to set silently, without notifying listeners.
+      doSetLocaleData(undefined, domain);
+    }
+
+    return tannin.dcnpgettext(domain, context, single, plural, number);
+  };
+  /** @type {GetFilterDomain} */
+
+
+  const getFilterDomain = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return domain;
+  };
+  /** @type {__} */
+
+
+  const __ = (text, domain) => {
+    let translation = dcnpgettext(domain, undefined, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
+    );
+  };
+  /** @type {_x} */
+
+
+  const _x = (text, context, domain) => {
+    let translation = dcnpgettext(domain, context, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation based on context information.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
+    );
+  };
+  /** @type {_n} */
+
+
+  const _n = (single, plural, number, domain) => {
+    let translation = dcnpgettext(domain, undefined, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
+    );
+  };
+  /** @type {_nx} */
+
+
+  const _nx = (single, plural, number, context, domain) => {
+    let translation = dcnpgettext(domain, context, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string with gettext context.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
+    );
+  };
+  /** @type {IsRtl} */
+
+
+  const isRTL = () => {
+    return 'rtl' === _x('ltr', 'text direction');
+  };
+  /** @type {HasTranslation} */
+
+
+  const hasTranslation = (single, context, domain) => {
+    var _tannin$data, _tannin$data2;
+
+    const key = context ? context + '\u0004' + single : single;
+    let result = !!((_tannin$data = tannin.data) !== null && _tannin$data !== void 0 && (_tannin$data2 = _tannin$data[domain !== null && domain !== void 0 ? domain : 'default']) !== null && _tannin$data2 !== void 0 && _tannin$data2[key]);
+
+    if (hooks) {
+      /**
+       * Filters the presence of a translation in the locale data.
+       *
+       * @param {boolean} hasTranslation Whether the translation is present or not..
+       * @param {string}  single         The singular form of the translated text (used as key in locale data)
+       * @param {string}  context        Context information for the translators.
+       * @param {string}  domain         Text domain. Unique identifier for retrieving translated strings.
+       */
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+    }
+
+    return result;
+  };
+
+  if (initialData) {
+    setLocaleData(initialData, initialDomain);
+  }
+
+  if (hooks) {
+    /**
+     * @param {string} hookName
+     */
+    const onHookAddedOrRemoved = hookName => {
+      if (I18N_HOOK_REGEXP.test(hookName)) {
+        notifyListeners();
+      }
+    };
+
+    hooks.addAction('hookAdded', 'core/i18n', onHookAddedOrRemoved);
+    hooks.addAction('hookRemoved', 'core/i18n', onHookAddedOrRemoved);
+  }
+
+  return {
+    getLocaleData,
+    setLocaleData,
+    addLocaleData,
+    resetLocaleData,
+    subscribe,
+    __,
+    _x,
+    _n,
+    _nx,
+    isRTL,
+    hasTranslation
+  };
+};
+//# sourceMappingURL=create-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/default-i18n.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/default-i18n.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* binding */ __),
+/* harmony export */   "_n": () => (/* binding */ _n),
+/* harmony export */   "_nx": () => (/* binding */ _nx),
+/* harmony export */   "_x": () => (/* binding */ _x),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "getLocaleData": () => (/* binding */ getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* binding */ hasTranslation),
+/* harmony export */   "isRTL": () => (/* binding */ isRTL),
+/* harmony export */   "resetLocaleData": () => (/* binding */ resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* binding */ setLocaleData),
+/* harmony export */   "subscribe": () => (/* binding */ subscribe)
+/* harmony export */ });
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/components/node_modules/@wordpress/hooks/build-module/index.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+const i18n = (0,_create_i18n__WEBPACK_IMPORTED_MODULE_0__.createI18n)(undefined, undefined, _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__.defaultHooks);
+/**
+ * Default, singleton instance of `I18n`.
+ */
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (i18n);
+/*
+ * Comments in this file are duplicated from ./i18n due to
+ * https://github.com/WordPress/gutenberg/pull/20318#issuecomment-590837722
+ */
+
+/**
+ * @typedef {import('./create-i18n').LocaleData} LocaleData
+ * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
+ * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
+ */
+
+/**
+ * Returns locale data by domain in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {string} [domain] Domain for which to get the data.
+ * @return {LocaleData} Locale data.
+ */
+
+const getLocaleData = i18n.getLocaleData.bind(i18n);
+/**
+ * Merges locale data into the Tannin instance by domain. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const setLocaleData = i18n.setLocaleData.bind(i18n);
+/**
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const resetLocaleData = i18n.resetLocaleData.bind(i18n);
+/**
+ * Subscribes to changes of locale data
+ *
+ * @param {SubscribeCallback} callback Subscription callback
+ * @return {UnsubscribeCallback} Unsubscribe callback
+ */
+
+const subscribe = i18n.subscribe.bind(i18n);
+/**
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated text.
+ */
+
+const __ = i18n.__.bind(i18n);
+/**
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated context string without pipe.
+ */
+
+const _x = i18n._x.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _n = i18n._n.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _nx = i18n._nx.bind(i18n);
+/**
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ *
+ * @return {boolean} Whether locale is RTL.
+ */
+
+const isRTL = i18n.isRTL.bind(i18n);
+/**
+ * Check if there is a translation for a given string (in singular form).
+ *
+ * @param {string} single    Singular form of the string to look up.
+ * @param {string} [context] Context information for the translators.
+ * @param {string} [domain]  Domain to retrieve the translated text.
+ * @return {boolean} Whether the translation exists or not.
+ */
+
+const hasTranslation = i18n.hasTranslation.bind(i18n);
+//# sourceMappingURL=default-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/index.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.__),
+/* harmony export */   "_n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._n),
+/* harmony export */   "_nx": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._nx),
+/* harmony export */   "_x": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._x),
+/* harmony export */   "createI18n": () => (/* reexport safe */ _create_i18n__WEBPACK_IMPORTED_MODULE_1__.createI18n),
+/* harmony export */   "defaultI18n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   "getLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.hasTranslation),
+/* harmony export */   "isRTL": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.isRTL),
+/* harmony export */   "resetLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.setLocaleData),
+/* harmony export */   "sprintf": () => (/* reexport safe */ _sprintf__WEBPACK_IMPORTED_MODULE_0__.sprintf),
+/* harmony export */   "subscribe": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.subscribe)
+/* harmony export */ });
+/* harmony import */ var _sprintf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sprintf */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/sprintf.js");
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _default_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./default-i18n */ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/default-i18n.js");
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/sprintf.js":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/i18n/build-module/sprintf.js ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "sprintf": () => (/* binding */ sprintf)
+/* harmony export */ });
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! memize */ "./node_modules/memize/index.js");
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(memize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sprintf-js */ "./node_modules/sprintf-js/src/sprintf.js");
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sprintf_js__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Log to console, once per message; or more precisely, per referentially equal
+ * argument set. Because Jed throws errors, we log these to the console instead
+ * to avoid crashing the application.
+ *
+ * @param {...*} args Arguments to pass to `console.error`
+ */
+
+const logErrorOnce = memize__WEBPACK_IMPORTED_MODULE_0___default()(console.error); // eslint-disable-line no-console
+
+/**
+ * Returns a formatted string. If an error occurs in applying the format, the
+ * original format string is returned.
+ *
+ * @param {string} format The format of the string to generate.
+ * @param {...*}   args   Arguments to apply to the format.
+ *
+ * @see https://www.npmjs.com/package/sprintf-js
+ *
+ * @return {string} The formatted string.
+ */
+
+function sprintf(format) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return sprintf_js__WEBPACK_IMPORTED_MODULE_1___default().sprintf(format, ...args);
+  } catch (error) {
+    if (error instanceof Error) {
+      logErrorOnce('sprintf error: \n\n' + error.toString());
+    }
+
+    return format;
+  }
+}
+//# sourceMappingURL=sprintf.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/index.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ warning)
+/* harmony export */ });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/utils.js");
+/**
+ * Internal dependencies
+ */
+
+
+function isDev() {
+  return typeof process !== 'undefined' && process.env && "development" !== 'production';
+}
+/**
+ * Shows a warning with `message` if environment is not `production`.
+ *
+ * @param {string} message Message to show in the warning.
+ *
+ * @example
+ * ```js
+ * import warning from '@wordpress/warning';
+ *
+ * function MyComponent( props ) {
+ *   if ( ! props.title ) {
+ *     warning( '`props.title` was not passed' );
+ *   }
+ *   ...
+ * }
+ * ```
+ */
+
+
+function warning(message) {
+  if (!isDev()) {
+    return;
+  } // Skip if already logged.
+
+
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__.logged.has(message)) {
+    return;
+  } // eslint-disable-next-line no-console
+
+
+  console.warn(message); // Throwing an error and catching it immediately to improve debugging
+  // A consumer can use 'pause on caught exceptions'
+  // https://github.com/facebook/react/issues/4216
+
+  try {
+    throw Error(message);
+  } catch (x) {// Do nothing.
+  }
+
+  _utils__WEBPACK_IMPORTED_MODULE_0__.logged.add(message);
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/utils.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/node_modules/@wordpress/warning/build-module/utils.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "logged": () => (/* binding */ logged)
+/* harmony export */ });
+/**
+ * Object map tracking messages which have been logged, for use in ensuring a
+ * message is only logged once.
+ *
+ * @type {Set<string>}
+ */
+const logged = new Set();
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
 /***/ "./node_modules/@wordpress/compose/build-module/hooks/use-constrained-tabbing/index.js":
 /*!*********************************************************************************************!*\
   !*** ./node_modules/@wordpress/compose/build-module/hooks/use-constrained-tabbing/index.js ***!
@@ -16416,14 +19856,33 @@ function useConstrainedTabbing() {
       const action = shiftKey ? 'findPrevious' : 'findNext';
       const nextElement = _wordpress_dom__WEBPACK_IMPORTED_MODULE_2__.focus.tabbable[action](
       /** @type {HTMLElement} */
-      target) || null; // If the element that is about to receive focus is outside the
+      target) || null; // When the target element contains the element that is about to
+      // receive focus, for example when the target is a tabbable
+      // container, browsers may disagree on where to move focus next.
+      // In this case we can't rely on native browsers behavior. We need
+      // to manage focus instead.
+      // See https://github.com/WordPress/gutenberg/issues/46041.
+
+      if (
+      /** @type {HTMLElement} */
+      target.contains(nextElement)) {
+        event.preventDefault();
+        /** @type {HTMLElement} */
+
+        nextElement === null || nextElement === void 0 ? void 0 : nextElement.focus();
+        return;
+      } // If the element that is about to receive focus is inside the
+      // area, rely on native browsers behavior and let tabbing follow
+      // the native tab sequence.
+
+
+      if (node.contains(nextElement)) {
+        return;
+      } // If the element that is about to receive focus is outside the
       // area, move focus to a div and insert it at the start or end of
       // the area, depending on the direction. Without preventing default
       // behaviour, the browser will then move focus to the next element.
 
-      if (node.contains(nextElement)) {
-        return;
-      }
 
       const domAction = shiftKey ? 'append' : 'prepend';
       const {
@@ -16548,7 +20007,7 @@ __webpack_require__.r(__webpack_exports__);
  *  - return focus on unmount.
  *  - focus outside.
  *
- * @param  options Dialog Options.
+ * @param options Dialog Options.
  */
 function useDialog(options) {
   const currentOptions = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)();
@@ -16715,7 +20174,7 @@ const INPUT_BUTTON_TYPES = ['button', 'submit'];
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
  *
- * @param  eventTarget The target from a mouse or touch event.
+ * @param eventTarget The target from a mouse or touch event.
  *
  * @return Whether the element is a button element subject to focus normalization.
  */
@@ -16740,8 +20199,8 @@ function isFocusNormalizedButton(eventTarget) {
  * A react hook that can be used to check whether focus has moved outside the
  * element the event handlers are bound to.
  *
- * @param  onFocusOutside A callback triggered when focus moves outside
- *                        the element the event handlers are bound to.
+ * @param onFocusOutside A callback triggered when focus moves outside
+ *                       the element the event handlers are bound to.
  *
  * @return An object containing event handlers. Bind the event handlers to a
  * wrapping element element to capture when focus moves outside that element.
@@ -16777,7 +20236,7 @@ function useFocusOutside(onFocusOutside) {
    * button elements when clicked, while others do. The logic here
    * intends to normalize this as treating click on buttons as focus.
    *
-   * @param  event
+   * @param event
    * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
    */
 
@@ -16967,7 +20426,7 @@ const instanceMap = new WeakMap();
 /**
  * Creates a new id for a given object.
  *
- * @param  object Object reference to create an id for.
+ * @param object Object reference to create an id for.
  * @return The instance id (index).
  */
 
@@ -16985,15 +20444,17 @@ function createId(object) {
  * 1. When only object is given, the returned value is a number
  * 2. When object and prefix is given, the returned value is a string
  * 3. When preferredId is given, the returned value is the type of preferredId
+ *
+ * @param object Object reference to create an id for.
  */
 
 
 /**
  * Provides a unique instance ID.
  *
- * @param  object        Object reference to create an id for.
- * @param  [prefix]      Prefix for the unique id.
- * @param  [preferredId] Default ID to use.
+ * @param object        Object reference to create an id for.
+ * @param [prefix]      Prefix for the unique id.
+ * @param [preferredId] Default ID to use.
  * @return The unique instance id.
  */
 function useInstanceId(object, prefix, preferredId) {
@@ -17236,8 +20697,8 @@ __webpack_require__.r(__webpack_exports__);
  * to be removed. It *is* necessary if you add dependencies because the ref
  * callback will be called multiple times for the same node.
  *
- * @param  callback     Callback with ref as argument.
- * @param  dependencies Dependencies of the callback.
+ * @param callback     Callback with ref as argument.
+ * @param dependencies Dependencies of the callback.
  *
  * @return Ref callback.
  */
@@ -17608,7 +21069,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ deprecated),
 /* harmony export */   "logged": () => (/* binding */ logged)
 /* harmony export */ });
-/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/hooks/build-module/index.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/index.js");
 /**
  * WordPress dependencies
  */
@@ -17692,6 +21153,763 @@ function deprecated(feature) {
 }
 /** @typedef {import('utility-types').NonUndefined<Parameters<typeof deprecated>[1]>} DeprecatedOptions */
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createAddHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback AddHook
+ *
+ * Adds the hook to the appropriate hooks container.
+ *
+ * @param {string}               hookName      Name of hook to add
+ * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
+ * @param {import('.').Callback} callback      Function to call when the hook is run
+ * @param {number}               [priority=10] Priority of this hook
+ */
+
+/**
+ * Returns a function which, when invoked, will add a hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {AddHook} Function that adds a new hook.
+ */
+
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback) {
+    let priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    }
+
+    if ('function' !== typeof callback) {
+      // eslint-disable-next-line no-console
+      console.error('The hook callback must be a function.');
+      return;
+    } // Validate numeric priority
+
+
+    if ('number' !== typeof priority) {
+      // eslint-disable-next-line no-console
+      console.error('If specified, the hook priority must be a number.');
+      return;
+    }
+
+    const handler = {
+      callback,
+      priority,
+      namespace
+    };
+
+    if (hooksStore[hookName]) {
+      // Find the correct insert index of the new hook.
+      const handlers = hooksStore[hookName].handlers;
+      /** @type {number} */
+
+      let i;
+
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
+      }
+
+      if (i === handlers.length) {
+        // If append, operate via direct assignment.
+        handlers[i] = handler;
+      } else {
+        // Otherwise, insert before index via splice.
+        handlers.splice(i, 0, handler);
+      } // We may also be currently executing this hook.  If the callback
+      // we're adding would come after the current callback, there's no
+      // problem; otherwise we need to increase the execution index of
+      // any other runs by 1 to account for the added element.
+
+
+      hooksStore.__current.forEach(hookInfo => {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      // This is the first hook of its type.
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
+      };
+    }
+
+    if (hookName !== 'hookAdded') {
+      hooks.doAction('hookAdded', hookName, namespace, callback, priority);
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAddHook);
+//# sourceMappingURL=createAddHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createCurrentHook.js":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createCurrentHook.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will return the name of the
+ * currently running hook, or `null` if no hook of the given type is currently
+ * running.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {() => string | null} Function that returns the current hook name or null.
+ */
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    var _hooksStore$__current, _hooksStore$__current2;
+
+    const hooksStore = hooks[storeKey];
+    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createCurrentHook);
+//# sourceMappingURL=createCurrentHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDidHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDidHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * @callback DidHook
+ *
+ * Returns the number of times an action has been fired.
+ *
+ * @param {string} hookName The hook name to check.
+ *
+ * @return {number | undefined} The number of times the hook has run.
+ */
+
+/**
+ * Returns a function which, when invoked, will return the number of times a
+ * hook has been called.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DidHook} Function that returns a hook's call count.
+ */
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_0__["default"])(hookName)) {
+      return;
+    }
+
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDidHook);
+//# sourceMappingURL=createDidHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDoingHook.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDoingHook.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback DoingHook
+ * Returns whether a hook is currently being executed.
+ *
+ * @param {string} [hookName] The name of the hook to check for.  If
+ *                            omitted, will check for any hook being executed.
+ *
+ * @return {boolean} Whether the hook is being executed.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether a hook is
+ * currently being executed.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DoingHook} Function that returns whether a hook is currently
+ *                     being executed.
+ */
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    const hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+
+    if ('undefined' === typeof hookName) {
+      return 'undefined' !== typeof hooksStore.__current[0];
+    } // Return the __current hook.
+
+
+    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDoingHook);
+//# sourceMappingURL=createDoingHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHasHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHasHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback HasHook
+ *
+ * Returns whether any handlers are attached for the given hookName and optional namespace.
+ *
+ * @param {string} hookName    The name of the hook to check for.
+ * @param {string} [namespace] Optional. The unique namespace identifying the callback
+ *                             in the form `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether there are handlers that are attached to the given hook.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether any handlers are
+ * attached to a particular hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {HasHook} Function that returns whether any handlers are
+ *                   attached to a particular hook and optional namespace.
+ */
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey]; // Use the namespace if provided.
+
+    if ('undefined' !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(hook => hook.namespace === namespace);
+    }
+
+    return hookName in hooksStore;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHasHook);
+//# sourceMappingURL=createHasHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHooks.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHooks.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "_Hooks": () => (/* binding */ _Hooks),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createAddHook__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createAddHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createAddHook.js");
+/* harmony import */ var _createRemoveHook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createRemoveHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRemoveHook.js");
+/* harmony import */ var _createHasHook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createHasHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHasHook.js");
+/* harmony import */ var _createRunHook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRunHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRunHook.js");
+/* harmony import */ var _createCurrentHook__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createCurrentHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createCurrentHook.js");
+/* harmony import */ var _createDoingHook__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createDoingHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDoingHook.js");
+/* harmony import */ var _createDidHook__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createDidHook */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createDidHook.js");
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal class for constructing hooks. Use `createHooks()` function
+ *
+ * Note, it is necessary to expose this class to make its type public.
+ *
+ * @private
+ */
+
+class _Hooks {
+  constructor() {
+    /** @type {import('.').Store} actions */
+    this.actions = Object.create(null);
+    this.actions.__current = [];
+    /** @type {import('.').Store} filters */
+
+    this.filters = Object.create(null);
+    this.filters.__current = [];
+    this.addAction = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'actions');
+    this.addFilter = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'filters');
+    this.removeAction = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions');
+    this.removeFilter = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters');
+    this.hasAction = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions');
+    this.hasFilter = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters');
+    this.removeAllActions = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions', true);
+    this.removeAllFilters = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters', true);
+    this.doAction = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'actions');
+    this.applyFilters = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'filters', true);
+    this.currentAction = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'actions');
+    this.currentFilter = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'filters');
+    this.doingAction = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'actions');
+    this.doingFilter = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'filters');
+    this.didAction = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'actions');
+    this.didFilter = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'filters');
+  }
+
+}
+/** @typedef {_Hooks} Hooks */
+
+/**
+ * Returns an instance of the hooks object.
+ *
+ * @return {Hooks} A Hooks instance.
+ */
+
+function createHooks() {
+  return new _Hooks();
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHooks);
+//# sourceMappingURL=createHooks.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRemoveHook.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRemoveHook.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback RemoveHook
+ * Removes the specified callback (or all callbacks) from the hook with a given hookName
+ * and namespace.
+ *
+ * @param {string} hookName  The name of the hook to modify.
+ * @param {string} namespace The unique namespace identifying the callback in the
+ *                           form `vendor/plugin/function`.
+ *
+ * @return {number | undefined} The number of callbacks removed.
+ */
+
+/**
+ * Returns a function which, when invoked, will remove a specified hook or all
+ * hooks by the given name.
+ *
+ * @param {import('.').Hooks}    hooks             Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                                                 without regard to namespace. Used to create
+ *                                                 `removeAll*` functions.
+ *
+ * @return {RemoveHook} Function that removes hooks.
+ */
+
+function createRemoveHook(hooks, storeKey) {
+  let removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function removeHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!removeAll && !(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    } // Bail if no hooks exist by this name.
+
+
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+
+    let handlersRemoved = 0;
+
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      // Try to find the specified callback to remove.
+      const handlers = hooksStore[hookName].handlers;
+
+      for (let i = handlers.length - 1; i >= 0; i--) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++; // This callback may also be part of a hook that is
+          // currently executing.  If the callback we're removing
+          // comes after the current callback, there's no problem;
+          // otherwise we need to decrease the execution index of any
+          // other runs by 1 to account for the removed element.
+
+          hooksStore.__current.forEach(hookInfo => {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
+      }
+    }
+
+    if (hookName !== 'hookRemoved') {
+      hooks.doAction('hookRemoved', hookName, namespace);
+    }
+
+    return handlersRemoved;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRemoveHook);
+//# sourceMappingURL=createRemoveHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRunHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createRunHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will execute all callbacks
+ * registered to a hook of the specified type, optionally returning the final
+ * value of the call chain.
+ *
+ * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
+ *                                                      return its first argument.
+ *
+ * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ */
+function createRunHook(hooks, storeKey) {
+  let returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function runHooks(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+
+    hooksStore[hookName].runs++;
+    const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+
+    if (true) {
+      // Handle any 'all' hooks registered.
+      if ('hookAdded' !== hookName && hooksStore.all) {
+        handlers.push(...hooksStore.all.handlers);
+      }
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : undefined;
+    }
+
+    const hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+
+    hooksStore.__current.push(hookInfo);
+
+    while (hookInfo.currentIndex < handlers.length) {
+      const handler = handlers[hookInfo.currentIndex];
+      const result = handler.callback.apply(null, args);
+
+      if (returnFirstArg) {
+        args[0] = result;
+      }
+
+      hookInfo.currentIndex++;
+    }
+
+    hooksStore.__current.pop();
+
+    if (returnFirstArg) {
+      return args[0];
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRunHook);
+//# sourceMappingURL=createRunHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/index.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/index.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "actions": () => (/* binding */ actions),
+/* harmony export */   "addAction": () => (/* binding */ addAction),
+/* harmony export */   "addFilter": () => (/* binding */ addFilter),
+/* harmony export */   "applyFilters": () => (/* binding */ applyFilters),
+/* harmony export */   "createHooks": () => (/* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "currentAction": () => (/* binding */ currentAction),
+/* harmony export */   "currentFilter": () => (/* binding */ currentFilter),
+/* harmony export */   "defaultHooks": () => (/* binding */ defaultHooks),
+/* harmony export */   "didAction": () => (/* binding */ didAction),
+/* harmony export */   "didFilter": () => (/* binding */ didFilter),
+/* harmony export */   "doAction": () => (/* binding */ doAction),
+/* harmony export */   "doingAction": () => (/* binding */ doingAction),
+/* harmony export */   "doingFilter": () => (/* binding */ doingFilter),
+/* harmony export */   "filters": () => (/* binding */ filters),
+/* harmony export */   "hasAction": () => (/* binding */ hasAction),
+/* harmony export */   "hasFilter": () => (/* binding */ hasFilter),
+/* harmony export */   "removeAction": () => (/* binding */ removeAction),
+/* harmony export */   "removeAllActions": () => (/* binding */ removeAllActions),
+/* harmony export */   "removeAllFilters": () => (/* binding */ removeAllFilters),
+/* harmony export */   "removeFilter": () => (/* binding */ removeFilter)
+/* harmony export */ });
+/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createHooks */ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/createHooks.js");
+/**
+ * Internal dependencies
+ */
+
+/** @typedef {(...args: any[])=>any} Callback */
+
+/**
+ * @typedef Handler
+ * @property {Callback} callback  The callback
+ * @property {string}   namespace The namespace
+ * @property {number}   priority  The namespace
+ */
+
+/**
+ * @typedef Hook
+ * @property {Handler[]} handlers Array of handlers
+ * @property {number}    runs     Run counter
+ */
+
+/**
+ * @typedef Current
+ * @property {string} name         Hook name
+ * @property {number} currentIndex The index
+ */
+
+/**
+ * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ */
+
+/**
+ * @typedef {'actions' | 'filters'} StoreKey
+ */
+
+/**
+ * @typedef {import('./createHooks').Hooks} Hooks
+ */
+
+const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__["default"])();
+const {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  applyFilters,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateHookName.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateHookName.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a hookName string.
+ *
+ * @param {string} hookName The hook name to validate. Should be a non empty string containing
+ *                          only numbers, letters, dashes, periods and underscores. Also,
+ *                          the hook name cannot begin with `__`.
+ *
+ * @return {boolean} Whether the hook name is valid.
+ */
+function validateHookName(hookName) {
+  if ('string' !== typeof hookName || '' === hookName) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name must be a non-empty string.');
+    return false;
+  }
+
+  if (/^__/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name cannot begin with `__`.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateHookName);
+//# sourceMappingURL=validateHookName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateNamespace.js":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/deprecated/node_modules/@wordpress/hooks/build-module/validateNamespace.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a namespace string.
+ *
+ * @param {string} namespace The namespace to validate - should take the form
+ *                           `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether the namespace is valid.
+ */
+function validateNamespace(namespace) {
+  if ('string' !== typeof namespace || '' === namespace) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace must be a non-empty string.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateNamespace);
+//# sourceMappingURL=validateNamespace.js.map
 
 /***/ }),
 
@@ -18446,7 +22664,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * Given a DOM node, finds the closest scrollable container node.
+ * Given a DOM node, finds the closest scrollable container node or the node
+ * itself, if scrollable.
  *
  * @param {Element | null} node Node from which to start.
  *
@@ -19953,7 +24172,7 @@ function isValidFocusableArea(element) {
  *                                       not sequentially focusable.
  *                                       https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute
  *
- * @return {Element[]} Focusable elements.
+ * @return {HTMLElement[]} Focusable elements.
  */
 
 
@@ -20492,179 +24711,6 @@ function assertIsDefined(val, name) {
   }
 }
 //# sourceMappingURL=assert-is-defined.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@wordpress/escape-html/build-module/escape-greater.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/@wordpress/escape-html/build-module/escape-greater.js ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ __unstableEscapeGreaterThan)
-/* harmony export */ });
-/**
- * Returns a string with greater-than sign replaced.
- *
- * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
- * necessary for `__unstableEscapeGreaterThan` to exist.
- *
- * See: https://core.trac.wordpress.org/ticket/45387
- *
- * @param {string} value Original string.
- *
- * @return {string} Escaped string.
- */
-function __unstableEscapeGreaterThan(value) {
-  return value.replace(/>/g, '&gt;');
-}
-//# sourceMappingURL=escape-greater.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@wordpress/escape-html/build-module/index.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/@wordpress/escape-html/build-module/index.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "escapeAmpersand": () => (/* binding */ escapeAmpersand),
-/* harmony export */   "escapeAttribute": () => (/* binding */ escapeAttribute),
-/* harmony export */   "escapeEditableHTML": () => (/* binding */ escapeEditableHTML),
-/* harmony export */   "escapeHTML": () => (/* binding */ escapeHTML),
-/* harmony export */   "escapeLessThan": () => (/* binding */ escapeLessThan),
-/* harmony export */   "escapeQuotationMark": () => (/* binding */ escapeQuotationMark),
-/* harmony export */   "isValidAttributeName": () => (/* binding */ isValidAttributeName)
-/* harmony export */ });
-/* harmony import */ var _escape_greater__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./escape-greater */ "./node_modules/@wordpress/escape-html/build-module/escape-greater.js");
-/**
- * Internal dependencies
- */
-
-/**
- * Regular expression matching invalid attribute names.
- *
- * "Attribute names must consist of one or more characters other than controls,
- * U+0020 SPACE, U+0022 ("), U+0027 ('), U+003E (>), U+002F (/), U+003D (=),
- * and noncharacters."
- *
- * @see https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
- *
- * @type {RegExp}
- */
-
-const REGEXP_INVALID_ATTRIBUTE_NAME = /[\u007F-\u009F "'>/="\uFDD0-\uFDEF]/;
-/**
- * Returns a string with ampersands escaped. Note that this is an imperfect
- * implementation, where only ampersands which do not appear as a pattern of
- * named, decimal, or hexadecimal character references are escaped. Invalid
- * named references (i.e. ambiguous ampersand) are still permitted.
- *
- * @see https://w3c.github.io/html/syntax.html#character-references
- * @see https://w3c.github.io/html/syntax.html#ambiguous-ampersand
- * @see https://w3c.github.io/html/syntax.html#named-character-references
- *
- * @param {string} value Original string.
- *
- * @return {string} Escaped string.
- */
-
-function escapeAmpersand(value) {
-  return value.replace(/&(?!([a-z0-9]+|#[0-9]+|#x[a-f0-9]+);)/gi, '&amp;');
-}
-/**
- * Returns a string with quotation marks replaced.
- *
- * @param {string} value Original string.
- *
- * @return {string} Escaped string.
- */
-
-function escapeQuotationMark(value) {
-  return value.replace(/"/g, '&quot;');
-}
-/**
- * Returns a string with less-than sign replaced.
- *
- * @param {string} value Original string.
- *
- * @return {string} Escaped string.
- */
-
-function escapeLessThan(value) {
-  return value.replace(/</g, '&lt;');
-}
-/**
- * Returns an escaped attribute value.
- *
- * @see https://w3c.github.io/html/syntax.html#elements-attributes
- *
- * "[...] the text cannot contain an ambiguous ampersand [...] must not contain
- * any literal U+0022 QUOTATION MARK characters (")"
- *
- * Note we also escape the greater than symbol, as this is used by wptexturize to
- * split HTML strings. This is a WordPress specific fix
- *
- * Note that if a resolution for Trac#45387 comes to fruition, it is no longer
- * necessary for `__unstableEscapeGreaterThan` to be used.
- *
- * See: https://core.trac.wordpress.org/ticket/45387
- *
- * @param {string} value Attribute value.
- *
- * @return {string} Escaped attribute value.
- */
-
-function escapeAttribute(value) {
-  return (0,_escape_greater__WEBPACK_IMPORTED_MODULE_0__["default"])(escapeQuotationMark(escapeAmpersand(value)));
-}
-/**
- * Returns an escaped HTML element value.
- *
- * @see https://w3c.github.io/html/syntax.html#writing-html-documents-elements
- *
- * "the text must not contain the character U+003C LESS-THAN SIGN (<) or an
- * ambiguous ampersand."
- *
- * @param {string} value Element value.
- *
- * @return {string} Escaped HTML element value.
- */
-
-function escapeHTML(value) {
-  return escapeLessThan(escapeAmpersand(value));
-}
-/**
- * Returns an escaped Editable HTML element value. This is different from
- * `escapeHTML`, because for editable HTML, ALL ampersands must be escaped in
- * order to render the content correctly on the page.
- *
- * @param {string} value Element value.
- *
- * @return {string} Escaped HTML element value.
- */
-
-function escapeEditableHTML(value) {
-  return escapeLessThan(value.replace(/&/g, '&amp;'));
-}
-/**
- * Returns true if the given attribute name is valid, or false otherwise.
- *
- * @param {string} name Attribute name to test.
- *
- * @return {boolean} Whether attribute is valid.
- */
-
-function isValidAttributeName(name) {
-  return !REGEXP_INVALID_ATTRIBUTE_NAME.test(name);
-}
-//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -22472,17 +26518,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ZERO": () => (/* binding */ ZERO),
 /* harmony export */   "displayShortcut": () => (/* binding */ displayShortcut),
 /* harmony export */   "displayShortcutList": () => (/* binding */ displayShortcutList),
-/* harmony export */   "isAppleOS": () => (/* reexport safe */ _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS),
+/* harmony export */   "isAppleOS": () => (/* reexport safe */ _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS),
 /* harmony export */   "isKeyboardEvent": () => (/* binding */ isKeyboardEvent),
 /* harmony export */   "modifiers": () => (/* binding */ modifiers),
 /* harmony export */   "rawShortcut": () => (/* binding */ rawShortcut),
 /* harmony export */   "shortcutAriaLabel": () => (/* binding */ shortcutAriaLabel)
 /* harmony export */ });
-/* harmony import */ var change_case__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! change-case */ "./node_modules/capital-case/dist.es2015/index.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _platform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./platform */ "./node_modules/@wordpress/keycodes/build-module/platform.js");
+/* harmony import */ var change_case__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! change-case */ "./node_modules/capital-case/dist.es2015/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _platform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./platform */ "./node_modules/@wordpress/keycodes/build-module/platform.js");
 /**
  * Note: The order of the modifier keys in many of the [foo]Shortcut()
  * functions in this file are intentional and should not be changed. They're
@@ -22497,7 +26541,6 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * External dependencies
  */
-
 
 /**
  * WordPress dependencies
@@ -22529,6 +26572,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /** @typedef {(event: KeyboardEvent, character: string, isApple?: () => boolean) => boolean} WPEventKeyHandler */
+
+/** @typedef {( isApple: () => boolean ) => WPModifierPart[]} WPModifier */
 
 /**
  * Keycode for BACKSPACE key.
@@ -22632,11 +26677,29 @@ const SHIFT = 'shift';
 const ZERO = 48;
 
 /**
+ * Map the values of an object with a specified callback and return the result object.
+ *
+ * @template T
+ *
+ * @param {T}                     object Object to map values of.
+ * @param {( value: any ) => any} mapFn  Mapping function
+ *
+ * @return {any} Active modifier constants.
+ */
+
+function mapValues(object, mapFn) {
+  return Object.fromEntries(Object.entries(object).map(_ref => {
+    let [key, value] = _ref;
+    return [key, mapFn(value)];
+  }));
+}
+/**
  * Object that contains functions that return the available modifier
  * depending on platform.
  *
  * @type {WPModifierHandler< ( isApple: () => boolean ) => WPModifierPart[]>}
  */
+
 
 const modifiers = {
   primary: _isApple => _isApple() ? [COMMAND] : [CTRL],
@@ -22667,11 +26730,13 @@ const modifiers = {
  *                                                 shortcuts.
  */
 
-const rawShortcut = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifiers, modifier => {
+const rawShortcut = mapValues(modifiers, (
+/** @type {WPModifier} */
+modifier) => {
   return (
     /** @type {WPKeyHandler<string>} */
     function (character) {
-      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS;
+      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS;
 
       return [...modifier(_isApple), character.toLowerCase()].join('+');
     }
@@ -22691,11 +26756,13 @@ const rawShortcut = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifiers,
  *                                                   shortcut sequences.
  */
 
-const displayShortcutList = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifiers, modifier => {
+const displayShortcutList = mapValues(modifiers, (
+/** @type {WPModifier} */
+modifier) => {
   return (
     /** @type {WPKeyHandler<string[]>} */
     function (character) {
-      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS;
+      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS;
 
       const isApple = _isApple();
 
@@ -22707,7 +26774,9 @@ const displayShortcutList = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(mo
         [SHIFT]: isApple ? '⇧' : 'Shift'
       };
       const modifierKeys = modifier(_isApple).reduce((accumulator, key) => {
-        const replacementKey = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.get)(replacementKeyMap, key, key); // If on the Mac, adhere to platform convention and don't show plus between keys.
+        var _replacementKeyMap$ke;
+
+        const replacementKey = (_replacementKeyMap$ke = replacementKeyMap[key]) !== null && _replacementKeyMap$ke !== void 0 ? _replacementKeyMap$ke : key; // If on the Mac, adhere to platform convention and don't show plus between keys.
 
         if (isApple) {
           return [...accumulator, replacementKey];
@@ -22720,7 +26789,7 @@ const displayShortcutList = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(mo
       // so override the rule to allow symbols used for shortcuts.
       // see: https://github.com/blakeembrey/change-case#options
 
-      const capitalizedCharacter = (0,change_case__WEBPACK_IMPORTED_MODULE_3__.capitalCase)(character, {
+      const capitalizedCharacter = (0,change_case__WEBPACK_IMPORTED_MODULE_2__.capitalCase)(character, {
         stripRegexp: /[^A-Z0-9~`,\.\\\-]/gi
       });
       return [...modifierKeys, capitalizedCharacter];
@@ -22741,11 +26810,13 @@ const displayShortcutList = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(mo
  *                                                 display shortcuts.
  */
 
-const displayShortcut = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(displayShortcutList, shortcutList => {
+const displayShortcut = mapValues(displayShortcutList, (
+/** @type {WPKeyHandler<string[]>} */
+shortcutList) => {
   return (
     /** @type {WPKeyHandler<string>} */
     function (character) {
-      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS;
+      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS;
 
       return shortcutList(character, _isApple).join('');
     }
@@ -22766,13 +26837,17 @@ const displayShortcut = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(displa
  *                                                 shortcut ARIA labels.
  */
 
-const shortcutAriaLabel = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifiers, modifier => {
+const shortcutAriaLabel = mapValues(modifiers, (
+/** @type {WPModifier} */
+modifier) => {
   return (
     /** @type {WPKeyHandler<string>} */
     function (character) {
-      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS;
+      let _isApple = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS;
 
       const isApple = _isApple();
+      /** @type {Record<string,string>} */
+
 
       const replacementKeyMap = {
         [SHIFT]: 'Shift',
@@ -22781,18 +26856,22 @@ const shortcutAriaLabel = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modi
         [ALT]: isApple ? 'Option' : 'Alt',
 
         /* translators: comma as in the character ',' */
-        ',': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Comma'),
+        ',': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comma'),
 
         /* translators: period as in the character '.' */
-        '.': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Period'),
+        '.': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Period'),
 
         /* translators: backtick as in the character '`' */
-        '`': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Backtick'),
+        '`': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Backtick'),
 
         /* translators: tilde as in the character '~' */
-        '~': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tilde')
+        '~': (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tilde')
       };
-      return [...modifier(_isApple), character].map(key => (0,change_case__WEBPACK_IMPORTED_MODULE_3__.capitalCase)((0,lodash__WEBPACK_IMPORTED_MODULE_0__.get)(replacementKeyMap, key, key))).join(isApple ? ' ' : ' + ');
+      return [...modifier(_isApple), character].map(key => {
+        var _replacementKeyMap$ke2;
+
+        return (0,change_case__WEBPACK_IMPORTED_MODULE_2__.capitalCase)((_replacementKeyMap$ke2 = replacementKeyMap[key]) !== null && _replacementKeyMap$ke2 !== void 0 ? _replacementKeyMap$ke2 : key);
+      }).join(isApple ? ' ' : ' + ');
     }
   );
 });
@@ -22829,14 +26908,25 @@ function getEventModifiers(event) {
  */
 
 
-const isKeyboardEvent = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifiers, getModifiers => {
+const isKeyboardEvent = mapValues(modifiers, (
+/** @type {WPModifier} */
+getModifiers) => {
   return (
     /** @type {WPEventKeyHandler} */
     function (event, character) {
-      let _isApple = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _platform__WEBPACK_IMPORTED_MODULE_2__.isAppleOS;
+      let _isApple = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _platform__WEBPACK_IMPORTED_MODULE_1__.isAppleOS;
 
       const mods = getModifiers(_isApple);
       const eventMods = getEventModifiers(event);
+      /** @type {Record<string,string>} */
+
+      const replacementWithShiftKeyMap = {
+        Comma: ',',
+        Backslash: '\\',
+        // Windows returns `\` for both IntlRo and IntlYen.
+        IntlRo: '\\',
+        IntlYen: '\\'
+      };
       const modsDiff = mods.filter(mod => !eventMods.includes(mod));
       const eventModsDiff = eventMods.filter(mod => !mods.includes(mod));
 
@@ -22854,14 +26944,15 @@ const isKeyboardEvent = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.mapValues)(modifi
 
       if (event.altKey && character.length === 1) {
         key = String.fromCharCode(event.keyCode).toLowerCase();
-      } // Replace some characters to match the key indicated
-      // by the shortcut on Windows.
+      } // `event.key` returns the value of the key pressed, taking into the state of
+      // modifier keys such as `Shift`. If the shift key is pressed, a different
+      // value may be returned depending on the keyboard layout. It is necessary to
+      // convert to the physical key value that don't take into account keyboard
+      // layout or modifier key state.
 
 
-      if (!_isApple()) {
-        if (event.shiftKey && character.length === 1 && event.code === 'Comma') {
-          key = ',';
-        }
+      if (event.shiftKey && character.length === 1 && replacementWithShiftKeyMap[event.code]) {
+        key = replacementWithShiftKeyMap[event.code];
       } // For backwards compatibility.
 
 
@@ -22912,6 +27003,1540 @@ function isAppleOS() {
   return platform.indexOf('Mac') !== -1 || ['iPad', 'iPhone'].includes(platform);
 }
 //# sourceMappingURL=platform.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createAddHook.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback AddHook
+ *
+ * Adds the hook to the appropriate hooks container.
+ *
+ * @param {string}               hookName      Name of hook to add
+ * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
+ * @param {import('.').Callback} callback      Function to call when the hook is run
+ * @param {number}               [priority=10] Priority of this hook
+ */
+
+/**
+ * Returns a function which, when invoked, will add a hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {AddHook} Function that adds a new hook.
+ */
+
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback) {
+    let priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    }
+
+    if ('function' !== typeof callback) {
+      // eslint-disable-next-line no-console
+      console.error('The hook callback must be a function.');
+      return;
+    } // Validate numeric priority
+
+
+    if ('number' !== typeof priority) {
+      // eslint-disable-next-line no-console
+      console.error('If specified, the hook priority must be a number.');
+      return;
+    }
+
+    const handler = {
+      callback,
+      priority,
+      namespace
+    };
+
+    if (hooksStore[hookName]) {
+      // Find the correct insert index of the new hook.
+      const handlers = hooksStore[hookName].handlers;
+      /** @type {number} */
+
+      let i;
+
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
+      }
+
+      if (i === handlers.length) {
+        // If append, operate via direct assignment.
+        handlers[i] = handler;
+      } else {
+        // Otherwise, insert before index via splice.
+        handlers.splice(i, 0, handler);
+      } // We may also be currently executing this hook.  If the callback
+      // we're adding would come after the current callback, there's no
+      // problem; otherwise we need to increase the execution index of
+      // any other runs by 1 to account for the added element.
+
+
+      hooksStore.__current.forEach(hookInfo => {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      // This is the first hook of its type.
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
+      };
+    }
+
+    if (hookName !== 'hookAdded') {
+      hooks.doAction('hookAdded', hookName, namespace, callback, priority);
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAddHook);
+//# sourceMappingURL=createAddHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createCurrentHook.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createCurrentHook.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will return the name of the
+ * currently running hook, or `null` if no hook of the given type is currently
+ * running.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {() => string | null} Function that returns the current hook name or null.
+ */
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    var _hooksStore$__current, _hooksStore$__current2;
+
+    const hooksStore = hooks[storeKey];
+    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createCurrentHook);
+//# sourceMappingURL=createCurrentHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDidHook.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDidHook.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * @callback DidHook
+ *
+ * Returns the number of times an action has been fired.
+ *
+ * @param {string} hookName The hook name to check.
+ *
+ * @return {number | undefined} The number of times the hook has run.
+ */
+
+/**
+ * Returns a function which, when invoked, will return the number of times a
+ * hook has been called.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DidHook} Function that returns a hook's call count.
+ */
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_0__["default"])(hookName)) {
+      return;
+    }
+
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDidHook);
+//# sourceMappingURL=createDidHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDoingHook.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDoingHook.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback DoingHook
+ * Returns whether a hook is currently being executed.
+ *
+ * @param {string} [hookName] The name of the hook to check for.  If
+ *                            omitted, will check for any hook being executed.
+ *
+ * @return {boolean} Whether the hook is being executed.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether a hook is
+ * currently being executed.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {DoingHook} Function that returns whether a hook is currently
+ *                     being executed.
+ */
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    const hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+
+    if ('undefined' === typeof hookName) {
+      return 'undefined' !== typeof hooksStore.__current[0];
+    } // Return the __current hook.
+
+
+    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDoingHook);
+//# sourceMappingURL=createDoingHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHasHook.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHasHook.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback HasHook
+ *
+ * Returns whether any handlers are attached for the given hookName and optional namespace.
+ *
+ * @param {string} hookName    The name of the hook to check for.
+ * @param {string} [namespace] Optional. The unique namespace identifying the callback
+ *                             in the form `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether there are handlers that are attached to the given hook.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether any handlers are
+ * attached to a particular hook.
+ *
+ * @param {import('.').Hooks}    hooks    Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ *
+ * @return {HasHook} Function that returns whether any handlers are
+ *                   attached to a particular hook and optional namespace.
+ */
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey]; // Use the namespace if provided.
+
+    if ('undefined' !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(hook => hook.namespace === namespace);
+    }
+
+    return hookName in hooksStore;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHasHook);
+//# sourceMappingURL=createHasHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHooks.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHooks.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "_Hooks": () => (/* binding */ _Hooks),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createAddHook__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createAddHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createAddHook.js");
+/* harmony import */ var _createRemoveHook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createRemoveHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRemoveHook.js");
+/* harmony import */ var _createHasHook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createHasHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHasHook.js");
+/* harmony import */ var _createRunHook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRunHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRunHook.js");
+/* harmony import */ var _createCurrentHook__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createCurrentHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createCurrentHook.js");
+/* harmony import */ var _createDoingHook__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createDoingHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDoingHook.js");
+/* harmony import */ var _createDidHook__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createDidHook */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createDidHook.js");
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal class for constructing hooks. Use `createHooks()` function
+ *
+ * Note, it is necessary to expose this class to make its type public.
+ *
+ * @private
+ */
+
+class _Hooks {
+  constructor() {
+    /** @type {import('.').Store} actions */
+    this.actions = Object.create(null);
+    this.actions.__current = [];
+    /** @type {import('.').Store} filters */
+
+    this.filters = Object.create(null);
+    this.filters.__current = [];
+    this.addAction = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'actions');
+    this.addFilter = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_0__["default"])(this, 'filters');
+    this.removeAction = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions');
+    this.removeFilter = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters');
+    this.hasAction = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions');
+    this.hasFilter = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters');
+    this.removeAllActions = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions', true);
+    this.removeAllFilters = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters', true);
+    this.doAction = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'actions');
+    this.applyFilters = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'filters', true);
+    this.currentAction = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'actions');
+    this.currentFilter = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'filters');
+    this.doingAction = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'actions');
+    this.doingFilter = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'filters');
+    this.didAction = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'actions');
+    this.didFilter = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'filters');
+  }
+
+}
+/** @typedef {_Hooks} Hooks */
+
+/**
+ * Returns an instance of the hooks object.
+ *
+ * @return {Hooks} A Hooks instance.
+ */
+
+function createHooks() {
+  return new _Hooks();
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHooks);
+//# sourceMappingURL=createHooks.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRemoveHook.js":
+/*!*********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRemoveHook.js ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback RemoveHook
+ * Removes the specified callback (or all callbacks) from the hook with a given hookName
+ * and namespace.
+ *
+ * @param {string} hookName  The name of the hook to modify.
+ * @param {string} namespace The unique namespace identifying the callback in the
+ *                           form `vendor/plugin/function`.
+ *
+ * @return {number | undefined} The number of callbacks removed.
+ */
+
+/**
+ * Returns a function which, when invoked, will remove a specified hook or all
+ * hooks by the given name.
+ *
+ * @param {import('.').Hooks}    hooks             Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                                                 without regard to namespace. Used to create
+ *                                                 `removeAll*` functions.
+ *
+ * @return {RemoveHook} Function that removes hooks.
+ */
+
+function createRemoveHook(hooks, storeKey) {
+  let removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function removeHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!removeAll && !(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    } // Bail if no hooks exist by this name.
+
+
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+
+    let handlersRemoved = 0;
+
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      // Try to find the specified callback to remove.
+      const handlers = hooksStore[hookName].handlers;
+
+      for (let i = handlers.length - 1; i >= 0; i--) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++; // This callback may also be part of a hook that is
+          // currently executing.  If the callback we're removing
+          // comes after the current callback, there's no problem;
+          // otherwise we need to decrease the execution index of any
+          // other runs by 1 to account for the removed element.
+
+          hooksStore.__current.forEach(hookInfo => {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
+      }
+    }
+
+    if (hookName !== 'hookRemoved') {
+      hooks.doAction('hookRemoved', hookName, namespace);
+    }
+
+    return handlersRemoved;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRemoveHook);
+//# sourceMappingURL=createRemoveHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRunHook.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createRunHook.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will execute all callbacks
+ * registered to a hook of the specified type, optionally returning the final
+ * value of the call chain.
+ *
+ * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').StoreKey} storeKey
+ * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
+ *                                                      return its first argument.
+ *
+ * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ */
+function createRunHook(hooks, storeKey) {
+  let returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function runHooks(hookName) {
+    const hooksStore = hooks[storeKey];
+
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+
+    hooksStore[hookName].runs++;
+    const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+
+    if (true) {
+      // Handle any 'all' hooks registered.
+      if ('hookAdded' !== hookName && hooksStore.all) {
+        handlers.push(...hooksStore.all.handlers);
+      }
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : undefined;
+    }
+
+    const hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+
+    hooksStore.__current.push(hookInfo);
+
+    while (hookInfo.currentIndex < handlers.length) {
+      const handler = handlers[hookInfo.currentIndex];
+      const result = handler.callback.apply(null, args);
+
+      if (returnFirstArg) {
+        args[0] = result;
+      }
+
+      hookInfo.currentIndex++;
+    }
+
+    hooksStore.__current.pop();
+
+    if (returnFirstArg) {
+      return args[0];
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRunHook);
+//# sourceMappingURL=createRunHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/index.js":
+/*!**********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/index.js ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "actions": () => (/* binding */ actions),
+/* harmony export */   "addAction": () => (/* binding */ addAction),
+/* harmony export */   "addFilter": () => (/* binding */ addFilter),
+/* harmony export */   "applyFilters": () => (/* binding */ applyFilters),
+/* harmony export */   "createHooks": () => (/* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "currentAction": () => (/* binding */ currentAction),
+/* harmony export */   "currentFilter": () => (/* binding */ currentFilter),
+/* harmony export */   "defaultHooks": () => (/* binding */ defaultHooks),
+/* harmony export */   "didAction": () => (/* binding */ didAction),
+/* harmony export */   "didFilter": () => (/* binding */ didFilter),
+/* harmony export */   "doAction": () => (/* binding */ doAction),
+/* harmony export */   "doingAction": () => (/* binding */ doingAction),
+/* harmony export */   "doingFilter": () => (/* binding */ doingFilter),
+/* harmony export */   "filters": () => (/* binding */ filters),
+/* harmony export */   "hasAction": () => (/* binding */ hasAction),
+/* harmony export */   "hasFilter": () => (/* binding */ hasFilter),
+/* harmony export */   "removeAction": () => (/* binding */ removeAction),
+/* harmony export */   "removeAllActions": () => (/* binding */ removeAllActions),
+/* harmony export */   "removeAllFilters": () => (/* binding */ removeAllFilters),
+/* harmony export */   "removeFilter": () => (/* binding */ removeFilter)
+/* harmony export */ });
+/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createHooks */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/createHooks.js");
+/**
+ * Internal dependencies
+ */
+
+/** @typedef {(...args: any[])=>any} Callback */
+
+/**
+ * @typedef Handler
+ * @property {Callback} callback  The callback
+ * @property {string}   namespace The namespace
+ * @property {number}   priority  The namespace
+ */
+
+/**
+ * @typedef Hook
+ * @property {Handler[]} handlers Array of handlers
+ * @property {number}    runs     Run counter
+ */
+
+/**
+ * @typedef Current
+ * @property {string} name         Hook name
+ * @property {number} currentIndex The index
+ */
+
+/**
+ * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ */
+
+/**
+ * @typedef {'actions' | 'filters'} StoreKey
+ */
+
+/**
+ * @typedef {import('./createHooks').Hooks} Hooks
+ */
+
+const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__["default"])();
+const {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  applyFilters,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateHookName.js":
+/*!*********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateHookName.js ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a hookName string.
+ *
+ * @param {string} hookName The hook name to validate. Should be a non empty string containing
+ *                          only numbers, letters, dashes, periods and underscores. Also,
+ *                          the hook name cannot begin with `__`.
+ *
+ * @return {boolean} Whether the hook name is valid.
+ */
+function validateHookName(hookName) {
+  if ('string' !== typeof hookName || '' === hookName) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name must be a non-empty string.');
+    return false;
+  }
+
+  if (/^__/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name cannot begin with `__`.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateHookName);
+//# sourceMappingURL=validateHookName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateNamespace.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/validateNamespace.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a namespace string.
+ *
+ * @param {string} namespace The namespace to validate - should take the form
+ *                           `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether the namespace is valid.
+ */
+function validateNamespace(namespace) {
+  if ('string' !== typeof namespace || '' === namespace) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace must be a non-empty string.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateNamespace);
+//# sourceMappingURL=validateNamespace.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/create-i18n.js":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/create-i18n.js ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createI18n": () => (/* binding */ createI18n)
+/* harmony export */ });
+/* harmony import */ var tannin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tannin */ "./node_modules/tannin/index.js");
+/**
+ * External dependencies
+ */
+
+/**
+ * @typedef {Record<string,any>} LocaleData
+ */
+
+/**
+ * Default locale data to use for Tannin domain when not otherwise provided.
+ * Assumes an English plural forms expression.
+ *
+ * @type {LocaleData}
+ */
+
+const DEFAULT_LOCALE_DATA = {
+  '': {
+    /** @param {number} n */
+    plural_forms(n) {
+      return n === 1 ? 0 : 1;
+    }
+
+  }
+};
+/*
+ * Regular expression that matches i18n hooks like `i18n.gettext`, `i18n.ngettext`,
+ * `i18n.gettext_domain` or `i18n.ngettext_with_context` or `i18n.has_translation`.
+ */
+
+const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+/**
+ * @typedef {(domain?: string) => LocaleData} GetLocaleData
+ *
+ * Returns locale data by domain in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will overwrite the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} AddLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Note that this
+ * function will also merge the domain configuration. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
+ *
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/** @typedef {() => void} SubscribeCallback */
+
+/** @typedef {() => void} UnsubscribeCallback */
+
+/**
+ * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
+ *
+ * Subscribes to changes of locale data
+ */
+
+/**
+ * @typedef {(domain?: string) => string} GetFilterDomain
+ * Retrieve the domain to use when calling domain-specific filters.
+ */
+
+/**
+ * @typedef {(text: string, domain?: string) => string} __
+ *
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ */
+
+/**
+ * @typedef {(text: string, context: string, domain?: string) => string} _x
+ *
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ */
+
+/**
+ * @typedef {() => boolean} IsRtl
+ *
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ */
+
+/**
+ * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
+ *
+ * Check if there is a translation for a given string in singular form.
+ */
+
+/** @typedef {import('@wordpress/hooks').Hooks} Hooks */
+
+/**
+ * An i18n instance
+ *
+ * @typedef I18n
+ * @property {GetLocaleData}   getLocaleData   Returns locale data by domain in a Jed-formatted JSON object shape.
+ * @property {SetLocaleData}   setLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will overwrite the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {AddLocaleData}   addLocaleData   Merges locale data into the Tannin instance by domain. Note that this
+ *                                             function will also merge the domain configuration. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {ResetLocaleData} resetLocaleData Resets all current Tannin instance locale data and sets the specified
+ *                                             locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ * @property {Subscribe}       subscribe       Subscribes to changes of Tannin locale data.
+ * @property {__}              __              Retrieve the translation of text.
+ * @property {_x}              _x              Retrieve translated string with gettext context.
+ * @property {_n}              _n              Translates and retrieves the singular or plural form based on the supplied
+ *                                             number.
+ * @property {_nx}             _nx             Translates and retrieves the singular or plural form based on the supplied
+ *                                             number, with gettext context.
+ * @property {IsRtl}           isRTL           Check if current locale is RTL.
+ * @property {HasTranslation}  hasTranslation  Check if there is a translation for a given string.
+ */
+
+/**
+ * Create an i18n instance
+ *
+ * @param {LocaleData} [initialData]   Locale data configuration.
+ * @param {string}     [initialDomain] Domain for which configuration applies.
+ * @param {Hooks}      [hooks]         Hooks implementation.
+ *
+ * @return {I18n} I18n instance.
+ */
+
+const createI18n = (initialData, initialDomain, hooks) => {
+  /**
+   * The underlying instance of Tannin to which exported functions interface.
+   *
+   * @type {Tannin}
+   */
+  const tannin = new tannin__WEBPACK_IMPORTED_MODULE_0__["default"]({});
+  const listeners = new Set();
+
+  const notifyListeners = () => {
+    listeners.forEach(listener => listener());
+  };
+  /**
+   * Subscribe to changes of locale data.
+   *
+   * @param {SubscribeCallback} callback Subscription callback.
+   * @return {UnsubscribeCallback} Unsubscribe callback.
+   */
+
+
+  const subscribe = callback => {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  };
+  /** @type {GetLocaleData} */
+
+
+  const getLocaleData = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return tannin.data[domain];
+  };
+  /**
+   * @param {LocaleData} [data]
+   * @param {string}     [domain]
+   */
+
+
+  const doSetLocaleData = function (data) {
+    var _tannin$data$domain;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data
+    }; // Populate default domain configuration (supported locale date which omits
+    // a plural forms expression).
+
+    tannin.data[domain][''] = { ...DEFAULT_LOCALE_DATA[''],
+      ...((_tannin$data$domain = tannin.data[domain]) === null || _tannin$data$domain === void 0 ? void 0 : _tannin$data$domain[''])
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+  };
+  /** @type {SetLocaleData} */
+
+
+  const setLocaleData = (data, domain) => {
+    doSetLocaleData(data, domain);
+    notifyListeners();
+  };
+  /** @type {AddLocaleData} */
+
+
+  const addLocaleData = function (data) {
+    var _tannin$data$domain2;
+
+    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = { ...tannin.data[domain],
+      ...data,
+      // Populate default domain configuration (supported locale date which omits
+      // a plural forms expression).
+      '': { ...DEFAULT_LOCALE_DATA[''],
+        ...((_tannin$data$domain2 = tannin.data[domain]) === null || _tannin$data$domain2 === void 0 ? void 0 : _tannin$data$domain2['']),
+        ...(data === null || data === void 0 ? void 0 : data[''])
+      }
+    }; // Clean up cached plural forms functions cache as it might be updated.
+
+    delete tannin.pluralForms[domain];
+    notifyListeners();
+  };
+  /** @type {ResetLocaleData} */
+
+
+  const resetLocaleData = (data, domain) => {
+    // Reset all current Tannin locale data.
+    tannin.data = {}; // Reset cached plural forms functions cache.
+
+    tannin.pluralForms = {};
+    setLocaleData(data, domain);
+  };
+  /**
+   * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
+   * otherwise previously assigned.
+   *
+   * @param {string|undefined} domain   Domain to retrieve the translated text.
+   * @param {string|undefined} context  Context information for the translators.
+   * @param {string}           single   Text to translate if non-plural. Used as
+   *                                    fallback return value on a caught error.
+   * @param {string}           [plural] The text to be used if the number is
+   *                                    plural.
+   * @param {number}           [number] The number to compare against to use
+   *                                    either the singular or plural form.
+   *
+   * @return {string} The translated string.
+   */
+
+
+  const dcnpgettext = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    let context = arguments.length > 1 ? arguments[1] : undefined;
+    let single = arguments.length > 2 ? arguments[2] : undefined;
+    let plural = arguments.length > 3 ? arguments[3] : undefined;
+    let number = arguments.length > 4 ? arguments[4] : undefined;
+
+    if (!tannin.data[domain]) {
+      // Use `doSetLocaleData` to set silently, without notifying listeners.
+      doSetLocaleData(undefined, domain);
+    }
+
+    return tannin.dcnpgettext(domain, context, single, plural, number);
+  };
+  /** @type {GetFilterDomain} */
+
+
+  const getFilterDomain = function () {
+    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return domain;
+  };
+  /** @type {__} */
+
+
+  const __ = (text, domain) => {
+    let translation = dcnpgettext(domain, undefined, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
+    );
+  };
+  /** @type {_x} */
+
+
+  const _x = (text, context, domain) => {
+    let translation = dcnpgettext(domain, context, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation based on context information.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
+    );
+  };
+  /** @type {_n} */
+
+
+  const _n = (single, plural, number, domain) => {
+    let translation = dcnpgettext(domain, undefined, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
+    );
+  };
+  /** @type {_nx} */
+
+
+  const _nx = (single, plural, number, context, domain) => {
+    let translation = dcnpgettext(domain, context, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string with gettext context.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
+    );
+  };
+  /** @type {IsRtl} */
+
+
+  const isRTL = () => {
+    return 'rtl' === _x('ltr', 'text direction');
+  };
+  /** @type {HasTranslation} */
+
+
+  const hasTranslation = (single, context, domain) => {
+    var _tannin$data, _tannin$data2;
+
+    const key = context ? context + '\u0004' + single : single;
+    let result = !!((_tannin$data = tannin.data) !== null && _tannin$data !== void 0 && (_tannin$data2 = _tannin$data[domain !== null && domain !== void 0 ? domain : 'default']) !== null && _tannin$data2 !== void 0 && _tannin$data2[key]);
+
+    if (hooks) {
+      /**
+       * Filters the presence of a translation in the locale data.
+       *
+       * @param {boolean} hasTranslation Whether the translation is present or not..
+       * @param {string}  single         The singular form of the translated text (used as key in locale data)
+       * @param {string}  context        Context information for the translators.
+       * @param {string}  domain         Text domain. Unique identifier for retrieving translated strings.
+       */
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+    }
+
+    return result;
+  };
+
+  if (initialData) {
+    setLocaleData(initialData, initialDomain);
+  }
+
+  if (hooks) {
+    /**
+     * @param {string} hookName
+     */
+    const onHookAddedOrRemoved = hookName => {
+      if (I18N_HOOK_REGEXP.test(hookName)) {
+        notifyListeners();
+      }
+    };
+
+    hooks.addAction('hookAdded', 'core/i18n', onHookAddedOrRemoved);
+    hooks.addAction('hookRemoved', 'core/i18n', onHookAddedOrRemoved);
+  }
+
+  return {
+    getLocaleData,
+    setLocaleData,
+    addLocaleData,
+    resetLocaleData,
+    subscribe,
+    __,
+    _x,
+    _n,
+    _nx,
+    isRTL,
+    hasTranslation
+  };
+};
+//# sourceMappingURL=create-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/default-i18n.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/default-i18n.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* binding */ __),
+/* harmony export */   "_n": () => (/* binding */ _n),
+/* harmony export */   "_nx": () => (/* binding */ _nx),
+/* harmony export */   "_x": () => (/* binding */ _x),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "getLocaleData": () => (/* binding */ getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* binding */ hasTranslation),
+/* harmony export */   "isRTL": () => (/* binding */ isRTL),
+/* harmony export */   "resetLocaleData": () => (/* binding */ resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* binding */ setLocaleData),
+/* harmony export */   "subscribe": () => (/* binding */ subscribe)
+/* harmony export */ });
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/hooks/build-module/index.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+const i18n = (0,_create_i18n__WEBPACK_IMPORTED_MODULE_0__.createI18n)(undefined, undefined, _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__.defaultHooks);
+/**
+ * Default, singleton instance of `I18n`.
+ */
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (i18n);
+/*
+ * Comments in this file are duplicated from ./i18n due to
+ * https://github.com/WordPress/gutenberg/pull/20318#issuecomment-590837722
+ */
+
+/**
+ * @typedef {import('./create-i18n').LocaleData} LocaleData
+ * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
+ * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
+ */
+
+/**
+ * Returns locale data by domain in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {string} [domain] Domain for which to get the data.
+ * @return {LocaleData} Locale data.
+ */
+
+const getLocaleData = i18n.getLocaleData.bind(i18n);
+/**
+ * Merges locale data into the Tannin instance by domain. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const setLocaleData = i18n.setLocaleData.bind(i18n);
+/**
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+const resetLocaleData = i18n.resetLocaleData.bind(i18n);
+/**
+ * Subscribes to changes of locale data
+ *
+ * @param {SubscribeCallback} callback Subscription callback
+ * @return {UnsubscribeCallback} Unsubscribe callback
+ */
+
+const subscribe = i18n.subscribe.bind(i18n);
+/**
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated text.
+ */
+
+const __ = i18n.__.bind(i18n);
+/**
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated context string without pipe.
+ */
+
+const _x = i18n._x.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _n = i18n._n.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+const _nx = i18n._nx.bind(i18n);
+/**
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ *
+ * @return {boolean} Whether locale is RTL.
+ */
+
+const isRTL = i18n.isRTL.bind(i18n);
+/**
+ * Check if there is a translation for a given string (in singular form).
+ *
+ * @param {string} single    Singular form of the string to look up.
+ * @param {string} [context] Context information for the translators.
+ * @param {string} [domain]  Domain to retrieve the translated text.
+ * @return {boolean} Whether the translation exists or not.
+ */
+
+const hasTranslation = i18n.hasTranslation.bind(i18n);
+//# sourceMappingURL=default-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/index.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/index.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.__),
+/* harmony export */   "_n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._n),
+/* harmony export */   "_nx": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._nx),
+/* harmony export */   "_x": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._x),
+/* harmony export */   "createI18n": () => (/* reexport safe */ _create_i18n__WEBPACK_IMPORTED_MODULE_1__.createI18n),
+/* harmony export */   "defaultI18n": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   "getLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.getLocaleData),
+/* harmony export */   "hasTranslation": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.hasTranslation),
+/* harmony export */   "isRTL": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.isRTL),
+/* harmony export */   "resetLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.resetLocaleData),
+/* harmony export */   "setLocaleData": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.setLocaleData),
+/* harmony export */   "sprintf": () => (/* reexport safe */ _sprintf__WEBPACK_IMPORTED_MODULE_0__.sprintf),
+/* harmony export */   "subscribe": () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.subscribe)
+/* harmony export */ });
+/* harmony import */ var _sprintf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sprintf */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/sprintf.js");
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _default_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./default-i18n */ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/default-i18n.js");
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/sprintf.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/keycodes/node_modules/@wordpress/i18n/build-module/sprintf.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "sprintf": () => (/* binding */ sprintf)
+/* harmony export */ });
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! memize */ "./node_modules/memize/index.js");
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(memize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sprintf-js */ "./node_modules/sprintf-js/src/sprintf.js");
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sprintf_js__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Log to console, once per message; or more precisely, per referentially equal
+ * argument set. Because Jed throws errors, we log these to the console instead
+ * to avoid crashing the application.
+ *
+ * @param {...*} args Arguments to pass to `console.error`
+ */
+
+const logErrorOnce = memize__WEBPACK_IMPORTED_MODULE_0___default()(console.error); // eslint-disable-line no-console
+
+/**
+ * Returns a formatted string. If an error occurs in applying the format, the
+ * original format string is returned.
+ *
+ * @param {string} format The format of the string to generate.
+ * @param {...*}   args   Arguments to apply to the format.
+ *
+ * @see https://www.npmjs.com/package/sprintf-js
+ *
+ * @return {string} The formatted string.
+ */
+
+function sprintf(format) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return sprintf_js__WEBPACK_IMPORTED_MODULE_1___default().sprintf(format, ...args);
+  } catch (error) {
+    if (error instanceof Error) {
+      logErrorOnce('sprintf error: \n\n' + error.toString());
+    }
+
+    return format;
+  }
+}
+//# sourceMappingURL=sprintf.js.map
 
 /***/ }),
 
@@ -23047,93 +28672,6 @@ const SVG = _ref => {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("svg", appliedProps);
 };
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@wordpress/warning/build-module/index.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/@wordpress/warning/build-module/index.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ warning)
-/* harmony export */ });
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/@wordpress/warning/build-module/utils.js");
-/**
- * Internal dependencies
- */
-
-
-function isDev() {
-  return typeof process !== 'undefined' && process.env && "development" !== 'production';
-}
-/**
- * Shows a warning with `message` if environment is not `production`.
- *
- * @param {string} message Message to show in the warning.
- *
- * @example
- * ```js
- * import warning from '@wordpress/warning';
- *
- * function MyComponent( props ) {
- *   if ( ! props.title ) {
- *     warning( '`props.title` was not passed' );
- *   }
- *   ...
- * }
- * ```
- */
-
-
-function warning(message) {
-  if (!isDev()) {
-    return;
-  } // Skip if already logged.
-
-
-  if (_utils__WEBPACK_IMPORTED_MODULE_0__.logged.has(message)) {
-    return;
-  } // eslint-disable-next-line no-console
-
-
-  console.warn(message); // Throwing an error and catching it immediately to improve debugging
-  // A consumer can use 'pause on caught exceptions'
-  // https://github.com/facebook/react/issues/4216
-
-  try {
-    throw Error(message);
-  } catch (x) {// Do nothing.
-  }
-
-  _utils__WEBPACK_IMPORTED_MODULE_0__.logged.add(message);
-}
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@wordpress/warning/build-module/utils.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/@wordpress/warning/build-module/utils.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "logged": () => (/* binding */ logged)
-/* harmony export */ });
-/**
- * Object map tracking messages which have been logged, for use in ensuring a
- * message is only logged once.
- *
- * @type {Set<string>}
- */
-const logged = new Set();
-//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
@@ -47867,14 +53405,14 @@ module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "affectedToPathList": () => (/* binding */ w),
-/* harmony export */   "createProxy": () => (/* binding */ u),
-/* harmony export */   "getUntracked": () => (/* binding */ g),
+/* harmony export */   "createProxy": () => (/* binding */ a),
+/* harmony export */   "getUntracked": () => (/* binding */ y),
 /* harmony export */   "isChanged": () => (/* binding */ p),
 /* harmony export */   "markToTrack": () => (/* binding */ h),
 /* harmony export */   "replaceNewProxy": () => (/* binding */ O),
-/* harmony export */   "trackMemo": () => (/* binding */ y)
+/* harmony export */   "trackMemo": () => (/* binding */ g)
 /* harmony export */ });
-const e=Symbol(),t=Symbol(),r="a",n="w";let o=(e,t)=>new Proxy(e,t);const s=Object.getPrototypeOf,c=new WeakMap,l=e=>e&&(c.has(e)?c.get(e):s(e)===Object.prototype||s(e)===Array.prototype),f=e=>"object"==typeof e&&null!==e,i=new WeakMap,a=e=>e[t]||e,u=(c,f,p)=>{if(!l(c))return c;const y=a(c),g=(e=>Object.isFrozen(e)||Object.values(Object.getOwnPropertyDescriptors(e)).some(e=>!e.writable))(y);let h=p&&p.get(y);return h&&h[1].f===g||(h=((o,s)=>{const c={f:s};let l=!1;const f=(e,t)=>{if(!l){let s=c[r].get(o);if(s||(s={},c[r].set(o,s)),e===n)s[n]=!0;else{let r=s[e];r||(r=new Set,s[e]=r),r.add(t)}}},i={get:(e,n)=>n===t?o:(f("k",n),u(Reflect.get(e,n),c[r],c.c)),has:(t,n)=>n===e?(l=!0,c[r].delete(o),!0):(f("h",n),Reflect.has(t,n)),getOwnPropertyDescriptor:(e,t)=>(f("o",t),Reflect.getOwnPropertyDescriptor(e,t)),ownKeys:e=>(f(n),Reflect.ownKeys(e))};return s&&(i.set=i.deleteProperty=()=>!1),[i,c]})(y,g),h[1].p=o(g?(e=>{let t=i.get(e);if(!t){if(Array.isArray(e))t=Array.from(e);else{const r=Object.getOwnPropertyDescriptors(e);Object.values(r).forEach(e=>{e.configurable=!0}),t=Object.create(s(e),r)}i.set(e,t)}return t})(y):y,h[0]),p&&p.set(y,h)),h[1][r]=f,h[1].c=p,h[1].p},p=(e,t,r,o)=>{if(Object.is(e,t))return!1;if(!f(e)||!f(t))return!0;const s=r.get(a(e));if(!s)return!0;if(o){const r=o.get(e);if(r&&r.n===t)return r.g;o.set(e,{n:t,g:!1})}let c=null;try{for(const r of s.h||[])if(c=Reflect.has(e,r)!==Reflect.has(t,r),c)return c;if(!0===s[n]){if(c=((e,t)=>{const r=Reflect.ownKeys(e),n=Reflect.ownKeys(t);return r.length!==n.length||r.some((e,t)=>e!==n[t])})(e,t),c)return c}else for(const r of s.o||[])if(c=!!Reflect.getOwnPropertyDescriptor(e,r)!=!!Reflect.getOwnPropertyDescriptor(t,r),c)return c;for(const n of s.k||[])if(c=p(e[n],t[n],r,o),c)return c;return null===c&&(c=!0),c}finally{o&&o.set(e,{n:t,g:c})}},y=t=>!!l(t)&&e in t,g=e=>l(e)&&e[t]||null,h=(e,t=!0)=>{c.set(e,t)},w=(e,t,r)=>{const o=[],s=new WeakSet,c=(e,l)=>{if(s.has(e))return;f(e)&&s.add(e);const i=f(e)&&t.get(a(e));if(i){var u,p;if(null==(u=i.h)||u.forEach(e=>{const t=`:has(${String(e)})`;o.push(l?[...l,t]:[t])}),!0===i[n]){const e=":ownKeys";o.push(l?[...l,e]:[e])}else{var y;null==(y=i.o)||y.forEach(e=>{const t=`:hasOwn(${String(e)})`;o.push(l?[...l,t]:[t])})}null==(p=i.k)||p.forEach(t=>{r&&!("value"in(Object.getOwnPropertyDescriptor(e,t)||{}))||c(e[t],l?[...l,t]:[t])})}else l&&o.push(l)};return c(e),o},O=e=>{o=e};
+const e=Symbol(),t=Symbol(),r="a",n="w";let o=(e,t)=>new Proxy(e,t);const s=Object.getPrototypeOf,c=new WeakMap,l=e=>e&&(c.has(e)?c.get(e):s(e)===Object.prototype||s(e)===Array.prototype),f=e=>"object"==typeof e&&null!==e,i=e=>{if(Array.isArray(e))return Array.from(e);const t=Object.getOwnPropertyDescriptors(e);return Object.values(t).forEach(e=>{e.configurable=!0}),Object.create(s(e),t)},u=e=>e[t]||e,a=(s,c,f,p)=>{if(!l(s))return s;let g=p&&p.get(s);if(!g){const e=u(s);g=(e=>Object.values(Object.getOwnPropertyDescriptors(e)).some(e=>!e.configurable&&!e.writable))(e)?[e,i(e)]:[e],null==p||p.set(s,g)}const[y,h]=g;let w=f&&f.get(y);return w&&w[1].f===!!h||(w=((o,s)=>{const c={f:s};let l=!1;const f=(e,t)=>{if(!l){let s=c[r].get(o);if(s||(s={},c[r].set(o,s)),e===n)s[n]=!0;else{let r=s[e];r||(r=new Set,s[e]=r),r.add(t)}}},i={get:(e,n)=>n===t?o:(f("k",n),a(Reflect.get(e,n),c[r],c.c)),has:(t,n)=>n===e?(l=!0,c[r].delete(o),!0):(f("h",n),Reflect.has(t,n)),getOwnPropertyDescriptor:(e,t)=>(f("o",t),Reflect.getOwnPropertyDescriptor(e,t)),ownKeys:e=>(f(n),Reflect.ownKeys(e))};return s&&(i.set=i.deleteProperty=()=>!1),[i,c]})(y,!!h),w[1].p=o(h||y,w[0]),f&&f.set(y,w)),w[1][r]=c,w[1].c=f,w[1].p},p=(e,t,r,o)=>{if(Object.is(e,t))return!1;if(!f(e)||!f(t))return!0;const s=r.get(u(e));if(!s)return!0;if(o){const r=o.get(e);if(r&&r.n===t)return r.g;o.set(e,{n:t,g:!1})}let c=null;try{for(const r of s.h||[])if(c=Reflect.has(e,r)!==Reflect.has(t,r),c)return c;if(!0===s[n]){if(c=((e,t)=>{const r=Reflect.ownKeys(e),n=Reflect.ownKeys(t);return r.length!==n.length||r.some((e,t)=>e!==n[t])})(e,t),c)return c}else for(const r of s.o||[])if(c=!!Reflect.getOwnPropertyDescriptor(e,r)!=!!Reflect.getOwnPropertyDescriptor(t,r),c)return c;for(const n of s.k||[])if(c=p(e[n],t[n],r,o),c)return c;return null===c&&(c=!0),c}finally{o&&o.set(e,{n:t,g:c})}},g=t=>!!l(t)&&e in t,y=e=>l(e)&&e[t]||null,h=(e,t=!0)=>{c.set(e,t)},w=(e,t,r)=>{const o=[],s=new WeakSet,c=(e,l)=>{if(s.has(e))return;f(e)&&s.add(e);const i=f(e)&&t.get(u(e));if(i){var a,p;if(null==(a=i.h)||a.forEach(e=>{const t=`:has(${String(e)})`;o.push(l?[...l,t]:[t])}),!0===i[n]){const e=":ownKeys";o.push(l?[...l,e]:[e])}else{var g;null==(g=i.o)||g.forEach(e=>{const t=`:hasOwn(${String(e)})`;o.push(l?[...l,t]:[t])})}null==(p=i.k)||p.forEach(t=>{r&&!("value"in(Object.getOwnPropertyDescriptor(e,t)||{}))||c(e[t],l?[...l,t]:[t])})}else l&&o.push(l)};return c(e),o},O=e=>{o=e};
 //# sourceMappingURL=index.modern.mjs.map
 
 
@@ -84313,13 +89851,13 @@ function rectToClientRect(rect) {
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the
- * element is overflowing a given clipping boundary.
+ * element is overflowing a given clipping boundary on each side.
  * - positive = overflowing the boundary by that number of pixels
  * - negative = how many pixels left before it will overflow
  * - 0 = lies flush with the boundary
  * @see https://floating-ui.com/docs/detectOverflow
  */
-async function detectOverflow(middlewareArguments, options) {
+async function detectOverflow(state, options) {
   var _await$platform$isEle;
   if (options === void 0) {
     options = {};
@@ -84331,7 +89869,7 @@ async function detectOverflow(middlewareArguments, options) {
     rects,
     elements,
     strategy
-  } = middlewareArguments;
+  } = state;
   const {
     boundary = 'clippingAncestors',
     rootBoundary = 'viewport',
@@ -84382,14 +89920,14 @@ function within(min$1, value, max$1) {
 }
 
 /**
- * Positions an inner element of the floating element such that it is centered
- * to the reference element.
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
  * @see https://floating-ui.com/docs/arrow
  */
 const arrow = options => ({
   name: 'arrow',
   options,
-  async fn(middlewareArguments) {
+  async fn(state) {
     // Since `element` is required, we don't Partial<> the type.
     const {
       element,
@@ -84401,7 +89939,7 @@ const arrow = options => ({
       placement,
       rects,
       platform
-    } = middlewareArguments;
+    } = state;
     if (element == null) {
       {
         console.warn('Floating UI: No `element` was passed to the `arrow` middleware.');
@@ -84498,7 +90036,9 @@ function getPlacementList(alignment, autoAlignment, allowedPlacements) {
   });
 }
 /**
- * Automatically chooses the `placement` which has the most space available.
+ * Optimizes the visibility of the floating element by choosing the placement
+ * that has the most space available automatically, without needing to specify a
+ * preferred placement. Alternative to `flip`.
  * @see https://floating-ui.com/docs/autoPlacement
  */
 const autoPlacement = function (options) {
@@ -84508,23 +90048,24 @@ const autoPlacement = function (options) {
   return {
     name: 'autoPlacement',
     options,
-    async fn(middlewareArguments) {
-      var _middlewareData$autoP, _middlewareData$autoP2, _placementsSortedByLe;
+    async fn(state) {
+      var _middlewareData$autoP, _middlewareData$autoP2, _placementsThatFitOnE;
       const {
         rects,
         middlewareData,
         placement,
         platform,
         elements
-      } = middlewareArguments;
+      } = state;
       const {
+        crossAxis = false,
         alignment,
         allowedPlacements = allPlacements,
         autoAlignment = true,
         ...detectOverflowOptions
       } = options;
       const placements = alignment !== undefined || allowedPlacements === allPlacements ? getPlacementList(alignment || null, autoAlignment, allowedPlacements) : allowedPlacements;
-      const overflow = await detectOverflow(middlewareArguments, detectOverflowOptions);
+      const overflow = await detectOverflow(state, detectOverflowOptions);
       const currentIndex = ((_middlewareData$autoP = middlewareData.autoPlacement) == null ? void 0 : _middlewareData$autoP.index) || 0;
       const currentPlacement = placements[currentIndex];
       if (currentPlacement == null) {
@@ -84562,14 +90103,19 @@ const autoPlacement = function (options) {
           }
         };
       }
-      const placementsSortedByLeastOverflow = allOverflows.slice().sort((a, b) => a.overflows[0] - b.overflows[0]);
-      const placementThatFitsOnAllSides = (_placementsSortedByLe = placementsSortedByLeastOverflow.find(_ref => {
-        let {
-          overflows
-        } = _ref;
-        return overflows.every(overflow => overflow <= 0);
-      })) == null ? void 0 : _placementsSortedByLe.placement;
-      const resetPlacement = placementThatFitsOnAllSides || placementsSortedByLeastOverflow[0].placement;
+      const placementsSortedByMostSpace = allOverflows.map(d => {
+        const alignment = getAlignment(d.placement);
+        return [d.placement, alignment && crossAxis ?
+        // Check along the mainAxis and main crossAxis side.
+        d.overflows.slice(0, 2).reduce((acc, v) => acc + v, 0) :
+        // Check only the mainAxis.
+        d.overflows[0], d.overflows];
+      }).sort((a, b) => a[1] - b[1]);
+      const placementsThatFitOnEachSide = placementsSortedByMostSpace.filter(d => d[2].slice(0,
+      // Aligned placements should not check their opposite crossAxis
+      // side.
+      getAlignment(d[0]) ? 2 : 3).every(v => v <= 0));
+      const resetPlacement = ((_placementsThatFitOnE = placementsThatFitOnEachSide[0]) == null ? void 0 : _placementsThatFitOnE[0]) || placementsSortedByMostSpace[0][0];
       if (resetPlacement !== placement) {
         return {
           data: {
@@ -84621,8 +90167,9 @@ function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
 }
 
 /**
- * Changes the placement of the floating element to one that will fit if the
- * initially specified `placement` does not.
+ * Optimizes the visibility of the floating element by flipping the `placement`
+ * in order to keep it in view when the preferred placement(s) will overflow the
+ * clipping boundary. Alternative to `autoPlacement`.
  * @see https://floating-ui.com/docs/flip
  */
 const flip = function (options) {
@@ -84632,7 +90179,7 @@ const flip = function (options) {
   return {
     name: 'flip',
     options,
-    async fn(middlewareArguments) {
+    async fn(state) {
       var _middlewareData$flip;
       const {
         placement,
@@ -84641,7 +90188,7 @@ const flip = function (options) {
         initialPlacement,
         platform,
         elements
-      } = middlewareArguments;
+      } = state;
       const {
         mainAxis: checkMainAxis = true,
         crossAxis: checkCrossAxis = true,
@@ -84659,7 +90206,7 @@ const flip = function (options) {
         fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
       }
       const placements = [initialPlacement, ...fallbackPlacements];
-      const overflow = await detectOverflow(middlewareArguments, detectOverflowOptions);
+      const overflow = await detectOverflow(state, detectOverflowOptions);
       const overflows = [];
       let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
       if (checkMainAxis) {
@@ -84679,7 +90226,7 @@ const flip = function (options) {
 
       // One or more sides is overflowing.
       if (!overflows.every(side => side <= 0)) {
-        var _middlewareData$flip2;
+        var _middlewareData$flip2, _overflowsData$filter;
         const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
         const nextPlacement = placements[nextIndex];
         if (nextPlacement) {
@@ -84694,20 +90241,27 @@ const flip = function (options) {
             }
           };
         }
-        let resetPlacement = 'bottom';
-        switch (fallbackStrategy) {
-          case 'bestFit':
-            {
-              var _overflowsData$map$so;
-              const placement = (_overflowsData$map$so = overflowsData.map(d => [d, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0].placement;
-              if (placement) {
-                resetPlacement = placement;
+
+        // First, find the candidates that fit on the mainAxis side of overflow,
+        // then find the placement that fits the best on the main crossAxis side.
+        let resetPlacement = (_overflowsData$filter = overflowsData.filter(d => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+
+        // Otherwise fallback.
+        if (!resetPlacement) {
+          switch (fallbackStrategy) {
+            case 'bestFit':
+              {
+                var _overflowsData$map$so;
+                const placement = (_overflowsData$map$so = overflowsData.map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0];
+                if (placement) {
+                  resetPlacement = placement;
+                }
+                break;
               }
+            case 'initialPlacement':
+              resetPlacement = initialPlacement;
               break;
-            }
-          case 'initialPlacement':
-            resetPlacement = initialPlacement;
-            break;
+          }
         }
         if (placement !== resetPlacement) {
           return {
@@ -84745,18 +90299,18 @@ const hide = function (options) {
   return {
     name: 'hide',
     options,
-    async fn(middlewareArguments) {
+    async fn(state) {
       const {
         strategy = 'referenceHidden',
         ...detectOverflowOptions
       } = options;
       const {
         rects
-      } = middlewareArguments;
+      } = state;
       switch (strategy) {
         case 'referenceHidden':
           {
-            const overflow = await detectOverflow(middlewareArguments, {
+            const overflow = await detectOverflow(state, {
               ...detectOverflowOptions,
               elementContext: 'reference'
             });
@@ -84770,7 +90324,7 @@ const hide = function (options) {
           }
         case 'escaped':
           {
-            const overflow = await detectOverflow(middlewareArguments, {
+            const overflow = await detectOverflow(state, {
               ...detectOverflowOptions,
               altBoundary: true
             });
@@ -84803,14 +90357,14 @@ const inline = function (options) {
   return {
     name: 'inline',
     options,
-    async fn(middlewareArguments) {
+    async fn(state) {
       const {
         placement,
         elements,
         rects,
         platform,
         strategy
-      } = middlewareArguments;
+      } = state;
       // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
       // ClientRect's bounds, despite the event listener being triggered. A
       // padding of 2 seems to handle this issue.
@@ -84898,19 +90452,19 @@ const inline = function (options) {
   };
 };
 
-async function convertValueToCoords(middlewareArguments, value) {
+async function convertValueToCoords(state, value) {
   const {
     placement,
     platform,
     elements
-  } = middlewareArguments;
+  } = state;
   const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
   const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
-  const rawValue = typeof value === 'function' ? value(middlewareArguments) : value;
+  const rawValue = typeof value === 'function' ? value(state) : value;
 
   // eslint-disable-next-line prefer-const
   let {
@@ -84940,7 +90494,10 @@ async function convertValueToCoords(middlewareArguments, value) {
 }
 
 /**
- * Displaces the floating element from its reference element.
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
 const offset = function (value) {
@@ -84950,12 +90507,12 @@ const offset = function (value) {
   return {
     name: 'offset',
     options: value,
-    async fn(middlewareArguments) {
+    async fn(state) {
       const {
         x,
         y
-      } = middlewareArguments;
-      const diffCoords = await convertValueToCoords(middlewareArguments, value);
+      } = state;
+      const diffCoords = await convertValueToCoords(state, value);
       return {
         x: x + diffCoords.x,
         y: y + diffCoords.y,
@@ -84970,8 +90527,8 @@ function getCrossAxis(axis) {
 }
 
 /**
- * Shifts the floating element in order to keep it in view when it will overflow
- * a clipping boundary.
+ * Optimizes the visibility of the floating element by shifting it in order to
+ * keep it in view when it will overflow the clipping boundary.
  * @see https://floating-ui.com/docs/shift
  */
 const shift = function (options) {
@@ -84981,12 +90538,12 @@ const shift = function (options) {
   return {
     name: 'shift',
     options,
-    async fn(middlewareArguments) {
+    async fn(state) {
       const {
         x,
         y,
         placement
-      } = middlewareArguments;
+      } = state;
       const {
         mainAxis: checkMainAxis = true,
         crossAxis: checkCrossAxis = false,
@@ -85008,7 +90565,7 @@ const shift = function (options) {
         x,
         y
       };
-      const overflow = await detectOverflow(middlewareArguments, detectOverflowOptions);
+      const overflow = await detectOverflow(state, detectOverflowOptions);
       const mainAxis = getMainAxisFromPlacement(getSide(placement));
       const crossAxis = getCrossAxis(mainAxis);
       let mainAxisCoord = coords[mainAxis];
@@ -85028,7 +90585,7 @@ const shift = function (options) {
         crossAxisCoord = within(min, crossAxisCoord, max);
       }
       const limitedCoords = limiter.fn({
-        ...middlewareArguments,
+        ...state,
         [mainAxis]: mainAxisCoord,
         [crossAxis]: crossAxisCoord
       });
@@ -85051,14 +90608,14 @@ const limitShift = function (options) {
   }
   return {
     options,
-    fn(middlewareArguments) {
+    fn(state) {
       const {
         x,
         y,
         placement,
         rects,
         middlewareData
-      } = middlewareArguments;
+      } = state;
       const {
         offset = 0,
         mainAxis: checkMainAxis = true,
@@ -85072,7 +90629,7 @@ const limitShift = function (options) {
       const crossAxis = getCrossAxis(mainAxis);
       let mainAxisCoord = coords[mainAxis];
       let crossAxisCoord = coords[crossAxis];
-      const rawOffset = typeof offset === 'function' ? offset(middlewareArguments) : offset;
+      const rawOffset = typeof offset === 'function' ? offset(state) : offset;
       const computedOffset = typeof rawOffset === 'number' ? {
         mainAxis: rawOffset,
         crossAxis: 0
@@ -85112,9 +90669,9 @@ const limitShift = function (options) {
 };
 
 /**
- * Provides data to change the size of the floating element. For instance,
- * prevent it from overflowing its clipping boundary or match the width of the
- * reference element.
+ * Provides data that allows you to change the size of the floating element —
+ * for instance, prevent it from overflowing the clipping boundary or match the
+ * width of the reference element.
  * @see https://floating-ui.com/docs/size
  */
 const size = function (options) {
@@ -85124,20 +90681,26 @@ const size = function (options) {
   return {
     name: 'size',
     options,
-    async fn(middlewareArguments) {
+    async fn(state) {
       const {
         placement,
         rects,
         platform,
         elements
-      } = middlewareArguments;
+      } = state;
       const {
         apply = () => {},
         ...detectOverflowOptions
       } = options;
-      const overflow = await detectOverflow(middlewareArguments, detectOverflowOptions);
+      const overflow = await detectOverflow(state, detectOverflowOptions);
       const side = getSide(placement);
       const alignment = getAlignment(placement);
+      const axis = getMainAxisFromPlacement(placement);
+      const isXAxis = axis === 'x';
+      const {
+        width,
+        height
+      } = rects.floating;
       let heightSide;
       let widthSide;
       if (side === 'top' || side === 'bottom') {
@@ -85147,20 +90710,37 @@ const size = function (options) {
         widthSide = side;
         heightSide = alignment === 'end' ? 'top' : 'bottom';
       }
-      const xMin = max(overflow.left, 0);
-      const xMax = max(overflow.right, 0);
-      const yMin = max(overflow.top, 0);
-      const yMax = max(overflow.bottom, 0);
-      const dimensions = {
-        availableHeight: rects.floating.height - (['left', 'right'].includes(placement) ? 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom)) : overflow[heightSide]),
-        availableWidth: rects.floating.width - (['top', 'bottom'].includes(placement) ? 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right)) : overflow[widthSide])
-      };
+      const overflowAvailableHeight = height - overflow[heightSide];
+      const overflowAvailableWidth = width - overflow[widthSide];
+      let availableHeight = overflowAvailableHeight;
+      let availableWidth = overflowAvailableWidth;
+      if (isXAxis) {
+        availableWidth = min(
+        // Maximum clipping viewport width
+        width - overflow.right - overflow.left, overflowAvailableWidth);
+      } else {
+        availableHeight = min(
+        // Maximum clipping viewport height
+        height - overflow.bottom - overflow.top, overflowAvailableHeight);
+      }
+      if (!state.middlewareData.shift && !alignment) {
+        const xMin = max(overflow.left, 0);
+        const xMax = max(overflow.right, 0);
+        const yMin = max(overflow.top, 0);
+        const yMax = max(overflow.bottom, 0);
+        if (isXAxis) {
+          availableWidth = width - 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right));
+        } else {
+          availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
+        }
+      }
       await apply({
-        ...middlewareArguments,
-        ...dimensions
+        ...state,
+        availableWidth,
+        availableHeight
       });
       const nextDimensions = await platform.getDimensions(elements.floating);
-      if (rects.floating.width !== nextDimensions.width || rects.floating.height !== nextDimensions.height) {
+      if (width !== nextDimensions.width || height !== nextDimensions.height) {
         return {
           reset: {
             rects: true
@@ -85214,6 +90794,28 @@ function getComputedStyle$1(element) {
   return getWindow(element).getComputedStyle(element);
 }
 
+const min = Math.min;
+const max = Math.max;
+const round = Math.round;
+
+function getCssDimensions(element) {
+  const css = getComputedStyle$1(element);
+  let width = parseFloat(css.width);
+  let height = parseFloat(css.height);
+  const offsetWidth = element.offsetWidth;
+  const offsetHeight = element.offsetHeight;
+  const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
+  if (shouldFallback) {
+    width = offsetWidth;
+    height = offsetHeight;
+  }
+  return {
+    width,
+    height,
+    fallback: shouldFallback
+  };
+}
+
 function getNodeName(node) {
   return isNode(node) ? (node.nodeName || '').toLowerCase() : '';
 }
@@ -85241,7 +90843,7 @@ function isNode(value) {
   return value instanceof getWindow(value).Node;
 }
 function isShadowRoot(node) {
-  // Browsers without `ShadowRoot` support
+  // Browsers without `ShadowRoot` support.
   if (typeof ShadowRoot === 'undefined') {
     return false;
   }
@@ -85261,7 +90863,7 @@ function isTableElement(element) {
   return ['table', 'td', 'th'].includes(getNodeName(element));
 }
 function isContainingBlock(element) {
-  // TODO: Try and use feature detection here instead
+  // TODO: Try to use feature detection here instead.
   const isFirefox = /firefox/i.test(getUAString());
   const css = getComputedStyle$1(element);
   const backdropFilter = css.backdropFilter || css.WebkitBackdropFilter;
@@ -85269,47 +90871,31 @@ function isContainingBlock(element) {
   // This is non-exhaustive but covers the most common CSS properties that
   // create a containing block.
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  return css.transform !== 'none' || css.perspective !== 'none' || (backdropFilter ? backdropFilter !== 'none' : false) || isFirefox && css.willChange === 'filter' || isFirefox && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective'].some(value => css.willChange.includes(value)) || ['paint', 'layout', 'strict', 'content'].some(
-  // TS 4.1 compat
-  value => {
+  return css.transform !== 'none' || css.perspective !== 'none' || (backdropFilter ? backdropFilter !== 'none' : false) || isFirefox && css.willChange === 'filter' || isFirefox && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective'].some(value => css.willChange.includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => {
+    // Add type check for old browsers.
     const contain = css.contain;
     return contain != null ? contain.includes(value) : false;
   });
 }
-function isLayoutViewport() {
-  // Not Safari
-  return !/^((?!chrome|android).)*safari/i.test(getUAString());
-  // Feature detection for this fails in various ways
-  // • Always-visible scrollbar or not
-  // • Width of <html>, etc.
-  // const vV = win.visualViewport;
-  // return vV ? Math.abs(win.innerWidth / vV.scale - vV.width) < 0.5 : true;
-}
 
+/**
+ * Determines whether or not `.getBoundingClientRect()` is affected by visual
+ * viewport offsets. In Safari, the `x`/`y` offsets are values relative to the
+ * visual viewport, while in other engines, they are values relative to the
+ * layout viewport.
+ */
+function isClientRectVisualViewportBased() {
+  // TODO: Try to use feature detection here instead. Feature detection for
+  // this can fail in various ways, making the userAgent check the most
+  // reliable:
+  // • Always-visible scrollbar or not
+  // • Width of <html>
+
+  // Is Safari.
+  return /^((?!chrome|android).)*safari/i.test(getUAString());
+}
 function isLastTraversableNode(node) {
   return ['html', 'body', '#document'].includes(getNodeName(node));
-}
-
-const min = Math.min;
-const max = Math.max;
-const round = Math.round;
-
-function getCssDimensions(element) {
-  const css = getComputedStyle$1(element);
-  let width = parseFloat(css.width);
-  let height = parseFloat(css.height);
-  const offsetWidth = element.offsetWidth;
-  const offsetHeight = element.offsetHeight;
-  const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
-  if (shouldFallback) {
-    width = offsetWidth;
-    height = offsetHeight;
-  }
-  return {
-    width,
-    height,
-    fallback: shouldFallback
-  };
 }
 
 function unwrapElement(element) {
@@ -85369,7 +90955,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     }
   }
   const win = domElement ? getWindow(domElement) : window;
-  const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
+  const addVisualOffsets = isClientRectVisualViewportBased() && isFixedStrategy;
   let x = (clientRect.left + (addVisualOffsets ? ((_win$visualViewport = win.visualViewport) == null ? void 0 : _win$visualViewport.offsetLeft) || 0 : 0)) / scale.x;
   let y = (clientRect.top + (addVisualOffsets ? ((_win$visualViewport2 = win.visualViewport) == null ? void 0 : _win$visualViewport2.offsetTop) || 0 : 0)) / scale.y;
   let width = clientRect.width / scale.x;
@@ -85422,10 +91008,290 @@ function getNodeScroll(element) {
   };
 }
 
+function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
+  let {
+    rect,
+    offsetParent,
+    strategy
+  } = _ref;
+  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const documentElement = getDocumentElement(offsetParent);
+  if (offsetParent === documentElement) {
+    return rect;
+  }
+  let scroll = {
+    scrollLeft: 0,
+    scrollTop: 0
+  };
+  let scale = {
+    x: 1,
+    y: 1
+  };
+  const offsets = {
+    x: 0,
+    y: 0
+  };
+  if (isOffsetParentAnElement || !isOffsetParentAnElement && strategy !== 'fixed') {
+    if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
+      scroll = getNodeScroll(offsetParent);
+    }
+    if (isHTMLElement(offsetParent)) {
+      const offsetRect = getBoundingClientRect(offsetParent);
+      scale = getScale(offsetParent);
+      offsets.x = offsetRect.x + offsetParent.clientLeft;
+      offsets.y = offsetRect.y + offsetParent.clientTop;
+    }
+  }
+  return {
+    width: rect.width * scale.x,
+    height: rect.height * scale.y,
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
+  };
+}
+
 function getWindowScrollBarX(element) {
   // If <html> has a CSS width greater than the viewport, then this will be
   // incorrect for RTL.
   return getBoundingClientRect(getDocumentElement(element)).left + getNodeScroll(element).scrollLeft;
+}
+
+// Gets the entire size of the scrollable document area, even extending outside
+// of the `<html>` and `<body>` rect bounds if horizontally scrollable.
+function getDocumentRect(element) {
+  const html = getDocumentElement(element);
+  const scroll = getNodeScroll(element);
+  const body = element.ownerDocument.body;
+  const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+  const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+  let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+  const y = -scroll.scrollTop;
+  if (getComputedStyle$1(body).direction === 'rtl') {
+    x += max(html.clientWidth, body.clientWidth) - width;
+  }
+  return {
+    width,
+    height,
+    x,
+    y
+  };
+}
+
+function getParentNode(node) {
+  if (getNodeName(node) === 'html') {
+    return node;
+  }
+  const result =
+  // Step into the shadow DOM of the parent of a slotted node.
+  node.assignedSlot ||
+  // DOM Element detected.
+  node.parentNode ||
+  // ShadowRoot detected.
+  isShadowRoot(node) && node.host ||
+  // Fallback.
+  getDocumentElement(node);
+  return isShadowRoot(result) ? result.host : result;
+}
+
+function getNearestOverflowAncestor(node) {
+  const parentNode = getParentNode(node);
+  if (isLastTraversableNode(parentNode)) {
+    // `getParentNode` will never return a `Document` due to the fallback
+    // check, so it's either the <html> or <body> element.
+    return parentNode.ownerDocument.body;
+  }
+  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+    return parentNode;
+  }
+  return getNearestOverflowAncestor(parentNode);
+}
+
+function getOverflowAncestors(node, list) {
+  var _node$ownerDocument;
+  if (list === void 0) {
+    list = [];
+  }
+  const scrollableAncestor = getNearestOverflowAncestor(node);
+  const isBody = scrollableAncestor === ((_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.body);
+  const win = getWindow(scrollableAncestor);
+  if (isBody) {
+    return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : []);
+  }
+  return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor));
+}
+
+function getViewportRect(element, strategy) {
+  const win = getWindow(element);
+  const html = getDocumentElement(element);
+  const visualViewport = win.visualViewport;
+  let width = html.clientWidth;
+  let height = html.clientHeight;
+  let x = 0;
+  let y = 0;
+  if (visualViewport) {
+    width = visualViewport.width;
+    height = visualViewport.height;
+    const visualViewportBased = isClientRectVisualViewportBased();
+    if (!visualViewportBased || visualViewportBased && strategy === 'fixed') {
+      x = visualViewport.offsetLeft;
+      y = visualViewport.offsetTop;
+    }
+  }
+  return {
+    width,
+    height,
+    x,
+    y
+  };
+}
+
+// Returns the inner client rect, subtracting scrollbars if present.
+function getInnerBoundingClientRect(element, strategy) {
+  const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
+  const top = clientRect.top + element.clientTop;
+  const left = clientRect.left + element.clientLeft;
+  const scale = isHTMLElement(element) ? getScale(element) : {
+    x: 1,
+    y: 1
+  };
+  const width = element.clientWidth * scale.x;
+  const height = element.clientHeight * scale.y;
+  const x = left * scale.x;
+  const y = top * scale.y;
+  return {
+    width,
+    height,
+    x,
+    y
+  };
+}
+function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
+  let rect;
+  if (clippingAncestor === 'viewport') {
+    rect = getViewportRect(element, strategy);
+  } else if (clippingAncestor === 'document') {
+    rect = getDocumentRect(getDocumentElement(element));
+  } else if (isElement(clippingAncestor)) {
+    rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+  } else {
+    const mutableRect = {
+      ...clippingAncestor
+    };
+    if (isClientRectVisualViewportBased()) {
+      var _win$visualViewport, _win$visualViewport2;
+      const win = getWindow(element);
+      mutableRect.x -= ((_win$visualViewport = win.visualViewport) == null ? void 0 : _win$visualViewport.offsetLeft) || 0;
+      mutableRect.y -= ((_win$visualViewport2 = win.visualViewport) == null ? void 0 : _win$visualViewport2.offsetTop) || 0;
+    }
+    rect = mutableRect;
+  }
+  return (0,_floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.rectToClientRect)(rect);
+}
+
+// A "clipping ancestor" is an `overflow` element with the characteristic of
+// clipping (or hiding) child elements. This returns all clipping ancestors
+// of the given element up the tree.
+function getClippingElementAncestors(element, cache) {
+  const cachedResult = cache.get(element);
+  if (cachedResult) {
+    return cachedResult;
+  }
+  let result = getOverflowAncestors(element).filter(el => isElement(el) && getNodeName(el) !== 'body');
+  let currentContainingBlockComputedStyle = null;
+  const elementIsFixed = getComputedStyle$1(element).position === 'fixed';
+  let currentNode = elementIsFixed ? getParentNode(element) : element;
+
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+  while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    const computedStyle = getComputedStyle$1(currentNode);
+    const containingBlock = isContainingBlock(currentNode);
+    const shouldIgnoreCurrentNode = computedStyle.position === 'fixed';
+    if (shouldIgnoreCurrentNode) {
+      currentContainingBlockComputedStyle = null;
+    } else {
+      const shouldDropCurrentNode = elementIsFixed ? !containingBlock && !currentContainingBlockComputedStyle : !containingBlock && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position);
+      if (shouldDropCurrentNode) {
+        // Drop non-containing blocks.
+        result = result.filter(ancestor => ancestor !== currentNode);
+      } else {
+        // Record last containing block for next iteration.
+        currentContainingBlockComputedStyle = computedStyle;
+      }
+    }
+    currentNode = getParentNode(currentNode);
+  }
+  cache.set(element, result);
+  return result;
+}
+
+// Gets the maximum area that the element is visible in due to any number of
+// clipping ancestors.
+function getClippingRect(_ref) {
+  let {
+    element,
+    boundary,
+    rootBoundary,
+    strategy
+  } = _ref;
+  const elementClippingAncestors = boundary === 'clippingAncestors' ? getClippingElementAncestors(element, this._c) : [].concat(boundary);
+  const clippingAncestors = [...elementClippingAncestors, rootBoundary];
+  const firstClippingAncestor = clippingAncestors[0];
+  const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
+    const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
+    accRect.top = max(rect.top, accRect.top);
+    accRect.right = min(rect.right, accRect.right);
+    accRect.bottom = min(rect.bottom, accRect.bottom);
+    accRect.left = max(rect.left, accRect.left);
+    return accRect;
+  }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
+  return {
+    width: clippingRect.right - clippingRect.left,
+    height: clippingRect.bottom - clippingRect.top,
+    x: clippingRect.left,
+    y: clippingRect.top
+  };
+}
+
+function getDimensions(element) {
+  if (isHTMLElement(element)) {
+    return getCssDimensions(element);
+  }
+  return element.getBoundingClientRect();
+}
+
+function getTrueOffsetParent(element, polyfill) {
+  if (!isHTMLElement(element) || getComputedStyle$1(element).position === 'fixed') {
+    return null;
+  }
+  if (polyfill) {
+    return polyfill(element);
+  }
+  return element.offsetParent;
+}
+function getContainingBlock(element) {
+  let currentNode = getParentNode(element);
+  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    if (isContainingBlock(currentNode)) {
+      return currentNode;
+    } else {
+      currentNode = getParentNode(currentNode);
+    }
+  }
+  return null;
+}
+
+// Gets the closest ancestor positioned element. Handles some edge cases,
+// such as table ancestors and cross browser bugs.
+function getOffsetParent(element, polyfill) {
+  const window = getWindow(element);
+  let offsetParent = getTrueOffsetParent(element, polyfill);
+  while (offsetParent && isTableElement(offsetParent) && getComputedStyle$1(offsetParent).position === 'static') {
+    offsetParent = getTrueOffsetParent(offsetParent, polyfill);
+  }
+  if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && getComputedStyle$1(offsetParent).position === 'static' && !isContainingBlock(offsetParent))) {
+    return window;
+  }
+  return offsetParent || getContainingBlock(element) || window;
 }
 
 function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
@@ -85460,271 +91326,6 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
   };
 }
 
-function getParentNode(node) {
-  if (getNodeName(node) === 'html') {
-    return node;
-  }
-  const result =
-  // Step into the shadow DOM of the parent of a slotted node
-  node.assignedSlot ||
-  // DOM Element detected
-  node.parentNode || (
-  // ShadowRoot detected
-  isShadowRoot(node) ? node.host : null) ||
-  // Fallback
-  getDocumentElement(node);
-  return isShadowRoot(result) ? result.host : result;
-}
-
-function getTrueOffsetParent(element) {
-  if (!isHTMLElement(element) || getComputedStyle$1(element).position === 'fixed') {
-    return null;
-  }
-  return element.offsetParent;
-}
-function getContainingBlock(element) {
-  let currentNode = getParentNode(element);
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    if (isContainingBlock(currentNode)) {
-      return currentNode;
-    } else {
-      currentNode = getParentNode(currentNode);
-    }
-  }
-  return null;
-}
-
-// Gets the closest ancestor positioned element. Handles some edge cases,
-// such as table ancestors and cross browser bugs.
-function getOffsetParent(element) {
-  const window = getWindow(element);
-  let offsetParent = getTrueOffsetParent(element);
-  while (offsetParent && isTableElement(offsetParent) && getComputedStyle$1(offsetParent).position === 'static') {
-    offsetParent = getTrueOffsetParent(offsetParent);
-  }
-  if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && getComputedStyle$1(offsetParent).position === 'static' && !isContainingBlock(offsetParent))) {
-    return window;
-  }
-  return offsetParent || getContainingBlock(element) || window;
-}
-
-function getDimensions(element) {
-  return getCssDimensions(element);
-}
-
-function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
-  let {
-    rect,
-    offsetParent,
-    strategy
-  } = _ref;
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
-  const documentElement = getDocumentElement(offsetParent);
-  if (offsetParent === documentElement) {
-    return rect;
-  }
-  let scroll = {
-    scrollLeft: 0,
-    scrollTop: 0
-  };
-  let scale = {
-    x: 1,
-    y: 1
-  };
-  const offsets = {
-    x: 0,
-    y: 0
-  };
-  if (isOffsetParentAnElement || !isOffsetParentAnElement && strategy !== 'fixed') {
-    if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
-      scroll = getNodeScroll(offsetParent);
-    }
-    if (isHTMLElement(offsetParent)) {
-      const offsetRect = getBoundingClientRect(offsetParent);
-      scale = getScale(offsetParent);
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
-    }
-    // This doesn't appear to need to be negated.
-    // else if (documentElement) {
-    //   offsets.x = getWindowScrollBarX(documentElement);
-    // }
-  }
-
-  return {
-    width: rect.width * scale.x,
-    height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
-  };
-}
-
-function getViewportRect(element, strategy) {
-  const win = getWindow(element);
-  const html = getDocumentElement(element);
-  const visualViewport = win.visualViewport;
-  let width = html.clientWidth;
-  let height = html.clientHeight;
-  let x = 0;
-  let y = 0;
-  if (visualViewport) {
-    width = visualViewport.width;
-    height = visualViewport.height;
-    const layoutViewport = isLayoutViewport();
-    if (layoutViewport || !layoutViewport && strategy === 'fixed') {
-      x = visualViewport.offsetLeft;
-      y = visualViewport.offsetTop;
-    }
-  }
-  return {
-    width,
-    height,
-    x,
-    y
-  };
-}
-
-// Gets the entire size of the scrollable document area, even extending outside
-// of the `<html>` and `<body>` rect bounds if horizontally scrollable
-function getDocumentRect(element) {
-  var _element$ownerDocumen;
-  const html = getDocumentElement(element);
-  const scroll = getNodeScroll(element);
-  const body = (_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body;
-  const width = max(html.scrollWidth, html.clientWidth, body ? body.scrollWidth : 0, body ? body.clientWidth : 0);
-  const height = max(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
-  let x = -scroll.scrollLeft + getWindowScrollBarX(element);
-  const y = -scroll.scrollTop;
-  if (getComputedStyle$1(body || html).direction === 'rtl') {
-    x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
-  }
-  return {
-    width,
-    height,
-    x,
-    y
-  };
-}
-
-function getNearestOverflowAncestor(node) {
-  const parentNode = getParentNode(node);
-  if (isLastTraversableNode(parentNode)) {
-    // @ts-ignore assume body is always available
-    return node.ownerDocument.body;
-  }
-  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
-    return parentNode;
-  }
-  return getNearestOverflowAncestor(parentNode);
-}
-
-function getOverflowAncestors(node, list) {
-  var _node$ownerDocument;
-  if (list === void 0) {
-    list = [];
-  }
-  const scrollableAncestor = getNearestOverflowAncestor(node);
-  const isBody = scrollableAncestor === ((_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.body);
-  const win = getWindow(scrollableAncestor);
-  if (isBody) {
-    return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : []);
-  }
-  return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor));
-}
-
-// Returns the inner client rect, subtracting scrollbars if present
-function getInnerBoundingClientRect(element, strategy) {
-  const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
-  const top = clientRect.top + element.clientTop;
-  const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : {
-    x: 1,
-    y: 1
-  };
-  const width = element.clientWidth * scale.x;
-  const height = element.clientHeight * scale.y;
-  const x = left * scale.x;
-  const y = top * scale.y;
-  return {
-    top: y,
-    left: x,
-    right: x + width,
-    bottom: y + height,
-    x,
-    y,
-    width,
-    height
-  };
-}
-function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
-  if (clippingAncestor === 'viewport') {
-    return (0,_floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.rectToClientRect)(getViewportRect(element, strategy));
-  }
-  if (isElement(clippingAncestor)) {
-    return getInnerBoundingClientRect(clippingAncestor, strategy);
-  }
-  return (0,_floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.rectToClientRect)(getDocumentRect(getDocumentElement(element)));
-}
-
-// A "clipping ancestor" is an `overflow` element with the characteristic of
-// clipping (or hiding) child elements. This returns all clipping ancestors
-// of the given element up the tree.
-function getClippingElementAncestors(element, cache) {
-  const cachedResult = cache.get(element);
-  if (cachedResult) {
-    return cachedResult;
-  }
-  let result = getOverflowAncestors(element).filter(el => isElement(el) && getNodeName(el) !== 'body');
-  let currentContainingBlockComputedStyle = null;
-  const elementIsFixed = getComputedStyle$1(element).position === 'fixed';
-  let currentNode = elementIsFixed ? getParentNode(element) : element;
-
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    const computedStyle = getComputedStyle$1(currentNode);
-    const containingBlock = isContainingBlock(currentNode);
-    const shouldDropCurrentNode = elementIsFixed ? !containingBlock && !currentContainingBlockComputedStyle : !containingBlock && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position);
-    if (shouldDropCurrentNode) {
-      // Drop non-containing blocks
-      result = result.filter(ancestor => ancestor !== currentNode);
-    } else {
-      // Record last containing block for next iteration
-      currentContainingBlockComputedStyle = computedStyle;
-    }
-    currentNode = getParentNode(currentNode);
-  }
-  cache.set(element, result);
-  return result;
-}
-
-// Gets the maximum area that the element is visible in due to any number of
-// clipping ancestors
-function getClippingRect(_ref) {
-  let {
-    element,
-    boundary,
-    rootBoundary,
-    strategy
-  } = _ref;
-  const elementClippingAncestors = boundary === 'clippingAncestors' ? getClippingElementAncestors(element, this._c) : [].concat(boundary);
-  const clippingAncestors = [...elementClippingAncestors, rootBoundary];
-  const firstClippingAncestor = clippingAncestors[0];
-  const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
-    const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
-    accRect.top = max(rect.top, accRect.top);
-    accRect.right = min(rect.right, accRect.right);
-    accRect.bottom = min(rect.bottom, accRect.bottom);
-    accRect.left = max(rect.left, accRect.left);
-    return accRect;
-  }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
-  return {
-    width: clippingRect.right - clippingRect.left,
-    height: clippingRect.bottom - clippingRect.top,
-    x: clippingRect.left,
-    y: clippingRect.top
-  };
-}
-
 const platform = {
   getClippingRect,
   convertOffsetParentRelativeRectToViewportRelativeRect,
@@ -85756,6 +91357,10 @@ const platform = {
 
 /**
  * Automatically updates the position of the floating element when necessary.
+ * Should only be called when the floating element is mounted on the DOM or
+ * visible on the screen.
+ * @returns cleanup function that should be invoked when the floating element is
+ * removed from the DOM or hidden from the screen.
  * @see https://floating-ui.com/docs/autoUpdate
  */
 function autoUpdate(reference, floating, update, options) {
@@ -102104,7 +107709,9 @@ const useAffectedDebugValue = (state, affected) => {
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useDebugValue)(pathList.current);
 };
+const targetCache = /* @__PURE__ */ new WeakMap();
 function useSnapshot(proxyObject, options) {
+  var _a;
   const notifyInSync = options == null ? void 0 : options.sync;
   const lastSnapshot = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
   const lastAffected = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
@@ -102141,11 +107748,16 @@ function useSnapshot(proxyObject, options) {
     lastSnapshot.current = currSnapshot;
     lastAffected.current = currAffected;
   });
-  if (true) {
+  if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production") {
     useAffectedDebugValue(currSnapshot, currAffected);
   }
   const proxyCache = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => /* @__PURE__ */ new WeakMap(), []);
-  return (0,proxy_compare__WEBPACK_IMPORTED_MODULE_2__.createProxy)(currSnapshot, currAffected, proxyCache);
+  return (0,proxy_compare__WEBPACK_IMPORTED_MODULE_2__.createProxy)(
+    currSnapshot,
+    currAffected,
+    proxyCache,
+    targetCache
+  );
 }
 
 
@@ -102193,24 +107805,36 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
   (0,proxy_compare__WEBPACK_IMPORTED_MODULE_0__.markToTrack)(snap, true);
   snapCache.set(target, [version, snap]);
   Reflect.ownKeys(target).forEach((key) => {
+    if (Object.getOwnPropertyDescriptor(snap, key)) {
+      return;
+    }
     const value = Reflect.get(target, key);
+    const desc = {
+      value,
+      enumerable: true,
+      // This is intentional to avoid copying with proxy-compare.
+      // It's still non-writable, so it avoids assigning a value.
+      configurable: true
+    };
     if (refSet.has(value)) {
       (0,proxy_compare__WEBPACK_IMPORTED_MODULE_0__.markToTrack)(value, false);
-      snap[key] = value;
     } else if (value instanceof Promise) {
-      Object.defineProperty(snap, key, {
-        get() {
-          return handlePromise(value);
-        }
-      });
+      delete desc.value;
+      desc.get = () => handlePromise(value);
     } else if (proxyStateMap.has(value)) {
-      snap[key] = snapshot(value, handlePromise);
-    } else {
-      snap[key] = value;
+      const [target2, ensureVersion] = proxyStateMap.get(
+        value
+      );
+      desc.value = createSnapshot(
+        target2,
+        ensureVersion(),
+        handlePromise
+      );
     }
+    Object.defineProperty(snap, key, desc);
   });
-  return Object.freeze(snap);
-}, proxyCache = /* @__PURE__ */ new WeakMap(), versionHolder = [1, 1], proxyFunction2 = (initialObject) => {
+  return snap;
+}, proxyCache = /* @__PURE__ */ new WeakMap(), versionHolder = [1, 1], proxyFunction = (initialObject) => {
   if (!isObject(initialObject)) {
     throw new Error("object required");
   }
@@ -102246,7 +107870,8 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
   };
   const propProxyStates = /* @__PURE__ */ new Map();
   const addPropListener = (prop, propProxyState) => {
-    if ( true && propProxyStates.has(prop)) {
+    var _a;
+    if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production" && propProxyStates.has(prop)) {
       throw new Error("prop listener already exists");
     }
     if (listeners.size) {
@@ -102268,7 +107893,8 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
     listeners.add(listener);
     if (listeners.size === 1) {
       propProxyStates.forEach(([propProxyState, prevRemove], prop) => {
-        if ( true && prevRemove) {
+        var _a;
+        if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production" && prevRemove) {
           throw new Error("remove already exists");
         }
         const remove = propProxyState[3](createPropListener(prop));
@@ -102300,10 +107926,9 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
       return deleted;
     },
     set(target, prop, value, receiver) {
-      var _a;
       const hasPrevValue = Reflect.has(target, prop);
       const prevValue = Reflect.get(target, prop, receiver);
-      if (hasPrevValue && objectIs(prevValue, value)) {
+      if (hasPrevValue && (objectIs(prevValue, value) || proxyCache.has(value) && objectIs(prevValue, proxyCache.get(value)))) {
         return true;
       }
       removePropListener(prop);
@@ -102311,7 +107936,7 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
         value = (0,proxy_compare__WEBPACK_IMPORTED_MODULE_0__.getUntracked)(value) || value;
       }
       let nextValue = value;
-      if ((_a = Object.getOwnPropertyDescriptor(target, prop)) == null ? void 0 : _a.set) ; else if (value instanceof Promise) {
+      if (value instanceof Promise) {
         value.then((v) => {
           value.status = "fulfilled";
           value.value = v;
@@ -102323,7 +107948,7 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
         });
       } else {
         if (!proxyStateMap.has(value) && canProxy(value)) {
-          nextValue = proxy(value);
+          nextValue = proxyFunction(value);
         }
         const childProxyState = !refSet.has(nextValue) && proxyStateMap.get(nextValue);
         if (childProxyState) {
@@ -102349,16 +107974,17 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
       initialObject,
       key
     );
-    if (desc.get || desc.set) {
-      Object.defineProperty(baseObject, key, desc);
-    } else {
+    const hasValue = "value" in desc;
+    delete desc.value;
+    Object.defineProperty(baseObject, key, desc);
+    if (hasValue) {
       proxyObject[key] = initialObject[key];
     }
   });
   return proxyObject;
 }) => [
   // public functions
-  proxyFunction2,
+  proxyFunction,
   // shared state
   proxyStateMap,
   refSet,
@@ -102372,17 +107998,18 @@ const buildProxyFunction = (objectIs = Object.is, newProxy = (target, handler) =
   proxyCache,
   versionHolder
 ];
-const [proxyFunction] = buildProxyFunction();
+const [defaultProxyFunction] = buildProxyFunction();
 function proxy(initialObject = {}) {
-  return proxyFunction(initialObject);
+  return defaultProxyFunction(initialObject);
 }
 function getVersion(proxyObject) {
   const proxyState = proxyStateMap.get(proxyObject);
   return proxyState == null ? void 0 : proxyState[1]();
 }
 function subscribe(proxyObject, callback, notifyInSync) {
+  var _a;
   const proxyState = proxyStateMap.get(proxyObject);
-  if ( true && !proxyState) {
+  if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production" && !proxyState) {
     console.warn("Please use proxy object");
   }
   let promise;
@@ -102412,8 +108039,9 @@ function subscribe(proxyObject, callback, notifyInSync) {
   };
 }
 function snapshot(proxyObject, handlePromise) {
+  var _a;
   const proxyState = proxyStateMap.get(proxyObject);
-  if ( true && !proxyState) {
+  if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production" && !proxyState) {
     console.warn("Please use proxy object");
   }
   const [target, ensureVersion, createSnapshot] = proxyState;
@@ -102444,7 +108072,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "devtools": () => (/* binding */ devtools),
 /* harmony export */   "proxyMap": () => (/* binding */ proxyMap),
 /* harmony export */   "proxySet": () => (/* binding */ proxySet),
-/* harmony export */   "proxyWithComputed": () => (/* binding */ proxyWithComputed),
+/* harmony export */   "proxyWithComputed": () => (/* binding */ proxyWithComputed_DEPRECATED),
 /* harmony export */   "proxyWithHistory": () => (/* binding */ proxyWithHistory),
 /* harmony export */   "subscribeKey": () => (/* binding */ subscribeKey),
 /* harmony export */   "underive": () => (/* binding */ underive),
@@ -102524,6 +108152,7 @@ function watch(callback, options) {
 
 const DEVTOOLS = Symbol();
 function devtools(proxyObject, options) {
+  var _a, _b;
   if (typeof options === "string") {
     console.warn(
       "string name option is deprecated, use { name }. https://github.com/pmndrs/valtio/pull/400"
@@ -102533,11 +108162,11 @@ function devtools(proxyObject, options) {
   const { enabled, name = "" } = options || {};
   let extension;
   try {
-    extension = (enabled != null ? enabled : (/* unsupported import.meta.env */ undefined && 0) !== "production") && window.__REDUX_DEVTOOLS_EXTENSION__;
+    extension = (enabled != null ? enabled : ((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production") && window.__REDUX_DEVTOOLS_EXTENSION__;
   } catch {
   }
   if (!extension) {
-    if ( true && enabled) {
+    if (((_b = /* unsupported import.meta.env */ undefined) == null ? void 0 : _b.MODE) !== "production" && enabled) {
       console.warn("[Warning] Please install/enable Redux devtools extension");
     }
     return;
@@ -102557,14 +108186,14 @@ function devtools(proxyObject, options) {
       devtools2.send(
         {
           type: action,
-          updatedAt: new Date().toLocaleString()
+          updatedAt: (/* @__PURE__ */ new Date()).toLocaleString()
         },
         snapWithoutDevtools
       );
     }
   });
   const unsub2 = devtools2.subscribe((message) => {
-    var _a, _b, _c, _d, _e, _f;
+    var _a2, _b2, _c, _d, _e, _f;
     if (message.type === "ACTION" && message.payload) {
       try {
         Object.assign(proxyObject, JSON.parse(message.payload));
@@ -102576,7 +108205,7 @@ function devtools(proxyObject, options) {
       }
     }
     if (message.type === "DISPATCH" && message.state) {
-      if (((_a = message.payload) == null ? void 0 : _a.type) === "JUMP_TO_ACTION" || ((_b = message.payload) == null ? void 0 : _b.type) === "JUMP_TO_STATE") {
+      if (((_a2 = message.payload) == null ? void 0 : _a2.type) === "JUMP_TO_ACTION" || ((_b2 = message.payload) == null ? void 0 : _b2.type) === "JUMP_TO_STATE") {
         isTimeTraveling = true;
         const state = JSON.parse(message.state);
         Object.assign(proxyObject, state);
@@ -102811,9 +108440,12 @@ function underive(proxyObject, options) {
 }
 
 function addComputed_DEPRECATED(proxyObject, computedFns_FAKE, targetObject = proxyObject) {
-  console.warn(
-    "addComputed is deprecated. Please consider using `derive` or `proxyWithComputed` instead. Falling back to emulation with derive. https://github.com/pmndrs/valtio/pull/201"
-  );
+  var _a;
+  if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production") {
+    console.warn(
+      "addComputed is deprecated. Please consider using `derive`. Falling back to emulation with derive. https://github.com/pmndrs/valtio/pull/201"
+    );
+  }
   const derivedFns = {};
   Object.keys(computedFns_FAKE).forEach((key) => {
     derivedFns[key] = (get) => computedFns_FAKE[key](get(proxyObject));
@@ -102821,7 +108453,13 @@ function addComputed_DEPRECATED(proxyObject, computedFns_FAKE, targetObject = pr
   return derive(derivedFns, { proxy: targetObject });
 }
 
-function proxyWithComputed(initialObject, computedFns) {
+function proxyWithComputed_DEPRECATED(initialObject, computedFns) {
+  var _a;
+  if (((_a = /* unsupported import.meta.env */ undefined) == null ? void 0 : _a.MODE) !== "production") {
+    console.warn(
+      'proxyWithComputed is deprecated. Please follow "Computed Properties" guide in docs.'
+    );
+  }
   Object.keys(computedFns).forEach((key) => {
     if (Object.getOwnPropertyDescriptor(initialObject, key)) {
       throw new Error("object property already defined");

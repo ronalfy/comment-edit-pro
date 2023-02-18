@@ -328,6 +328,8 @@ class Comment_Edit_Pro {
 		$this->spam_protection->run();
 		$this->character_control = new \CommentEditPro\Includes\Character_Control();
 		$this->character_control->run();
+		$this->webhooks = new \CommentEditPro\Includes\Webhooks();
+		$this->webhooks->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

@@ -23,6 +23,7 @@ class Init_Tabs {
 		new License();
 		new Mentions();
 		new Spam_Protection();
+		new Webhooks();
 		new Support();
 	}
 }

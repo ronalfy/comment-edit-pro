@@ -560,6 +560,9 @@ h3.sce-panel-heading {
   justify-content: space-between;
   align-items: center;
 }
+.sce-admin-buttons.sce-admin-buttons-flex-right {
+  justify-content: flex-end;
+}
 .sce-admin-buttons button {
   background: #FFF;
   color: #017e01;
@@ -568,6 +571,7 @@ h3.sce-panel-heading {
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  transition: all 0.4s ease-in-out;
 }
 .sce-admin-buttons button:hover {
   border-radius: 5px;
@@ -590,6 +594,29 @@ h3.sce-panel-heading {
   background: #ece6e6;
   color: #822700;
   border-color: #822700;
+}
+.sce-admin-buttons button.sce__btn-action {
+  display: flex;
+  align-items: center;
+  background: #FFF;
+  color: #9949cf;
+  border-color: #9949cf;
+  font-weight: 600;
+}
+.sce-admin-buttons button.sce__btn-action:hover {
+  background: rgb(248, 247, 254);
+  color: #8019c4;
+  border-color: #6f6f6f;
+}
+.sce-admin-buttons button.sce__btn-action:hover svg path {
+  fill: #8019c4;
+}
+.sce-admin-buttons button.sce__btn-action svg {
+  display: inline-block;
+  margin-right: 8px;
+}
+.sce-admin-buttons button.sce__btn-action svg path {
+  fill: #9949cf;
 }
 .sce-admin-buttons button.qdlx__btn--icon-right.is-saving {
   display: flex;
@@ -1046,6 +1073,37 @@ h2 a.sce-admin-heading-docs {
 .sce-admin-panel-card-header img {
   max-width: 100%;
   height: auto;
+}
+
+/* Webhooks Table */
+.sce-panel-webhooks-table__wrapper {
+  margin-top: 35px;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(156, 104, 176, 0.45);
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table tr {
+  border-bottom: 1px solid #eee;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table tr:last-child {
+  border-bottom: 0;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table th {
+  padding: 10px 15px;
+  background: #eee;
+  text-align: left;
+  font-weight: 500;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table td {
+  padding: 10px 15px;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table td.sce-panel-webhooks-table__actions {
+  text-align: right;
 }
 
 /*# sourceMappingURL=admin.css.map*/

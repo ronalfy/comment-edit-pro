@@ -39,7 +39,7 @@ class Help {
 		 * @param string $settings_hook The current settings hook.
 		 * @param object $screen The current screen object.
 		 */
-		do_action( 'sce-help-tab-' . $tab, $tab, $settings_hook, $screen );
+		do_action( 'sce_help_tab_' . $tab, $tab, $settings_hook, $screen );
 
 		// Add help tabs conditionally.
 		switch ( $tab ) {

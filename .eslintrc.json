@@ -13,7 +13,8 @@
 		"sceSpamProtection": "readonly",
 		"turnstile": "readonly",
 		"sceTurnstileLocal": "readonly",
-		"sceCharacterControl": "readonly"
+		"sceCharacterControl": "readonly",
+		"sceWebhooks": "readonly"
 	},
 	"env": {
 		"browser": true,

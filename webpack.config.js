@@ -37,6 +37,8 @@ module.exports = ( env ) => {
 				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
 				'sce-cloudflare-turnstile': [ './src/js/turnstile/index.js' ],
 				'sce-character-control': [ './src/js/react/views/character-control/index.js' ],
+				'sce-webhook-modal': [ './src/scss/webhooks-modal.scss' ],
+				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
 			},
 			module: {
 				rules: [
@@ -51,6 +53,27 @@ module.exports = ( env ) => {
 								'@babel/plugin-transform-arrow-functions',
 							],
 						},
+					},
+					{
+						test: /\.css$/,
+						include: [
+							path.resolve(
+								__dirname,
+								'node_modules/@wordpress/components/build-style/style.css'
+							),
+						],
+						use: [
+							{
+								loader: MiniCssExtractPlugin.loader,
+							},
+							{
+								loader: 'css-loader',
+								options: {
+									sourceMap: true,
+								},
+							},
+							'sass-loader',
+						],
 					},
 					{
 						test: /\.scss$/,
