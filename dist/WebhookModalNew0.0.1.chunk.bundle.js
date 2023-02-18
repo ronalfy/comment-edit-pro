@@ -272,7 +272,7 @@ var ModalNew = function ModalNew(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Webhook', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
-    className: "form-table"
+    className: "form-table sce-form-table-modal"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
@@ -377,7 +377,13 @@ var ModalNew = function ModalNew(props) {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Headers', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin__values-repeater"
-  }, requestHeadersFields.map(function (item, index) {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row sce-admin__values-repeater__row-heading"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row__key"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row__key"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null)), requestHeadersFields.map(function (item, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row",
       key: item.id
@@ -397,7 +403,6 @@ var ModalNew = function ModalNew(props) {
             value = _ref5$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
           value: value !== null && value !== void 0 ? value : '',
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro'),
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$requestHeader = errors.requestHeaders) === null || _errors$requestHeader === void 0 ? void 0 : (_errors$requestHeader2 = _errors$requestHeader[index]) === null || _errors$requestHeader2 === void 0 ? void 0 : (_errors$requestHeader3 = _errors$requestHeader2.customName) === null || _errors$requestHeader3 === void 0 ? void 0 : _errors$requestHeader3.type),
             'is-required': true
@@ -419,7 +424,6 @@ var ModalNew = function ModalNew(props) {
             _onChange4 = _ref6$field.onChange,
             value = _ref6$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro'),
           value: value,
           options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
           onChange: function onChange(methodValue) {
@@ -443,7 +447,6 @@ var ModalNew = function ModalNew(props) {
             value = _ref7$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
           value: value !== null && value !== void 0 ? value : '',
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'),
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$requestHeader4 = errors.requestHeaders) === null || _errors$requestHeader4 === void 0 ? void 0 : (_errors$requestHeader5 = _errors$requestHeader4[index]) === null || _errors$requestHeader5 === void 0 ? void 0 : (_errors$requestHeader6 = _errors$requestHeader5.customValue) === null || _errors$requestHeader6 === void 0 ? void 0 : _errors$requestHeader6.type),
             'is-required': true
@@ -465,7 +468,6 @@ var ModalNew = function ModalNew(props) {
             _onChange6 = _ref8$field.onChange,
             value = _ref8$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'),
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
@@ -481,6 +483,13 @@ var ModalNew = function ModalNew(props) {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Header', 'comment-edit-pro'),
       onClick: function onClick() {
         appendRequestHeaders(index);
+      }
+    }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
+      icon: "minus",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Header', 'comment-edit-pro'),
+      onClick: function onClick() {
+        removeRequestHeaders(index);
       }
     })));
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {

@@ -1107,6 +1107,22 @@ h2 a.sce-admin-heading-docs {
 }
 
 /* Webhooks Modal */
+.sce-form-table-modal .components-base-control__field {
+  margin-bottom: 0 !important;
+}
+.sce-form-table-modal label {
+  font-weight: 700 !important; /* override core style */
+  font-size: 0.8125rem !important; /* override core style */
+  text-transform: uppercase !important; /* override core style */
+}
+.sce-form-table-modal .components-select-control__input,
+.sce-form-table-modal .components-text-control__input {
+  height: unset !important;
+  padding: 0.4575rem 2rem 0.4575rem 1rem !important; /* override core style */
+  width: 100% !important;
+  max-width: unset !important; /* override core style */
+}
+
 .sce-admin__values-repeater__row {
   display: grid;
   grid-template-columns: 45fr 45fr 10fr;
@@ -1114,7 +1130,15 @@ h2 a.sce-admin-heading-docs {
   row-gap: 20px;
   align-items: center;
 }
-.sce-admin__values-repeater__row .sce-admin__values-repeater-button {
+.sce-admin__values-repeater__row:not(:last-child) {
+  margin-bottom: 20px;
+}
+.sce-admin__values-repeater__row .sce-admin__values-repeater__row__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sce-admin__values-repeater__row .sce-admin__values-repeater__row__actions .sce-admin__values-repeater-button {
   min-width: 30px;
   min-height: 30px;
   border-radius: 100%;
@@ -1124,12 +1148,20 @@ h2 a.sce-admin-heading-docs {
   cursor: pointer;
   transition: background-color 0.5s ease;
 }
-.sce-admin__values-repeater__row .sce-admin__values-repeater-button span {
+.sce-admin__values-repeater__row .sce-admin__values-repeater__row__actions .sce-admin__values-repeater-button span {
   line-height: unset;
 }
-.sce-admin__values-repeater__row .sce-admin__values-repeater-button:hover {
+.sce-admin__values-repeater__row .sce-admin__values-repeater__row__actions .sce-admin__values-repeater-button:hover {
   background: #9c68b0;
   color: #fff;
+}
+.sce-admin__values-repeater__row .sce-admin__values-repeater__row__actions button:not(:last-child) {
+  margin-right: 10px;
+}
+.sce-admin__values-repeater__row.sce-admin__values-repeater__row-heading h3 {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-transform: uppercase !important; /* override core style */
 }
 
 /*# sourceMappingURL=admin.css.map*/

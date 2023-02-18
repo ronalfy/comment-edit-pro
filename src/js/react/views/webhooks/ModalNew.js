@@ -126,7 +126,7 @@ const ModalNew = ( props ) => {
 		<>
 			<h2>{ __( 'Add New Webhook', 'comment-edit-pro' ) }</h2>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
-				<table className="form-table">
+				<table className="form-table sce-form-table-modal">
 					<tbody>
 						<tr>
 							<th scope="row">{ __( 'Name', 'comment-edit-pro' ) }</th>
@@ -248,6 +248,15 @@ const ModalNew = ( props ) => {
 							<th scope="row">{ __( 'Request Headers', 'comment-edit-pro' ) }</th>
 							<td>
 								<div className="sce-admin__values-repeater">
+									<div className="sce-admin__values-repeater__row sce-admin__values-repeater__row-heading">
+										<div className="sce-admin__values-repeater__row__key">
+											<h3>{ __( 'Name', 'comment-edit-pro' ) }</h3>
+										</div>
+										<div className="sce-admin__values-repeater__row__key">
+											<h3>{ __( 'Value', 'comment-edit-pro' ) }</h3>
+										</div>
+										<div></div>
+									</div>
 									{ requestHeadersFields.map( ( item, index ) => (
 										<div className="sce-admin__values-repeater__row" key={ item.id }>
 											<div className="sce-admin__values-repeater__row__key">
@@ -259,7 +268,6 @@ const ModalNew = ( props ) => {
 														render={ ( { field: { onChange, value } } ) => (
 															<TextControl
 																value={ value ?? '' }
-																label={ __( 'Name', 'comment-edit-pro' ) }
 																className={ classNames( 'sce-admin__text-control', {
 																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customName?.type,
 																	'is-required': true,
@@ -279,7 +287,6 @@ const ModalNew = ( props ) => {
 														rules={ { required: true } }
 														render={ ( { field: { onChange, value } } ) => (
 															<SelectControl
-																label={ __( 'Name', 'comment-edit-pro' ) }
 																value={ value }
 																options={ RequestHeadersValues }
 																onChange={ ( methodValue ) => {
@@ -299,7 +306,6 @@ const ModalNew = ( props ) => {
 														render={ ( { field: { onChange, value } } ) => (
 															<TextControl
 																value={ value ?? '' }
-																label={ __( 'Value', 'comment-edit-pro' ) }
 																className={ classNames( 'sce-admin__text-control', {
 																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customValue?.type,
 																	'is-required': true,
@@ -319,7 +325,6 @@ const ModalNew = ( props ) => {
 														rules={ { required: true } }
 														render={ ( { field: { onChange, value } } ) => (
 															<SelectControl
-																label={ __( 'Value', 'comment-edit-pro' ) }
 																value={ value }
 																options={ RequestHeaderFields }
 																onChange={ ( methodValue ) => {
@@ -343,6 +348,19 @@ const ModalNew = ( props ) => {
 														appendRequestHeaders( index );
 													} }
 												/>
+												{ requestHeadersFields.length > 1 && (
+													<Button
+														className="sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset"
+														icon="minus"
+														label={ __(
+															'Remove Request Header',
+															'comment-edit-pro'
+														) }
+														onClick={ () => {
+															removeRequestHeaders( index );
+														} }
+													/>
+												) }
 											</div>
 										</div>
 									) ) }

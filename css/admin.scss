@@ -1208,6 +1208,23 @@ h2 a.sce-admin-heading-docs {
 }
 
 /* Webhooks Modal */
+.sce-form-table-modal {
+	.components-base-control__field {
+		margin-bottom: 0 !important;
+	}
+	label {
+		font-weight: 700 !important; /* override core style */
+		font-size: 0.8125rem !important; /* override core style */
+		text-transform: uppercase !important; /* override core style */
+	}
+	.components-select-control__input,
+	.components-text-control__input {
+		height: unset !important /* override core style */;
+		padding: .4575rem 2rem .4575rem 1rem !important; /* override core style */
+		width: 100% !important;
+		max-width: unset !important; /* override core style */
+	}
+}
 .sce-admin__values-repeater__row {
 	display: grid;
 	grid-template-columns: 45fr 45fr 10fr;
@@ -1215,21 +1232,45 @@ h2 a.sce-admin-heading-docs {
 	row-gap: 20px;
 	align-items: center;
 
-	.sce-admin__values-repeater-button {
-		min-width: 30px;
-		min-height: 30px;
-		border-radius: 100%;
-		border: 1px solid #ddd;
-		background: #fff;
-		color: #9c68b0;
-		cursor: pointer;
-		transition: background-color 0.5s ease;
-		span {
-			line-height: unset;
+	&:not(:last-child) {
+		margin-bottom: 20px;
+	}
+
+	.sce-admin__values-repeater__row__actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.sce-admin__values-repeater-button {
+			min-width: 30px;
+			min-height: 30px;
+			border-radius: 100%;
+			border: 1px solid #ddd;
+			background: #fff;
+			color: #9c68b0;
+			cursor: pointer;
+			transition: background-color 0.5s ease;
+			span {
+				line-height: unset;
+			}
+			&:hover {
+				background: #9c68b0;
+				color: #fff;
+			}
 		}
-		&:hover {
-			background: #9c68b0;
-			color: #fff;
+
+		button:not(:last-child) {
+			margin-right: 10px;
 		}
 	}
+
+	&.sce-admin__values-repeater__row-heading {
+		h3 {
+			font-weight: 700;
+			font-size: 0.8125rem;
+			text-transform: uppercase !important; /* override core style */
+		}
+	}
+
+	
 }
