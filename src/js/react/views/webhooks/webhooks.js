@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState, Suspense, useContext } from 'react';
+import React, { useEffect, useState, Suspense, useContext, lazy } from 'react';
 
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
@@ -24,6 +24,10 @@ import EyeIcon from '../../components/icons/EyeIcon';
 import EyeSlashRegular from '../../components/icons/EyeSlashRegular';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import WebhooksIcon from '../../components/icons/Webhooks';
+
+const ModalNew = lazy( () =>
+	import( /* webpackChunkName: "WebhookModalNew0.0.1" */ './ModalNew' )
+);
 
 const retrieveWebhooks = () => {
 	return sendCommand( 'sce_get_webhooks', {
@@ -62,6 +66,8 @@ const Interface = ( props ) => {
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
+
+	const [ showModal, setShowModal ] = useState( true );
 	
 	const {
 		webhooks,
@@ -89,6 +95,9 @@ const Interface = ( props ) => {
 	return (
 		<>
 			<div className="sce-admin-panel-area">
+				{ showModal && ( 
+					<div className="sce-panel-row"><ModalNew /></div>
+				)}
 				<div className="sce-panel-row">
 					{ getWebhooksHeader() }
 				</div>
@@ -96,7 +105,7 @@ const Interface = ( props ) => {
 					<Button
 						className="sce-panel-webhooks-button sce__btn-action"
 						onClick={ () => {
-							
+							setShowModal( true );
 						} }
 						icon={ WebhooksIcon }
 						iconSize={ 3 }
