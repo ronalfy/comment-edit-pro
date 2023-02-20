@@ -1113,7 +1113,7 @@ h2 a.sce-admin-heading-docs {
 .sce-form-table-modal label {
   font-weight: 700 !important; /* override core style */
   font-size: 0.8125rem !important; /* override core style */
-  text-transform: uppercase !important; /* override core style */
+  text-transform: capitalize !important; /* override core style */
 }
 .sce-form-table-modal .components-base-control {
   margin-bottom: 0;

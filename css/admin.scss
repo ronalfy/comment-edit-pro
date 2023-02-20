@@ -1215,7 +1215,7 @@ h2 a.sce-admin-heading-docs {
 	label {
 		font-weight: 700 !important; /* override core style */
 		font-size: 0.8125rem !important; /* override core style */
-		text-transform: uppercase !important; /* override core style */
+		text-transform: capitalize !important; /* override core style */
 	}
 	.components-base-control {
 		margin-bottom: 0;

@@ -49,6 +49,13 @@ const ModalNew = ( props ) => {
 			requestMethod: 'POST',
 			requestFormat: 'JSON',
 			requestHeaders: [ { label: '', value: '', customName: '', customValue: '' } ],
+			requestBody: [ { label: '', value: '', customName: '', customValue: '' } ],
+			sendApprovedComments: true,
+			sendPendingComments: false,
+			sendSpamComments: false,
+			sendDeletedComments: false,
+			sendEditedComments: false,
+
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -63,6 +70,24 @@ const ModalNew = ( props ) => {
 	} = useFieldArray( {
 		control,
 		name: 'requestHeaders',
+	} );
+
+	const {
+		fields: requestBodyFields,
+		append: appendRequestBody,
+		remove: removeRequestBody,
+	} = useFieldArray( {
+		control,
+		name: 'requestBody',
+	} );
+
+	const {
+		fields: conditionalLogicFields,
+		append: appendConditionalLogic,
+		remove: removeConditionalLogic,
+	} = useFieldArray( {
+		control,
+		name: 'conditionalLogicRules',
 	} );
 
 	const hasErrors = () => {
@@ -389,6 +414,211 @@ const ModalNew = ( props ) => {
 										</div>
 									) ) }
 								</div>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Request Body', 'comment-edit-pro' ) }</th>
+							<td>
+								<div className="sce-admin__values-repeater">
+									<div className="sce-admin__values-repeater__row sce-admin__values-repeater__row-heading">
+										<div className="sce-admin__values-repeater__row__key">
+											<h3>{ __( 'Key', 'comment-edit-pro' ) }</h3>
+										</div>
+										<div className="sce-admin__values-repeater__row__key">
+											<h3>{ __( 'Value', 'comment-edit-pro' ) }</h3>
+										</div>
+										<div></div>
+									</div>
+									{ requestBodyFields.map( ( item, index ) => (
+										<div className="sce-admin__values-repeater__row" key={ item.id }>
+											<div className="sce-admin__values-repeater__row__key">
+												<Controller
+													name={ `requestBody[${ index }].customName` }
+													control={ control }
+													rules={ { required: true } }
+													render={ ( { field: { onChange, value } } ) => (
+														<TextControl
+															value={ value ?? '' }
+															className={ classNames( 'sce-admin__text-control', {
+																'has-error': 'required' === errors.requestBody?.[ index ]?.customName?.type,
+																'is-required': true,
+															} ) }
+															aria-required="true"
+															onChange={ ( methodValue ) => {
+																onChange( methodValue );
+															} }
+														/>
+													) }
+												/>
+
+											</div>
+											<div className="sce-admin__values-repeater__row__value">
+												{ 'custom' === getValues( `requestBody[${ index }].value` ) && (
+													<>
+														<Controller
+															name={ `requestBody[${ index }].customValue` }
+															control={ control }
+															rules={ { required: true } }
+															render={ ( { field: { onChange, value } } ) => (
+																<TextControl
+																	value={ value ?? '' }
+																	className={ classNames( 'sce-admin__text-control', {
+																		'has-error': 'required' === errors.requestBody?.[ index ]?.customValue?.type,
+																		'is-required': true,
+																	} ) }
+																	aria-required="true"
+																	onChange={ ( methodValue ) => {
+																		onChange( methodValue );
+																	} }
+																/>
+															) }
+														/>
+														<Button
+															className="sce-admin__text-control-reset button-reset"
+															icon="no-alt"
+															label={ __( 'Clear Text Input', 'comment-edit-pro' ) }
+															onClick={ () => {
+																setValue( `requestBody[${ index }].value`, 'none' );
+															} }
+															showTooltip={ false }
+														/>
+													</>
+												) }
+												{ 'custom' !== getValues( `requestBody[${ index }].value` ) && (
+													<Controller
+														name={ `requestBody[${ index }].value` }
+														control={ control }
+														rules={ { required: true } }
+														render={ ( { field: { onChange, value } } ) => (
+															<SelectControl
+																value={ value }
+																options={ RequestHeaderFields }
+																onChange={ ( methodValue ) => {
+																	onChange( methodValue );
+																} }
+															/>
+														) }
+													/>
+												) }
+
+											</div>
+											<div className="sce-admin__values-repeater__row__actions">
+												<Button
+													className="sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset"
+													icon="plus"
+													label={ __(
+														'Add Request Body',
+														'comment-edit-pro'
+													) }
+													onClick={ () => {
+														appendRequestBody( index );
+													} }
+													showTooltip={ false }
+												/>
+												{ requestBodyFields.length > 1 && (
+													<Button
+														className="sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset"
+														icon="minus"
+														label={ __(
+															'Remove Request Body',
+															'comment-edit-pro'
+														) }
+														onClick={ () => {
+															removeRequestBody( index );
+														} }
+														showTooltip={ false }
+													/>
+												) }
+											</div>
+										</div>
+									) ) }
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Webhook Triggers', 'comment-edit-pro' ) }</th>
+							<td><>
+								<div className="sce-panel-row">
+									<Controller
+										name="sendApprovedComments"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												className="sce-admin__toggle-control"
+												label={ __( 'Send Approved Comments', 'comment-edit-pro' ) }
+												checked={ value }
+												onChange={ ( methodValue ) => {
+													onChange( methodValue );
+												} }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="sendPendingComments"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												className="sce-admin__toggle-control"
+												label={ __( 'Send Pending (Moderated) Comments', 'comment-edit-pro' ) }
+												checked={ value }
+												onChange={ ( methodValue ) => {
+													onChange( methodValue );
+												} }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="sendSpamComments"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												className="sce-admin__toggle-control"
+												label={ __( 'Send Spam Comments', 'comment-edit-pro' ) }
+												checked={ value }
+												onChange={ ( methodValue ) => {
+													onChange( methodValue );
+												} }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="sendDeletedComments"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												className="sce-admin__toggle-control"
+												label={ __( 'Send Deleted Comments', 'comment-edit-pro' ) }
+												checked={ value }
+												onChange={ ( methodValue ) => {
+													onChange( methodValue );
+												} }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="sendEditedComments"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												className="sce-admin__toggle-control"
+												label={ __( 'Send Edited Comments', 'comment-edit-pro' ) }
+												checked={ value }
+												onChange={ ( methodValue ) => {
+													onChange( methodValue );
+												} }
+											/>
+										) }
+									/>
+								</div>
+							</>
 							</td>
 						</tr>
 					</tbody>

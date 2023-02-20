@@ -23073,7 +23073,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var ModalNew = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.all(/*! import() | WebhookModalNew0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_base-control_hooks_js-node_modules_wor-3a28b1"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_input-control_input-base_js-node_modul-c86cda"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_select-control_index_js"), __webpack_require__.e("WebhookModalNew0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./ModalNew */ "./src/js/react/views/webhooks/ModalNew.js"));
+  return Promise.all(/*! import() | WebhookModalNew0.0.1 */[__webpack_require__.e("vendors-node_modules_wordpress_components_build-module_toggle-control_index_js-node_modules_r-c05ecd"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_input-control_input-base_js-node_modul-c86cda"), __webpack_require__.e("vendors-node_modules_wordpress_components_build-module_select-control_index_js"), __webpack_require__.e("WebhookModalNew0.0.1")]).then(__webpack_require__.bind(__webpack_require__, /*! ./ModalNew */ "./src/js/react/views/webhooks/ModalNew.js"));
 });
 
 var retrieveWebhooks = function retrieveWebhooks() {

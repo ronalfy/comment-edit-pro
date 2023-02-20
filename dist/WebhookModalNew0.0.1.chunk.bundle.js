@@ -111,6 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
@@ -178,7 +179,18 @@ var ModalNew = function ModalNew(props) {
         value: '',
         customName: '',
         customValue: ''
-      }]
+      }],
+      requestBody: [{
+        label: '',
+        value: '',
+        customName: '',
+        customValue: ''
+      }],
+      sendApprovedComments: true,
+      sendPendingComments: false,
+      sendSpamComments: false,
+      sendDeletedComments: false,
+      sendEditedComments: false
     }
   }),
       register = _useForm.register,
@@ -208,6 +220,22 @@ var ModalNew = function ModalNew(props) {
       requestHeadersFields = _useFieldArray.fields,
       appendRequestHeaders = _useFieldArray.append,
       removeRequestHeaders = _useFieldArray.remove;
+
+  var _useFieldArray2 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFieldArray)({
+    control: control,
+    name: 'requestBody'
+  }),
+      requestBodyFields = _useFieldArray2.fields,
+      appendRequestBody = _useFieldArray2.append,
+      removeRequestBody = _useFieldArray2.remove;
+
+  var _useFieldArray3 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFieldArray)({
+    control: control,
+    name: 'conditionalLogicRules'
+  }),
+      conditionalLogicFields = _useFieldArray3.fields,
+      appendConditionalLogic = _useFieldArray3.append,
+      removeConditionalLogic = _useFieldArray3.remove;
 
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
@@ -510,7 +538,210 @@ var ModalNew = function ModalNew(props) {
       },
       showTooltip: false
     })));
-  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Body', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row sce-admin__values-repeater__row-heading"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row__key"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Key', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__values-repeater__row__key"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Value', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null)), requestBodyFields.map(function (item, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin__values-repeater__row",
+      key: item.id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin__values-repeater__row__key"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestBody[".concat(index, "].customName"),
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref9) {
+        var _errors$requestBody, _errors$requestBody$i, _errors$requestBody$i2;
+
+        var _ref9$field = _ref9.field,
+            _onChange7 = _ref9$field.onChange,
+            value = _ref9$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          value: value !== null && value !== void 0 ? value : '',
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$requestBody = errors.requestBody) === null || _errors$requestBody === void 0 ? void 0 : (_errors$requestBody$i = _errors$requestBody[index]) === null || _errors$requestBody$i === void 0 ? void 0 : (_errors$requestBody$i2 = _errors$requestBody$i.customName) === null || _errors$requestBody$i2 === void 0 ? void 0 : _errors$requestBody$i2.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          onChange: function onChange(methodValue) {
+            _onChange7(methodValue);
+          }
+        });
+      }
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin__values-repeater__row__value"
+    }, 'custom' === getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestBody[".concat(index, "].customValue"),
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref10) {
+        var _errors$requestBody2, _errors$requestBody2$, _errors$requestBody2$2;
+
+        var _ref10$field = _ref10.field,
+            _onChange8 = _ref10$field.onChange,
+            value = _ref10$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          value: value !== null && value !== void 0 ? value : '',
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$requestBody2 = errors.requestBody) === null || _errors$requestBody2 === void 0 ? void 0 : (_errors$requestBody2$ = _errors$requestBody2[index]) === null || _errors$requestBody2$ === void 0 ? void 0 : (_errors$requestBody2$2 = _errors$requestBody2$.customValue) === null || _errors$requestBody2$2 === void 0 ? void 0 : _errors$requestBody2$2.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          onChange: function onChange(methodValue) {
+            _onChange8(methodValue);
+          }
+        });
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__text-control-reset button-reset",
+      icon: "no-alt",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
+      onClick: function onClick() {
+        setValue("requestBody[".concat(index, "].value"), 'none');
+      },
+      showTooltip: false
+    })), 'custom' !== getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "requestBody[".concat(index, "].value"),
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref11) {
+        var _ref11$field = _ref11.field,
+            _onChange9 = _ref11$field.onChange,
+            value = _ref11$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          value: value,
+          options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
+          onChange: function onChange(methodValue) {
+            _onChange9(methodValue);
+          }
+        });
+      }
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin__values-repeater__row__actions"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
+      icon: "plus",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Body', 'comment-edit-pro'),
+      onClick: function onClick() {
+        appendRequestBody(index);
+      },
+      showTooltip: false
+    }), requestBodyFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
+      icon: "minus",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Body', 'comment-edit-pro'),
+      onClick: function onClick() {
+        removeRequestBody(index);
+      },
+      showTooltip: false
+    })));
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook Triggers', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    name: "sendApprovedComments",
+    control: control,
+    render: function render(_ref12) {
+      var _ref12$field = _ref12.field,
+          _onChange10 = _ref12$field.onChange,
+          value = _ref12$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+        className: "sce-admin__toggle-control",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Approved Comments', 'comment-edit-pro'),
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange10(methodValue);
+        }
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    name: "sendPendingComments",
+    control: control,
+    render: function render(_ref13) {
+      var _ref13$field = _ref13.field,
+          _onChange11 = _ref13$field.onChange,
+          value = _ref13$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+        className: "sce-admin__toggle-control",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Pending (Moderated) Comments', 'comment-edit-pro'),
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange11(methodValue);
+        }
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    name: "sendSpamComments",
+    control: control,
+    render: function render(_ref14) {
+      var _ref14$field = _ref14.field,
+          _onChange12 = _ref14$field.onChange,
+          value = _ref14$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+        className: "sce-admin__toggle-control",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Spam Comments', 'comment-edit-pro'),
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange12(methodValue);
+        }
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    name: "sendDeletedComments",
+    control: control,
+    render: function render(_ref15) {
+      var _ref15$field = _ref15.field,
+          _onChange13 = _ref15$field.onChange,
+          value = _ref15$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+        className: "sce-admin__toggle-control",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Deleted Comments', 'comment-edit-pro'),
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange13(methodValue);
+        }
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    name: "sendEditedComments",
+    control: control,
+    render: function render(_ref16) {
+      var _ref16$field = _ref16.field,
+          _onChange14 = _ref16$field.onChange,
+          value = _ref16$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+        className: "sce-admin__toggle-control",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Edited Comments', 'comment-edit-pro'),
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange14(methodValue);
+        }
+      });
+    }
+  }))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
