@@ -1217,6 +1217,9 @@ h2 a.sce-admin-heading-docs {
 		font-size: 0.8125rem !important; /* override core style */
 		text-transform: uppercase !important; /* override core style */
 	}
+	.components-base-control {
+		margin-bottom: 0;
+	}
 	.components-select-control__input,
 	.components-text-control__input {
 		height: unset !important /* override core style */;
@@ -1227,10 +1230,22 @@ h2 a.sce-admin-heading-docs {
 }
 .sce-admin__values-repeater__row {
 	display: grid;
-	grid-template-columns: 45fr 45fr 10fr;
+	grid-template-columns: 45fr 45fr 100px;
 	grid-gap: 20px;
 	row-gap: 20px;
 	align-items: center;
+
+	.sce-admin__values-repeater__row__key,
+	.sce-admin__values-repeater__row__value {
+		position: relative;
+	}
+
+	.sce-admin__text-control-reset {
+		position: absolute;
+		top: calc(50% - 0.5em - (0.4575rem/2));
+		right: 10px;
+		color: #CCC;
+	}
 
 	&:not(:last-child) {
 		margin-bottom: 20px;
@@ -1239,7 +1254,7 @@ h2 a.sce-admin-heading-docs {
 	.sce-admin__values-repeater__row__actions {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 
 		.sce-admin__values-repeater-button {
 			min-width: 30px;
@@ -1269,6 +1284,8 @@ h2 a.sce-admin-heading-docs {
 			font-weight: 700;
 			font-size: 0.8125rem;
 			text-transform: uppercase !important; /* override core style */
+			margin-bottom: 0;
+			padding-bottom: 0;
 		}
 	}
 

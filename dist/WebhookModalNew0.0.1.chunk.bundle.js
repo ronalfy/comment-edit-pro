@@ -389,7 +389,7 @@ var ModalNew = function ModalNew(props) {
       key: item.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__key"
-    }, 'custom' === getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: "requestHeaders[".concat(index, "].customName"),
       control: control,
       rules: {
@@ -413,7 +413,15 @@ var ModalNew = function ModalNew(props) {
           }
         });
       }
-    }), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__text-control-reset button-reset",
+      icon: "no-alt",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
+      onClick: function onClick() {
+        setValue("requestHeaders[".concat(index, "].name"), 'none');
+      },
+      showTooltip: false
+    })), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: "requestHeaders[".concat(index, "].name"),
       control: control,
       rules: {
@@ -433,7 +441,7 @@ var ModalNew = function ModalNew(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__value"
-    }, 'custom' === getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: "requestHeaders[".concat(index, "].customValue"),
       control: control,
       rules: {
@@ -457,7 +465,15 @@ var ModalNew = function ModalNew(props) {
           }
         });
       }
-    }), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      className: "sce-admin__text-control-reset button-reset",
+      icon: "no-alt",
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
+      onClick: function onClick() {
+        setValue("requestHeaders[".concat(index, "].value"), 'none');
+      },
+      showTooltip: false
+    })), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: "requestHeaders[".concat(index, "].value"),
       control: control,
       rules: {
@@ -483,14 +499,16 @@ var ModalNew = function ModalNew(props) {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Header', 'comment-edit-pro'),
       onClick: function onClick() {
         appendRequestHeaders(index);
-      }
+      },
+      showTooltip: false
     }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "minus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Header', 'comment-edit-pro'),
       onClick: function onClick() {
         removeRequestHeaders(index);
-      }
+      },
+      showTooltip: false
     })));
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"

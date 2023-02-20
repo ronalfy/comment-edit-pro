@@ -261,24 +261,35 @@ const ModalNew = ( props ) => {
 										<div className="sce-admin__values-repeater__row" key={ item.id }>
 											<div className="sce-admin__values-repeater__row__key">
 												{ 'custom' === getValues( `requestHeaders[${ index }].name` ) && (
-													<Controller
-														name={ `requestHeaders[${ index }].customName` }
-														control={ control }
-														rules={ { required: true } }
-														render={ ( { field: { onChange, value } } ) => (
-															<TextControl
-																value={ value ?? '' }
-																className={ classNames( 'sce-admin__text-control', {
-																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customName?.type,
-																	'is-required': true,
-																} ) }
-																aria-required="true"
-																onChange={ ( methodValue ) => {
-																	onChange( methodValue );
-																} }
-															/>
-														) }
-													/>
+													<>
+														<Controller
+															name={ `requestHeaders[${ index }].customName` }
+															control={ control }
+															rules={ { required: true } }
+															render={ ( { field: { onChange, value } } ) => (
+																<TextControl
+																	value={ value ?? '' }
+																	className={ classNames( 'sce-admin__text-control', {
+																		'has-error': 'required' === errors.requestHeaders?.[ index ]?.customName?.type,
+																		'is-required': true,
+																	} ) }
+																	aria-required="true"
+																	onChange={ ( methodValue ) => {
+																		onChange( methodValue );
+																	} }
+																/>
+															) }
+														/>
+														<Button
+															className="sce-admin__text-control-reset button-reset"
+															icon="no-alt"
+															label={ __( 'Clear Text Input', 'comment-edit-pro' ) }
+															onClick={ () => {
+																setValue( `requestHeaders[${ index }].name`, 'none' );
+															} }
+															showTooltip={ false }
+														/>
+													</>
 												) }
 												{ 'custom' !== getValues( `requestHeaders[${ index }].name` ) && (
 													<Controller
@@ -299,24 +310,35 @@ const ModalNew = ( props ) => {
 											</div>
 											<div className="sce-admin__values-repeater__row__value">
 												{ 'custom' === getValues( `requestHeaders[${ index }].value` ) && (
-													<Controller
-														name={ `requestHeaders[${ index }].customValue` }
-														control={ control }
-														rules={ { required: true } }
-														render={ ( { field: { onChange, value } } ) => (
-															<TextControl
-																value={ value ?? '' }
-																className={ classNames( 'sce-admin__text-control', {
-																	'has-error': 'required' === errors.requestHeaders?.[ index ]?.customValue?.type,
-																	'is-required': true,
-																} ) }
-																aria-required="true"
-																onChange={ ( methodValue ) => {
-																	onChange( methodValue );
-																} }
-															/>
-														) }
-													/>
+													<>
+														<Controller
+															name={ `requestHeaders[${ index }].customValue` }
+															control={ control }
+															rules={ { required: true } }
+															render={ ( { field: { onChange, value } } ) => (
+																<TextControl
+																	value={ value ?? '' }
+																	className={ classNames( 'sce-admin__text-control', {
+																		'has-error': 'required' === errors.requestHeaders?.[ index ]?.customValue?.type,
+																		'is-required': true,
+																	} ) }
+																	aria-required="true"
+																	onChange={ ( methodValue ) => {
+																		onChange( methodValue );
+																	} }
+																/>
+															) }
+														/>
+														<Button
+															className="sce-admin__text-control-reset button-reset"
+															icon="no-alt"
+															label={ __( 'Clear Text Input', 'comment-edit-pro' ) }
+															onClick={ () => {
+																setValue( `requestHeaders[${ index }].value`, 'none' );
+															} }
+															showTooltip={ false }
+														/>
+													</>
 												) }
 												{ 'custom' !== getValues( `requestHeaders[${ index }].value` ) && (
 													<Controller
@@ -347,6 +369,7 @@ const ModalNew = ( props ) => {
 													onClick={ () => {
 														appendRequestHeaders( index );
 													} }
+													showTooltip={ false }
 												/>
 												{ requestHeadersFields.length > 1 && (
 													<Button
@@ -359,6 +382,7 @@ const ModalNew = ( props ) => {
 														onClick={ () => {
 															removeRequestHeaders( index );
 														} }
+														showTooltip={ false }
 													/>
 												) }
 											</div>
