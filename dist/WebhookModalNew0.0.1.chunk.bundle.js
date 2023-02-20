@@ -102,16 +102,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! use-async-resource */ "./node_modules/use-async-resource/lib/index.js");
 /* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(use_async_resource__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
@@ -154,9 +156,55 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+/**
+ * Retrieve a webhook or create dummy ID if creating a new one.
+ *
+ * @param {number} id    The ID of the webhook to retrieve.
+ * @param {string} nonce The nonce for the request.
+ * @return {Promise} The promise for the request.
+ */
+
+var retrieveWebhook = function retrieveWebhook() {
+  var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  var nonce = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  if ('' === nonce) {
+    nonce = sceWebhooks.get_webhook_nonce;
+  }
+
+  return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_retrieve_webhook', {
+    webhook_id: id,
+    nonce: nonce
+  });
+};
 
 var ModalNew = function ModalNew(props) {
+  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveWebhook, props.id, props.nonce),
+      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+      defaults = _useAsyncResource2[0],
+      getDefaults = _useAsyncResource2[1];
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Loading Webhook', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14___default()), {
+      color: '#9c68b0',
+      loading: true,
+      cssOverride: true,
+      size: 25,
+      speedMultiplier: 0.65
+    }))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Interface, _extends({
+    defaults: defaults
+  }, props)));
+};
+
+var Interface = function Interface(props) {
   var _errors$name2, _errors$webhookUrl2;
+
+  var defaults = props.defaults;
+  var response = defaults();
+  var _response$data = response.data,
+      data = _response$data.data,
+      success = _response$data.success;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -168,7 +216,7 @@ var ModalNew = function ModalNew(props) {
       isSaved = _useState4[0],
       setIsSaved = _useState4[1];
 
-  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useForm)({
+  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useForm)({
     defaultValues: {
       name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('New Webhook', 'comment-edit-pro'),
       webhookUrl: '',
@@ -181,9 +229,8 @@ var ModalNew = function ModalNew(props) {
         customValue: ''
       }],
       requestBody: [{
-        label: '',
+        key: '',
         value: '',
-        customName: '',
         customValue: ''
       }],
       sendApprovedComments: true,
@@ -201,11 +248,11 @@ var ModalNew = function ModalNew(props) {
       reset = _useForm.reset,
       setError = _useForm.setError;
 
-  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useWatch)({
+  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useWatch)({
     control: control
   });
 
-  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFormState)({
+  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useFormState)({
     control: control
   }),
       errors = _useFormState.errors,
@@ -213,7 +260,7 @@ var ModalNew = function ModalNew(props) {
       dirtyFields = _useFormState.dirtyFields,
       touchedFields = _useFormState.touchedFields;
 
-  var _useFieldArray = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFieldArray)({
+  var _useFieldArray = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useFieldArray)({
     control: control,
     name: 'requestHeaders'
   }),
@@ -221,7 +268,7 @@ var ModalNew = function ModalNew(props) {
       appendRequestHeaders = _useFieldArray.append,
       removeRequestHeaders = _useFieldArray.remove;
 
-  var _useFieldArray2 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFieldArray)({
+  var _useFieldArray2 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useFieldArray)({
     control: control,
     name: 'requestBody'
   }),
@@ -229,7 +276,7 @@ var ModalNew = function ModalNew(props) {
       appendRequestBody = _useFieldArray2.append,
       removeRequestBody = _useFieldArray2.remove;
 
-  var _useFieldArray3 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFieldArray)({
+  var _useFieldArray3 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useFieldArray)({
     control: control,
     name: 'conditionalLogicRules'
   }),
@@ -241,7 +288,8 @@ var ModalNew = function ModalNew(props) {
     return Object.keys(errors).length > 0;
   };
 
-  var onSubmit = function onSubmit(formData) {// setSaving( true );
+  var onSubmit = function onSubmit(formData) {
+    console.log(formData); // setSaving( true );
     // sendCommand( 'sce_save_mailchimp_options', {
     // 	nonce: sceIntegrations.save_nonce,
     // 	...formData,
@@ -303,7 +351,7 @@ var ModalNew = function ModalNew(props) {
     className: "form-table sce-form-table-modal"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Name', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "name",
     control: control,
     rules: {
@@ -313,7 +361,7 @@ var ModalNew = function ModalNew(props) {
       var _errors$name;
 
       var field = _ref.field;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], _extends({}, field, {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], _extends({}, field, {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook Name', 'comment-edit-pro'),
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$name = errors.name) === null || _errors$name === void 0 ? void 0 : _errors$name.type),
@@ -331,7 +379,7 @@ var ModalNew = function ModalNew(props) {
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "webhookUrl",
     control: control,
     rules: {
@@ -341,7 +389,7 @@ var ModalNew = function ModalNew(props) {
       var _errors$webhookUrl;
 
       var field = _ref2.field;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], _extends({}, field, {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], _extends({}, field, {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro'),
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$webhookUrl = errors.webhookUrl) === null || _errors$webhookUrl === void 0 ? void 0 : _errors$webhookUrl.type),
@@ -359,7 +407,7 @@ var ModalNew = function ModalNew(props) {
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Method', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Method', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "requestMethod",
     control: control,
     rules: {
@@ -369,7 +417,7 @@ var ModalNew = function ModalNew(props) {
       var _ref3$field = _ref3.field,
           _onChange = _ref3$field.onChange,
           value = _ref3$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Method', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the Webhook should send data to the URL.', 'comment-edit-pro'),
         value: value,
@@ -381,7 +429,7 @@ var ModalNew = function ModalNew(props) {
     }
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Format', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Format', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "requestFormat",
     control: control,
     rules: {
@@ -391,7 +439,7 @@ var ModalNew = function ModalNew(props) {
       var _ref4$field = _ref4.field,
           _onChange2 = _ref4$field.onChange,
           value = _ref4$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Format', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the Webhook should format the data sent to the URL.', 'comment-edit-pro'),
         value: value,
@@ -417,7 +465,7 @@ var ModalNew = function ModalNew(props) {
       key: item.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__key"
-    }, 'custom' === getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].customName"),
       control: control,
       rules: {
@@ -429,7 +477,7 @@ var ModalNew = function ModalNew(props) {
         var _ref5$field = _ref5.field,
             _onChange3 = _ref5$field.onChange,
             value = _ref5$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$requestHeader = errors.requestHeaders) === null || _errors$requestHeader === void 0 ? void 0 : (_errors$requestHeader2 = _errors$requestHeader[index]) === null || _errors$requestHeader2 === void 0 ? void 0 : (_errors$requestHeader3 = _errors$requestHeader2.customName) === null || _errors$requestHeader3 === void 0 ? void 0 : _errors$requestHeader3.type),
@@ -441,7 +489,7 @@ var ModalNew = function ModalNew(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -449,7 +497,7 @@ var ModalNew = function ModalNew(props) {
         setValue("requestHeaders[".concat(index, "].name"), 'none');
       },
       showTooltip: false
-    })), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    })), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].name"),
       control: control,
       rules: {
@@ -459,7 +507,7 @@ var ModalNew = function ModalNew(props) {
         var _ref6$field = _ref6.field,
             _onChange4 = _ref6$field.onChange,
             value = _ref6$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
           value: value,
           options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
           onChange: function onChange(methodValue) {
@@ -469,7 +517,7 @@ var ModalNew = function ModalNew(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__value"
-    }, 'custom' === getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }, 'custom' === getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].customValue"),
       control: control,
       rules: {
@@ -481,7 +529,7 @@ var ModalNew = function ModalNew(props) {
         var _ref7$field = _ref7.field,
             _onChange5 = _ref7$field.onChange,
             value = _ref7$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$requestHeader4 = errors.requestHeaders) === null || _errors$requestHeader4 === void 0 ? void 0 : (_errors$requestHeader5 = _errors$requestHeader4[index]) === null || _errors$requestHeader5 === void 0 ? void 0 : (_errors$requestHeader6 = _errors$requestHeader5.customValue) === null || _errors$requestHeader6 === void 0 ? void 0 : _errors$requestHeader6.type),
@@ -493,7 +541,7 @@ var ModalNew = function ModalNew(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -501,7 +549,7 @@ var ModalNew = function ModalNew(props) {
         setValue("requestHeaders[".concat(index, "].value"), 'none');
       },
       showTooltip: false
-    })), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    })), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].value"),
       control: control,
       rules: {
@@ -511,7 +559,7 @@ var ModalNew = function ModalNew(props) {
         var _ref8$field = _ref8.field,
             _onChange6 = _ref8$field.onChange,
             value = _ref8$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
@@ -521,7 +569,7 @@ var ModalNew = function ModalNew(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__actions"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "plus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Header', 'comment-edit-pro'),
@@ -529,7 +577,7 @@ var ModalNew = function ModalNew(props) {
         appendRequestHeaders(index);
       },
       showTooltip: false
-    }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "minus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Header', 'comment-edit-pro'),
@@ -554,8 +602,8 @@ var ModalNew = function ModalNew(props) {
       key: item.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__key"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "requestBody[".concat(index, "].customName"),
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
+      name: "requestBody[".concat(index, "].key"),
       control: control,
       rules: {
         required: true
@@ -566,10 +614,10 @@ var ModalNew = function ModalNew(props) {
         var _ref9$field = _ref9.field,
             _onChange7 = _ref9$field.onChange,
             value = _ref9$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-            'has-error': 'required' === ((_errors$requestBody = errors.requestBody) === null || _errors$requestBody === void 0 ? void 0 : (_errors$requestBody$i = _errors$requestBody[index]) === null || _errors$requestBody$i === void 0 ? void 0 : (_errors$requestBody$i2 = _errors$requestBody$i.customName) === null || _errors$requestBody$i2 === void 0 ? void 0 : _errors$requestBody$i2.type),
+            'has-error': 'required' === ((_errors$requestBody = errors.requestBody) === null || _errors$requestBody === void 0 ? void 0 : (_errors$requestBody$i = _errors$requestBody[index]) === null || _errors$requestBody$i === void 0 ? void 0 : (_errors$requestBody$i2 = _errors$requestBody$i.key) === null || _errors$requestBody$i2 === void 0 ? void 0 : _errors$requestBody$i2.type),
             'is-required': true
           }),
           "aria-required": "true",
@@ -580,7 +628,7 @@ var ModalNew = function ModalNew(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__value"
-    }, 'custom' === getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }, 'custom' === getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestBody[".concat(index, "].customValue"),
       control: control,
       rules: {
@@ -592,7 +640,7 @@ var ModalNew = function ModalNew(props) {
         var _ref10$field = _ref10.field,
             _onChange8 = _ref10$field.onChange,
             value = _ref10$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
             'has-error': 'required' === ((_errors$requestBody2 = errors.requestBody) === null || _errors$requestBody2 === void 0 ? void 0 : (_errors$requestBody2$ = _errors$requestBody2[index]) === null || _errors$requestBody2$ === void 0 ? void 0 : (_errors$requestBody2$2 = _errors$requestBody2$.customValue) === null || _errors$requestBody2$2 === void 0 ? void 0 : _errors$requestBody2$2.type),
@@ -604,7 +652,7 @@ var ModalNew = function ModalNew(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -612,7 +660,7 @@ var ModalNew = function ModalNew(props) {
         setValue("requestBody[".concat(index, "].value"), 'none');
       },
       showTooltip: false
-    })), 'custom' !== getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    })), 'custom' !== getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestBody[".concat(index, "].value"),
       control: control,
       rules: {
@@ -622,7 +670,7 @@ var ModalNew = function ModalNew(props) {
         var _ref11$field = _ref11.field,
             _onChange9 = _ref11$field.onChange,
             value = _ref11$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
@@ -632,7 +680,7 @@ var ModalNew = function ModalNew(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__actions"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "plus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Body', 'comment-edit-pro'),
@@ -640,7 +688,7 @@ var ModalNew = function ModalNew(props) {
         appendRequestBody(index);
       },
       showTooltip: false
-    }), requestBodyFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), requestBodyFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "minus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Body', 'comment-edit-pro'),
@@ -653,14 +701,14 @@ var ModalNew = function ModalNew(props) {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook Triggers', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendApprovedComments",
     control: control,
     render: function render(_ref12) {
       var _ref12$field = _ref12.field,
           _onChange10 = _ref12$field.onChange,
           value = _ref12$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Approved Comments', 'comment-edit-pro'),
         checked: value,
@@ -671,14 +719,14 @@ var ModalNew = function ModalNew(props) {
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendPendingComments",
     control: control,
     render: function render(_ref13) {
       var _ref13$field = _ref13.field,
           _onChange11 = _ref13$field.onChange,
           value = _ref13$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Pending (Moderated) Comments', 'comment-edit-pro'),
         checked: value,
@@ -689,14 +737,14 @@ var ModalNew = function ModalNew(props) {
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendSpamComments",
     control: control,
     render: function render(_ref14) {
       var _ref14$field = _ref14.field,
           _onChange12 = _ref14$field.onChange,
           value = _ref14$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Spam Comments', 'comment-edit-pro'),
         checked: value,
@@ -707,14 +755,14 @@ var ModalNew = function ModalNew(props) {
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendDeletedComments",
     control: control,
     render: function render(_ref15) {
       var _ref15$field = _ref15.field,
           _onChange13 = _ref15$field.onChange,
           value = _ref15$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Deleted Comments', 'comment-edit-pro'),
         checked: value,
@@ -725,14 +773,14 @@ var ModalNew = function ModalNew(props) {
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendEditedComments",
     control: control,
     render: function render(_ref16) {
       var _ref16$field = _ref16.field,
           _onChange14 = _ref16$field.onChange,
           value = _ref16$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Edited Comments', 'comment-edit-pro'),
         checked: value,
@@ -743,7 +791,7 @@ var ModalNew = function ModalNew(props) {
     }
   }))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {

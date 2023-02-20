@@ -30,7 +30,49 @@ import RequestFormatValues from './RequestFormatValues';
 import RequestHeadersValues from './RequestHeadersValues';
 import RequestHeaderFields from './RequestHeaderFields';
 
+/**
+ * Retrieve a webhook or create dummy ID if creating a new one.
+ *
+ * @param {number} id    The ID of the webhook to retrieve.
+ * @param {string} nonce The nonce for the request.
+ * @return {Promise} The promise for the request.
+ */
+const retrieveWebhook = ( id = 0, nonce = '' ) => {
+	if ( '' === nonce ) {
+		nonce = sceWebhooks.get_webhook_nonce;
+	}
+	return sendCommand( 'sce_retrieve_webhook', {
+		webhook_id: id,
+		nonce,
+	} );
+};
+
 const ModalNew = ( props ) => {
+	const [ defaults, getDefaults ] = useAsyncResource( retrieveWebhook, props.id, props.nonce );
+	return (
+		<Suspense
+			fallback={
+				<>
+					<h2>{ __( 'Loading Webhook', 'comment-edit-pro' ) }</h2>
+					<BeatLoader
+						color={ '#9c68b0' }
+						loading={ true }
+						cssOverride={ true }
+						size={ 25 }
+						speedMultiplier={ 0.65 }
+					/>
+				</>
+			}
+		>
+			<Interface defaults={ defaults } { ...props } />
+		</Suspense>
+	);
+};
+
+const Interface = ( props ) => {
+	const { defaults } = props;
+	const response = defaults();
+	const { data, success } = response.data;
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
 
@@ -49,7 +91,7 @@ const ModalNew = ( props ) => {
 			requestMethod: 'POST',
 			requestFormat: 'JSON',
 			requestHeaders: [ { label: '', value: '', customName: '', customValue: '' } ],
-			requestBody: [ { label: '', value: '', customName: '', customValue: '' } ],
+			requestBody: [ { key: '', value: '', customValue: '' } ],
 			sendApprovedComments: true,
 			sendPendingComments: false,
 			sendSpamComments: false,
@@ -95,6 +137,7 @@ const ModalNew = ( props ) => {
 	};
 
 	const onSubmit = ( formData ) => {
+		console.log( formData );
 		// setSaving( true );
 		// sendCommand( 'sce_save_mailchimp_options', {
 		// 	nonce: sceIntegrations.save_nonce,
@@ -433,14 +476,14 @@ const ModalNew = ( props ) => {
 										<div className="sce-admin__values-repeater__row" key={ item.id }>
 											<div className="sce-admin__values-repeater__row__key">
 												<Controller
-													name={ `requestBody[${ index }].customName` }
+													name={ `requestBody[${ index }].key` }
 													control={ control }
 													rules={ { required: true } }
 													render={ ( { field: { onChange, value } } ) => (
 														<TextControl
 															value={ value ?? '' }
 															className={ classNames( 'sce-admin__text-control', {
-																'has-error': 'required' === errors.requestBody?.[ index ]?.customName?.type,
+																'has-error': 'required' === errors.requestBody?.[ index ]?.key?.type,
 																'is-required': true,
 															} ) }
 															aria-required="true"

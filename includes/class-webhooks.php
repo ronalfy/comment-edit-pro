@@ -28,13 +28,10 @@ class Webhooks {
 		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
 
 		// Save gravatar settings in the admin.
-		add_action( 'wp_ajax_sce_save_gravatar_options', array( $this, 'ajax_save_gravatar_options' ) );
+		add_action( 'wp_ajax_sce_retrieve_webhook', array( $this, 'ajax_retrieve_webhook' ) );
 
-		// Retrieve avatar settings in the admin.
+		// Retrieve existing webhooks settings in the admin.
 		add_action( 'wp_ajax_sce_get_webhooks', array( $this, 'ajax_get_webhooks' ) );
-
-		// Retrieve avatar settings in the admin.
-		add_action( 'wp_ajax_sce_get_gravatar_options', array( $this, 'ajax_get_gravatar_options' ) );
 
 		// Init webhook post type.
 		add_action( 'init', array( $this, 'register_post_type_init' ) );
@@ -95,9 +92,10 @@ class Webhooks {
 				'sce-webhooks',
 				'sceWebhooks',
 				array(
-					'save_nonce'      => wp_create_nonce( 'sce-save-webhook' ),
-					'get_nonce'       => wp_create_nonce( 'sce-retrieve-webhooks' ),
-					'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'save_nonce'        => wp_create_nonce( 'sce-save-webhook' ),
+					'get_nonce'         => wp_create_nonce( 'sce-retrieve-webhooks' ),
+					'get_webhook_nonce' => wp_create_nonce( 'sce-retrieve-webhook' ),
+					'ajaxurl'           => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);
 		}
@@ -118,15 +116,13 @@ class Webhooks {
 			);
 		}
 
-		$avatar_options = Options::get_options();
-
 		$query_args = array(
-			'post_type' => 'sce_webhooks',
-			'posts_per_page' => 100,
-			'post_status' => 'publish',
+			'post_type'        => 'sce_webhooks',
+			'posts_per_page'   => 100,
+			'post_status'      => 'publish',
 			'suppress_filters' => true,
 		);
-		$webhooks = get_posts( $query_args );
+		$webhooks   = get_posts( $query_args );
 
 		$return = array(
 			'webhooks' => $webhooks,
@@ -134,6 +130,79 @@ class Webhooks {
 
 		// Exit gracefully.
 		wp_send_json_success( $return );
+	}
+
+	/**
+	 * Get single webhook or create and return new webhook.
+	 */
+	public function ajax_retrieve_webhook() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$webhook_id = absint( filter_input( INPUT_POST, 'webhook_id', FILTER_DEFAULT ) );
+
+		// If webhook_id is 0, then verify nonce for creating a new webhook.
+		if ( 0 === $webhook_id ) {
+			if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-webhook' ) || ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+					)
+				);
+			}
+		} else {
+			// Security.
+			if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+					)
+				);
+			}
+		}
+
+		// If webhook_id is 0, then create a new webhook.
+		if ( 0 === $webhook_id ) {
+			// Get existing drafts and remove them.
+			$query_args = array(
+				'post_type'        => 'sce_webhooks',
+				'posts_per_page'   => 100,
+				'post_status'      => 'draft',
+				'suppress_filters' => true,
+			);
+			$webhooks   = get_posts( $query_args );
+			foreach ( $webhooks as $webhook ) {
+				wp_delete_post( $webhook->ID, true );
+			}
+
+			$webhook_id = wp_insert_post(
+				array(
+					'post_type'   => 'sce_webhooks',
+					'post_status' => 'draft',
+				)
+			);
+
+			// Format data for return.
+			$webhook = get_post( $webhook_id );
+
+			// Send json response.
+			wp_send_json_success( array( 'webhook' => $webhook ) );
+			exit;
+		}
+
+		// Get the webhook.
+		$webhook = get_post( $webhook_id );
+		if ( ! $webhook ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not retrieve webhook.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Format data for return.
+
+		// Send json response.
+		wp_send_json_success( array( 'webhook' => $webhook ) );
+
 	}
 
 	/**
@@ -163,18 +232,10 @@ class Webhooks {
 	}
 
 	/**
-	 * Save avatar options.
+	 * Save New Webhook.
 	 */
-	public function ajax_save_avatar_options() {
+	public function ajax_save_new_webhook() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		$options_to_save = array(
-			'enable_avatars'            => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
-			'avatar_size'               => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
-			'enable_avatars_logged_in'  => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
-			'enable_custom_avatar_size' => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
-			'choose_avatar_text'        => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
-		);
 
 		// Security.
 		if ( ! wp_verify_nonce( $nonce, 'sce-save-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {

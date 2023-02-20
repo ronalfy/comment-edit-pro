@@ -72,7 +72,6 @@ const Interface = ( props ) => {
 	const {
 		webhooks,
 	} = data;
-	console.log( data );
 	const getWebhooksHeader = () => {
 		return (
 			<div className="sce-admin__tabs--content-heading">
@@ -96,7 +95,7 @@ const Interface = ( props ) => {
 		<>
 			<div className="sce-admin-panel-area">
 				{ showModal && ( 
-					<div className="sce-panel-row"><ModalNew /></div>
+					<div className="sce-panel-row"><ModalNew id={ 0 } nonce={ sceWebhooks.get_webhook_nonce } /></div>
 				)}
 				<div className="sce-panel-row">
 					{ getWebhooksHeader() }

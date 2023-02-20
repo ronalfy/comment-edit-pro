@@ -23118,7 +23118,6 @@ var Interface = function Interface(props) {
       setShowModal = _useState2[1];
 
   var webhooks = data.webhooks;
-  console.log(data);
 
   var getWebhooksHeader = function getWebhooksHeader() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -23138,7 +23137,10 @@ var Interface = function Interface(props) {
     className: "sce-admin-panel-area"
   }, showModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ModalNew, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ModalNew, {
+    id: 0,
+    nonce: sceWebhooks.get_webhook_nonce
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-row"
   }, getWebhooksHeader()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-panel-webhooks-button_wrapper sce-admin-buttons sce-admin-buttons-flex-right"
