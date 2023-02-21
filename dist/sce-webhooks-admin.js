@@ -23118,6 +23118,7 @@ var Interface = function Interface(props) {
       setShowModal = _useState2[1];
 
   var webhooks = data.webhooks;
+  console.log(webhooks);
 
   var getWebhooksHeader = function getWebhooksHeader() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -23170,6 +23171,8 @@ var Interface = function Interface(props) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
       className: "sce-panel-webhooks-table__data"
     }, webhook.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+      className: "sce-panel-webhooks-table__data"
+    }, webhook.enabled ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabled', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disabled', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
       className: "sce-panel-webhooks-table__data"
     }, webhook.url));
   }), webhooks.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {

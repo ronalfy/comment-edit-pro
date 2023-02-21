@@ -219,14 +219,14 @@ const Interface = ( props ) => {
 									name="webhookEnabled"
 									control={ control }
 									rules={ { required: true } }
-									render={ ( { field } ) => (
+									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											{ ...field }
+											className="sce-admin__toggle-control"
 											label={ __( 'Enabled', 'comment-edit-pro' ) }
-											help={ __(
-												'Enable or disable this webhook.',
-												'comment-edit-pro'
-											) }
+											checked={ value }
+											onChange={ ( methodValue ) => {
+												onChange( methodValue );
+											} }
 										/>
 									) }
 								/>

@@ -124,8 +124,26 @@ class Webhooks {
 		);
 		$webhooks   = get_posts( $query_args );
 
+		// Get webhooks for return.
+		$webhooks_array = array();
+		foreach ( $webhooks as $webhook ) {
+			$webhook_id       = $webhook->ID;
+			$webhook_url      = esc_url_raw( $webhook->post_content );
+			$webhook_enabled  = (bool) get_post_meta( $webhook_id, 'webhook_enabled', true );
+			$webhook_to_add   = array(
+				'id'            => $webhook_id,
+				'name'          => sanitize_text_field( stripslashes_deep( $webhook->post_title ) ),
+				'enabled'       => $webhook_enabled,
+				'url'           => $webhook_url,
+				'edit_nonce'    => wp_create_nonce( 'sce-edit-webhook-' . $webhook_id ),
+				'delete_nonce'  => wp_create_nonce( 'sce-delete-webhook-' . $webhook_id ),
+				'disable_nonce' => wp_create_nonce( 'sce-disable-webhook-' . $webhook_id ),
+			);
+			$webhooks_array[] = $webhook_to_add;
+		}
+
 		$return = array(
-			'webhooks' => $webhooks,
+			'webhooks' => $webhooks_array,
 		);
 
 		// Exit gracefully.
@@ -304,6 +322,7 @@ class Webhooks {
 		wp_update_post( $webhook );
 
 		// Update webhook meta.
+		update_post_meta( $webhook_id, 'webhook_enabled', $webhook_enabled );
 		update_post_meta( $webhook_id, 'request_method', $request_method );
 		update_post_meta( $webhook_id, 'request_format', $request_format );
 		update_post_meta( $webhook_id, 'request_headers', $request_headers );

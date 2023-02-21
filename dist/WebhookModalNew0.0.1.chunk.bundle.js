@@ -372,11 +372,17 @@ var Interface = function Interface(props) {
       required: true
     },
     render: function render(_ref2) {
-      var field = _ref2.field;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], _extends({}, field, {
+      var _ref2$field = _ref2.field,
+          _onChange = _ref2$field.onChange,
+          value = _ref2$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+        className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabled', 'comment-edit-pro'),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable this webhook.', 'comment-edit-pro')
-      }));
+        checked: value,
+        onChange: function onChange(methodValue) {
+          _onChange(methodValue);
+        }
+      });
     }
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
@@ -416,7 +422,7 @@ var Interface = function Interface(props) {
     },
     render: function render(_ref4) {
       var _ref4$field = _ref4.field,
-          _onChange = _ref4$field.onChange,
+          _onChange2 = _ref4$field.onChange,
           value = _ref4$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Method', 'comment-edit-pro'),
@@ -424,7 +430,7 @@ var Interface = function Interface(props) {
         value: value,
         options: _RequestMethodValues__WEBPACK_IMPORTED_MODULE_10__["default"],
         onChange: function onChange(methodValue) {
-          _onChange(methodValue);
+          _onChange2(methodValue);
         }
       });
     }
@@ -438,7 +444,7 @@ var Interface = function Interface(props) {
     },
     render: function render(_ref5) {
       var _ref5$field = _ref5.field,
-          _onChange2 = _ref5$field.onChange,
+          _onChange3 = _ref5$field.onChange,
           value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Format', 'comment-edit-pro'),
@@ -446,7 +452,7 @@ var Interface = function Interface(props) {
         value: value,
         options: _RequestFormatValues__WEBPACK_IMPORTED_MODULE_11__["default"],
         onChange: function onChange(methodValue) {
-          _onChange2(methodValue);
+          _onChange3(methodValue);
         }
       });
     }
@@ -476,7 +482,7 @@ var Interface = function Interface(props) {
         var _errors$requestHeader, _errors$requestHeader2, _errors$requestHeader3;
 
         var _ref6$field = _ref6.field,
-            _onChange3 = _ref6$field.onChange,
+            _onChange4 = _ref6$field.onChange,
             value = _ref6$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
@@ -486,7 +492,7 @@ var Interface = function Interface(props) {
           }),
           "aria-required": "true",
           onChange: function onChange(methodValue) {
-            _onChange3(methodValue);
+            _onChange4(methodValue);
           }
         });
       }
@@ -506,13 +512,13 @@ var Interface = function Interface(props) {
       },
       render: function render(_ref7) {
         var _ref7$field = _ref7.field,
-            _onChange4 = _ref7$field.onChange,
+            _onChange5 = _ref7$field.onChange,
             value = _ref7$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
           onChange: function onChange(methodValue) {
-            _onChange4(methodValue);
+            _onChange5(methodValue);
           }
         });
       }
@@ -528,7 +534,7 @@ var Interface = function Interface(props) {
         var _errors$requestHeader4, _errors$requestHeader5, _errors$requestHeader6;
 
         var _ref8$field = _ref8.field,
-            _onChange5 = _ref8$field.onChange,
+            _onChange6 = _ref8$field.onChange,
             value = _ref8$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
@@ -538,7 +544,7 @@ var Interface = function Interface(props) {
           }),
           "aria-required": "true",
           onChange: function onChange(methodValue) {
-            _onChange5(methodValue);
+            _onChange6(methodValue);
           }
         });
       }
@@ -558,13 +564,13 @@ var Interface = function Interface(props) {
       },
       render: function render(_ref9) {
         var _ref9$field = _ref9.field,
-            _onChange6 = _ref9$field.onChange,
+            _onChange7 = _ref9$field.onChange,
             value = _ref9$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
-            _onChange6(methodValue);
+            _onChange7(methodValue);
           }
         });
       }
@@ -613,7 +619,7 @@ var Interface = function Interface(props) {
         var _errors$requestBody, _errors$requestBody$i, _errors$requestBody$i2;
 
         var _ref10$field = _ref10.field,
-            _onChange7 = _ref10$field.onChange,
+            _onChange8 = _ref10$field.onChange,
             value = _ref10$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
@@ -623,7 +629,7 @@ var Interface = function Interface(props) {
           }),
           "aria-required": "true",
           onChange: function onChange(methodValue) {
-            _onChange7(methodValue);
+            _onChange8(methodValue);
           }
         });
       }
@@ -639,7 +645,7 @@ var Interface = function Interface(props) {
         var _errors$requestBody2, _errors$requestBody2$, _errors$requestBody2$2;
 
         var _ref11$field = _ref11.field,
-            _onChange8 = _ref11$field.onChange,
+            _onChange9 = _ref11$field.onChange,
             value = _ref11$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
@@ -649,7 +655,7 @@ var Interface = function Interface(props) {
           }),
           "aria-required": "true",
           onChange: function onChange(methodValue) {
-            _onChange8(methodValue);
+            _onChange9(methodValue);
           }
         });
       }
@@ -669,13 +675,13 @@ var Interface = function Interface(props) {
       },
       render: function render(_ref12) {
         var _ref12$field = _ref12.field,
-            _onChange9 = _ref12$field.onChange,
+            _onChange10 = _ref12$field.onChange,
             value = _ref12$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
-            _onChange9(methodValue);
+            _onChange10(methodValue);
           }
         });
       }
@@ -707,14 +713,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref13) {
       var _ref13$field = _ref13.field,
-          _onChange10 = _ref13$field.onChange,
+          _onChange11 = _ref13$field.onChange,
           value = _ref13$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Approved Comments', 'comment-edit-pro'),
         checked: value,
         onChange: function onChange(methodValue) {
-          _onChange10(methodValue);
+          _onChange11(methodValue);
         }
       });
     }
@@ -725,14 +731,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref14) {
       var _ref14$field = _ref14.field,
-          _onChange11 = _ref14$field.onChange,
+          _onChange12 = _ref14$field.onChange,
           value = _ref14$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Pending (Moderated) Comments', 'comment-edit-pro'),
         checked: value,
         onChange: function onChange(methodValue) {
-          _onChange11(methodValue);
+          _onChange12(methodValue);
         }
       });
     }
@@ -743,14 +749,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref15) {
       var _ref15$field = _ref15.field,
-          _onChange12 = _ref15$field.onChange,
+          _onChange13 = _ref15$field.onChange,
           value = _ref15$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Spam Comments', 'comment-edit-pro'),
         checked: value,
         onChange: function onChange(methodValue) {
-          _onChange12(methodValue);
+          _onChange13(methodValue);
         }
       });
     }
@@ -761,14 +767,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref16) {
       var _ref16$field = _ref16.field,
-          _onChange13 = _ref16$field.onChange,
+          _onChange14 = _ref16$field.onChange,
           value = _ref16$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Deleted Comments', 'comment-edit-pro'),
         checked: value,
         onChange: function onChange(methodValue) {
-          _onChange13(methodValue);
+          _onChange14(methodValue);
         }
       });
     }
@@ -779,14 +785,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref17) {
       var _ref17$field = _ref17.field,
-          _onChange14 = _ref17$field.onChange,
+          _onChange15 = _ref17$field.onChange,
           value = _ref17$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Edited Comments', 'comment-edit-pro'),
         checked: value,
         onChange: function onChange(methodValue) {
-          _onChange14(methodValue);
+          _onChange15(methodValue);
         }
       });
     }

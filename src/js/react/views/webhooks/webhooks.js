@@ -72,6 +72,7 @@ const Interface = ( props ) => {
 	const {
 		webhooks,
 	} = data;
+	console.log( webhooks );
 	const getWebhooksHeader = () => {
 		return (
 			<div className="sce-admin__tabs--content-heading">
@@ -134,6 +135,9 @@ const Interface = ( props ) => {
 										<tr key={ index }>
 											<td className="sce-panel-webhooks-table__data">
 												{ webhook.name }
+											</td>
+											<td className="sce-panel-webhooks-table__data">
+												{ webhook.enabled ? __( 'Enabled', 'comment-edit-pro' ) : __( 'Disabled', 'comment-edit-pro' ) }
 											</td>
 											<td className="sce-panel-webhooks-table__data">
 												{ webhook.url }
