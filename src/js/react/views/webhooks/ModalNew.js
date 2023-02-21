@@ -88,6 +88,7 @@ const Interface = ( props ) => {
 		defaultValues: {
 			name: __( 'New Webhook', 'comment-edit-pro' ),
 			webhookUrl: '',
+			webhookEnabled: true,
 			requestMethod: 'POST',
 			requestFormat: 'JSON',
 			requestHeaders: [ { label: '', value: '', customName: '', customValue: '' } ],
@@ -123,51 +124,32 @@ const Interface = ( props ) => {
 		name: 'requestBody',
 	} );
 
-	const {
-		fields: conditionalLogicFields,
-		append: appendConditionalLogic,
-		remove: removeConditionalLogic,
-	} = useFieldArray( {
-		control,
-		name: 'conditionalLogicRules',
-	} );
-
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
 	};
 
 	const onSubmit = ( formData ) => {
-		console.log( formData );
-		// setSaving( true );
-		// sendCommand( 'sce_save_mailchimp_options', {
-		// 	nonce: sceIntegrations.save_nonce,
-		// 	...formData,
-		// } )
-		// 	.then( ( ajaxResponse ) => {
-		// 		const ajaxData = ajaxResponse.data.data;
-		// 		const ajaxSuccess = ajaxResponse.data.success;
-		// 		if ( ajaxSuccess ) {
-		// 			const { lists, mailchimp_selected_list, mailchimp_signup_label } =
-		// 				ajaxData;
-		// 			const listsValues = [];
-		// 			lists.forEach( ( keys, index ) => {
-		// 				listsValues.push( keys );
-		// 			} );
-		// 			setValue( 'selectedList', mailchimp_selected_list );
-		// 			setValue( 'mailchimpLists', listsValues );
-		// 			setValue( 'signUpLabel', mailchimp_signup_label );
-		// 			setIsSaved( true );
-		// 			setTimeout( () => {
-		// 				setIsSaved( false );
-		// 			}, 3000 );
-		// 		} else {
-		// 			setError( 'apiKey', { type: 'noLists', message: ajaxData.message } );
-		// 		}
-		// 	} )
-		// 	.catch( ( ajaxResponse ) => {} )
-		// 	.then( ( ajaxResponse ) => {
-		// 		setSaving( false );
-		// 	} );
+		setSaving( true );
+		sendCommand( 'sce_save_webhook', {
+			nonce: data.nonce,
+			webhook_id: data.webhook_id,
+			...formData,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					setIsSaved( true );
+					setTimeout( () => {
+						setIsSaved( false );
+					}, 3000 );
+				} else {
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setSaving( false );
+			} );
 	};
 
 	const getSaveIcon = () => {
@@ -228,6 +210,26 @@ const Interface = ( props ) => {
 										icon={ CircularExclamationIcon }
 									/>
 								) }
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{ __( 'Enabled', 'comment-edit-pro' ) }</th>
+							<td>
+								<Controller
+									name="webhookEnabled"
+									control={ control }
+									rules={ { required: true } }
+									render={ ( { field } ) => (
+										<ToggleControl
+											{ ...field }
+											label={ __( 'Enabled', 'comment-edit-pro' ) }
+											help={ __(
+												'Enable or disable this webhook.',
+												'comment-edit-pro'
+											) }
+										/>
+									) }
+								/>
 							</td>
 						</tr>
 						<tr>

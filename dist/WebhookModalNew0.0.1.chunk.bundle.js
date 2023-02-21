@@ -111,9 +111,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
 /* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_14__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
@@ -124,6 +124,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _RequestFormatValues__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./RequestFormatValues */ "./src/js/react/views/webhooks/RequestFormatValues.js");
 /* harmony import */ var _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./RequestHeadersValues */ "./src/js/react/views/webhooks/RequestHeadersValues.js");
 /* harmony import */ var _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./RequestHeaderFields */ "./src/js/react/views/webhooks/RequestHeaderFields.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -220,6 +226,7 @@ var Interface = function Interface(props) {
     defaultValues: {
       name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('New Webhook', 'comment-edit-pro'),
       webhookUrl: '',
+      webhookEnabled: true,
       requestMethod: 'POST',
       requestFormat: 'JSON',
       requestHeaders: [{
@@ -276,49 +283,28 @@ var Interface = function Interface(props) {
       appendRequestBody = _useFieldArray2.append,
       removeRequestBody = _useFieldArray2.remove;
 
-  var _useFieldArray3 = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useFieldArray)({
-    control: control,
-    name: 'conditionalLogicRules'
-  }),
-      conditionalLogicFields = _useFieldArray3.fields,
-      appendConditionalLogic = _useFieldArray3.append,
-      removeConditionalLogic = _useFieldArray3.remove;
-
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
   };
 
   var onSubmit = function onSubmit(formData) {
-    console.log(formData); // setSaving( true );
-    // sendCommand( 'sce_save_mailchimp_options', {
-    // 	nonce: sceIntegrations.save_nonce,
-    // 	...formData,
-    // } )
-    // 	.then( ( ajaxResponse ) => {
-    // 		const ajaxData = ajaxResponse.data.data;
-    // 		const ajaxSuccess = ajaxResponse.data.success;
-    // 		if ( ajaxSuccess ) {
-    // 			const { lists, mailchimp_selected_list, mailchimp_signup_label } =
-    // 				ajaxData;
-    // 			const listsValues = [];
-    // 			lists.forEach( ( keys, index ) => {
-    // 				listsValues.push( keys );
-    // 			} );
-    // 			setValue( 'selectedList', mailchimp_selected_list );
-    // 			setValue( 'mailchimpLists', listsValues );
-    // 			setValue( 'signUpLabel', mailchimp_signup_label );
-    // 			setIsSaved( true );
-    // 			setTimeout( () => {
-    // 				setIsSaved( false );
-    // 			}, 3000 );
-    // 		} else {
-    // 			setError( 'apiKey', { type: 'noLists', message: ajaxData.message } );
-    // 		}
-    // 	} )
-    // 	.catch( ( ajaxResponse ) => {} )
-    // 	.then( ( ajaxResponse ) => {
-    // 		setSaving( false );
-    // 	} );
+    setSaving(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_webhook', _objectSpread({
+      nonce: data.nonce,
+      webhook_id: data.webhook_id
+    }, formData)).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        setIsSaved(true);
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {}
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setSaving(false);
+    });
   };
 
   var getSaveIcon = function getSaveIcon() {
@@ -379,16 +365,31 @@ var Interface = function Interface(props) {
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabled', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
+    name: "webhookEnabled",
+    control: control,
+    rules: {
+      required: true
+    },
+    render: function render(_ref2) {
+      var field = _ref2.field;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], _extends({}, field, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabled', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable this webhook.', 'comment-edit-pro')
+      }));
+    }
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "webhookUrl",
     control: control,
     rules: {
       required: true
     },
-    render: function render(_ref2) {
+    render: function render(_ref3) {
       var _errors$webhookUrl;
 
-      var field = _ref2.field;
+      var field = _ref3.field;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], _extends({}, field, {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro'),
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -413,11 +414,11 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref3) {
-      var _ref3$field = _ref3.field,
-          _onChange = _ref3$field.onChange,
-          value = _ref3$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    render: function render(_ref4) {
+      var _ref4$field = _ref4.field,
+          _onChange = _ref4$field.onChange,
+          value = _ref4$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Method', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the Webhook should send data to the URL.', 'comment-edit-pro'),
         value: value,
@@ -435,11 +436,11 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange2 = _ref4$field.onChange,
-          value = _ref4$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange2 = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Request Format', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the Webhook should format the data sent to the URL.', 'comment-edit-pro'),
         value: value,
@@ -471,12 +472,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref5) {
+      render: function render(_ref6) {
         var _errors$requestHeader, _errors$requestHeader2, _errors$requestHeader3;
 
-        var _ref5$field = _ref5.field,
-            _onChange3 = _ref5$field.onChange,
-            value = _ref5$field.value;
+        var _ref6$field = _ref6.field,
+            _onChange3 = _ref6$field.onChange,
+            value = _ref6$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -489,7 +490,7 @@ var Interface = function Interface(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -503,11 +504,11 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref6) {
-        var _ref6$field = _ref6.field,
-            _onChange4 = _ref6$field.onChange,
-            value = _ref6$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      render: function render(_ref7) {
+        var _ref7$field = _ref7.field,
+            _onChange4 = _ref7$field.onChange,
+            value = _ref7$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeadersValues__WEBPACK_IMPORTED_MODULE_12__["default"],
           onChange: function onChange(methodValue) {
@@ -523,12 +524,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref7) {
+      render: function render(_ref8) {
         var _errors$requestHeader4, _errors$requestHeader5, _errors$requestHeader6;
 
-        var _ref7$field = _ref7.field,
-            _onChange5 = _ref7$field.onChange,
-            value = _ref7$field.value;
+        var _ref8$field = _ref8.field,
+            _onChange5 = _ref8$field.onChange,
+            value = _ref8$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -541,7 +542,7 @@ var Interface = function Interface(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -555,11 +556,11 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref8) {
-        var _ref8$field = _ref8.field,
-            _onChange6 = _ref8$field.onChange,
-            value = _ref8$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      render: function render(_ref9) {
+        var _ref9$field = _ref9.field,
+            _onChange6 = _ref9$field.onChange,
+            value = _ref9$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
@@ -569,7 +570,7 @@ var Interface = function Interface(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__actions"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "plus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Header', 'comment-edit-pro'),
@@ -577,7 +578,7 @@ var Interface = function Interface(props) {
         appendRequestHeaders(index);
       },
       showTooltip: false
-    }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), requestHeadersFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "minus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Header', 'comment-edit-pro'),
@@ -608,12 +609,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref9) {
+      render: function render(_ref10) {
         var _errors$requestBody, _errors$requestBody$i, _errors$requestBody$i2;
 
-        var _ref9$field = _ref9.field,
-            _onChange7 = _ref9$field.onChange,
-            value = _ref9$field.value;
+        var _ref10$field = _ref10.field,
+            _onChange7 = _ref10$field.onChange,
+            value = _ref10$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -634,12 +635,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref10) {
+      render: function render(_ref11) {
         var _errors$requestBody2, _errors$requestBody2$, _errors$requestBody2$2;
 
-        var _ref10$field = _ref10.field,
-            _onChange8 = _ref10$field.onChange,
-            value = _ref10$field.value;
+        var _ref11$field = _ref11.field,
+            _onChange8 = _ref11$field.onChange,
+            value = _ref11$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           value: value !== null && value !== void 0 ? value : '',
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -652,7 +653,7 @@ var Interface = function Interface(props) {
           }
         });
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__text-control-reset button-reset",
       icon: "no-alt",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -666,11 +667,11 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref11) {
-        var _ref11$field = _ref11.field,
-            _onChange9 = _ref11$field.onChange,
-            value = _ref11$field.value;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      render: function render(_ref12) {
+        var _ref12$field = _ref12.field,
+            _onChange9 = _ref12$field.onChange,
+            value = _ref12$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
           value: value,
           options: _RequestHeaderFields__WEBPACK_IMPORTED_MODULE_13__["default"],
           onChange: function onChange(methodValue) {
@@ -680,7 +681,7 @@ var Interface = function Interface(props) {
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__values-repeater__row__actions"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "plus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Request Body', 'comment-edit-pro'),
@@ -688,7 +689,7 @@ var Interface = function Interface(props) {
         appendRequestBody(index);
       },
       showTooltip: false
-    }), requestBodyFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), requestBodyFields.length > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
       className: "sce-admin__values-repeater-remove sce-admin__values-repeater-button button-reset",
       icon: "minus",
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove Request Body', 'comment-edit-pro'),
@@ -704,11 +705,11 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendApprovedComments",
     control: control,
-    render: function render(_ref12) {
-      var _ref12$field = _ref12.field,
-          _onChange10 = _ref12$field.onChange,
-          value = _ref12$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    render: function render(_ref13) {
+      var _ref13$field = _ref13.field,
+          _onChange10 = _ref13$field.onChange,
+          value = _ref13$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Approved Comments', 'comment-edit-pro'),
         checked: value,
@@ -722,11 +723,11 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendPendingComments",
     control: control,
-    render: function render(_ref13) {
-      var _ref13$field = _ref13.field,
-          _onChange11 = _ref13$field.onChange,
-          value = _ref13$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    render: function render(_ref14) {
+      var _ref14$field = _ref14.field,
+          _onChange11 = _ref14$field.onChange,
+          value = _ref14$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Pending (Moderated) Comments', 'comment-edit-pro'),
         checked: value,
@@ -740,11 +741,11 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendSpamComments",
     control: control,
-    render: function render(_ref14) {
-      var _ref14$field = _ref14.field,
-          _onChange12 = _ref14$field.onChange,
-          value = _ref14$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    render: function render(_ref15) {
+      var _ref15$field = _ref15.field,
+          _onChange12 = _ref15$field.onChange,
+          value = _ref15$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Spam Comments', 'comment-edit-pro'),
         checked: value,
@@ -758,11 +759,11 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendDeletedComments",
     control: control,
-    render: function render(_ref15) {
-      var _ref15$field = _ref15.field,
-          _onChange13 = _ref15$field.onChange,
-          value = _ref15$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    render: function render(_ref16) {
+      var _ref16$field = _ref16.field,
+          _onChange13 = _ref16$field.onChange,
+          value = _ref16$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Deleted Comments', 'comment-edit-pro'),
         checked: value,
@@ -776,11 +777,11 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "sendEditedComments",
     control: control,
-    render: function render(_ref16) {
-      var _ref16$field = _ref16.field,
-          _onChange14 = _ref16$field.onChange,
-          value = _ref16$field.value;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    render: function render(_ref17) {
+      var _ref17$field = _ref17.field,
+          _onChange14 = _ref17$field.onChange,
+          value = _ref17$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__toggle-control",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send Edited Comments', 'comment-edit-pro'),
         checked: value,
@@ -791,7 +792,7 @@ var Interface = function Interface(props) {
     }
   }))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {

@@ -25,7 +25,7 @@ class Webhooks {
 		 */
 
 		// Save avatar settings in the admin.
-		add_action( 'wp_ajax_sce_save_avatar_options', array( $this, 'ajax_save_avatar_options' ) );
+		add_action( 'wp_ajax_sce_save_webhook', array( $this, 'ajax_save_webhook' ) );
 
 		// Save gravatar settings in the admin.
 		add_action( 'wp_ajax_sce_retrieve_webhook', array( $this, 'ajax_retrieve_webhook' ) );
@@ -184,7 +184,13 @@ class Webhooks {
 			$webhook = get_post( $webhook_id );
 
 			// Send json response.
-			wp_send_json_success( array( 'webhook' => $webhook ) );
+			wp_send_json_success(
+				array(
+					'webhook'    => $webhook,
+					'webhook_id' => $webhook_id,
+					'nonce'      => wp_create_nonce( 'sce-save-webhook-' . $webhook_id ),
+				)
+			);
 			exit;
 		}
 
@@ -201,7 +207,13 @@ class Webhooks {
 		// Format data for return.
 
 		// Send json response.
-		wp_send_json_success( array( 'webhook' => $webhook ) );
+		wp_send_json_success(
+			array(
+				'webhook'    => $webhook,
+				'webhook_id' => $webhook_id,
+				'nonce'      => wp_create_nonce( 'sce-save-webhook-' . $webhook_id ),
+			)
+		);
 
 	}
 
@@ -234,11 +246,12 @@ class Webhooks {
 	/**
 	 * Save New Webhook.
 	 */
-	public function ajax_save_new_webhook() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+	public function ajax_save_webhook() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$webhook_id = absint( filter_input( INPUT_POST, 'webhook_id', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -246,10 +259,77 @@ class Webhooks {
 			);
 		}
 
-		Options::update_options( $options_to_save );
+		// Get the webhook name.
+		$webhook_name = sanitize_text_field( filter_input( INPUT_POST, 'name', FILTER_DEFAULT ) );
+
+		// Get webhook enabled status.
+		$webhook_enabled = filter_input( INPUT_POST, 'webhookEnabled', FILTER_VALIDATE_BOOLEAN );
+
+		// Get the webhook URL.
+		$webhook_url = esc_url_raw( filter_input( INPUT_POST, 'webhookUrl', FILTER_DEFAULT ) );
+
+		// Get request method.
+		$request_method = sanitize_text_field( filter_input( INPUT_POST, 'requestMethod', FILTER_DEFAULT ) );
+
+		// Get request format.
+		$request_format = sanitize_text_field( filter_input( INPUT_POST, 'requestFormat', FILTER_DEFAULT ) );
+
+		// Get request headers.
+		$request_headers = filter_input( INPUT_POST, 'requestHeaders', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		// Get request body.
+		$request_body = filter_input( INPUT_POST, 'requestBody', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		// Get triggers.
+		$send_approved = filter_input( INPUT_POST, 'sendApprovedComments', FILTER_VALIDATE_BOOLEAN );
+		$send_pending  = filter_input( INPUT_POST, 'sendPendingComments', FILTER_VALIDATE_BOOLEAN );
+		$send_spam     = filter_input( INPUT_POST, 'sendSpamComments', FILTER_VALIDATE_BOOLEAN );
+		$send_deleted  = filter_input( INPUT_POST, 'sendDeletedComments', FILTER_VALIDATE_BOOLEAN );
+		$send_edited   = filter_input( INPUT_POST, 'sendEditedComments', FILTER_VALIDATE_BOOLEAN );
+
+		// Get webhook post.
+		$webhook = get_post( $webhook_id );
+		if ( ! $webhook ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not retrieve webhook.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Update webhook post.
+		$webhook->post_title   = $webhook_name;
+		$webhook->post_content = $webhook_url;
+		$webhook->post_status  = $webhook_enabled ? 'publish' : 'draft';
+		wp_update_post( $webhook );
+
+		// Update webhook meta.
+		update_post_meta( $webhook_id, 'request_method', $request_method );
+		update_post_meta( $webhook_id, 'request_format', $request_format );
+		update_post_meta( $webhook_id, 'request_headers', $request_headers );
+		update_post_meta( $webhook_id, 'request_body', $request_body );
+		update_post_meta( $webhook_id, 'send_approved', $send_approved );
+		update_post_meta( $webhook_id, 'send_pending', $send_pending );
+		update_post_meta( $webhook_id, 'send_spam', $send_spam );
+		update_post_meta( $webhook_id, 'send_deleted', $send_deleted );
+		update_post_meta( $webhook_id, 'send_edited', $send_edited );
+
+		// Create nonces for return.
+		$edit_nonce    = wp_create_nonce( 'sce-edit-webhook-' . $webhook_id );
+		$delete_nonce  = wp_create_nonce( 'sce-delete-webhook-' . $webhook_id );
+		$disable_nonce = wp_create_nonce( 'sce-disable-webhook-' . $webhook_id );
 
 		// Exit gracefully.
-		wp_send_json_success( array() );
+		wp_send_json_success(
+			array(
+				'webhook_name'  => $webhook_name,
+				'webhook_url'   => $webhook_url,
+				'webhook_id'    => $webhook_id,
+				'edit_nonce'    => $edit_nonce,
+				'delete_nonce'  => $delete_nonce,
+				'disable_nonce' => $disable_nonce,
+			)
+		);
 	}
 
 	/**
