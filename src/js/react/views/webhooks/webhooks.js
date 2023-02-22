@@ -5,7 +5,12 @@ import React, { useEffect, useState, Suspense, useContext, lazy } from 'react';
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
-import { TextControl, Button, ToggleControl, Modal as WPModal } from '@wordpress/components';
+import {
+	TextControl,
+	Button,
+	ToggleControl,
+	Modal as WPModal,
+} from '@wordpress/components';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import sendCommand from '../../../SendCommand';
@@ -137,6 +142,21 @@ const Interface = ( props ) => {
 		} );
 		return enableResponse;
 	};
+	/**
+	 * Deletes a webhook.
+	 *
+	 * @param {number} id    The webhook ID.
+	 * @param {string} nonce The webhook nonce.
+	 * @return {Promise} The ajax promise.
+	 */
+	const deleteWebhook = async( id, nonce ) => {
+		const deleteResponse = await sendCommand( 'sce_delete_webhook', {
+			nonce,
+			id,
+		} );
+		return deleteResponse;
+	};
+
 	const getWebhooksHeader = () => {
 		return (
 			<div className="sce-admin__tabs--content-heading">
@@ -161,7 +181,11 @@ const Interface = ( props ) => {
 			<div className="sce-admin-panel-area">
 				{ showModal && (
 					<WPModal
-						title={ 0 !== editModalParams.id ? __( 'Edit Existing Webhook', 'comment-edit-pro' ) : __( 'Add New Webhook', 'comment-edit-pro' ) }
+						title={
+							0 !== editModalParams.id
+								? __( 'Edit Existing Webhook', 'comment-edit-pro' )
+								: __( 'Add New Webhook', 'comment-edit-pro' )
+						}
 						isDismissible={ true }
 						shouldCloseOnClickOutside={ false }
 						isFullScreen={ true }
@@ -172,9 +196,7 @@ const Interface = ( props ) => {
 						} }
 						key={ modalCount }
 					>
-						<div
-							className="sce-panel-row"
-						>
+						<div className="sce-panel-row">
 							<ModalNew
 								id={ editModalParams.id }
 								nonce={ editModalParams.nonce }
@@ -255,7 +277,12 @@ const Interface = ( props ) => {
 							{ existingWebhooks.length > 0 &&
 								existingWebhooks.map( ( webhook, index ) => {
 									return (
-										<tr key={ index }>
+										<tr
+											key={ index }
+											className={ classNames( {
+												'sce-delete-row': webhook?.isDeleted,
+											} ) }
+										>
 											<td className="sce-panel-webhooks-table__data">
 												<div className="sce-panel-webhooks-name">
 													{ webhook.name }
@@ -264,20 +291,118 @@ const Interface = ( props ) => {
 													<Button
 														className="sce-panel-webhooks-button sce__btn-action"
 														onClick={ () => {
-															setEditModalParams( {
-																id: 0,
-																nonce: '',
-															}, () => {
-																setEditModalParams( {
-																	id: webhook.id,
-																	nonce: webhook.edit_nonce,
-																} );
-																setShowModal( true );
-															} );
+															setEditModalParams(
+																{
+																	id: 0,
+																	nonce: '',
+																},
+																() => {
+																	setEditModalParams( {
+																		id: webhook.id,
+																		nonce: webhook.edit_nonce,
+																	} );
+																	setShowModal( true );
+																}
+															);
 														} }
-														variant="tertiary"
+														variant="link"
 													>
 														{ __( 'Edit', 'comment-edit-pro' ) }
+													</Button>
+													{ ' | ' }
+													<Button
+														className="sce-panel-webhooks-button sce__btn-action
+														sce__btn-delete"
+														onClick={ () => {
+															setModalParams( {
+																title: __(
+																	'Please confirm the deletion of this webhook',
+																	'comment-edit-pro'
+																),
+																message: __(
+																	'Deleting this webhook cannot be undone.',
+																	'comment-edit-pro'
+																),
+																type: 'prompt',
+																isDismissible: false,
+																shouldCloseOnClickOutside: false,
+																onConfirm: () => {
+																	// Copy webhook and update state.
+																	const webhookCopy = { ...webhook };
+																	if ( webhookCopy?.isDeleted ) {
+																		return;
+																	}
+																	webhookCopy.deleting = true;
+
+																	// Update the row.
+																	const updatedWebhooksStatus =
+																		updateWebhooksRow(
+																			existingWebhooks,
+																			webhook.id,
+																			webhookCopy
+																		);
+																	// Update the context/state.
+																	setExistingWebhooks( updatedWebhooksStatus );
+
+																	// Delete the webhook.
+																	const deleteResposne = deleteWebhook(
+																		webhook.id,
+																		webhook.delete_nonce
+																	);
+																	deleteResposne.then( ( ajaxResponse ) => {
+																		const ajaxData = ajaxResponse.data;
+																		if ( ajaxData.success ) {
+																			// Get a copy of the webhook, update table, and set timer to remove.
+																			const webhookDeleteCopy = { ...webhook };
+																			webhookDeleteCopy.isDeleted = true;
+
+																			// Update the row.
+																			const webhookDeleted = updateWebhooksRow(
+																				existingWebhooks,
+																				webhook.id,
+																				webhookDeleteCopy
+																			);
+																			// Update the context/state.
+																			setExistingWebhooks( webhookDeleted );
+
+																			// Set timer to remove webhook.
+																			setTimeout( () => {
+																				// Remove the webhook from the table.
+																				const updatedWebhooks =
+																					existingWebhooks.filter(
+																						( webhookFilter ) =>
+																							webhookFilter.id !==
+																							ajaxData.data.id
+																					);
+																				setExistingWebhooks( updatedWebhooks );
+																			}, 800 );
+																		} else {
+																			// Show error message.
+																			setModalParams( {
+																				title: __(
+																					'Error deleting webhook',
+																					'comment-edit-pro'
+																				),
+																				message: ajaxData.message,
+																				type: 'error',
+																				isDismissible: true,
+																				shouldCloseOnClickOutside: true,
+																			} );
+																		}
+																	} );
+																	setShowWPModal( false );
+																},
+																onClose: () => {
+																	setShowWPModal( false );
+																},
+															} );
+															setShowWPModal( true );
+														} }
+														variant="link"
+													>
+														{ webhook?.deleting
+															? __( 'Deleting…', 'comment-edit-pro' )
+															: __( 'Delete', 'comment-edit-pro' ) }
 													</Button>
 												</div>
 											</td>

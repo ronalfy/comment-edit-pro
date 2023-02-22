@@ -25930,6 +25930,44 @@ var Interface = function Interface(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+   * Deletes a webhook.
+   *
+   * @param {number} id    The webhook ID.
+   * @param {string} nonce The webhook nonce.
+   * @return {Promise} The ajax promise.
+   */
+
+
+  var deleteWebhook = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(id, nonce) {
+      var deleteResponse;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_4__["default"])('sce_delete_webhook', {
+                nonce: nonce,
+                id: id
+              });
+
+            case 2:
+              deleteResponse = _context3.sent;
+              return _context3.abrupt("return", deleteResponse);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function deleteWebhook(_x5, _x6) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
 
   var getWebhooksHeader = function getWebhooksHeader() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -26029,7 +26067,10 @@ var Interface = function Interface(props) {
     scope: "col"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, existingWebhooks.length > 0 && existingWebhooks.map(function (webhook, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
-      key: index
+      key: index,
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
+        'sce-delete-row': webhook === null || webhook === void 0 ? void 0 : webhook.isDeleted
+      })
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
       className: "sce-panel-webhooks-table__data"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -26050,8 +26091,72 @@ var Interface = function Interface(props) {
           setShowModal(true);
         });
       },
-      variant: "tertiary"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+      variant: "link"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit', 'comment-edit-pro')), ' | ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_21__["default"], {
+      className: "sce-panel-webhooks-button sce__btn-action sce__btn-delete",
+      onClick: function onClick() {
+        setModalParams({
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please confirm the deletion of this webhook', 'comment-edit-pro'),
+          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Deleting this webhook cannot be undone.', 'comment-edit-pro'),
+          type: 'prompt',
+          isDismissible: false,
+          shouldCloseOnClickOutside: false,
+          onConfirm: function onConfirm() {
+            // Copy webhook and update state.
+            var webhookCopy = _objectSpread({}, webhook);
+
+            if (webhookCopy !== null && webhookCopy !== void 0 && webhookCopy.isDeleted) {
+              return;
+            }
+
+            webhookCopy.deleting = true; // Update the row.
+
+            var updatedWebhooksStatus = updateWebhooksRow(existingWebhooks, webhook.id, webhookCopy); // Update the context/state.
+
+            setExistingWebhooks(updatedWebhooksStatus); // Delete the webhook.
+
+            var deleteResposne = deleteWebhook(webhook.id, webhook.delete_nonce);
+            deleteResposne.then(function (ajaxResponse) {
+              var ajaxData = ajaxResponse.data;
+
+              if (ajaxData.success) {
+                // Get a copy of the webhook, update table, and set timer to remove.
+                var webhookDeleteCopy = _objectSpread({}, webhook);
+
+                webhookDeleteCopy.isDeleted = true; // Update the row.
+
+                var webhookDeleted = updateWebhooksRow(existingWebhooks, webhook.id, webhookDeleteCopy); // Update the context/state.
+
+                setExistingWebhooks(webhookDeleted); // Set timer to remove webhook.
+
+                setTimeout(function () {
+                  // Remove the webhook from the table.
+                  var updatedWebhooks = existingWebhooks.filter(function (webhookFilter) {
+                    return webhookFilter.id !== ajaxData.data.id;
+                  });
+                  setExistingWebhooks(updatedWebhooks);
+                }, 800);
+              } else {
+                // Show error message.
+                setModalParams({
+                  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Error deleting webhook', 'comment-edit-pro'),
+                  message: ajaxData.message,
+                  type: 'error',
+                  isDismissible: true,
+                  shouldCloseOnClickOutside: true
+                });
+              }
+            });
+            setShowWPModal(false);
+          },
+          onClose: function onClose() {
+            setShowWPModal(false);
+          }
+        });
+        setShowWPModal(true);
+      },
+      variant: "link"
+    }, webhook !== null && webhook !== void 0 && webhook.deleting ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Deleting…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Delete', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
       className: "sce-panel-webhooks-table__data"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-panel-row"

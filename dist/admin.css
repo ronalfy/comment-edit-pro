@@ -1086,6 +1086,26 @@ h2 a.sce-admin-heading-docs {
 }
 
 /* Webhooks Table */
+@keyframes sceAdminTableRowFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+    max-height: 0;
+  }
+}
+@keyframes sceAdminTableTDFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+  }
+}
 .sce-panel-webhooks-table__wrapper {
   margin-top: 35px;
 }
@@ -1114,6 +1134,34 @@ h2 a.sce-admin-heading-docs {
 }
 .sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table td.sce-panel-webhooks-table__actions {
   text-align: right;
+}
+.sce-panel-webhooks-table__wrapper table.sce-panel-webhooks-table tr.sce-delete-row {
+  background: #f8d7da;
+  animation: sceAdminTableRowFadeOut 0.8s;
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.8s ease, height 0.8s ease;
+}
+.sce-panel-webhooks-table__wrapper .sce-panel-webhooks-button.is-link {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--wp-admin-theme-color, #007cba);
+  height: auto;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  transition-duration: 0.05s;
+  transition-property: border, background, color;
+  transition-timing-function: ease-in-out;
+}
+.sce-panel-webhooks-table__wrapper .sce-panel-webhooks-button.is-link.sce__btn-delete {
+  color: var(--wp-components-color-accent, #cc1818);
+  outline: 1px solid transparent;
 }
 
 /* Webhooks Modal */
@@ -1244,7 +1292,7 @@ h2 a.sce-admin-heading-docs {
     animation-fill-mode: forwards;
   }
   .components-modal__frame.is-full-screen {
-    width: 64vw;
+    width: 72vw;
     max-width: 100%;
     min-height: 80vh;
     height: 100%;
@@ -1257,9 +1305,10 @@ h2 a.sce-admin-heading-docs {
   padding: 20px 20px;
   display: flex;
   flex-direction: column;
-  height: 30px;
+  height: 60px;
   justify-content: space-between;
   width: 100%;
+  background: #FFF;
   z-index: 100000;
   position: absolute;
   top: 0;

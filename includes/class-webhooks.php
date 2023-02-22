@@ -28,6 +28,9 @@ class Webhooks {
 		// Save a single webhook in the admin.
 		add_action( 'wp_ajax_sce_save_webhook', array( $this, 'ajax_save_webhook' ) );
 
+		// Deletes a single webhook in the admin.
+		add_action( 'wp_ajax_sce_delete_webhook', array( $this, 'ajax_delete_webhook' ) );
+
 		// Retrieve a single webhook settings in the admin.
 		add_action( 'wp_ajax_sce_retrieve_webhook', array( $this, 'ajax_retrieve_webhook' ) );
 
@@ -115,6 +118,43 @@ class Webhooks {
 				'all'
 			);
 		}
+	}
+
+	/**
+	 * Deletes a webhook via Ajax.
+	 */
+	public function ajax_delete_webhook() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$webhook_id = absint( filter_input( INPUT_POST, 'id', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-delete-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get webhook.
+		$webhook = get_post( $webhook_id );
+		if ( ! $webhook ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not find webhook.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Delete webhook.
+		//wp_delete_post( $webhook_id, true );
+
+		// Exit gracefully.
+		wp_send_json_success(
+			array(
+				'id' => $webhook_id,
+			)
+		);
 	}
 
 	/**
