@@ -114,7 +114,8 @@ button.button-reset.show-cursor {
   margin-top: 0;
   line-height: 1.3;
 }
-#wpcontent .sce-main-help, #wpcontent .sce-edit-count {
+#wpcontent .sce-main-help,
+#wpcontent .sce-edit-count {
   font-size: 14px;
 }
 
@@ -147,6 +148,13 @@ button.button-reset.show-cursor {
 .sce-button.sce-button-info:hover {
   background: #868e96;
 }
+.sce-button.sce-button-primary {
+  background: #9c68b0;
+  color: #FFF;
+}
+.sce-button.sce-button-primary:hover {
+  background: #b289c2;
+}
 .sce-button.sce-button-danger {
   background: #721c24;
   color: #fff;
@@ -154,11 +162,12 @@ button.button-reset.show-cursor {
 .sce-button.sce-button-danger:hover {
   background: #9b2631;
 }
-.sce-button.sce-button-edit {
+.sce-button.sce-button-edit, .sce-button.sce-button-secondary {
   background: #f8f9fa;
   color: #000;
 }
-.sce-button.sce-button-edit:hover {
+.sce-button.sce-button-edit:hover, .sce-button.sce-button-secondary:hover {
+  color: #000 !important;
   background: white;
 }
 .sce-button.sce-button-delete {
@@ -891,7 +900,8 @@ h2 a.sce-admin-heading-docs {
   width: 40px;
   height: 40px;
   overflow: hidden;
-  top: calc(50% - 0.34375rem - 4px); /* 50% height - padding/2 - bottom margin/2) */
+  top: calc(50% - 0.34375rem - 4px);
+  /* 50% height - padding/2 - bottom margin/2) */
   right: 0.5rem;
   line-height: 0;
   font-size: 0;
@@ -1111,9 +1121,12 @@ h2 a.sce-admin-heading-docs {
   margin-bottom: 0 !important;
 }
 .sce-form-table-modal label {
-  font-weight: 700 !important; /* override core style */
-  font-size: 0.8125rem !important; /* override core style */
-  text-transform: capitalize !important; /* override core style */
+  font-weight: 700 !important;
+  /* override core style */
+  font-size: 0.8125rem !important;
+  /* override core style */
+  text-transform: capitalize !important;
+  /* override core style */
 }
 .sce-form-table-modal .components-base-control {
   margin-bottom: 0;
@@ -1121,9 +1134,11 @@ h2 a.sce-admin-heading-docs {
 .sce-form-table-modal .components-select-control__input,
 .sce-form-table-modal .components-text-control__input {
   height: unset !important;
-  padding: 0.4575rem 2rem 0.4575rem 1rem !important; /* override core style */
+  padding: 0.4575rem 2rem 0.4575rem 1rem !important;
+  /* override core style */
   width: 100% !important;
-  max-width: unset !important; /* override core style */
+  max-width: unset !important;
+  /* override core style */
 }
 
 .sce-admin__values-repeater__row {
@@ -1174,9 +1189,146 @@ h2 a.sce-admin-heading-docs {
 .sce-admin__values-repeater__row.sce-admin__values-repeater__row-heading h3 {
   font-weight: 700;
   font-size: 0.8125rem;
-  text-transform: uppercase !important; /* override core style */
+  text-transform: uppercase !important;
+  /* override core style */
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+@keyframes sceAdminModalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes sceAdminModalAppear {
+  from {
+    transform: translateY(-2em) scaleY(0) scaleX(0);
+  }
+  to {
+    transform: translateY(0%) scaleY(1) scaleX(1);
+  }
+}
+/* Modal Overlay */
+.components-modal__screen-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 100000;
+  display: flex;
+  animation: sceAdminModalFadeIn 0.3s;
+}
+
+.components-modal__frame {
+  margin: 0;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 1px 1px 7px 2px rgba(221, 221, 221, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+}
+@media (min-width: 30em) {
+  .components-modal__frame {
+    margin: auto;
+    width: auto;
+    min-width: 500px;
+    max-width: 500px;
+    max-height: 500px;
+    animation: sceAdminModalAppear 0.1s ease-out;
+    animation-fill-mode: forwards;
+  }
+  .components-modal__frame.is-full-screen {
+    width: 64vw;
+    max-width: 100%;
+    min-height: 80vh;
+    height: 100%;
+  }
+}
+
+.components-modal__header {
+  box-sizing: border-box;
+  border-bottom: 1px solid transparent;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  height: 30px;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 100000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.components-modal__header .components-modal__header-heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.components-modal__header h1 {
+  line-height: 1;
+  margin: 0;
+}
+.components-modal__header .components-button {
+  all: unset;
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  cursor: pointer;
+}
+.components-modal__content.has-scrolled-content:not(.hide-header) .components-modal__header {
+  border-bottom-color: #ddd;
+}
+.components-modal__header + p {
+  margin-top: 0;
+}
+
+.components-modal__header-heading-container {
+  align-items: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.components-modal__header-icon-container {
+  display: inline-block;
+}
+.components-modal__header-icon-container svg {
+  max-width: 20px;
+  max-height: 20px;
+  padding: 10px;
+}
+
+.components-modal__content {
+  flex: 1;
+  margin-top: 45px;
+  padding: 0 20px 20px;
+  overflow: auto;
+}
+.components-modal__content.hide-header {
+  margin-top: 0;
+  padding-top: 30px;
+}
+.components-modal__content.is-scrollable:focus-visible {
+  box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.sce-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.sce-modal-actions .components-button {
+  margin-left: 10px;
+}
+.sce-modal-actions .components-button:first-child {
+  margin-left: 0;
 }
 
 /*# sourceMappingURL=admin.css.map*/

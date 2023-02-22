@@ -15,7 +15,6 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import {
 	TextControl,
 	Button,
-	RadioControl,
 	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
@@ -33,11 +32,12 @@ import RequestHeaderFields from './RequestHeaderFields';
 /**
  * Retrieve a webhook or create dummy ID if creating a new one.
  *
- * @param {number} id    The ID of the webhook to retrieve.
- * @param {string} nonce The nonce for the request.
+ * @param {number} id          The ID of the webhook to retrieve.
+ * @param {string} nonce       The nonce for the request.
+ * @param {number} modalNumber The number of the modal.
  * @return {Promise} The promise for the request.
  */
-const retrieveWebhook = ( id = 0, nonce = '' ) => {
+const retrieveWebhook = ( id = 0, nonce = '', modalNumber = 0 ) => {
 	if ( '' === nonce ) {
 		nonce = sceWebhooks.get_webhook_nonce;
 	}
@@ -48,7 +48,9 @@ const retrieveWebhook = ( id = 0, nonce = '' ) => {
 };
 
 const ModalNew = ( props ) => {
-	const [ defaults, getDefaults ] = useAsyncResource( retrieveWebhook, props.id, props.nonce );
+	const [ modalNumber, setModalNumber ] = useState( props.modalNumber );
+	const [ defaults, getDefaults ] = useAsyncResource( retrieveWebhook, props.id, props.nonce, modalNumber );
+
 	return (
 		<Suspense
 			fallback={
@@ -70,7 +72,7 @@ const ModalNew = ( props ) => {
 };
 
 const Interface = ( props ) => {
-	const { defaults } = props;
+	const { defaults, onSave } = props;
 	const response = defaults();
 	const { data, success } = response.data;
 	const [ saving, setSaving ] = useState( false );
@@ -124,6 +126,15 @@ const Interface = ( props ) => {
 		name: 'requestBody',
 	} );
 
+	/**
+	 * Set the form values when the data is retrieved.
+	 */
+	useEffect( () => {
+		if ( data ) {
+			reset( data.form );
+		}
+	}, [ data ] );
+
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
 	};
@@ -142,6 +153,7 @@ const Interface = ( props ) => {
 					setIsSaved( true );
 					setTimeout( () => {
 						setIsSaved( false );
+						props.onSave( ajaxData );
 					}, 3000 );
 				} else {
 				}
@@ -174,7 +186,6 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Add New Webhook', 'comment-edit-pro' ) }</h2>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table sce-form-table-modal">
 					<tbody>
@@ -218,7 +229,6 @@ const Interface = ( props ) => {
 								<Controller
 									name="webhookEnabled"
 									control={ control }
-									rules={ { required: true } }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
 											className="sce-admin__toggle-control"

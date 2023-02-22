@@ -165,14 +165,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Retrieve a webhook or create dummy ID if creating a new one.
  *
- * @param {number} id    The ID of the webhook to retrieve.
- * @param {string} nonce The nonce for the request.
+ * @param {number} id          The ID of the webhook to retrieve.
+ * @param {string} nonce       The nonce for the request.
+ * @param {number} modalNumber The number of the modal.
  * @return {Promise} The promise for the request.
  */
 
 var retrieveWebhook = function retrieveWebhook() {
   var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
   var nonce = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var modalNumber = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
   if ('' === nonce) {
     nonce = sceWebhooks.get_webhook_nonce;
@@ -185,7 +187,12 @@ var retrieveWebhook = function retrieveWebhook() {
 };
 
 var ModalNew = function ModalNew(props) {
-  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveWebhook, props.id, props.nonce),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(props.modalNumber),
+      _useState2 = _slicedToArray(_useState, 2),
+      modalNumber = _useState2[0],
+      setModalNumber = _useState2[1];
+
+  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveWebhook, props.id, props.nonce, modalNumber),
       _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
       defaults = _useAsyncResource2[0],
       getDefaults = _useAsyncResource2[1];
@@ -206,21 +213,22 @@ var ModalNew = function ModalNew(props) {
 var Interface = function Interface(props) {
   var _errors$name2, _errors$webhookUrl2;
 
-  var defaults = props.defaults;
+  var defaults = props.defaults,
+      onSave = props.onSave;
   var response = defaults();
   var _response$data = response.data,
       data = _response$data.data,
       success = _response$data.success;
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      saving = _useState2[0],
-      setSaving = _useState2[1];
-
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState4 = _slicedToArray(_useState3, 2),
-      isSaved = _useState4[0],
-      setIsSaved = _useState4[1];
+      saving = _useState4[0],
+      setSaving = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isSaved = _useState6[0],
+      setIsSaved = _useState6[1];
 
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_15__.useForm)({
     defaultValues: {
@@ -282,6 +290,16 @@ var Interface = function Interface(props) {
       requestBodyFields = _useFieldArray2.fields,
       appendRequestBody = _useFieldArray2.append,
       removeRequestBody = _useFieldArray2.remove;
+  /**
+   * Set the form values when the data is retrieved.
+   */
+
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (data) {
+      reset(data.form);
+    }
+  }, [data]);
 
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
@@ -300,6 +318,7 @@ var Interface = function Interface(props) {
         setIsSaved(true);
         setTimeout(function () {
           setIsSaved(false);
+          props.onSave(ajaxData);
         }, 3000);
       } else {}
     })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
@@ -331,7 +350,7 @@ var Interface = function Interface(props) {
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Webhook', 'quotes-dlx');
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Webhook', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
     className: "form-table sce-form-table-modal"
@@ -368,9 +387,6 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabled', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
     name: "webhookEnabled",
     control: control,
-    rules: {
-      required: true
-    },
     render: function render(_ref2) {
       var _ref2$field = _ref2.field,
           _onChange = _ref2$field.onChange,

@@ -5,11 +5,7 @@ import React, { useEffect, useState, Suspense, useContext, lazy } from 'react';
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
-import {
-	TextControl,
-	Button,
-	ToggleControl,
-} from '@wordpress/components';
+import { TextControl, Button, ToggleControl, Modal as WPModal } from '@wordpress/components';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import sendCommand from '../../../SendCommand';
@@ -24,6 +20,9 @@ import EyeIcon from '../../components/icons/EyeIcon';
 import EyeSlashRegular from '../../components/icons/EyeSlashRegular';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import WebhooksIcon from '../../components/icons/Webhooks';
+import WebhooksContext from './Context';
+import Modal from '../../components/Modal';
+import useStateCallback from '../../hooks/useStateCallback';
 
 const ModalNew = lazy( () =>
 	import( /* webpackChunkName: "WebhookModalNew0.0.1" */ './ModalNew' )
@@ -53,7 +52,6 @@ const Webhooks = ( props ) => {
 							/>
 						</div>
 					</div>
-
 				</>
 			}
 		>
@@ -67,12 +65,78 @@ const Interface = ( props ) => {
 	const response = defaults();
 	const { data, success } = response.data;
 
-	const [ showModal, setShowModal ] = useState( true );
-	
-	const {
-		webhooks,
-	} = data;
-	console.log( webhooks );
+	const [ showModal, setShowModal ] = useStateCallback( false );
+	const [ showWPModal, setShowWPModal ] = useState( false );
+	const [ modalParams, setModalParams ] = useState( {
+		type: 'prompt',
+		title: '',
+		message: '',
+		onClose: () => {},
+		onConfirm: () => {},
+		isDismissible: true,
+		shouldCloseOnClickOutside: true,
+	} );
+	const [ editModalParams, setEditModalParams ] = useStateCallback( {
+		id: 0,
+		nonce: '',
+	} );
+	const [ modalCount, setModalCount ] = useState( 0 );
+
+	const { existingWebhooks, setExistingWebhooks } = useContext( WebhooksContext );
+
+	const { webhooks } = data;
+
+	// Set webhooks when they load in,.
+	useEffect( () => {
+		setExistingWebhooks( webhooks );
+	}, [ webhooks ] );
+
+	/**
+	 * Update webhook data row with new data.
+	 *
+	 * @param {Array}  webhookData Existing webhook data.
+	 * @param {number} webhookId   The webhook ID.
+	 * @param {Object} rowData     Row data to replace.
+	 * @return {Array} Updated webhook data.
+	 */
+	const updateWebhooksRow = ( webhookData, webhookId, rowData ) => {
+		const updatedWebhooks = webhookData.map( ( webhook ) => {
+			if ( webhook.id === webhookId ) {
+				return rowData;
+			}
+			return webhook;
+		} );
+		return updatedWebhooks;
+	};
+
+	/**
+	 * Disables a webhook.
+	 *
+	 * @param {number} id    The webhook ID.
+	 * @param {string} nonce The webhook nonce.
+	 * @return {Promise} The ajax promise.
+	 */
+	const disableWebhook = async( id, nonce ) => {
+		const disableResponse = await sendCommand( 'sce_disable_webhook', {
+			nonce,
+			id,
+		} );
+		return disableResponse;
+	};
+	/**
+	 * Enables a webhook.
+	 *
+	 * @param {number} id    The webhook ID.
+	 * @param {string} nonce The webhook nonce.
+	 * @return {Promise} The ajax promise.
+	 */
+	const enableWebhook = async( id, nonce ) => {
+		const enableResponse = await sendCommand( 'sce_enable_webhook', {
+			nonce,
+			id,
+		} );
+		return enableResponse;
+	};
 	const getWebhooksHeader = () => {
 		return (
 			<div className="sce-admin__tabs--content-heading">
@@ -95,12 +159,71 @@ const Interface = ( props ) => {
 	return (
 		<>
 			<div className="sce-admin-panel-area">
-				{ showModal && ( 
-					<div className="sce-panel-row"><ModalNew id={ 0 } nonce={ sceWebhooks.get_webhook_nonce } /></div>
-				)}
-				<div className="sce-panel-row">
-					{ getWebhooksHeader() }
-				</div>
+				{ showModal && (
+					<WPModal
+						title={ 0 !== editModalParams.id ? __( 'Edit Existing Webhook', 'comment-edit-pro' ) : __( 'Add New Webhook', 'comment-edit-pro' ) }
+						isDismissible={ true }
+						shouldCloseOnClickOutside={ false }
+						isFullScreen={ true }
+						onRequestClose={ () => {
+							setShowModal( false );
+							setEditModalParams( { id: 0, nonce: '' } );
+							setModalCount( modalCount + 1 );
+						} }
+						key={ modalCount }
+					>
+						<div
+							className="sce-panel-row"
+						>
+							<ModalNew
+								id={ editModalParams.id }
+								nonce={ editModalParams.nonce }
+								modalNumber={ modalCount }
+								onSave={ ( webhookData ) => {
+									// Clear modal data.
+									setEditModalParams( { id: 0, nonce: '' } );
+									// Increase the modal count.
+									setModalCount( modalCount + 1 );
+
+									// Determine if we need to update a webhook in the table, or add a new entry.
+									if ( existingWebhooks.length > 0 ) {
+										// Determine if webhook_id is in existing webhooks.
+										const webhookExists = existingWebhooks.find(
+											( webhook ) => webhook.id === webhookData.id
+										);
+										if ( webhookExists ) {
+											// Update the webhook.
+											const updatedWebhooks = updateWebhooksRow(
+												existingWebhooks,
+												webhookData.id,
+												webhookData
+											);
+											setExistingWebhooks( updatedWebhooks );
+										} else {
+											// Add the webhook.
+											setExistingWebhooks( [ ...existingWebhooks, webhookData ] );
+										}
+
+										// Close the modal.
+										setShowModal( false );
+									}
+								} }
+							/>
+						</div>
+					</WPModal>
+				) }
+				{ showWPModal && (
+					<Modal
+						title={ modalParams.title }
+						onClose={ modalParams.onClose }
+						onConfirm={ modalParams.onConfirm }
+						type={ modalParams.type }
+						message={ modalParams.message }
+						isDismissible={ modalParams.isDismissible }
+						shouldCloseOnClickOutside={ modalParams.shouldCloseOnClickOutside }
+					/>
+				) }
+				<div className="sce-panel-row">{ getWebhooksHeader() }</div>
 				<div className="sce-panel-webhooks-button_wrapper sce-admin-buttons sce-admin-buttons-flex-right">
 					<Button
 						className="sce-panel-webhooks-button sce__btn-action"
@@ -129,30 +252,139 @@ const Interface = ( props ) => {
 							</tr>
 						</thead>
 						<tbody>
-							{
-								webhooks.length > 0 && webhooks.map( ( webhook, index ) => {
+							{ existingWebhooks.length > 0 &&
+								existingWebhooks.map( ( webhook, index ) => {
 									return (
 										<tr key={ index }>
 											<td className="sce-panel-webhooks-table__data">
-												{ webhook.name }
+												<div className="sce-panel-webhooks-name">
+													{ webhook.name }
+												</div>
+												<div className="sce-panel-webhooks-actions">
+													<Button
+														className="sce-panel-webhooks-button sce__btn-action"
+														onClick={ () => {
+															setEditModalParams( {
+																id: 0,
+																nonce: '',
+															}, () => {
+																setEditModalParams( {
+																	id: webhook.id,
+																	nonce: webhook.edit_nonce,
+																} );
+																setShowModal( true );
+															} );
+														} }
+														variant="tertiary"
+													>
+														{ __( 'Edit', 'comment-edit-pro' ) }
+													</Button>
+												</div>
 											</td>
 											<td className="sce-panel-webhooks-table__data">
-												{ webhook.enabled ? __( 'Enabled', 'comment-edit-pro' ) : __( 'Disabled', 'comment-edit-pro' ) }
+												<div className="sce-panel-row">
+													<ToggleControl
+														className="sce-admin__toggle-control"
+														checked={ webhook.enabled }
+														onChange={ ( value ) => {
+															// Create copy of webhook.
+															const webhookCopy = { ...webhook };
+															webhookCopy.enabled = value;
+
+															// Update the row.
+															const updatedWebhooks = updateWebhooksRow(
+																webhooks,
+																webhook.id,
+																webhookCopy
+															);
+
+															// Update the context/state.
+															setExistingWebhooks( updatedWebhooks );
+
+															// Perform Ajax requests.
+															if ( ! value ) {
+																const disableResponse = disableWebhook(
+																	webhook.id,
+																	webhook.disable_nonce
+																);
+																disableResponse.then( ( ajaxResponse ) => {
+																	const ajaxData = ajaxResponse.data;
+																	if ( ! ajaxData.success ) {
+																		// Notify user.
+																		setModalParams( {
+																			title: __(
+																				'There was an error changing the Webhook status',
+																				'comment-edit-pro'
+																			),
+																			message: ajaxData.data.message,
+																			type: 'error',
+																			isDismissible: true,
+																			shouldCloseOnClickOutside: true,
+																			onClose: () => {
+																				setShowWPModal( false );
+																			},
+																		} );
+																		setShowWPModal( true );
+
+																		// Revert the row.
+																		const revertedWebhooks = updateWebhooksRow(
+																			webhooks,
+																			webhook.id,
+																			webhook
+																		);
+																		setExistingWebhooks( revertedWebhooks );
+																	}
+																} );
+															} else {
+																const enableResponse = enableWebhook(
+																	webhook.id,
+																	webhook.enable_nonce
+																);
+																enableResponse.then( ( ajaxResponse ) => {
+																	const ajaxData = ajaxResponse.data;
+																	// Revert the row.
+																	if ( ! ajaxData.success ) {
+																		// Notify user.
+																		setModalParams( {
+																			title: __(
+																				'There was an error changing the Webhook status',
+																				'comment-edit-pro'
+																			),
+																			message: ajaxData.data.message,
+																			type: 'error',
+																			isDismissible: true,
+																			shouldCloseOnClickOutside: true,
+																			onClose: () => {
+																				setShowWPModal( false );
+																			},
+																		} );
+																		setShowWPModal( true );
+
+																		// Revert the row.
+																		const revertedWebhooks = updateWebhooksRow(
+																			webhooks,
+																			webhook.id,
+																			webhook
+																		);
+																		setExistingWebhooks( revertedWebhooks );
+																	}
+																} );
+															}
+														} }
+														label={ __( 'Enabled', 'comment-edit-pro' ) }
+													/>
+												</div>
 											</td>
 											<td className="sce-panel-webhooks-table__data">
 												{ webhook.url }
 											</td>
 										</tr>
 									);
-								} )
-							}
+								} ) }
 							{ webhooks.length === 0 && (
 								<tr>
 									<td className="sce-panel-webhooks-table__data" colSpan="3">
-										{ __(
-											'No webhooks have been added yet.',
-											'comment-edit-pro'
-										) }
+										{ __( 'No webhooks have been added yet.', 'comment-edit-pro' ) }
 									</td>
 								</tr>
 							) }

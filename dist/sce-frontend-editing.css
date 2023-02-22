@@ -178,7 +178,7 @@ h6 {
 .sce-form-button-grid-items .empty-div {
   display: none;
 }
-@media (min-width: 48em) {
+@media (min-width: 768px) {
   .sce-form-button-grid-items {
     grid-template-columns: 175px 175px 1fr 175px;
   }
@@ -190,7 +190,7 @@ h6 {
 .sce-delete-comment {
   align-self: end;
 }
-@media (min-width: 48em) {
+@media (min-width: 768px) {
   .sce-delete-comment {
     max-width: 175px;
   }

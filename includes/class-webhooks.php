@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Helper fuctions for Webhooks tab.
  *
@@ -15,23 +16,29 @@ use CommentEditPro\Includes\Options as Options;
  */
 class Webhooks {
 
+
 	/**
 	 * Class runner.
 	 */
 	public function run() {
-
 		/**
 		 * Avatar admin panel actions.
 		 */
 
-		// Save avatar settings in the admin.
+		// Save a single webhook in the admin.
 		add_action( 'wp_ajax_sce_save_webhook', array( $this, 'ajax_save_webhook' ) );
 
-		// Save gravatar settings in the admin.
+		// Retrieve a single webhook settings in the admin.
 		add_action( 'wp_ajax_sce_retrieve_webhook', array( $this, 'ajax_retrieve_webhook' ) );
 
 		// Retrieve existing webhooks settings in the admin.
 		add_action( 'wp_ajax_sce_get_webhooks', array( $this, 'ajax_get_webhooks' ) );
+
+		// Disable a webhook.
+		add_action( 'wp_ajax_sce_disable_webhook', array( $this, 'ajax_disable_webhook' ) );
+
+		// Enable a webhook.
+		add_action( 'wp_ajax_sce_enable_webhook', array( $this, 'ajax_enable_webhook' ) );
 
 		// Init webhook post type.
 		add_action( 'init', array( $this, 'register_post_type_init' ) );
@@ -44,7 +51,7 @@ class Webhooks {
 	 * Register the Webhooks post type.
 	 */
 	public function register_post_type_init() {
-		// Register post types.
+		 // Register post types.
 		$post_type_args = array(
 			'public'             => false,
 			'publicly_queryable' => false,
@@ -98,7 +105,82 @@ class Webhooks {
 					'ajaxurl'           => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);
+
+			// Add styles.
+			wp_enqueue_script(
+				'sce-webhooks-css',
+				Functions::get_plugin_url( 'dist/sce-webhooks-admin-css.css' ),
+				array(),
+				Functions::get_plugin_version(),
+				'all'
+			);
 		}
+	}
+
+	/**
+	 * Disable a webhook via Ajax.
+	 */
+	public function ajax_disable_webhook() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$webhook_id = absint( filter_input( INPUT_POST, 'id', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-disable-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get webhook.
+		$webhook = get_post( $webhook_id );
+		if ( ! $webhook ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not find webhook.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Update enabled post meta.
+		update_post_meta( $webhook_id, 'enabled', false );
+
+		// Exit gracefully.
+		wp_send_json_success();
+	}
+
+	/**
+	 * Enable a webhook via Ajax.
+	 */
+	public function ajax_enable_webhook() {
+		 $nonce     = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$webhook_id = absint( filter_input( INPUT_POST, 'id', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-enable-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get webhook.
+		$webhook = get_post( $webhook_id );
+		if ( ! $webhook ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not find webhook.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Update enabled post meta.
+		update_post_meta( $webhook_id, 'enabled', true );
+
+		// Exit gracefully.
+		wp_send_json_success();
 	}
 
 	/**
@@ -129,7 +211,7 @@ class Webhooks {
 		foreach ( $webhooks as $webhook ) {
 			$webhook_id       = $webhook->ID;
 			$webhook_url      = esc_url_raw( $webhook->post_content );
-			$webhook_enabled  = (bool) get_post_meta( $webhook_id, 'webhook_enabled', true );
+			$webhook_enabled  = (bool) get_post_meta( $webhook_id, 'enabled', true );
 			$webhook_to_add   = array(
 				'id'            => $webhook_id,
 				'name'          => sanitize_text_field( stripslashes_deep( $webhook->post_title ) ),
@@ -138,6 +220,7 @@ class Webhooks {
 				'edit_nonce'    => wp_create_nonce( 'sce-edit-webhook-' . $webhook_id ),
 				'delete_nonce'  => wp_create_nonce( 'sce-delete-webhook-' . $webhook_id ),
 				'disable_nonce' => wp_create_nonce( 'sce-disable-webhook-' . $webhook_id ),
+				'enable_nonce'  => wp_create_nonce( 'sce-enable-webhook-' . $webhook_id ),
 			);
 			$webhooks_array[] = $webhook_to_add;
 		}
@@ -168,7 +251,7 @@ class Webhooks {
 			}
 		} else {
 			// Security.
-			if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
+			if ( ! wp_verify_nonce( $nonce, 'sce-edit-webhook-' . $webhook_id ) || ! current_user_can( 'manage_options' ) ) {
 				wp_send_json_error(
 					array(
 						'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -198,6 +281,10 @@ class Webhooks {
 				)
 			);
 
+			// Set some defaults.
+			update_post_meta( $webhook_id, 'enabled', true );
+			update_post_meta( $webhook_id, 'send_approved', true );
+
 			// Format data for return.
 			$webhook = get_post( $webhook_id );
 
@@ -222,43 +309,45 @@ class Webhooks {
 			);
 		}
 
+		$request_headers = get_post_meta( $webhook_id, 'request_headers', true );
+		if ( ! $request_headers ) {
+			$request_headers = array();
+		} else {
+			$request_headers = json_decode( wp_json_encode( $request_headers ) );
+		}
+
+		$request_body = get_post_meta( $webhook_id, 'request_body', true );
+		if ( ! $request_body ) {
+			$request_body = array();
+		} else {
+			$request_body = json_decode( wp_json_encode( $request_body ) );
+		}
+
 		// Format data for return.
+		$json_return = array(
+			'name'                 => sanitize_text_field( stripslashes_deep( $webhook->post_title ) ),
+			'webhookEnabled'       => (bool) get_post_meta( $webhook_id, 'enabled', true ),
+			'webhookUrl'           => sanitize_text_field( $webhook->post_content ),
+			'requestMethod'        => sanitize_text_field( get_post_meta( $webhook_id, 'request_method', true ) ),
+			'requestFormat'        => sanitize_text_field( get_post_meta( $webhook_id, 'request_format', true ) ),
+			'requestHeaders'       => $request_headers,
+			'requestBody'          => $request_body,
+			'sendApprovedComments' => (bool) get_post_meta( $webhook_id, 'send_approved', true ),
+			'sendPendingComments'  => (bool) get_post_meta( $webhook_id, 'send_pending', true ),
+			'sendSpamComments'     => (bool) get_post_meta( $webhook_id, 'send_spam', true ),
+			'sendDeletedComments'  => (bool) get_post_meta( $webhook_id, 'send_deleted', true ),
+			'sendEditedComments'   => (bool) get_post_meta( $webhook_id, 'send_edited', true ),
+		);
 
 		// Send json response.
 		wp_send_json_success(
 			array(
+				'form'       => $json_return,
 				'webhook'    => $webhook,
 				'webhook_id' => $webhook_id,
 				'nonce'      => wp_create_nonce( 'sce-save-webhook-' . $webhook_id ),
 			)
 		);
-
-	}
-
-	/**
-	 * Get Gravatar options.
-	 */
-	public function ajax_get_gravatar_options() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		$avatar_options = Options::get_options();
-
-		$json_array = array(
-			'enableGravatarProtection' => $avatar_options['enable_gravatar_protection'],
-			'gravatarProtectionText'   => $avatar_options['gravatar_protection_text'],
-		);
-
-		// Exit gracefully.
-		wp_send_json_success( $json_array );
 	}
 
 	/**
@@ -322,7 +411,7 @@ class Webhooks {
 		wp_update_post( $webhook );
 
 		// Update webhook meta.
-		update_post_meta( $webhook_id, 'webhook_enabled', $webhook_enabled );
+		update_post_meta( $webhook_id, 'enabled', $webhook_enabled );
 		update_post_meta( $webhook_id, 'request_method', $request_method );
 		update_post_meta( $webhook_id, 'request_format', $request_format );
 		update_post_meta( $webhook_id, 'request_headers', $request_headers );
@@ -337,43 +426,20 @@ class Webhooks {
 		$edit_nonce    = wp_create_nonce( 'sce-edit-webhook-' . $webhook_id );
 		$delete_nonce  = wp_create_nonce( 'sce-delete-webhook-' . $webhook_id );
 		$disable_nonce = wp_create_nonce( 'sce-disable-webhook-' . $webhook_id );
+		$enable_nonce  = wp_create_nonce( 'sce-enable-webhook-' . $webhook_id );
 
 		// Exit gracefully.
 		wp_send_json_success(
 			array(
-				'webhook_name'  => $webhook_name,
-				'webhook_url'   => $webhook_url,
-				'webhook_id'    => $webhook_id,
+				'name'          => $webhook_name,
+				'enabled'       => $webhook_enabled,
+				'url'           => $webhook_url,
+				'id'            => $webhook_id,
 				'edit_nonce'    => $edit_nonce,
 				'delete_nonce'  => $delete_nonce,
 				'disable_nonce' => $disable_nonce,
+				'enable_nonce'  => $enable_nonce,
 			)
 		);
-	}
-
-	/**
-	 * Save gravatar options.
-	 */
-	public function ajax_save_gravatar_options() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		$options_to_save = array(
-			'enable_gravatar_protection' => filter_input( INPUT_POST, 'enableGravatarProtection', FILTER_VALIDATE_BOOLEAN ),
-			'gravatar_protection_text'   => sanitize_text_field( filter_input( INPUT_POST, 'gravatarProtectionText', FILTER_DEFAULT ) ),
-		);
-
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-avatar-options' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		Options::update_options( $options_to_save );
-
-		// Exit gracefully.
-		wp_send_json_success( array() );
 	}
 }
