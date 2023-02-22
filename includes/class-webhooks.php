@@ -147,7 +147,7 @@ class Webhooks {
 		}
 
 		// Delete webhook.
-		//wp_delete_post( $webhook_id, true );
+		wp_delete_post( $webhook_id, true );
 
 		// Exit gracefully.
 		wp_send_json_success(

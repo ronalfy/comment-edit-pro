@@ -208,27 +208,24 @@ const Interface = ( props ) => {
 									setModalCount( modalCount + 1 );
 
 									// Determine if we need to update a webhook in the table, or add a new entry.
-									if ( existingWebhooks.length > 0 ) {
-										// Determine if webhook_id is in existing webhooks.
-										const webhookExists = existingWebhooks.find(
-											( webhook ) => webhook.id === webhookData.id
+									const webhookExists = existingWebhooks.find(
+										( webhook ) => webhook.id === webhookData.id
+									);
+									if ( webhookExists ) {
+										// Update the webhook.
+										const updatedWebhooks = updateWebhooksRow(
+											existingWebhooks,
+											webhookData.id,
+											webhookData
 										);
-										if ( webhookExists ) {
-											// Update the webhook.
-											const updatedWebhooks = updateWebhooksRow(
-												existingWebhooks,
-												webhookData.id,
-												webhookData
-											);
-											setExistingWebhooks( updatedWebhooks );
-										} else {
-											// Add the webhook.
-											setExistingWebhooks( [ ...existingWebhooks, webhookData ] );
-										}
-
-										// Close the modal.
-										setShowModal( false );
+										setExistingWebhooks( updatedWebhooks );
+									} else {
+										// Add the webhook.
+										setExistingWebhooks( [ ...existingWebhooks, webhookData ] );
 									}
+
+									// Close the modal.
+									setShowModal( false );
 								} }
 							/>
 						</div>

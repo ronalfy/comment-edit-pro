@@ -26014,24 +26014,21 @@ var Interface = function Interface(props) {
 
       setModalCount(modalCount + 1); // Determine if we need to update a webhook in the table, or add a new entry.
 
-      if (existingWebhooks.length > 0) {
-        // Determine if webhook_id is in existing webhooks.
-        var webhookExists = existingWebhooks.find(function (webhook) {
-          return webhook.id === webhookData.id;
-        });
+      var webhookExists = existingWebhooks.find(function (webhook) {
+        return webhook.id === webhookData.id;
+      });
 
-        if (webhookExists) {
-          // Update the webhook.
-          var updatedWebhooks = updateWebhooksRow(existingWebhooks, webhookData.id, webhookData);
-          setExistingWebhooks(updatedWebhooks);
-        } else {
-          // Add the webhook.
-          setExistingWebhooks([].concat(_toConsumableArray(existingWebhooks), [webhookData]));
-        } // Close the modal.
+      if (webhookExists) {
+        // Update the webhook.
+        var updatedWebhooks = updateWebhooksRow(existingWebhooks, webhookData.id, webhookData);
+        setExistingWebhooks(updatedWebhooks);
+      } else {
+        // Add the webhook.
+        setExistingWebhooks([].concat(_toConsumableArray(existingWebhooks), [webhookData]));
+      } // Close the modal.
 
 
-        setShowModal(false);
-      }
+      setShowModal(false);
     }
   }))), showWPModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Modal__WEBPACK_IMPORTED_MODULE_17__["default"], {
     title: modalParams.title,
