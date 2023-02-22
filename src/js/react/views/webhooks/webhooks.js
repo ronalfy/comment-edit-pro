@@ -246,7 +246,7 @@ const Interface = ( props ) => {
 				<div className="sce-panel-webhooks-button_wrapper sce-admin-buttons sce-admin-buttons-flex-right">
 					<Button
 						className="sce-panel-webhooks-button sce__btn-action"
-						onClick={ () => {
+						onClick={ ( e ) => {
 							setShowModal( true );
 						} }
 						icon={ WebhooksIcon }
@@ -503,7 +503,7 @@ const Interface = ( props ) => {
 										</tr>
 									);
 								} ) }
-							{ webhooks.length === 0 && (
+							{ existingWebhooks.length === 0 && (
 								<tr>
 									<td className="sce-panel-webhooks-table__data" colSpan="3">
 										{ __( 'No webhooks have been added yet.', 'comment-edit-pro' ) }

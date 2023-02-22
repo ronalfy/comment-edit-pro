@@ -3,7 +3,7 @@ const RequestHeadersValues = [
 	{ label: __( 'Select a Name', 'comment-edit-pro' ), value: 'none' },
 	{
 		label: 'Accept',
-		value: 'Accept-Charset',
+		value: 'Accept',
 	},
 	{
 		label: 'Accept-Charset',

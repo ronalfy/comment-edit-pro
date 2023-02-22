@@ -26044,7 +26044,7 @@ var Interface = function Interface(props) {
     className: "sce-panel-webhooks-button_wrapper sce-admin-buttons sce-admin-buttons-flex-right"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_21__["default"], {
     className: "sce-panel-webhooks-button sce__btn-action",
-    onClick: function onClick() {
+    onClick: function onClick(e) {
       setShowModal(true);
     },
     icon: _components_icons_Webhooks__WEBPACK_IMPORTED_MODULE_15__["default"],
@@ -26222,7 +26222,7 @@ var Interface = function Interface(props) {
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
       className: "sce-panel-webhooks-table__data"
     }, webhook.url));
-  }), webhooks.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+  }), existingWebhooks.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
     className: "sce-panel-webhooks-table__data",
     colSpan: "3"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No webhooks have been added yet.', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {

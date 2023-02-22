@@ -375,7 +375,6 @@ const Interface = ( props ) => {
 													<Controller
 														name={ `requestHeaders[${ index }].name` }
 														control={ control }
-														rules={ { required: true } }
 														render={ ( { field: { onChange, value } } ) => (
 															<SelectControl
 																value={ value }
@@ -424,7 +423,6 @@ const Interface = ( props ) => {
 													<Controller
 														name={ `requestHeaders[${ index }].value` }
 														control={ control }
-														rules={ { required: true } }
 														render={ ( { field: { onChange, value } } ) => (
 															<SelectControl
 																value={ value }
@@ -490,7 +488,6 @@ const Interface = ( props ) => {
 												<Controller
 													name={ `requestBody[${ index }].key` }
 													control={ control }
-													rules={ { required: true } }
 													render={ ( { field: { onChange, value } } ) => (
 														<TextControl
 															value={ value ?? '' }
@@ -543,7 +540,6 @@ const Interface = ( props ) => {
 													<Controller
 														name={ `requestBody[${ index }].value` }
 														control={ control }
-														rules={ { required: true } }
 														render={ ( { field: { onChange, value } } ) => (
 															<SelectControl
 																value={ value }

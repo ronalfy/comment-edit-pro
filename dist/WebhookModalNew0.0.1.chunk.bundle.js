@@ -523,9 +523,6 @@ var Interface = function Interface(props) {
     })), 'custom' !== getValues("requestHeaders[".concat(index, "].name")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].name"),
       control: control,
-      rules: {
-        required: true
-      },
       render: function render(_ref7) {
         var _ref7$field = _ref7.field,
             _onChange5 = _ref7$field.onChange,
@@ -575,9 +572,6 @@ var Interface = function Interface(props) {
     })), 'custom' !== getValues("requestHeaders[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestHeaders[".concat(index, "].value"),
       control: control,
-      rules: {
-        required: true
-      },
       render: function render(_ref9) {
         var _ref9$field = _ref9.field,
             _onChange7 = _ref9$field.onChange,
@@ -628,9 +622,6 @@ var Interface = function Interface(props) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestBody[".concat(index, "].key"),
       control: control,
-      rules: {
-        required: true
-      },
       render: function render(_ref10) {
         var _errors$requestBody, _errors$requestBody$i, _errors$requestBody$i2;
 
@@ -686,9 +677,6 @@ var Interface = function Interface(props) {
     })), 'custom' !== getValues("requestBody[".concat(index, "].value")) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_15__.Controller, {
       name: "requestBody[".concat(index, "].value"),
       control: control,
-      rules: {
-        required: true
-      },
       render: function render(_ref12) {
         var _ref12$field = _ref12.field,
             _onChange10 = _ref12$field.onChange,
@@ -951,7 +939,7 @@ var RequestHeadersValues = [{
   value: 'none'
 }, {
   label: 'Accept',
-  value: 'Accept-Charset'
+  value: 'Accept'
 }, {
   label: 'Accept-Charset',
   value: 'Accept-Charset'
