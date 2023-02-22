@@ -46,15 +46,207 @@ class Webhooks {
 		// Init webhook post type.
 		add_action( 'init', array( $this, 'register_post_type_init' ) );
 
+		// Add Comment Meta Box for webhook status.
+		add_action( 'admin_init', array( $this, 'add_comment_meta_box' ) );
+
 		// Init tab JS.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
+
+		// Add webhook when a comment has been posted.
+		add_action( 'comment_post', array( $this, 'send_webhook_comment_post' ), 10, 2 );
+	}
+
+	/**
+	 * Add a comment meta box for webhook status displays.
+	 */
+	public function add_comment_meta_box() {
+		add_meta_box(
+			'sce-webhooks',
+			__( 'Comment Webhooks', 'comment-edit-pro' ),
+			array( $this, 'output_webhook_comment_meta' ),
+			'comment',
+			'normal'
+		);
+	}
+
+	/**
+	 * Output webhook status for a commment.
+	 *
+	 * @param WP_Comment $comment The comment object.
+	 */
+	public function output_webhook_comment_meta( $comment ) {
+		// todo - output webhook status from comment meta.
+	}
+
+	/**
+	 * Send a webhook when a comment has been posted.
+	 *
+	 * @param int   $comment_id       Comment ID.
+	 * @param mixed $comment_approved Comment object.
+	 */
+	public function send_webhook_comment_post( $comment_id, $comment_approved ) {
+		// Retrieve webhooks.
+		$webhooks = get_posts(
+			array(
+				'post_type'      => 'sce_webhooks',
+				'posts_per_page' => 100,
+				'post_status'    => 'publish',
+				'meta_query'     => array(
+					array(
+						'key'     => 'enabled',
+						'value'   => true,
+						'compare' => '=',
+						'type'    => 'BOOLEAN',
+					),
+				),
+			)
+		);
+		if ( ! $webhooks ) {
+			return;
+		}
+
+		// Retrieve comment.
+		$comment = get_comment( $comment_id );
+
+		// Loop through webhooks and get the webhook data from post meta.
+		foreach ( $webhooks as $webhook ) {
+			$webhook_title          = sanitize_text_field( stripslashes_deep( $webhook->post_title ) );
+			$webhook_url            = esc_url_raw( $webhook->post_content );
+			$webhook_id             = absint( $webhook->ID );
+			$request_method         = strtoupper( sanitize_text_field( get_post_meta( $webhook_id, 'request_method', true ) ) );
+			$request_format         = sanitize_text_field( get_post_meta( $webhook_id, 'request_format', true ) );
+			$request_headers        = get_post_meta( $webhook_id, 'request_headers', true );
+			$request_body           = get_post_meta( $webhook_id, 'request_body', true );
+			$send_approved_comments = (bool) get_post_meta( $webhook_id, 'send_approved', true );
+			$send_pending_comments  = (bool) get_post_meta( $webhook_id, 'send_pending', true );
+			$send_spam_comments     = (bool) get_post_meta( $webhook_id, 'send_spam', true );
+			$send_deleted_comments  = (bool) get_post_meta( $webhook_id, 'send_deleted', true );
+			$send_edited_comments   = (bool) get_post_meta( $webhook_id, 'send_edited', true );
+
+			// Determine if webhook can be sent.
+			$comment_status = $comment->comment_approved;
+			if ( 'approved' === $comment_status && ! $send_approved_comments ) {
+				continue;
+			}
+			if ( '0' === $comment_status && ! $send_pending_comments ) {
+				continue;
+			}
+			if ( 'spam' === $comment_status && ! $send_spam_comments ) {
+				continue;
+			}
+
+			// Map request headers to variables.
+			$mapped_request_headers = array();
+			if ( is_array( $request_headers ) ) {
+				foreach ( $request_headers as $key => $request_header ) {
+					$request_key   = 'custom' === $request_header['name'] ? $request_header['customName'] : $request_header['name'];
+					$request_value = 'custom' === $request_header['value'] ? $request_header['customValue'] : $request_header['value'];
+
+					// Map values if not custom.
+					if ( 'custom' !== $request_header['value'] ) {
+						$request_value = $this->map_request_header( $request_value, $comment );
+					}
+					$mapped_request_headers[ sanitize_text_field( $request_key ) ] = sanitize_text_field( $request_value );
+				}
+			}
+
+			// Map request body to variables.
+			$mapped_request_body = array();
+			if ( is_array( $request_body ) ) {
+				foreach ( $request_body as $key => $body_params ) {
+					$request_key   = $body_params['key'];
+					$request_value = 'custom' === $body_params['value'] ? $body_params['customValue'] : $body_params['value'];
+
+					// Map values if not custom.
+					if ( 'custom' !== $body_params['value'] ) {
+						$request_value = $this->map_request_header( $request_value, $comment );
+					}
+					$mapped_request_body[ sanitize_text_field( $request_key ) ] = sanitize_text_field( $request_value );
+				}
+			}
+		}
+
+		// Add data to URL if GET or DELETE request.
+		if ( in_array( $request_method, array( 'GET', 'DELETE' ), true ) && ! empty( $mapped_request_body ) ) {
+			$webhook_url = add_query_arg( urlencode_deep( $mapped_request_body ), $webhook_url );
+		}
+
+		// If this is a PUT or POST request, format request data.
+		if ( in_array( $request_method, array( 'POST', 'PUT' ), true ) && 'JSON' === $request_format ) {
+
+			// Add content type header.
+			$mapped_request_headers['Content-Type'] = 'application/json';
+
+			// Encode request data.
+			$mapped_request_body = wp_json_encode( $mapped_request_body );
+		}
+
+		// Format request.
+		$request_args = array(
+			'body'      => ! in_array( $request_method, array( 'GET', 'DELETE' ), true ) ? $mapped_request_body : null,
+			'method'    => $request_method,
+			'headers'   => $mapped_request_headers,
+			'sslverify' => apply_filters( 'https_local_ssl_verify', true, $webhook_url ),
+		);
+
+		return;
+
+		// $response = wp_remote_request( $webhook_url, $request_args );
+		// if ( is_wp_error( $response ) ) {
+		// 	// todo - log error.
+		// } else {
+		// 	// todo - log success.
+		// }
+	}
+
+	/**
+	 * Map a request header to a comment value.
+	 *
+	 * @param string     $request_key Request key to retrieve the value for.
+	 * @param WP_Comment $comment     The comment object.
+	 */
+	private function map_request_header( $request_key, $comment ) {
+		switch ( $request_key ) {
+			case 'commenter_name':
+				return $comment->comment_author;
+			case 'commenter_email':
+				return $comment->comment_author_email;
+			case 'commenter_website':
+				return $comment->comment_author_url;
+			case 'comment_content':
+				return $comment->comment_content;
+			case 'comment_id':
+				return $comment->comment_ID;
+			case 'comment_parent_id':
+				return $comment->comment_parent;
+			case 'comment_post_id':
+				return $comment->comment_post_ID;
+			case 'comment_post_title':
+				return get_the_title( $comment->comment_post_ID );
+			case 'comment_post_url':
+				return get_permalink( $comment->comment_post_ID );
+			case 'comment_author_ip':
+				return $comment->comment_author_IP;
+			case 'comment_author_user_agent':
+				return $comment->comment_agent;
+			case 'comment_date':
+				return $comment->comment_date;
+			case 'comment_date_gmt':
+				return $comment->comment_date_gmt;
+			case 'comment_approved':
+				return $comment->comment_approved;
+			case 'comment_type':
+				return $comment->comment_type;
+			default:
+				return '';
+		}
 	}
 
 	/**
 	 * Register the Webhooks post type.
 	 */
 	public function register_post_type_init() {
-		 // Register post types.
+		// Register post types.
 		$post_type_args = array(
 			'public'             => false,
 			'publicly_queryable' => false,
@@ -194,7 +386,7 @@ class Webhooks {
 	 * Enable a webhook via Ajax.
 	 */
 	public function ajax_enable_webhook() {
-		 $nonce     = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 		$webhook_id = absint( filter_input( INPUT_POST, 'id', FILTER_DEFAULT ) );
 
 		// Security.
