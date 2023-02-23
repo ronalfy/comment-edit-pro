@@ -131,7 +131,7 @@ class Frontend_Editing {
 			return;
 		}
 		wp_enqueue_script(
-			'sce-frontend-fancybox-js',
+			'jquery-fancybox',
 			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.js' ),
 			array( 'jquery' ),
 			Functions::get_plugin_version(),
@@ -145,7 +145,7 @@ class Frontend_Editing {
 			'all'
 		);
 		wp_enqueue_style(
-			'sce-frontend-fancybox-css',
+			'fancybox',
 			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.css' ),
 			array(),
 			Functions::get_plugin_version(),
@@ -154,7 +154,7 @@ class Frontend_Editing {
 		wp_enqueue_script(
 			'comment-edit-pro',
 			Functions::get_plugin_url( '/js/simple-comment-editing-options.js' ),
-			array( 'jquery', 'sce-frontend-fancybox-js' ),
+			array( 'jquery', 'jquery-fancybox' ),
 			Functions::get_plugin_version(),
 			true
 		);
@@ -297,7 +297,7 @@ class Frontend_Editing {
 			admin_url( 'admin-ajax.php' )
 		);
 		$html  = sprintf(
-			'<a data-fancybox data-type="iframe" href="%s">%s</a>',
+			'<a data-sce-fancybox data-type="iframe" data-preload="false" data-src="%1$s" href="%1$s">%2$s</a>',
 			esc_url_raw( $url ),
 			__( 'Edit', 'comment-edit-pro' )
 		);
