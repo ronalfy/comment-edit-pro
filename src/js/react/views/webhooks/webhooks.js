@@ -273,9 +273,10 @@ const Interface = ( props ) => {
 						<tbody>
 							{ existingWebhooks.length > 0 &&
 								existingWebhooks.map( ( webhook, index ) => {
+									console.log( webhook );
 									return (
 										<tr
-											key={ index }
+											key={ webhook.id }
 											className={ classNames( {
 												'sce-delete-row': webhook?.isDeleted,
 											} ) }
@@ -415,7 +416,7 @@ const Interface = ( props ) => {
 
 															// Update the row.
 															const updatedWebhooks = updateWebhooksRow(
-																webhooks,
+																existingWebhooks,
 																webhook.id,
 																webhookCopy
 															);

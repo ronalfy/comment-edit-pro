@@ -62,7 +62,7 @@ class Webhooks {
 	public function add_comment_meta_box() {
 		add_meta_box(
 			'sce-webhooks',
-			__( 'Comment Webhooks', 'comment-edit-pro' ),
+			__( 'Comment Webhook History', 'comment-edit-pro' ),
 			array( $this, 'output_webhook_comment_meta' ),
 			'comment',
 			'normal'
@@ -75,7 +75,89 @@ class Webhooks {
 	 * @param WP_Comment $comment The comment object.
 	 */
 	public function output_webhook_comment_meta( $comment ) {
-		// todo - output webhook status from comment meta.
+		$comment_meta = get_comment_meta( $comment->comment_ID, 'sce_webhook_data', true );
+		if ( ! $comment_meta ) {
+			?>
+			<p><?php esc_html_e( 'No webhooks have been sent for this comment.', 'comment-edit-pro' ); ?></p>
+			<?php
+			return;
+		}
+
+		?>
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Webhook URL', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ( $comment_meta as $webhook_id => $webhook_data ) :
+						$webhook_title = get_the_title( $webhook_id );
+						?>
+						<tr>
+							<td>
+								<?php
+								if ( isset( $webhook_data['url'] ) ) {
+									echo esc_url_raw( $webhook_data['url'] );
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $webhook_data['success'] ) ) {
+									if ( $webhook_data['success'] ) {
+										esc_html_e( 'Yes', 'comment-edit-pro' );
+									} else {
+										esc_html_e( 'No', 'comment-edit-pro' );
+									}
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $webhook_data['status_code'] ) ) {
+									echo esc_html( $webhook_data['status_code'] );
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $webhook_data['error'] ) && $webhook_data['error'] ) {
+									if ( is_string( $webhook_data['error'] ) ) {
+										echo esc_html( $webhook_data['error'] );
+									} else {
+										esc_html_e( 'Unknown error', 'comment-edit-pro' );
+									}
+								} else {
+									esc_html_e( 'No known errors', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+						</tr>
+						<?php
+						endforeach;
+					?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Webhook URL', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
+					</tr>
+				</tfoot>
+			</table>
+			<?php
 	}
 
 	/**
@@ -86,32 +168,44 @@ class Webhooks {
 	 */
 	public function send_webhook_comment_post( $comment_id, $comment_approved ) {
 		// Retrieve webhooks.
-		$webhooks = get_posts(
-			array(
-				'post_type'      => 'sce_webhooks',
-				'posts_per_page' => 100,
-				'post_status'    => 'publish',
-				'meta_query'     => array(
-					array(
-						'key'     => 'enabled',
-						'value'   => true,
-						'compare' => '=',
-						'type'    => 'BOOLEAN',
+		$webhooks = wp_cache_get( 'sce_webhooks', 'sce' );
+		if ( ! $webhooks ) {
+			$webhooks = get_posts(
+				array(
+					'post_type'      => 'sce_webhooks',
+					'posts_per_page' => 100,
+					'post_status'    => 'publish',
+					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+						array(
+							'key'     => 'enabled',
+							'value'   => true,
+							'compare' => '=',
+							'type'    => 'BOOLEAN',
+						),
 					),
-				),
-			)
-		);
+				)
+			);
+		}
 		if ( ! $webhooks ) {
 			return;
 		}
 
+		wp_cache_set( 'sce_webhooks', $webhooks, 'sce' );
+
 		// Retrieve comment.
 		$comment = get_comment( $comment_id );
+
+		// Get comment meta with webhook data.
+		$comment_meta = get_comment_meta( $comment_id, 'sce_webhook_data', true );
+		if ( ! is_array( $comment_meta ) ) {
+			$comment_meta = array();
+		}
 
 		// Loop through webhooks and get the webhook data from post meta.
 		foreach ( $webhooks as $webhook ) {
 			$webhook_title          = sanitize_text_field( stripslashes_deep( $webhook->post_title ) );
 			$webhook_url            = esc_url_raw( $webhook->post_content );
+			$original_webhook_url   = $webhook_url;
 			$webhook_id             = absint( $webhook->ID );
 			$request_method         = strtoupper( sanitize_text_field( get_post_meta( $webhook_id, 'request_method', true ) ) );
 			$request_format         = sanitize_text_field( get_post_meta( $webhook_id, 'request_format', true ) );
@@ -164,39 +258,79 @@ class Webhooks {
 					$mapped_request_body[ sanitize_text_field( $request_key ) ] = sanitize_text_field( $request_value );
 				}
 			}
+
+			// Add data to URL if GET or DELETE request.
+			if ( in_array( $request_method, array( 'GET', 'DELETE' ), true ) && ! empty( $mapped_request_body ) ) {
+				$webhook_url = add_query_arg( urlencode_deep( $mapped_request_body ), $webhook_url );
+			}
+
+			// If this is a PUT or POST request, format request data.
+			if ( in_array( $request_method, array( 'POST', 'PUT' ), true ) && 'JSON' === $request_format ) {
+
+				// Add content type header.
+				$mapped_request_headers['Content-Type'] = 'application/json';
+
+				// Encode request data.
+				$mapped_request_body = wp_json_encode( $mapped_request_body );
+			}
+
+			// Format request.
+			$request_args = array(
+				'body'      => ! in_array( $request_method, array( 'GET', 'DELETE' ), true ) ? $mapped_request_body : null,
+				'method'    => $request_method,
+				'headers'   => $mapped_request_headers,
+				'sslverify' => apply_filters( 'https_local_ssl_verify', true, $webhook_url ),
+			);
+
+			// Send response.
+			$response = null;
+			try {
+				$response = wp_remote_request( $webhook_url, $request_args );
+			} catch ( \Exception $e ) {
+				// Log error.
+				$comment_meta[ $webhook_id ]['error'] = $e->getMessage();
+			}
+
+			if ( is_wp_error( $response ) ) {
+				// Log error.
+				$comment_meta[ $webhook_id ]['success']     = false;
+				$comment_meta[ $webhook_id ]['error']       = $response->get_error_message();
+				$comment_meta[ $webhook_id ]['status_code'] = false;
+			} elseif ( null === $response ) {
+				// Log error.
+				$comment_meta[ $webhook_id ]['success']     = false;
+				$comment_meta[ $webhook_id ]['error']       = __( 'No response received.', 'comment-edit-pro' );
+				$comment_meta[ $webhook_id ]['status_code'] = false;
+			} else {
+				// Get status code.
+				$status_code                                = wp_remote_retrieve_response_code( $response );
+				$comment_meta[ $webhook_id ]['status_code'] = $status_code;
+				if ( 200 === $status_code ) {
+					$comment_meta[ $webhook_id ]['success'] = true;
+					$comment_meta[ $webhook_id ]['error']   = false;
+				} else {
+					$comment_meta[ $webhook_id ]['success'] = false;
+					// Try to get error code from webhook.
+					$response_body = wp_remote_retrieve_body( $response );
+					$response_body = json_decode( $response_body, true );
+					if ( is_array( $response_body ) && isset( $response_body['error'] ) ) {
+						if ( isset( $response_body['error']['message'] ) ) {
+							$comment_meta[ $webhook_id ]['error'] = $response_body['error']['message'];
+						}
+					} elseif ( is_array( $response_body ) && isset( $response_body['message'] ) ) {
+						$comment_meta[ $webhook_id ]['error'] = $response_body['message'];
+					} else {
+						$comment_meta[ $webhook_id ]['error'] = $status_code;
+					}
+				}
+			}
+
+			// Add URL to comment meta.
+			$comment_meta[ $webhook_id ]['url'] = esc_url_raw( $original_webhook_url );
 		}
 
-		// Add data to URL if GET or DELETE request.
-		if ( in_array( $request_method, array( 'GET', 'DELETE' ), true ) && ! empty( $mapped_request_body ) ) {
-			$webhook_url = add_query_arg( urlencode_deep( $mapped_request_body ), $webhook_url );
-		}
-
-		// If this is a PUT or POST request, format request data.
-		if ( in_array( $request_method, array( 'POST', 'PUT' ), true ) && 'JSON' === $request_format ) {
-
-			// Add content type header.
-			$mapped_request_headers['Content-Type'] = 'application/json';
-
-			// Encode request data.
-			$mapped_request_body = wp_json_encode( $mapped_request_body );
-		}
-
-		// Format request.
-		$request_args = array(
-			'body'      => ! in_array( $request_method, array( 'GET', 'DELETE' ), true ) ? $mapped_request_body : null,
-			'method'    => $request_method,
-			'headers'   => $mapped_request_headers,
-			'sslverify' => apply_filters( 'https_local_ssl_verify', true, $webhook_url ),
-		);
-
-		return;
-
-		// $response = wp_remote_request( $webhook_url, $request_args );
-		// if ( is_wp_error( $response ) ) {
-		// 	// todo - log error.
-		// } else {
-		// 	// todo - log success.
-		// }
+		// Save comment meta.
+		update_comment_meta( $comment_id, 'sce_webhook_data', $comment_meta );
 	}
 
 	/**
@@ -341,6 +475,9 @@ class Webhooks {
 		// Delete webhook.
 		wp_delete_post( $webhook_id, true );
 
+		// Clear cache.
+		wp_cache_delete( 'sce_webhooks', 'sce' );
+
 		// Exit gracefully.
 		wp_send_json_success(
 			array(
@@ -378,6 +515,9 @@ class Webhooks {
 		// Update enabled post meta.
 		update_post_meta( $webhook_id, 'enabled', false );
 
+		// Clear cache.
+		wp_cache_delete( 'sce_webhooks', 'sce' );
+
 		// Exit gracefully.
 		wp_send_json_success();
 	}
@@ -411,6 +551,9 @@ class Webhooks {
 		// Update enabled post meta.
 		update_post_meta( $webhook_id, 'enabled', true );
 
+		// Clear cache.
+		wp_cache_delete( 'sce_webhooks', 'sce' );
+
 		// Exit gracefully.
 		wp_send_json_success();
 	}
@@ -435,6 +578,8 @@ class Webhooks {
 			'posts_per_page'   => 100,
 			'post_status'      => 'publish',
 			'suppress_filters' => true,
+			'orderby'          => 'ID',
+			'order'            => 'ASC',
 		);
 		$webhooks   = get_posts( $query_args );
 
@@ -641,6 +786,9 @@ class Webhooks {
 		$webhook->post_content = $webhook_url;
 		$webhook->post_status  = $webhook_enabled ? 'publish' : 'draft';
 		wp_update_post( $webhook );
+
+		// Clear cache.
+		wp_cache_delete( 'sce_webhooks', 'sce' );
 
 		// Update webhook meta.
 		update_post_meta( $webhook_id, 'enabled', $webhook_enabled );

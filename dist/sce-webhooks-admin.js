@@ -26063,8 +26063,9 @@ var Interface = function Interface(props) {
     className: "sce-panel-webhooks-table__header",
     scope: "col"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Webhook URL', 'comment-edit-pro')))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, existingWebhooks.length > 0 && existingWebhooks.map(function (webhook, index) {
+    console.log(webhook);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
-      key: index,
+      key: webhook.id,
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
         'sce-delete-row': webhook === null || webhook === void 0 ? void 0 : webhook.isDeleted
       })
@@ -26166,7 +26167,7 @@ var Interface = function Interface(props) {
 
         webhookCopy.enabled = value; // Update the row.
 
-        var updatedWebhooks = updateWebhooksRow(webhooks, webhook.id, webhookCopy); // Update the context/state.
+        var updatedWebhooks = updateWebhooksRow(existingWebhooks, webhook.id, webhookCopy); // Update the context/state.
 
         setExistingWebhooks(updatedWebhooks); // Perform Ajax requests.
 
