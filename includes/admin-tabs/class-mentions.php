@@ -73,7 +73,7 @@ class Mentions {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-mentions"></div>	
+						<div id="sce-tab-mentions"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>	
 					</div>
 				</div>
 				<?php

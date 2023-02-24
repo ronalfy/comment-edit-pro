@@ -46,8 +46,28 @@ class Admin_Settings {
 	 * Output Generic Settings Place holder for React goodness.
 	 */
 	public static function get_settings_header() {
+		$options   = Options::get_options();
+		$user      = wp_get_current_user();
+		$user_id   = $user->ID;
+		$firstname = get_user_meta( $user_id, 'first_name', true );
+		$lastname  = get_user_meta( $user_id, 'last_name', true );
+		$website   = home_url();
+
+		$support_url = add_query_arg(
+			array(
+				'firstname' => $firstname,
+				'lastname'  => $lastname,
+				'site'      => $website,
+				'email'     => $user->data->user_email,
+				'license'   => $options['license'],
+				'product'   => 'Comment Edit Pro',
+				'subject'   => 'Comment Edit Pro support',
+				'support'   => 'Yes',
+			),
+			'https://dlxplugins.com/support/'
+		);
 		?>
-		<header id="comment-edit-pro-header" style="background-image: url(<?php echo esc_url( Functions::get_plugin_url( 'images/admin-header-bg.jpg' ) ); ?>); background-size: cover; background-repeat: no-repeat;">
+		<header id="comment-edit-pro-header">
 			<div id="comment-edit-pro-header-content">
 				<div class="sce-admin-header-logo">
 					<h1>
@@ -57,7 +77,7 @@ class Admin_Settings {
 				</div>
 				<div class="sce-admin-header-links">
 					<a href="https://docs.dlxplugins.com/v/comment-edit-pro/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Documentation', 'comment-edit-pro' ); ?></a>
-					<a href="https://dlxplugins.com/support/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
+					<a href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
 				</div>
 			</div>
 		</header>
@@ -198,10 +218,26 @@ class Admin_Settings {
 			<symbol aria-hidden="true" data-prefix="fas" data-icon="appearance-alt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" id="person-running">
 				<path fill="currentColor" d="M400 224h-44l-26.12-53.25c-12.5-25.5-35.38-44.25-61.75-51L197 98.63C189.5 96.84 181.1 95.97 174.5 95.97c-20.88 0-41.33 6.81-58.26 19.78L76.5 146.3C68.31 152.5 64.01 162 64.01 171.6c0 17.11 13.67 32.02 32.02 32.02c6.808 0 13.67-2.158 19.47-6.616l39.63-30.38c5.92-4.488 13.01-6.787 19.53-6.787c2.017 0 3.981 .2196 5.841 .6623l14.62 4.25l-37.5 87.5C154.1 260.3 152.5 268.8 152.5 277.2c0 22.09 11.49 43.52 31.51 55.29l85 50.13l-27.5 87.75c-.9875 3.174-1.458 6.388-1.458 9.55c0 13.65 8.757 26.31 22.46 30.58C265.6 511.5 268.9 512 272 512c13.62 0 26.25-8.75 30.5-22.5l31.75-101c1.211-4.278 1.796-8.625 1.796-12.93c0-16.57-8.661-32.51-23.55-41.44l-61.13-36.12l31.25-78.38l20.25 41.5C310.9 277.4 327.9 288 345.1 288H400c17.62 0 32-14.38 32-32C432 238.3 417.6 224 400 224zM288 96c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48S261.5 96 288 96zM129.8 317.5L114.9 352H48c-17.62 0-32 14.38-32 32s14.38 32 32 32h77.5c19.25 0 36.5-11.5 44-29.12l8.875-20.5l-10.75-6.25C150.4 349.9 137.6 334.8 129.8 317.5z"/>
 			</symbol>
-
-			
-
-			<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="pen-to-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="pen-to-square">
+				<path fill="currentColor" d="M392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66zM437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7L339.7 74.34L437.7 172.3z" opacity="0.4"/><path fill="currentColor" d="M0 160C0 106.1 42.98 64 96 64H192C209.7 64 224 78.33 224 96C224 113.7 209.7 128 192 128H96C78.33 128 64 142.3 64 160V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V320C384 302.3 398.3 288 416 288C433.7 288 448 302.3 448 320V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V160z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="shield-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="shield-check">
+				<path class="fa-primary" fill="currentColor" opacity="0.4" d="M378.4 192.1c0 4.095-1.562 8.189-4.688 11.31L235.4 342.6c-3.125 3.124-7.22 4.686-11.31 4.686S215.9 345.7 212.8 342.6L138.4 268.3C135.3 265.2 133.7 261.1 133.7 256.1c0-4.095 1.562-8.189 4.688-11.31l11.31-11.31C152.9 231.2 156.1 229.7 161 229.7S169.2 231.2 172.4 234.3l51.72 51.72l115.7-115.7c3.125-3.124 7.22-4.686 11.31-4.686s8.189 1.562 11.31 4.686l11.31 11.31C376.9 184.8 378.4 188.9 378.4 192.1z"/><path class="fa-secondary" fill="currentColor" d="M466.5 83.71l-192-80c-4.875-2.031-13.16-3.703-18.44-3.703c-5.312 0-13.55 1.672-18.46 3.703L45.61 83.71C27.7 91.1 16 108.6 16 127.1C16 385.2 205.2 512 255.9 512C307.1 512 496 383.8 496 127.1C496 108.6 484.3 91.1 466.5 83.71zM378.4 192.1c0 4.095-1.562 8.189-4.688 11.31L235.4 342.6c-3.125 3.124-7.22 4.686-11.31 4.686S215.9 345.7 212.8 342.6L138.4 268.3C135.3 265.2 133.7 261.1 133.7 256.1c0-4.095 1.562-8.189 4.688-11.31l11.31-11.31C152.9 231.2 156.1 229.7 161 229.7S169.2 231.2 172.4 234.3l51.72 51.72l115.7-115.7c3.125-3.124 7.22-4.686 11.31-4.686s8.189 1.562 11.31 4.686l11.31 11.31C376.9 184.8 378.4 188.9 378.4 192.1z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="gears" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="gears">
+				<path class="fa-primary" fill="currentColor" d="M314.7 110.3C318.4 119 315.5 128.1 308.5 135.3L286.3 155.1C287.4 161.9 288 168.9 288 175.1C288 183.1 287.4 190.1 286.3 196.9L308.5 216.7C315.5 223 318.4 232.1 314.7 241.7C312.4 246.1 309.9 252.2 307.1 257.2L304 262.6C300.1 267.6 297.7 272.4 294.2 277.1C288.5 284.7 278.5 287.2 269.5 284.2L241.2 274.9C230.5 283.8 218.3 290.9 205 295.9L198.1 324.9C197 334.2 189.8 341.6 180.4 342.8C173.7 343.6 166.9 344 160 344C153.1 344 146.3 343.6 139.6 342.8C130.2 341.6 122.1 334.2 121 324.9L114.1 295.9C101.7 290.9 89.5 283.8 78.75 274.9L50.53 284.2C41.54 287.2 31.52 284.7 25.82 277.1C22.28 272.4 18.98 267.5 15.94 262.5L12.92 257.2C10.13 252.2 7.592 247 5.324 241.7C1.62 232.1 4.458 223 11.52 216.7L33.7 196.9C32.58 190.1 31.1 183.1 31.1 175.1C31.1 168.9 32.58 161.9 33.7 155.1L11.52 135.3C4.458 128.1 1.62 119 5.324 110.3C7.592 104.1 10.13 99.79 12.91 94.76L15.95 89.51C18.98 84.46 22.28 79.58 25.82 74.89C31.52 67.34 41.54 64.83 50.53 67.79L78.75 77.09C89.5 68.25 101.7 61.13 114.1 56.15L121 27.08C122.1 17.8 130.2 10.37 139.6 9.231C146.3 8.418 153.1 8 160 8C166.9 8 173.7 8.418 180.4 9.23C189.8 10.37 197 17.8 198.1 27.08L205 56.15C218.3 61.13 230.5 68.25 241.2 77.09L269.5 67.79C278.5 64.83 288.5 67.34 294.2 74.89C297.7 79.56 300.1 84.42 304 89.44L307.1 94.83C309.9 99.84 312.4 105 314.7 110.3L314.7 110.3zM160 223.1C186.5 223.1 208 202.5 208 175.1C208 149.5 186.5 127.1 160 127.1C133.5 127.1 112 149.5 112 175.1C112 202.5 133.5 223.1 160 223.1z"/><path class="fa-secondary" fill="currentColor" opacity="0.4" d="M529.7 506.7C520.1 510.4 511 507.5 504.7 500.5L484.9 478.3C478.1 479.4 471.1 480 464 480C456.9 480 449.9 479.4 443.1 478.3L423.3 500.5C416.1 507.5 407 510.4 398.3 506.7C393 504.4 387.8 501.9 382.8 499.1L377.4 496C372.4 492.1 367.6 489.7 362.9 486.2C355.3 480.5 352.8 470.5 355.8 461.5L365.1 433.2C356.2 422.5 349.1 410.3 344.1 397L315.1 390.1C305.8 389 298.4 381.8 297.2 372.4C296.4 365.7 296 358.9 296 352C296 345.1 296.4 338.3 297.2 331.6C298.4 322.2 305.8 314.1 315.1 313L344.1 306.1C349.1 293.7 356.2 281.5 365.1 270.8L355.8 242.5C352.8 233.5 355.3 223.5 362.9 217.8C367.6 214.3 372.5 210.1 377.5 207.9L382.8 204.9C387.8 202.1 392.1 199.6 398.3 197.3C407 193.6 416.1 196.5 423.3 203.5L443.1 225.7C449.9 224.6 456.9 224 464 224C471.1 224 478.1 224.6 484.9 225.7L504.7 203.5C511 196.5 520.1 193.6 529.7 197.3C535 199.6 540.2 202.1 545.2 204.9L550.5 207.9C555.5 210.1 560.4 214.3 565.1 217.8C572.7 223.5 575.2 233.5 572.2 242.5L562.9 270.8C571.8 281.5 578.9 293.7 583.9 306.1L612.9 313C622.2 314.1 629.6 322.2 630.8 331.6C631.6 338.3 632 345.1 632 352C632 358.9 631.6 365.7 630.8 372.4C629.6 381.8 622.2 389 612.9 390.1L583.9 397C578.9 410.3 571.8 422.5 562.9 433.2L572.2 461.5C575.2 470.5 572.7 480.5 565.1 486.2C560.4 489.7 555.6 492.1 550.6 496L545.2 499.1C540.2 501.9 534.1 504.4 529.7 506.7H529.7zM416 352C416 378.5 437.5 400 464 400C490.5 400 512 378.5 512 352C512 325.5 490.5 304 464 304C437.5 304 416 325.5 416 352z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="users" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="users">
+				<path class="fa-primary" fill="currentColor"  d="M319.9 320c57.41 0 103.1-46.56 103.1-104c0-57.44-46.54-104-103.1-104c-57.41 0-103.1 46.56-103.1 104C215.9 273.4 262.5 320 319.9 320zM369.9 352H270.1C191.6 352 128 411.7 128 485.3C128 500.1 140.7 512 156.4 512h327.2C499.3 512 512 500.1 512 485.3C512 411.7 448.4 352 369.9 352z"/><path fill="currentColor" opacity="0.4" class="fa-secondary" d="M128 160c44.18 0 80-35.82 80-80S172.2 0 128 0C83.82 0 48 35.82 48 80S83.82 160 128 160zM512 160c44.18 0 80-35.82 80-80S556.2 0 512 0c-44.18 0-80 35.82-80 80S467.8 160 512 160zM551.9 192h-61.84c-12.8 0-24.88 3.037-35.86 8.24C454.8 205.5 455.8 210.6 455.8 216c0 33.71-12.78 64.21-33.16 88h199.7C632.1 304 640 295.6 640 285.3C640 233.8 600.6 192 551.9 192zM185.5 200.1C174.6 194.1 162.6 192 149.9 192H88.08C39.44 192 0 233.8 0 285.3C0 295.6 7.887 304 17.62 304h199.5c-20.38-23.79-33.16-54.29-33.16-88C183.9 210.6 184.9 205.4 185.5 200.1z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="text">
+				<path class="fa-primary" fill="currentColor" opacity="0.4" d="M608 224h-256c-17.67 0-32 14.31-32 31.1v32c0 17.69 14.33 32 32 32s32-14.31 32-32h64v128h-16c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H512v-128h64c0 17.69 14.33 32 32 32s32-14.31 32-32v-32C640 238.3 625.7 224 608 224z"/><path fill="currentColor" class="fa-secondary" d="M256 416H224v-320h96v32c0 17.69 14.33 32 32 32s32-14.31 32-32v-64c0-17.69-14.33-32-32-32H32c-17.67 0-32 14.31-32 32v64c0 17.69 14.33 32 32 32s32-14.31 32-32v-32h96v320H128c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S273.7 416 256 416z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="webhook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" id="webhook">
+				<path class="fa-primary" fill="currentColor" d="M288 176a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM176 384a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm320 0a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/><path fill="currentColor" opacity="0.4" d="M210.1 110C220 67 262.9 40.1 306 50.1c41.1 9.5 67.5 49.2 61.1 90.2c-2.1 13.1 6.9 25.4 20 27.4s25.4-6.9 27.4-20C424.8 82 382.6 18.5 316.8 3.3c-68.9-15.9-137.6 27-153.5 95.9c-10.7 46.3 5.2 92.6 37.7 122.7L129.7 336c17.7 .6 32.9 10.7 40.7 25.4l82.8-132.5c3.4-5.4 4.5-11.9 3-18.1s-5.3-11.6-10.7-15c-28.2-17.6-43.4-51.7-35.5-85.9zm120.3 40.5c-7.8 14.7-23.1 24.8-40.7 25.4l82.8 132.5c3.4 5.4 8.8 9.2 15 10.7s12.7 .3 18.1-3c30.9-19.3 72.1-15.5 99 11.3c31.2 31.2 31.2 81.9 0 113.1c-26.8 26.8-68.1 30.6-99 11.3c-11.2-7-26-3.6-33.1 7.6s-3.6 26 7.6 33.1c49.4 31 115.4 25 158.4-18c50-50 50-131 0-181c-37-37-91-46.6-136.8-28.9L330.4 150.5zM110.1 278.8c-5.1-12.2-19.1-18-31.4-12.9C22.1 289.4-11 351 3.3 412.8c15.9 68.9 84.6 111.8 153.5 95.9c51-11.8 87.7-52.5 97-100.7H406.4c-4.1-7.1-6.4-15.3-6.4-24s2.3-16.9 6.4-24H232c-6.4 0-12.5 2.5-17 7s-7 10.6-7 17c0 36.4-25 69.4-62 77.9c-43.1 9.9-86-16.9-95.9-60c-8.9-38.6 11.7-77.1 47.1-91.8c12.2-5.1 18-19.1 12.9-31.4z"/>
+			</symbol>
+		</svg>
+		<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>
 		<?php
 	}
 	/**
@@ -212,7 +248,7 @@ class Admin_Settings {
 		$tabs = new Admin_Tabs\Init_Tabs();
 		$tabs->run();
 
-		$settings_url_base = Functions::get_settings_url( 'main' )
+		$settings_url_base = Functions::get_settings_url( 'home' )
 		?>
 			<?php
 			$tabs = array();
@@ -231,11 +267,11 @@ class Admin_Settings {
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
 				$active_tab = Functions::get_admin_tab();
 				if ( null === $active_tab ) {
-					$active_tab = 'main';
+					$active_tab = 'home';
 				}
 				$is_tab_match = false;
-				if ( 'main' === $active_tab ) {
-					$active_tab = 'main';
+				if ( 'home' === $active_tab ) {
+					$active_tab = 'home';
 				} else {
 					foreach ( $tabs as $tab ) {
 						$tab_get = isset( $tab['get'] ) ? $tab['get'] : '';
@@ -244,7 +280,7 @@ class Admin_Settings {
 						}
 					}
 					if ( ! $is_tab_match ) {
-						$active_tab = 'main';
+						$active_tab = 'home';
 					}
 				}
 				$do_action = false;
@@ -254,7 +290,7 @@ class Admin_Settings {
 					if ( $active_tab === $tab_get ) {
 						$classes[] = 'nav-tab-active';
 						$do_action = isset( $tab['action'] ) ? $tab['action'] : false;
-					} elseif ( ! $is_tab_match && 'main' === $tab_get ) {
+					} elseif ( ! $is_tab_match && 'home' === $tab_get ) {
 						$classes[] = 'nav-tab-active';
 						$do_action = isset( $tab['action'] ) ? $tab['action'] : false;
 					}
@@ -292,7 +328,7 @@ class Admin_Settings {
 
 				// Check to see if no tabs are available for this view.
 				if ( null === $current_tab && null === $current_sub_tab ) {
-					$current_tab = 'main';
+					$current_tab = 'home';
 				}
 				if ( $sub_tabs && ! empty( $sub_tabs ) && is_array( $sub_tabs ) ) {
 					if ( null === $current_sub_tab ) {

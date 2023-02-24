@@ -78,6 +78,9 @@ class Options {
 				case 'slack_moderation_enabled':
 				case 'slack_edit_comments_enabled':
 				case 'license_activated':
+				case 'turnstile_enabled':
+				case 'turnstile_logged_in_users_enabled':
+				case 'enable_comment_editing':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -145,11 +148,11 @@ class Options {
 	 *
 	 * @return array default options
 	 */
-	private static function get_defaults() {
+	public static function get_defaults() {
 		$defaults = array(
+			'enable_comment_editing'             => true,
 			'timer'                              => 5,
-			'show_timer'                         => true,
-			'loading_image'                      => \Simple_Comment_Editing::get_instance()->get_plugin_url( '/images/loading.gif' ),
+			'loading_image'                      => Functions::get_plugin_url( 'images/loading.gif' ),
 			'allow_delete'                       => true,
 			'delete_only'                        => false,
 			'button_theme'                       => 'default',
@@ -174,7 +177,7 @@ class Options {
 			'confirm_delete'                     => __( 'Do you want to delete this comment?', 'comment-edit-pro' ),
 			'comment_deleted'                    => __( 'Your comment has been removed.', 'comment-edit-pro' ),
 			'comment_deleted_error'              => __( 'Your comment could not be deleted', 'comment-edit-pro' ),
-			'comment_empty_error'                => \Simple_Comment_Editing::get_instance()->errors->get_error_message( 'comment_empty' ),
+			'comment_empty_error'                => __( 'Your comment appears to be empty.', 'comment-edit-pro' ),
 			'require_comment_length'             => false,
 			'min_comment_length'                 => 50,
 			'require_comment_length_max'         => false,
@@ -235,6 +238,15 @@ class Options {
 			'slack_webhook_url'                  => '',
 			'slack_moderation_enabled'           => false,
 			'slack_edit_comments_enabled'        => false,
+			'turnstile_enabled'                  => false,
+			'turnstile_sitekey'                  => '',
+			'turnstile_secret'                   => '',
+			'turnstile_theme'                    => 'auto',
+			'turnstile_language'                 => 'auto',
+			'turnstile_widget_size'              => 'normal',
+			'turnstile_comment_submit_button_id' => 'submit',
+			'turnstile_logged_in_users_enabled'  => true,
+
 		);
 		return $defaults;
 	}

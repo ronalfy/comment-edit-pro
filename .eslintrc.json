@@ -7,7 +7,14 @@
 		"document": true,
 		"sceAvatars": "readonly",
 		"sceIntegrations": "readonly",
-		"sceMentions": "readonly"
+		"sceMentions": "readonly",
+		"sceCommentEditing": "readonly",
+		"jQuery": "readonly",
+		"sceSpamProtection": "readonly",
+		"turnstile": "readonly",
+		"sceTurnstileLocal": "readonly",
+		"sceCharacterControl": "readonly",
+		"sceWebhooks": "readonly"
 	},
 	"env": {
 		"browser": true,

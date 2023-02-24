@@ -94,6 +94,37 @@ class Functions {
 	}
 
 	/**
+	 * Take a _ separated field and convert to camelcase.
+	 *
+	 * @param string $field Field to convert to camelcase.
+	 *
+	 * @return string camelCased field.
+	 */
+	public static function to_camelcase( string $field ) {
+		return str_replace( '_', '', lcfirst( ucwords( $field, '_' ) ) );
+	}
+
+	/**
+	 * Get a loading SVG state.
+	 */
+	public static function get_loading_svg() {
+		$svg = '<div class="sce-load-static-svg"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="26.349px" height="26.35px" viewBox="0 0 26.349 26.35" style="enable-background:new 0 0 26.349 26.35;" xml:space="preserve"><g><g><circle cx="13.792" cy="3.082" r="3.082"/><circle cx="13.792" cy="24.501" r="1.849"/><circle cx="6.219" cy="6.218" r="2.774"/><circle cx="21.365" cy="21.363" r="1.541"/><circle cx="3.082" cy="13.792" r="2.465"/><circle cx="24.501" cy="13.791" r="1.232"/><path d="M4.694,19.84c-0.843,0.843-0.843,2.207,0,3.05c0.842,0.843,2.208,0.843,3.05,0c0.843-0.843,0.843-2.207,0-3.05 C6.902,18.996,5.537,18.988,4.694,19.84z"/><circle cx="21.364" cy="6.218" r="0.924"/></g></g></svg></div>';
+		return $svg;
+	}
+
+	/**
+	 * Take a camelcase field and converts it to underline case.
+	 *
+	 * @param string $field Field to convert to camelcase.
+	 *
+	 * @return string $field Field name in camelCase..
+	 */
+	public static function to_underlines( string $field ) {
+		$field = strtolower( preg_replace( '/([a-z])([A-Z])/', '$1_$2', $field ) );
+		return $field;
+	}
+
+	/**
 	 * Return the plugin slug.
 	 *
 	 * @return string plugin slug.
@@ -292,6 +323,12 @@ class Functions {
 		);
 		$allowed_tags['a']['class'] = array();
 
+		// Add div tag.
+		$allowed_tags['div'] = array(
+			'class' => array(),
+			'id'    => array(),
+		);
+
 		if ( ! $svg ) {
 			return $allowed_tags;
 		}
@@ -303,6 +340,8 @@ class Functions {
 			'aria-hidden' => array(),
 			'focusable'   => array(),
 			'class'       => array(),
+			'width'       => array(),
+			'height'      => array(),
 		);
 
 		$allowed_tags['path'] = array(
@@ -312,6 +351,14 @@ class Functions {
 		);
 
 		$allowed_tags['g'] = array();
+
+		$allowed_tags['circle'] = array(
+			'cx'     => array(),
+			'cy'     => array(),
+			'r'      => array(),
+			'fill'   => array(),
+			'stroke' => array(),
+		);
 
 		$allowed_tags['use'] = array(
 			'xlink:href' => array(),

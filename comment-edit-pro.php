@@ -4,7 +4,7 @@ Plugin Name: Comment Edit Pro
 Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 2.3.5
+Version: 3.0.0-beta
 Requires at least: 5.0
 Author URI: https://dlxplugins.com
 Contributors: DLX Plugins
@@ -23,7 +23,7 @@ use CommentEditPro\Includes\Plugin_Updater as Plugin_Updater;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '2.3.5' );
+define( 'COMMENTEDITPRO_VERSION', '3.0.0-beta2' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
@@ -132,39 +132,6 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Checks for SCE version.
-	 *
-	 * Checks if SCE version is sufficient.
-	 *
-	 * @since 1.0.3
-	 * @access public
-	 */
-	public function admin_notice_insufficient_sce() {
-		$this->show_admin_warning(
-			__( 'Higher Comment Edit Lite version required', 'comment-edit-pro' ),
-			/* translators: %1$s is name of the plugin. */
-			sprintf( __( 'The %1$s plugin requires %2$s version %3$s or higher - your current version is only %4$s.', 'comment-edit-pro' ), 'Comment Edit Pro', 'Comment Edit Lite', SCE_MIN_VERSION, SCE_VERSION ),
-			'notice-error'
-		);
-	}
-
-	/**
-	 * Checks for SCE is installed.
-	 *
-	 * Checks for SCE is installed.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 */
-	public function admin_notice_sce_not_installed() {
-		$this->show_admin_warning(
-			__( 'Comment Edit Lite is required.', 'comment-edit-pro' ),
-			__( 'The Comment Edit Lite plugin is required for Comment Edit Pro to function.', 'comment-edit-pro' ),
-			'notice-error'
-		);
-	}
-
-	/**
 	 * Checks for SCE Options is installed.
 	 *
 	 * Checks for SCE Options is installed.
@@ -236,32 +203,6 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Add scripts for comment character control.
-	 */
-	public function add_scripts_ccc() {
-		if ( ! is_singular() || ! comments_open() ) {
-			return;
-		}
-		$options            = Options::get_options();
-		$min_comment_option = filter_var( $options['require_comment_length'], FILTER_VALIDATE_BOOLEAN );
-		$max_comment_option = filter_var( $options['require_comment_length_max'], FILTER_VALIDATE_BOOLEAN );
-		if ( $min_comment_option && $max_comment_option ) {
-			wp_enqueue_style( 'sce-ccc', plugins_url( '/dist/sce-ccc-progress-bar.css', __FILE__ ), array(), COMMENTEDITPRO_VERSION, 'all' );
-			wp_enqueue_script( 'sce-ccc', plugins_url( '/js/comment-character-control.js', __FILE__ ), array(), COMMENTEDITPRO_VERSION, true );
-			wp_localize_script(
-				'sce-ccc',
-				'sce_ccc',
-				array(
-					'min_length' => $options['min_comment_length'],
-					'max_length' => $options['max_comment_length'],
-					'min_option' => $options['require_comment_length'],
-					'max_option' => $options['require_comment_length_max'],
-				)
-			);
-		}
-	}
-
-	/**
 	 * Checks if the plugin is on a multisite install.
 	 *
 	 * @return true if multisite, false if not.
@@ -270,7 +211,36 @@ class Comment_Edit_Pro {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
-		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) && is_plugin_active_for_network( SCE_SLUG ) ) {
+		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) && is_plugin_active_for_network( 'simple-comment-editing' ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the plugin is on a multisite install.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $network_admin Check if in network admin.
+	 *
+	 * @return true if multisite, false if not.
+	 */
+	public function is_multisite( $network_admin = false ) {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		}
+		$is_network_admin = false;
+		if ( $network_admin ) {
+			if ( is_network_admin() ) {
+				if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) ) {
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+		if ( is_multisite() && is_plugin_active_for_network( COMMENTEDITPRO_SLUG ) ) {
 			return true;
 		}
 		return false;
@@ -284,13 +254,13 @@ class Comment_Edit_Pro {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	private function is_sce_enabled() {
+	public function is_sce_enabled() {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 		if ( self::is_plugin_activated_multisite() ) {
 			return true;
-		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'comment-edit-pro' ) ) {
+		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'simple-comment-editing' ) ) {
 			return false;
 		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
 			return true;
@@ -301,7 +271,7 @@ class Comment_Edit_Pro {
 	}
 
 	/**
-	 * Checks for Simple Comment Editing.
+	 * Checks for Simple Comment Editing Options (old version).
 	 *
 	 * Checks if SCE is installed
 	 *
@@ -328,15 +298,6 @@ class Comment_Edit_Pro {
 		// Prevent double loading admin/classnames.
 		add_filter( 'sce_show_admin', '__return_false' );
 
-		// Check to see if SCE is installed.
-		if ( ! $this->is_sce_enabled() ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_sce_not_installed' ) );
-			if ( is_multisite() ) {
-				add_action( 'network_admin_notices', array( $this, 'admin_notice_sce_not_installed' ) );
-			}
-			return;
-		}
-
 		// Check if SCE Options is installed.
 		if ( $this->is_comment_edit_pro_enabled() ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_comment_edit_pro_installed' ) );
@@ -346,14 +307,6 @@ class Comment_Edit_Pro {
 			return;
 		}
 
-		// Check to see SCE Minimum is installed.
-		if ( version_compare( SCE_VERSION, SCE_MIN_VERSION, '<' ) ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
-			if ( is_multisite() ) {
-				add_action( 'network_admin_notices', array( $this, 'admin_notice_insufficient_sce' ) );
-			}
-			return;
-		}
 		if ( is_admin() ) {
 			$this->admin = new \CommentEditPro\Includes\Admin();
 		}
@@ -369,17 +322,16 @@ class Comment_Edit_Pro {
 		$this->comment_mentions->run();
 		$this->license_ajax = new \CommentEditPro\Includes\Plugin_License_Ajax();
 		$this->license_ajax->run();
-		$this->help = new \CommentEditPro\Includes\Help();
-		$this->help->run();
+		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
+		$this->comment_editing->run();
+		$this->spam_protection = new \CommentEditPro\Includes\Spam_Protection();
+		$this->spam_protection->run();
+		$this->character_control = new \CommentEditPro\Includes\Character_Control();
+		$this->character_control->run();
+		$this->webhooks = new \CommentEditPro\Includes\Webhooks();
+		$this->webhooks->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
-
-		$functions = Functions::get_plugin_version();
-		$options   = Options::get_options();
-
-		if ( isset( $options['allow_front_end_character_limit'] ) && true === filter_var( $options['allow_front_end_character_limit'], FILTER_VALIDATE_BOOLEAN ) ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_ccc' ) );
-		}
 
 		add_action( 'init', array( $this, 'setup_ajax_calls' ) );
 
@@ -416,7 +368,7 @@ class Comment_Edit_Pro {
 					'license' => $options['license'],
 					'item_id' => 882,
 					'author'  => 'Ronald Huereca',
-					'beta'    => false,
+					'beta'    => true,
 					'url'     => home_url(),
 				)
 			);
@@ -519,6 +471,11 @@ function comment_edit_pro_plugin_activate_redirect() {
 		delete_option( 'comment-edit-pro-activate' );
 		// GEt bulk activation variable if it exists.
 		$maybe_multi = filter_input( INPUT_GET, 'activate-multi', FILTER_VALIDATE_BOOLEAN );
+
+		// Skip debug.
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			return;
+		}
 
 		// Return early if it's a bulk activation.
 		if ( $maybe_multi ) {

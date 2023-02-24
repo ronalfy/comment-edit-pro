@@ -16,13 +16,14 @@ class Init_Tabs {
 	 */
 	public function run() {
 		new Main();
-		new Appearance();
-		new Translations();
 		new Avatars();
-		new Mentions();
-		// new Comment_Actions();
+		new Character_Control();
+		new Comment_Editing();
 		new Integrations();
 		new License();
+		new Mentions();
+		new Spam_Protection();
+		new Webhooks();
 		new Support();
 	}
 }

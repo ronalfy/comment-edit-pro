@@ -40,7 +40,7 @@ class Integrations {
 			'action' => 'comment_edit_pro_output_integrations',
 			'url'    => Functions::get_settings_url( 'integrations' ),
 			'label'  => _x( 'Integrations', 'Tab label as Main', 'ultimate-auto-updates' ),
-			'icon'   => 'gear-alt',
+			'icon'   => 'gears',
 		);
 		return $tabs;
 	}
@@ -73,22 +73,12 @@ class Integrations {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-akismet"></div>
+						<div id="sce-tab-mailchimp"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-mailchimp"></div>
-					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-recaptcha"></div>
-					</div>
-				</div>
-				<div class="sce-admin-panel-area">
-					<div class="sce-panel-row">
-						<div id="sce-tab-slack"></div>
+						<div id="sce-tab-slack"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
 				<?php

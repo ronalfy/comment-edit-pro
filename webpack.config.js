@@ -33,6 +33,12 @@ module.exports = ( env ) => {
 				'sce-frontend-editing': [ './src/scss/frontend-editing.scss' ],
 				'sce-mentions-theme-white': [ './src/scss/sce-mentions-theme-white.scss' ],
 				'sce-license': [ './src/js/react/views/license/index.js' ],
+				'sce-comment-editing': [ './src/js/react/views/comment-editing/index.js' ],
+				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
+				'sce-cloudflare-turnstile': [ './src/js/turnstile/index.js' ],
+				'sce-character-control': [ './src/js/react/views/character-control/index.js' ],
+				'sce-webhooks-admin-css': [ './src/scss/webhooks-admin.scss' ],
+				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
 			},
 			module: {
 				rules: [
@@ -60,6 +66,29 @@ module.exports = ( env ) => {
 								options: {
 									sourceMap: true,
 									url: false,
+								},
+							},
+							{
+								loader: 'resolve-url-loader',
+							},
+							{
+								loader: 'sass-loader',
+								options: {
+									sourceMap: true,
+								},
+							},
+						],
+					},
+					{
+						test: /\.css$/,
+						use: [
+							{
+								loader: MiniCssExtractPlugin.loader,
+							},
+							{
+								loader: 'css-loader',
+								options: {
+									sourceMap: true,
 								},
 							},
 							'sass-loader',

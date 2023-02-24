@@ -16,6 +16,7 @@ import Notice from '../../components/Notice';
 import Spinner from '../../components/icons/Spinner';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 const retrieveGravatarOptions = () => {
 	return sendCommand( 'sce_get_gravatar_options', {
@@ -26,22 +27,40 @@ const retrieveGravatarOptions = () => {
 const GravatarProtection = ( props ) => {
 	const [ defaults ] = useAsyncResource( retrieveGravatarOptions, [] );
 	return (
-		<Suspense
+		<ErrorBoundary
 			fallback={
-				<>
-					<h2>{ __( 'Gravatar Privacy Protection', 'comment-edit-pro' ) }</h2>
-					<BeatLoader
-						color={ '#9c68b0' }
-						loading={ true }
-						cssOverride={ true }
-						size={ 25 }
-						speedMultiplier={ 0.65 }
-					/>
-				</>
+				<p>
+					{ __( 'Could not load Gravatar Protection Settings.', 'comment-edit-pro' ) }
+					<br />
+					<a
+						href="https://dlxplugins.com/support/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						DLX Plugins Support
+					</a>
+				</p>
 			}
 		>
-			<Interface defaults={ defaults } { ...props } />
-		</Suspense>
+			<Suspense
+				fallback={
+					<>
+						<h2>{ __( 'Gravatar Privacy Protection', 'comment-edit-pro' ) }</h2>
+						<BeatLoader
+							color={ '#9c68b0' }
+							loading={ true }
+							cssOverride={ true }
+							size={ 25 }
+							speedMultiplier={ 0.65 }
+						/>
+					</>
+				}
+			>
+				<Interface defaults={ defaults } { ...props } />
+			</Suspense>
+
+		</ErrorBoundary>
+
 	);
 };
 

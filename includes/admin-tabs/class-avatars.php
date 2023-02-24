@@ -41,7 +41,7 @@ class Avatars {
 			'action' => 'comment_edit_pro_output_avatars',
 			'url'    => Functions::get_settings_url( 'avatars' ),
 			'label'  => _x( 'Avatars', 'Tab label as Main', 'ultimate-auto-updates' ),
-			'icon'   => 'avatar',
+			'icon'   => 'users',
 		);
 		return $tabs;
 	}
@@ -72,7 +72,9 @@ class Avatars {
 		if ( 'avatars' === $tab ) {
 			if ( empty( $sub_tab ) || 'avatars' === $sub_tab ) {
 				?>
-				<div id="sce-tab-avatars"></div>	
+				<div id="sce-tab-avatars">
+					<?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?>
+				</div>	
 				
 				<!-- <div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
