@@ -330,6 +330,8 @@ class Comment_Edit_Pro {
 		$this->character_control->run();
 		$this->webhooks = new \CommentEditPro\Includes\Webhooks();
 		$this->webhooks->run();
+		$this->tools = new \CommentEditPro\Includes\Tools();
+		$this->tools->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

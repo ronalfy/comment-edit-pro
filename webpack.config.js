@@ -39,6 +39,7 @@ module.exports = ( env ) => {
 				'sce-character-control': [ './src/js/react/views/character-control/index.js' ],
 				'sce-webhooks-admin-css': [ './src/scss/webhooks-admin.scss' ],
 				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
+				'sce-tools-admin': [ './src/js/react/views/tools/index.js' ],
 			},
 			module: {
 				rules: [
