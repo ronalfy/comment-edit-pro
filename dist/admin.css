@@ -1298,6 +1298,11 @@ h2 a.sce-admin-heading-docs {
     height: 100%;
   }
 }
+@media (min-width: 64em) {
+  .components-modal__frame {
+    max-height: 70%;
+  }
+}
 
 .components-modal__header {
   box-sizing: border-box;

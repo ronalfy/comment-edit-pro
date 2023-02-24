@@ -1,8 +1,27 @@
+.sce-comment-edit-buttons .sce-comment-edit-buttons-group {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.sce-comment-edit-buttons .sce-comment-edit-buttons-group .sce-comment-delete {
+  margin-left: auto;
+}
+.sce-comment-edit-buttons .sce-comment-edit-buttons-group .sce-comment-delete,
+.sce-comment-edit-buttons .sce-comment-edit-buttons-group .sce-comment-save,
+.sce-comment-edit-buttons .sce-comment-edit-buttons-group .sce-comment-cancel {
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
+
 /* Regular Theme */
 .sce-edit-comment {
   margin: 20px 0;
 }
 @media only screen and (max-width: 600px) {
+  .sce-edit-comment .sce-comment-edit-buttons .sce-comment-edit-buttons-group {
+    display: block;
+  }
   .sce-edit-comment .sce-comment-edit-buttons button {
     display: block;
     width: 100%;
@@ -68,7 +87,6 @@
 }
 .sce-edit-comment.regular .sce-comment-edit-buttons button,
 .sce-edit-comment.regular .sce-timer-cancel-wrapper button {
-  display: inline-block;
   border-radius: 5px;
   border: 1px solid #EEE;
   padding: 10px 20px;
@@ -168,7 +186,6 @@
 }
 .sce-edit-comment.dark .sce-comment-edit-buttons button,
 .sce-edit-comment.dark .sce-timer-cancel-wrapper button {
-  display: inline-block;
   background-color: #595959;
   color: #FFF;
   margin-right: 10px;
@@ -229,7 +246,6 @@
 }
 .sce-edit-comment.light .sce-comment-edit-buttons button,
 .sce-edit-comment.light .sce-timer-cancel-wrapper button {
-  display: inline-block;
   background-color: #EEE;
   color: #000;
   margin-right: 10px;

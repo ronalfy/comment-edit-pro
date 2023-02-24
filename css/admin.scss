@@ -1540,7 +1540,7 @@ h2 a.sce-admin-heading-docs {
 		}
 	}
 
-	@include respond-to( 'large ') {
+	@include respond-to( 'large' ) {
 		max-height: 70%;
 	}
 }

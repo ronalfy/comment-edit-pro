@@ -96,11 +96,8 @@ const Interface = ( props ) => {
 			requestHeaders: [ { label: '', value: '', customName: '', customValue: '' } ],
 			requestBody: [ { key: '', value: '', customValue: '' } ],
 			sendApprovedComments: true,
-			sendPendingComments: false,
+			sendPendingComments: true,
 			sendSpamComments: false,
-			sendDeletedComments: false,
-			sendEditedComments: false,
-
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -588,7 +585,7 @@ const Interface = ( props ) => {
 						</tr>
 						<tr>
 							<th scope="row">{ __( 'Webhook Triggers', 'comment-edit-pro' ) }</th>
-							<td><>
+							<td>
 								<div className="sce-panel-row">
 									<Controller
 										name="sendApprovedComments"
@@ -637,39 +634,6 @@ const Interface = ( props ) => {
 										) }
 									/>
 								</div>
-								<div className="sce-panel-row">
-									<Controller
-										name="sendDeletedComments"
-										control={ control }
-										render={ ( { field: { onChange, value } } ) => (
-											<ToggleControl
-												className="sce-admin__toggle-control"
-												label={ __( 'Send Deleted Comments', 'comment-edit-pro' ) }
-												checked={ value }
-												onChange={ ( methodValue ) => {
-													onChange( methodValue );
-												} }
-											/>
-										) }
-									/>
-								</div>
-								<div className="sce-panel-row">
-									<Controller
-										name="sendEditedComments"
-										control={ control }
-										render={ ( { field: { onChange, value } } ) => (
-											<ToggleControl
-												className="sce-admin__toggle-control"
-												label={ __( 'Send Edited Comments', 'comment-edit-pro' ) }
-												checked={ value }
-												onChange={ ( methodValue ) => {
-													onChange( methodValue );
-												} }
-											/>
-										) }
-									/>
-								</div>
-							</>
 							</td>
 						</tr>
 					</tbody>
