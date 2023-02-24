@@ -299,12 +299,13 @@ class Avatars {
 		$avatar_options = Options::get_options();
 
 		$json_array = array(
-			'enableAvatars'          => $avatar_options['enable_avatars'],
-			'avatarSize'             => $avatar_options['avatar_size'],
-			'enableAvatarsLoggedIn'  => $avatar_options['enable_avatars_logged_in'],
-			'enableAvatarsAnonymous' => $avatar_options['enable_avatars_anonymous'],
-			'chooseAvatarText'       => $avatar_options['choose_avatar_text'],
-			'enableCustomAvatarSize' => $avatar_options['enable_custom_avatar_size'],
+			'enableAvatars'                => $avatar_options['enable_avatars'],
+			'avatarSize'                   => $avatar_options['avatar_size'],
+			'enableAvatarsLoggedIn'        => $avatar_options['enable_avatars_logged_in'],
+			'enableAvatarsAnonymous'       => $avatar_options['enable_avatars_anonymous'],
+			'chooseAvatarText'             => $avatar_options['choose_avatar_text'],
+			'enableCustomAvatarSize'       => $avatar_options['enable_custom_avatar_size'],
+			'enableAvatarGravatarFallback' => $avatar_options['enable_avatar_gravatar_fallback'],
 		);
 
 		// Exit gracefully.
@@ -344,11 +345,12 @@ class Avatars {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		$options_to_save = array(
-			'enable_avatars'            => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
-			'avatar_size'               => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
-			'enable_avatars_logged_in'  => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
-			'enable_custom_avatar_size' => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
-			'choose_avatar_text'        => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
+			'enable_avatars'                  => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
+			'avatar_size'                     => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
+			'enable_avatars_logged_in'        => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
+			'enable_custom_avatar_size'       => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
+			'choose_avatar_text'              => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
+			'enable_avatar_gravatar_fallback' => filter_input( INPUT_POST, 'enableAvatarGravatarFallback', FILTER_VALIDATE_BOOLEAN ),
 		);
 
 		// Security.
@@ -517,13 +519,14 @@ class Avatars {
 	/**
 	 * Retrieve an avatar based on past data.
 	 *
-	 * @param int $comment_id The comment ID to retrieve data from.
-	 * @param int $user_id    The user ID to retrieve the avatar from.
-	 * @param int $size       The size of the avatar.
+	 * @param string $original_html The original avatar HTML.
+	 * @param int    $comment_id    The comment ID to retrieve data from.
+	 * @param int    $user_id       The user ID to retrieve the avatar from.
+	 * @param int    $size          The size of the avatar.
 	 *
 	 * @return string Avatar HTML.
 	 */
-	private function get_avatar( $comment_id = 0, $user_id = null, $size = 90 ) {
+	private function get_avatar( $original_html, $comment_id = 0, $user_id = null, $size = 90 ) {
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 		$avatar         = null;
 
@@ -546,7 +549,14 @@ class Avatars {
 
 		// If avatar is still null, return default.
 		if ( null === $avatar ) {
-			$avatar = $default_avatar;
+			$options           = Options::get_options();
+			$fallback_settings = (bool) $options['enable_avatar_gravatar_fallback'];
+			if ( $fallback_settings ) {
+				$avatar = $original_html;
+				return $avatar;
+			} else {
+				$avatar = $default_avatar;
+			}
 		}
 
 		// Return avatar html or blank if avatar is still null.
@@ -807,7 +817,7 @@ class Avatars {
 
 		// Now get the user ID if it exists.
 		$user_id = $user->ID ?? null;
-		$avatar  = $this->get_avatar( $comment_id, $user_id, $size );
+		$avatar  = $this->get_avatar( $avatar, $comment_id, $user_id, $size );
 		if ( ! empty( $avatar ) ) {
 			return $avatar;
 		}
@@ -828,6 +838,9 @@ class Avatars {
 
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 
+		$options = Options::get_options();
+		$fallback_avatar_enabled = (bool) $options['enable_avatar_gravatar_fallback'];
+
 		// Get user data.
 		if ( is_numeric( $id_or_email ) ) {
 			$user = get_user_by( 'id', (int) $id_or_email );
@@ -839,16 +852,27 @@ class Avatars {
 				$user = get_user_by( 'email', $comment->comment_author_email );
 			}
 			if ( ! $user ) {
-				$args['url'] = $default_avatar;
-				return $args;
+				if ( $fallback_avatar_enabled ) {
+					return $args;
+				} else {
+					$args['url'] = $default_avatar;
+				}
 			}
 		} elseif ( is_string( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
 		} else {
-			$args['url'] = $default_avatar;
+			if ( $fallback_avatar_enabled ) {
+				return $args;
+			} else {
+				$args['url'] = $default_avatar;
+			}
 		}
 		if ( ! $user ) {
-			$args['url'] = $default_avatar;
+			if ( $fallback_avatar_enabled ) {
+				return $args;
+			} else {
+				$args['url'] = $default_avatar;
+			}
 		}
 		return $args;
 	}
@@ -920,6 +944,13 @@ class Avatars {
 	 */
 	public function comment_posted( $comment_id, $maybe_comment_approved ) {
 		$avatar = sanitize_text_field( filter_input( INPUT_POST, 'sce-comment-form-avatar', FILTER_DEFAULT ) );
+
+		// Get fallback Avatar and exit if available.
+		$options         = Options::get_options();
+		$avatar_fallback = (bool) $options['enable_avatar_gravatar_fallback'];
+		if ( $avatar_fallback && empty( $avatar ) ) {
+			return;
+		}
 
 		// An approved or moderated comment is okay. Spam, skip.
 		if ( 'spam' !== $maybe_comment_approved ) {

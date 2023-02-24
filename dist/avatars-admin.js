@@ -31157,6 +31157,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function sendCommand(action, data) {
+  var ajaxUrl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   var params = {
     action: action
   };
@@ -31175,9 +31176,17 @@ function sendCommand(action, data) {
     }
   }
 
+  var sendAjaxUrl = '';
+
+  if (typeof ajaxurl === 'undefined') {
+    sendAjaxUrl = ajaxUrl;
+  } else {
+    sendAjaxUrl = ajaxurl;
+  }
+
   var options = {
     method: 'post',
-    url: ajaxurl,
+    url: sendAjaxUrl,
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {
@@ -31646,7 +31655,8 @@ var Interface = function Interface(props) {
       enableAvatarsLoggedIn: data.enableAvatarsLoggedIn,
       enableAvatarsAnonymous: data.enableAvatarsAnonymous,
       chooseAvatarText: data.chooseAvatarText,
-      enableCustomAvatarSize: data.enableCustomAvatarSize
+      enableCustomAvatarSize: data.enableCustomAvatarSize,
+      enableAvatarGravatarFallback: data.enableAvatarGravatarFallback
     }
   }),
       register = _useForm.register,
@@ -31790,6 +31800,29 @@ var Interface = function Interface(props) {
     })));
   };
 
+  var getAvatarFallback = function getAvatarFallback() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Gravatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
+      name: "enableAvatarGravatarFallback",
+      control: control,
+      render: function render(_ref5) {
+        var _ref5$field = _ref5.field,
+            _onChange5 = _ref5$field.onChange,
+            value = _ref5$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Gravatar Fallback', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange5(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('If a user does not have an avatar, use their Gravatar if available.', 'comment-edit-pro')
+        }));
+      }
+    })));
+  };
+
   var getAvatarLabel = function getAvatarLabel() {
     var _errors$chooseAvatarT2;
 
@@ -31801,10 +31834,10 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref5) {
+      render: function render(_ref6) {
         var _errors$chooseAvatarT;
 
-        var field = _ref5.field;
+        var field = _ref6.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatar Label', 'quotes-dlx')
         }, field, {
@@ -31866,24 +31899,24 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Avatars', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
     name: "enableAvatars",
     control: control,
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-          _onChange5 = _ref6$field.onChange,
-          value = _ref6$field.value;
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange6 = _ref7$field.onChange,
+          value = _ref7$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Comment Avatars', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange5(boolValue);
+          _onChange6(boolValue);
 
           setAvatarsEnabled(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable Comment Avatars.', 'comment-edit-pro')
       });
     }
-  }))), getValues('enableAvatars') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAvatarPermissions(), getAvatarLabel(), getAvatarWidth()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), getValues('enableAvatars') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAvatarPermissions(), getAvatarFallback(), getAvatarLabel(), getAvatarWidth()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

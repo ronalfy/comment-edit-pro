@@ -81,6 +81,7 @@ class Options {
 				case 'turnstile_enabled':
 				case 'turnstile_logged_in_users_enabled':
 				case 'enable_comment_editing':
+				case 'enable_avatar_gravatar_fallback':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -204,6 +205,7 @@ class Options {
 			'enable_avatars_logged_in'           => true,
 			'enable_avatars_anonymous'           => true,
 			'enable_custom_avatar_size'          => false,
+			'enable_avatar_gravatar_fallback'    => false,
 			'choose_avatar_text'                 => __( 'Choose an Avatar', 'comment-edit-pro' ),
 			'enable_gravatar_protection'         => false,
 			'gravatar_protection_text'           => __( 'Prevent my avatar from showing next to my comment', 'comment-edit-pro' ),

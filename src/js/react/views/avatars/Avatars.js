@@ -91,6 +91,7 @@ const Interface = ( props ) => {
 				enableAvatarsAnonymous: data.enableAvatarsAnonymous,
 				chooseAvatarText: data.chooseAvatarText,
 				enableCustomAvatarSize: data.enableCustomAvatarSize,
+				enableAvatarGravatarFallback: data.enableAvatarGravatarFallback,
 			},
 		} );
 
@@ -249,6 +250,36 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getAvatarFallback = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Gravatars', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="enableAvatarGravatarFallback"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<>
+								<ToggleControl
+									label={ __( 'Gravatar Fallback', 'comment-edit-pro' ) }
+									className="sce-admin__toggle-control"
+									checked={ value }
+									onChange={ ( boolValue ) => {
+										onChange( boolValue );
+									} }
+									help={ __(
+										'If a user does not have an avatar, use their Gravatar if available.',
+										'comment-edit-pro'
+									) }
+								/>
+							</>
+						) }
+					/>
+				</td>
+			</tr>
+		);
+	};
+
 	const getAvatarLabel = () => {
 		return (
 			<tr>
@@ -344,6 +375,7 @@ const Interface = ( props ) => {
 						{ getValues( 'enableAvatars' ) && (
 							<>
 								{ getAvatarPermissions() }
+								{ getAvatarFallback() }
 								{ getAvatarLabel() }
 								{ getAvatarWidth() }
 							</>

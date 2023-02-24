@@ -3,7 +3,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-export default function sendCommand( action, data ) {
+export default function sendCommand( action, data, ajaxUrl = '' ) {
 	const params = {
 		action,
 	};
@@ -23,9 +23,17 @@ export default function sendCommand( action, data ) {
 		}
 	}
 
+	let sendAjaxUrl = '';
+
+	if ( typeof ajaxurl === 'undefined' ) {
+		sendAjaxUrl = ajaxUrl;
+	} else {
+		sendAjaxUrl = ajaxurl;
+	}
+
 	const options = {
 		method: 'post',
-		url: ajaxurl,
+		url: sendAjaxUrl,
 		params,
 		paramsSerializer( jsparams ) {
 			return qs.stringify( jsparams, { arrayFormat: 'brackets' } );

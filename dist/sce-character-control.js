@@ -24665,6 +24665,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function sendCommand(action, data) {
+  var ajaxUrl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   var params = {
     action: action
   };
@@ -24683,9 +24684,17 @@ function sendCommand(action, data) {
     }
   }
 
+  var sendAjaxUrl = '';
+
+  if (typeof ajaxurl === 'undefined') {
+    sendAjaxUrl = ajaxUrl;
+  } else {
+    sendAjaxUrl = ajaxurl;
+  }
+
   var options = {
     method: 'post',
-    url: ajaxurl,
+    url: sendAjaxUrl,
     params: params,
     paramsSerializer: function paramsSerializer(jsparams) {
       return qs__WEBPACK_IMPORTED_MODULE_1___default().stringify(jsparams, {

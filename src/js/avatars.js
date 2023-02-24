@@ -224,7 +224,7 @@ window.addEventListener( 'load', function( event ) {
 							user_id: userId,
 							nonce,
 							key: imgKey,
-						} )
+						}, sceAvatars.ajaxurl )
 							.then( ( ajaxResponse ) => {
 								const ajaxData = ajaxResponse.data.data;
 								const ajaxSuccess = ajaxResponse.data.success;
