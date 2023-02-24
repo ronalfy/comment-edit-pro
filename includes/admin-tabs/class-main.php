@@ -98,8 +98,8 @@ class Main {
 				</div>
 				<div class="sce-admin-panel-cards">
 					<div class="sce-admin-panel-card">
-					<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/akismet.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Akismet logo', 'comment-edit-pro' ); ?>" />
+						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'spam-protection' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/akismet.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Akismet logo', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Akismet Spam Protection', 'comment-edit-pro' ); ?></h3>
@@ -111,7 +111,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/turnstile.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Cloudflare Turnstile', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'spam-protection' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/turnstile.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Cloudflare Turnstile', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Cloudflare Turnstile', 'comment-edit-pro' ); ?></h3>
@@ -123,7 +123,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/avatars.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Avatars', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'avatars' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/avatars.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Avatars', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Comment Avatars', 'comment-edit-pro' ); ?></h3>
@@ -135,7 +135,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Character Control', 'comment-edit-pro' ); ?></h3>
@@ -147,7 +147,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-editing.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Editing', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-editing' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-editing.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Editing', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Comment Editing', 'comment-edit-pro' ); ?></h3>
@@ -159,7 +159,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/gravatar-protection.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of an anonymous comment with no avatar.', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'avatars' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/gravatar-protection.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of an anonymous comment with no avatar.', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Gravatar Protection', 'comment-edit-pro' ); ?></h3>
@@ -171,7 +171,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mailchimp.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Mailchimp Logo', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mailchimp.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Mailchimp Logo', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Mailchimp', 'comment-edit-pro' ); ?></h3>
@@ -183,7 +183,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mentions.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Mentions feature', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'mentions' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mentions.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Mentions feature', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( '@ Mentions', 'comment-edit-pro' ); ?></h3>
@@ -195,7 +195,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/recaptcha.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of reCAPTCHA Logo', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'spam-protection' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/recaptcha.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of reCAPTCHA Logo', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'reCAPTCHA 3', 'comment-edit-pro' ); ?></h3>
@@ -207,7 +207,7 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-							<img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/slack.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Slack Notification', 'comment-edit-pro' ); ?>" />
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/slack.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Slack Notification', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Slack Integration', 'comment-edit-pro' ); ?></h3>
@@ -215,6 +215,18 @@ class Main {
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><?php esc_html_e( 'View Integration Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'webhooks' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/webhooks.png' ) ); ?>" alt="<?php esc_html_e( 'Two gears with an arrow demonstrating Webhooks', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Webhooks', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Ping an external webhook when a new comment has been posted.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'webhooks' ) ); ?>"><?php esc_html_e( 'View Webhooks Settings', 'comment-edit-pro' ); ?></a>
 						</div>
 					</div>
 				</div>
