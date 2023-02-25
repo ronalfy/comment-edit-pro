@@ -633,7 +633,7 @@ var Interface = function Interface(props) {
     className: "sce-admin-heading-docs",
     target: "_blank",
     rel: "noreferrer",
-    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support"
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/spam-protection/cloudflare-turnstile"
   }, "(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "description"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cloudflare Turnstile is an alternative captcha that is designed for privacy and user experience.', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {

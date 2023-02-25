@@ -187,7 +187,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Cloudflare Turnstile', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Cloudflare Turnstile', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/spam-protection/cloudflare-turnstile">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
 			<p className="description">
 				{ __(
 					'Cloudflare Turnstile is an alternative captcha that is designed for privacy and user experience.',
