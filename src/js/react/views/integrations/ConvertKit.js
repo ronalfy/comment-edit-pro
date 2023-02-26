@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, Suspense, useEffect } from 'react';
-import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
+import React, { useState, Suspense, useEffect, useRef } from 'react';
+import { useForm, Controller, useWatch, useFormState, useFieldArray } from 'react-hook-form';
 import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
@@ -27,7 +27,10 @@ const retrieveConvertKitOptions = () => {
 };
 
 const ConvertKit = ( props ) => {
-	const [ defaults, getDefaults ] = useAsyncResource( retrieveConvertKitOptions, [] );
+	const [ defaults, getDefaults ] = useAsyncResource(
+		retrieveConvertKitOptions,
+		[]
+	);
 	return (
 		<ErrorBoundary
 			fallback={
@@ -61,11 +64,11 @@ const ConvertKit = ( props ) => {
 				<Interface defaults={ defaults } { ...props } />
 			</Suspense>
 		</ErrorBoundary>
-
 	);
 };
 
 const Interface = ( props ) => {
+	const tagInput = useRef( null );
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
@@ -74,8 +77,9 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 	const [ credentialsRefreshing, setCredentialsRefreshing ] = useState( false );
-
-	console.log( data );
+	const [ isRefreshingFormsAndTags, setIsRefreshingFormsAndTags ] =
+		useState( false );
+	const [ isAddingTag, setIsAddingTag ] = useState( false );
 
 	const {
 		register,
@@ -85,6 +89,8 @@ const Interface = ( props ) => {
 		getValues,
 		reset,
 		setError,
+		clearErrors,
+		trigger,
 	} = useForm( {
 		defaultValues: {
 			enableConvertKit: data.enableConvertKit,
@@ -95,11 +101,19 @@ const Interface = ( props ) => {
 			checkboxEnabled: data.checkboxEnabled,
 			formOrTag: data.formOrTag,
 			forms: data.forms,
-			tags: data.tags,
+			tags: data.tags ?? [ { label: '', value: '', selected: '' } ],
 			selectedForm: data.selectedForm,
-			selectedTags: data.selectedTags,
+			selectedTags: [ { label: '', value: '', selected: '' } ],
+			tagInput: '',
 		},
 	} );
+	// Get tags array.
+	const { fields: tagFields, append: appendTag, remove: removeTag } = useFieldArray(
+		{
+			control,
+			name: 'selectedTags',
+		}
+	);
 	const formValues = useWatch( { control } );
 	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
 		control,
@@ -120,11 +134,50 @@ const Interface = ( props ) => {
 		return false;
 	};
 
+	/**
+	 * Check if we can save the form.
+	 *
+	 * @return {boolean} true to show the save button, false to hide it.
+	 */
+	const canShowSaveButton = () => {
+		const forms = getValues( 'forms' );
+		const tags = getValues( 'tags' );
+
+		if ( getValues( 'apiValid' ) && ( forms.length === 0 && tags.length === 0 ) ) {
+			return false;
+		}
+		if ( ! getValues( 'apiValid' ) && isDirty ) {
+			return false;
+		}
+		if ( needsCredentialRefresh() ) {
+			return false;
+		}
+
+		// Check to see if any tags are selected.
+		if ( getValues( 'formOrTag' ) === 'tag' ) {
+			if ( tags.length === 0 ) {
+				return false;
+			}
+			let selected = false;
+			tags.forEach( ( tag ) => {
+				if ( tag.selected ) {
+					selected = true;
+				}
+			} );
+			if ( ! selected ) {
+				return false;
+			}
+		}
+		return true;
+	};
+
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
 	};
 
 	const onSubmit = ( formData ) => {
+		console.log( formData );
+		return;
 		setSaving( true );
 		sendCommand( 'sce_save_convertkit_options', {
 			nonce: sceIntegrations.ck_save_nonce,
@@ -134,8 +187,7 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { forms, tags } =
-						ajaxData;
+					const { forms, tags } = ajaxData;
 					const newFormValues = [];
 					forms.forEach( ( keys, index ) => {
 						newFormValues.push( keys );
@@ -154,7 +206,7 @@ const Interface = ( props ) => {
 					setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
 				}
 			} )
-			.catch( ( ajaxResponse ) => { } )
+			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
 				setSaving( false );
 			} );
@@ -170,8 +222,7 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { forms, tags, apiValid } =
-						ajaxData;
+					const { forms, tags, apiValid } = ajaxData;
 					const newFormValues = [];
 					forms.forEach( ( keys, index ) => {
 						newFormValues.push( keys );
@@ -185,17 +236,123 @@ const Interface = ( props ) => {
 						tags: newTagValues,
 						apiValid,
 					};
-					reset( { ...formValues, ...updatedFormValues }, {
-						keepErrors: false,
-						keepDirty: false,
-					} );
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: false,
+							keepDirty: false,
+						}
+					);
 				} else {
-					setValue( 'apiValid', false );
+					const updatedFormValues = {
+						apiValid: false,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: false,
+							keepDirty: false,
+						}
+					);
 					setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
 					setError( 'secretKey', { type: 'noForms', message: ajaxData.message } );
 				}
 			} )
-			.catch( ( ajaxResponse ) => { } )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setSaving( false );
+			} );
+	};
+
+	const onAddTag = ( tagLabel ) => {
+		tagLabel = tagLabel.trim();
+		if ( '' === tagLabel ) {
+			setError( 'tagInput', { type: 'addTagError', message: __( 'Tag name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentTags = getValues( 'tags' );
+		const tagExists = currentTags.find( ( tag ) => tag.label === tagLabel );
+		if ( tagExists ) {
+			setError( 'tagInput', { type: 'addTagError', message: __( 'Tag name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the tag.
+		setIsAddingTag( true );
+		sendCommand( 'sce_add_convertkit_tag', {
+			nonce: sceIntegrations.ck_add_tag_nonce,
+			label: tagLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { tags } = ajaxData;
+					const newTagValues = [];
+					tags.forEach( ( keys, index ) => {
+						newTagValues.push( keys );
+					} );
+					setValue( 'tags', newTagValues );
+				} else {
+					setError( 'tagInput', { type: 'addTagError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingTag( false );
+				tagInput.current.focus();
+			} );
+	};
+
+	const refreshFormsAndTags = ( formData ) => {
+		setSaving( true );
+		sendCommand( 'sce_refresh_convertkit_forms_tags', {
+			nonce: sceIntegrations.ck_refresh_forms_tags_nonce,
+			...formData,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { forms, tags, apiValid } = ajaxData;
+					const newFormValues = [];
+					forms.forEach( ( keys, index ) => {
+						newFormValues.push( keys );
+					} );
+					const newTagValues = [];
+					tags.forEach( ( keys, index ) => {
+						newTagValues.push( keys );
+					} );
+					const updatedFormValues = {
+						forms: newFormValues,
+						tags: newTagValues,
+						apiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: false,
+							keepDirty: false,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+						apiValid: false,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: false,
+							keepDirty: false,
+						}
+					);
+					setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
+					setError( 'secretKey', { type: 'noForms', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
 				setSaving( false );
 			} );
@@ -224,7 +381,7 @@ const Interface = ( props ) => {
 					}, 3000 );
 				}
 			} )
-			.catch( ( ajaxResponse ) => { } )
+			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
 				setResetting( false );
 			} );
@@ -312,6 +469,8 @@ const Interface = ( props ) => {
 		if ( needsCredentialRefresh() ) {
 			return <></>;
 		}
+		const forms = getValues( 'forms' );
+		const tags = getValues( 'tags' );
 		return (
 			<tr>
 				<th scope="row">{ __( 'Forms or Tags', 'comment-edit-pro' ) }</th>
@@ -321,15 +480,18 @@ const Interface = ( props ) => {
 						control={ control }
 						rules={ { required: true } }
 						render={ ( { field: { onChange, value } } ) => (
-							<RadioControl
-								label={ __( 'Add Subscribers to Forms or Tags', 'comment-edit-pro' ) }
-								help={ __(
-									'Select whether to add new subscribers to a an existing ConvertKit form or tag(s).',
-									'comment-edit-pro'
-								) }
-								selected={ getValues( 'formOrTag' ) }
-								options={
-									[
+							<>
+								<RadioControl
+									label={ __(
+										'Add Subscribers to Forms or Tags',
+										'comment-edit-pro'
+									) }
+									help={ __(
+										'Select whether to add new subscribers to a an existing ConvertKit form or tag(s).',
+										'comment-edit-pro'
+									) }
+									selected={ getValues( 'formOrTag' ) }
+									options={ [
 										{
 											label: __( 'Forms', 'comment-edit-pro' ),
 											value: 'form',
@@ -338,14 +500,56 @@ const Interface = ( props ) => {
 											label: __( 'Tags', 'comment-edit-pro' ),
 											value: 'tag',
 										},
-									]
-								}
-								onChange={ ( formOrTagValue ) => {
-									onChange( formOrTagValue );
-								} }
-							/>
+									] }
+									onChange={ ( formOrTagValue ) => {
+										onChange( formOrTagValue );
+									} }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										variant="tertiary"
+										isBusy={ isRefreshingFormsAndTags }
+										disabled={ isRefreshingFormsAndTags }
+										onClick={ () => {
+											setIsRefreshingFormsAndTags( true );
+											refreshFormsAndTags();
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+											{ 'has-error': hasErrors() },
+											{ 'has-icon': isRefreshingFormsAndTags },
+											{ 'is-saving': isRefreshingFormsAndTags },
+										) }
+										text={ isRefreshingFormsAndTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Forms and Tags', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</>
 						) }
 					/>
+					{ 'form' === getValues( 'formOrTag' ) && forms.length === 0 && (
+						<Notice
+							message={ __(
+								'There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.',
+								'comment-edit-pro'
+							) }
+							status="error"
+							politeness="assertive"
+							inline={ false }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+					{ 'tag' === getValues( 'formOrTag' ) && tags.length === 0 && (
+						<Notice
+							message={ __(
+								'There are no tags available. Try creating a tag below.',
+								'comment-edit-pro'
+							) }
+							status="warning"
+							politeness="assertive"
+							inline={ false }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
 				</td>
 			</tr>
 		);
@@ -367,7 +571,10 @@ const Interface = ( props ) => {
 						rules={ { required: true } }
 						render={ ( { field: { onChange, value } } ) => (
 							<RadioControl
-								label={ __( 'Select a form for your subscribers', 'comment-edit-pro' ) }
+								label={ __(
+									'Select a form for your subscribers',
+									'comment-edit-pro'
+								) }
 								help={ __(
 									'Select a default form that will be used when signing up your subscribers.',
 									'comment-edit-pro'
@@ -405,34 +612,92 @@ const Interface = ( props ) => {
 
 	const getConvertKitTags = () => {
 		const convertKitTags = getValues( 'tags' );
-		if ( convertKitTags.length === 0 || 'tag' !== getValues( 'formOrTag' ) ) {
-			return <></>;
-		}
-
 		return (
 			<tr>
 				<th scope="row">{ __( 'ConvertKit Tags', 'comment-edit-pro' ) }</th>
 				<td>
-					{ convertKitTags.length > 0 && (
-						convertKitTags.map( ( tag ) => (
+					<>
+						{ convertKitTags.length > 0 && getValues( 'apiValid' ) &&
+						convertKitTags.map( ( tag, index ) => (
 							<Controller
-								key={ tag.id }
-								name="convertKitTags"
+								key={ tag.value }
+								name={ `tags[${ index }].selected` }
 								control={ control }
-								rules={ { required: true } }
 								render={ ( { field: { onChange, value } } ) => (
 									<CheckboxControl
-										label={ tag.name }
-										checked={ value }
+										label={ tag.label }
 										onChange={ ( tagSelectedValue ) => {
 											onChange( tagSelectedValue );
 										} }
+										value={ tag.value }
 									/>
 								) }
 							/>
-						)
-						) )
-					}
+						) ) }
+						<div className="sce-convertkit-add-tag">
+							<div className="sce-convertkit-add-tag-group">
+								<Controller
+									name="tagInput"
+									control={ control }
+									rules={ {
+										pattern: /[-_ 0-9A-Za-z]/,
+									} }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											type="text"
+											value={ value }
+											onChange={ ( tagInputValue ) => {
+												clearErrors( 'tagInput' );
+												onChange( tagInputValue );
+											} }
+											label={ __( 'Add New Tag', 'comment-edit-pro' ) }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.tagInput?.type,
+											} ) }
+											placeholder={ __( 'Tag Name', 'comment-edit-pro' ) }
+											aria-required="true"
+											ref={ tagInput }
+										/>
+									) }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										onClick={ async( e ) => {
+											const validationResult = await trigger( 'tagInput' );
+											if ( validationResult ) {
+												onAddTag( getValues( 'tagInput' ) );
+											}
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
+										) }
+										text={
+											isAddingTag
+												? __( 'Adding…', 'comment-edit-pro' )
+												: __( 'Add New Tag', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</div>
+							{ 'pattern' === errors.tagInput?.type && (
+								<Notice
+									message={ __( 'Special characters are not allowed in tags.', 'comment-edit-pro' ) }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+							{ 'addTagError' === errors.tagInput?.type && (
+								<Notice
+									message={ errors.tagInput?.message }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</div>
+					</>
 				</td>
 			</tr>
 		);
@@ -447,10 +712,15 @@ const Interface = ( props ) => {
 						name="apiKey"
 						control={ control }
 						rules={ { required: true } }
-						render={ ( { field } ) => (
+						render={ ( { field: { onChange, value } } ) => (
 							<TextControl
 								label={ __( 'ConvertKit API Key', 'comment-edit-pro' ) }
-								{ ...field }
+								type="text"
+								value={ value }
+								onChange={ ( apiKeyValue ) => {
+									onChange( apiKeyValue );
+									clearErrors();
+								} }
 								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.apiKey?.type,
 									'is-required': true,
@@ -495,12 +765,17 @@ const Interface = ( props ) => {
 						name="secretKey"
 						control={ control }
 						rules={ { required: true } }
-						render={ ( { field } ) => (
+						render={ ( { field: { onChange, value } } ) => (
 							<TextControl
 								label={ __( 'ConvertKit Secret Key', 'comment-edit-pro' ) }
-								{ ...field }
+								type="text"
+								value={ value }
+								onChange={ ( secretKey ) => {
+									onChange( secretKey );
+									clearErrors();
+								} }
 								className={ classNames( 'sce-admin__text-control', {
-									'has-error': 'required' === errors.apiKey?.type,
+									'has-error': 'required' === errors.secretKey?.type,
 									'is-required': true,
 								} ) }
 								help={ __(
@@ -522,7 +797,7 @@ const Interface = ( props ) => {
 					) }
 					{ 'noForms' === errors.secretKey?.type && (
 						<Notice
-							message={ __( 'No ConvertKit forms or tags for the API key were found.' ) }
+							message={ errors.secretKey?.message }
 							status="error"
 							politeness="assertive"
 							inline={ true }
@@ -576,7 +851,17 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'ConvertKit', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>
+				{ __( 'ConvertKit', 'comment-edit-pro' ) }{ ' ' }
+				<a
+					className="sce-admin-heading-docs"
+					target="_blank"
+					rel="noreferrer"
+					href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"
+				>
+					({ __( 'Docs', 'comment-edit-pro' ) })
+				</a>
+			</h2>
 			<p className="description">
 				{ __(
 					'When someone leaves a comment, they can be given the option to subscribe to your ConvertKit account.',
@@ -633,7 +918,7 @@ const Interface = ( props ) => {
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
-					{ ! needsCredentialRefresh() && getValues( 'apiValid' ) && (
+					{ getValues( 'apiValid' ) && canShowSaveButton() && (
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
@@ -654,7 +939,7 @@ const Interface = ( props ) => {
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
-								{ 'has-error': hasErrors() },
+								{ 'has-error': hasErrors() }
 							) }
 							type="submit"
 							text={ getRefreshCredentialsText() }

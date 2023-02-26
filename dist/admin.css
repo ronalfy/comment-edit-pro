@@ -594,6 +594,23 @@ h3.sce-panel-heading {
 .sce-admin-buttons button.has-error:hover {
   cursor: not-allowed;
 }
+.sce-admin-buttons button.qdlx__btn-secondary {
+  background: #333;
+  color: #FFFFFF;
+  border-color: #111;
+}
+.sce-admin-buttons button.qdlx__btn-secondary:hover {
+  background: #4d4d4d;
+  color: #FFFFFF;
+  border-color: #2b2b2b;
+}
+.sce-admin-buttons button.qdlx__btn-link {
+  all: unset;
+  cursor: pointer;
+  color: #9949cf;
+  font-weight: 600;
+  text-decoration: underline;
+}
 .sce-admin-buttons button.qdlx__btn-danger {
   background: #FFF;
   color: #822700;
@@ -635,10 +652,11 @@ h3.sce-panel-heading {
 .sce-admin-buttons button.qdlx__btn--icon-right.is-saving svg {
   width: 24px;
   height: 24px;
+  margin-left: 8px;
   animation: sce-rotate 1s linear infinite;
 }
 .sce-admin-buttons button.qdlx__btn--icon-right.is-saving svg path {
-  fill: #017e01;
+  fill: currentColor;
 }
 .sce-admin-buttons button.qdlx__btn--icon-right.is-saved {
   display: flex;
@@ -1015,6 +1033,11 @@ h2 a.sce-admin-heading-docs {
   padding-top: 20px;
 }
 
+.form-table td {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 /* Initial loading state for tab content */
 .sce-load-static-svg svg {
   display: flex;
@@ -1383,6 +1406,52 @@ h2 a.sce-admin-heading-docs {
 }
 .sce-modal-actions .components-button:first-child {
   margin-left: 0;
+}
+
+/* ConvertKit admin styles */
+.sce-convertkit-add-tag-group {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  grid-gap: 20px;
+  align-items: end;
+}
+.sce-convertkit-add-tag-group .components-base-control,
+.sce-convertkit-add-tag-group .components-base-control__field {
+  margin-bottom: 0 !important; /* override core style */
+}
+.sce-convertkit-add-tag-group .sce-admin__text-control input[type=text] {
+  width: 100%;
+  max-width: 100%;
+}
+.sce-convertkit-add-tag-group .components-button {
+  line-height: 2;
+  font-size: 13px;
+  padding: 0.2875rem 0.5rem;
+  min-height: 30px;
+  border-radius: 3px;
+  border-width: 1px;
+}
+
+/* Checkbox Controls */
+.components-checkbox-control {
+  margin-bottom: 10px !important; /* override core style */
+}
+.components-checkbox-control .components-base-control__field {
+  display: flex;
+  align-items: center;
+}
+.components-checkbox-control .components-checkbox-control__label {
+  display: inline-block;
+  padding-left: 10px;
+  line-height: normal;
+  font-size: 14px;
+}
+.components-checkbox-control .components-checkbox-control__input-container {
+  display: inline-block;
+  line-height: normal;
+}
+.components-checkbox-control .components-checkbox-control__input {
+  margin: 0;
 }
 
 /*# sourceMappingURL=admin.css.map*/
