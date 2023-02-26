@@ -82,6 +82,7 @@ class Options {
 				case 'turnstile_logged_in_users_enabled':
 				case 'enable_comment_editing':
 				case 'enable_avatar_gravatar_fallback':
+				case 'enable_convertkit':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -104,7 +105,11 @@ class Options {
 					$option = esc_url( $option );
 					break;
 				default:
-					$option = sanitize_text_field( $options[ $key ] );
+					if ( is_array( $option ) ) {
+						$option = Functions::sanitize_array_recursive( $option );
+					} else {
+						$option = sanitize_text_field( $options[ $key ] );
+					}
 					break;
 			}
 		}
@@ -248,6 +253,15 @@ class Options {
 			'turnstile_widget_size'              => 'normal',
 			'turnstile_comment_submit_button_id' => 'submit',
 			'turnstile_logged_in_users_enabled'  => true,
+			'enable_convertkit'                  => false,
+			'convertkit_api_key'                 => '',
+			'convertkit_secret_key'              => '',
+			'convertkit_form_or_tag'             => 'tag',
+			'convertkit_signup_label'            => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'convertkit_checkbox_enabled'        => true,
+			'convertkit_form_id'                 => '',
+			'convertkit_tag_ids'                 => array(),
+			'convertkit_custom_fields'           => array(),
 
 		);
 		return $defaults;
