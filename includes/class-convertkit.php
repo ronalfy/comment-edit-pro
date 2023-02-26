@@ -20,7 +20,7 @@ class ConvertKit {
 	 *
 	 * @var string ConvertKit API variable.
 	 */
-	private $convertkit_api = 'https://api.convertkit.com/v3/';
+	private $convertkit_api = 'https://api.convertkit.com/v3';
 
 	/**
 	 * Class runner.
@@ -37,6 +37,9 @@ class ConvertKit {
 		// Retrieve mailchimp settings in the admin.
 		add_action( 'wp_ajax_sce_get_convertkit_options', array( $this, 'ajax_get_convertkit_options' ) );
 
+		// Refresh or Initialize ConvertKit credentials.
+		add_action( 'wp_ajax_sce_refresh_convertkit_connection', array( $this, 'ajax_refresh_convertkit_connection' ) );
+
 		// Reset ConvertKit API key.
 		add_action( 'wp_ajax_sce_reset_convertkit_options', array( $this, 'ajax_reset_convertkit_options' ) );
 
@@ -48,6 +51,9 @@ class ConvertKit {
 
 		// Add frontend scripts and styles.
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
+
+		// Add ConvertKit localized nonces.
+		add_filter( 'sce_integrations_localized_vars', array( $this, 'add_convertkit_localized_vars' ) );
 	}
 
 	/**
@@ -93,7 +99,7 @@ class ConvertKit {
 			$this->convertkit_api
 		);
 
-		$commenter_name    = $comment->comment_author;
+		$commenter_name     = $comment->comment_author;
 		$convertkit_api_key = $options['convertkit_api_key'];
 
 		$endpoint = $convertkit_api_url . 'lists/' . $list . '/members/';
@@ -132,7 +138,7 @@ class ConvertKit {
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
 	public function add_convertkit_checkbox( $comment_fields ) {
-		$options           = Options::get_options();
+		$options            = Options::get_options();
 		$convertkit_enabled = (bool) $options['enable_convertkit'];
 
 		// Chceck to see if ConvertKit is enabled.
@@ -142,7 +148,7 @@ class ConvertKit {
 
 		// Now get the checkbox details.
 		$checked_by_default              = (bool) $options['convertkit_checkbox_enabled'];
-		$convertkit_html                  = array(
+		$convertkit_html                 = array(
 			'sce-mailchimp' => sprintf(
 				'<section class="comment-form-sce-mailchimp"><label><input type="checkbox" name="sce-mailchimp-signup" %s /> %s</label></section>',
 				checked( $checked_by_default, true, false ),
@@ -160,7 +166,7 @@ class ConvertKit {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-convertkit-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -169,21 +175,24 @@ class ConvertKit {
 		}
 
 		$options = Options::get_options();
-		$lists   = array();
 		if ( Functions::is_multisite() ) {
-			$lists = get_site_option( 'sce_convertkit_lists', array() );
+			$forms = get_site_option( 'sce_convertkit_forms', array() );
+			$tags  = get_site_option( 'sce_convertkit_tags', array() );
 		} else {
-			$lists = get_option( 'sce_convertkit_lists', array() );
+			$forms = get_option( 'sce_convertkit_forms', array() );
+			$tags  = get_option( 'sce_convertkit_tags', array() );
 		}
 
 		$json_array = array(
-			'enableConvertKit'       => (bool) $options['enable_convertkit'],
-			'apiKey'                => $options['convertkit_api_key'],
-			'mailchimpServerPrefix' => $options['convertkit_api_key_server_prefix'],
-			'mailchimpLists'        => $lists,
-			'selectedList'          => $options['convertkit_selected_list'],
-			'signUpLabel'           => $options['convertkit_signup_label'],
-			'checkboxEnabled'       => (bool) $options['convertkit_checkbox_enabled'],
+			'enableConvertKit' => (bool) $options['enable_convertkit'],
+			'apiValid'         => (bool) $options['convertkit_api_valid'],
+			'apiKey'           => $options['convertkit_api_key'],
+			'secretKey'        => $options['convertkit_secret_key'],
+			'signUpLabel'      => $options['convertkit_signup_label'],
+			'checkboxEnabled'  => (bool) $options['convertkit_checkbox_enabled'],
+			'formOrTag'        => $options['convertkit_form_or_tag'],
+			'forms'            => $forms,
+			'tags'             => $tags,
 		);
 
 		// Exit gracefully.
@@ -191,13 +200,13 @@ class ConvertKit {
 	}
 
 	/**
-	 * Save mailchimp options.
+	 * Save ConvertKit options.
 	 */
 	public function ajax_save_convertkit_options() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-convertkit-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -207,50 +216,65 @@ class ConvertKit {
 
 		// Nonce passed, let's get post vars.
 		$convertkit_enabled          = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
-		$api_token                  = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_server_prefix          = sanitize_text_field( filter_input( INPUT_POST, 'mailchimpServerPrefix', FILTER_DEFAULT ) );
-		$selected_list              = sanitize_text_field( filter_input( INPUT_POST, 'selectedList', FILTER_DEFAULT ) );
+		$api_key                     = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
 		$convertkit_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
-		$signup_label               = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
+		$signup_label                = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
+		$form_or_tag                 = sanitize_text_field( filter_input( INPUT_POST, 'formOrTag', FILTER_DEFAULT ) );
+		$selected_form               = absint( filter_input( INPUT_POST, 'selectedForm', FILTER_DEFAULT ) );
+		$selected_tags               = array_map( 'absint', filter_input( INPUT_POST, 'selectedTags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		// Check that form or tag is set.
+		if ( empty( $form_or_tag ) ) {
+			$form_or_tag = 'tag';
+		}
 
-		// If mailchimp is disabled, let's clear out some keys.
+		// If convertkit is disabled, let's clear out some keys.
 		if ( ! $convertkit_enabled ) {
 			$options_to_save = array(
-				'enable_convertkit'                => false,
-				'convertkit_api_key'               => '',
-				'convertkit_api_key_server_prefix' => '',
-				'convertkit_selected_list'         => '',
-				'convertkit_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'convertkit_checkbox_enabled'      => true,
+				'enable_convertkit'           => false,
+				'convertkit_api_key'          => '',
+				'convertkit_secret_key'       => '',
+				'convertkit_signup_label'     => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+				'convertkit_checkbox_enabled' => false,
+				'convertkit_selected_form'    => 0,
+				'convertkit_selected_tags'    => array(),
+				'convertkit_form_or_tag'      => 'tag',
 			);
 			if ( Functions::is_multisite() ) {
-				delete_site_option( 'sce_convertkit_lists' );
+				delete_site_option( 'sce_convertkit_forms' );
+				delete_site_option( 'sce_convertkit_tags' );
 			} else {
-				delete_option( 'sce_convertkit_lists' );
+				delete_option( 'sce_convertkit_forms' );
+				delete_option( 'sce_convertkit_tags' );
 			}
 
-			// todo: clear mailchimp lists option.
-
 			Options::update_options( $options_to_save );
-			wp_send_json_success( array( 'list' => false ) );
+			wp_send_json_success(
+				array(
+					'forms' => array(),
+					'tags'  => array(),
+				)
+			);
 			exit;
 		}
 
 		// Now let's save options.
 		$options_to_save = array(
-			'enable_convertkit'                => $convertkit_enabled,
-			'convertkit_api_key'               => $api_token,
-			'convertkit_api_key_server_prefix' => $api_server_prefix,
-			'convertkit_selected_list'         => $selected_list,
-			'convertkit_signup_label'          => $signup_label,
-			'convertkit_checkbox_enabled'      => $convertkit_checkbox_enabled,
+			'enable_convertkit'           => $convertkit_enabled,
+			'convertkit_api_key'          => $api_key,
+			'convertkit_secret_key'       => $api_secret_key,
+			'convertkit_signup_label'     => $signup_label,
+			'convertkit_checkbox_enabled' => $convertkit_checkbox_enabled,
+			'convertkit_form_or_tag'      => $form_or_tag,
+			'convertkit_selected_form'    => $selected_form,
+			'convertkit_selected_tags'    => $selected_tags,
 		);
 		Options::update_options( $options_to_save );
 
-		// Let's check if mailchimp key has changed and if so, let's grab the list again.
+		// Let's check if convertkit key has changed and if so, let's grab the list again.
 		$needs_refresh = false;
 		$options       = Options::get_options();
-		if ( '' === $options['convertkit_selected_list'] ) {
+		if ( '' === $options['convertkit_selected_form'] && empty( $options['convertkit_selected_tags'] ) ) {
 			$needs_refresh = true;
 		}
 
@@ -258,68 +282,192 @@ class ConvertKit {
 		if ( ! $needs_refresh ) {
 			// Exit gracefully.
 			if ( Functions::is_multisite() ) {
-				$convertkit_lists = get_site_option( 'sce_convertkit_lists', array() );
+				$convertkit_forms = get_site_option( 'sce_convertkit_forms', array() );
+				$convertkit_tags  = get_site_option( 'sce_convertkit_tags', array() );
 			} else {
-				$convertkit_lists = get_option( 'sce_convertkit_lists', array() );
+				$convertkit_forms = get_option( 'sce_convertkit_forms', array() );
+				$convertkit_tags  = get_option( 'sce_convertkit_tags', array() );
 			}
-			$options_to_save['lists'] = $convertkit_lists;
+			$options_to_save['forms'] = $convertkit_forms;
+			$options_to_save['tags']  = $convertkit_tags;
 			wp_send_json_success( $options_to_save );
 			exit;
 		}
 
-		// Format API url for a server prefix..
-		$convertkit_api_url = str_replace(
-			'<sp>',
-			$api_server_prefix,
-			$this->convertkit_api
-		);
-
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_token,
+			'Authorization' => 'Bearer ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
 		);
+		$http_args['body']    = array(
+			'api_key' => $api_key,
+		);
 
-		// Get lists endpoint.
-		$lists_api_url = esc_url_raw( $convertkit_api_url . '/lists' );
+		// Get forms endpoint.
+		$forms_api_url = esc_url_raw( $this->convertkit_api . '/forms' );
+		$tags_api_url  = esc_url_raw( $this->convertkit_api . '/tags' );
 
 		// Make API call.
-		$response = wp_remote_get( $lists_api_url, $http_args );
+		$forms_api_response = wp_remote_get( $forms_api_url, $http_args );
+		$tags_api_response  = wp_remote_get( $tags_api_url, $http_args );
 
-		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+		if ( is_wp_error( $forms_api_response ) || 200 !== wp_remote_retrieve_response_code( $forms_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not connect to ConvertKit.', 'comment-edit-pro' ) ) );
+		}
+		if ( is_wp_error( $tags_api_response ) || 200 !== wp_remote_retrieve_response_code( $tags_api_response ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not connect to ConvertKit.', 'comment-edit-pro' ) ) );
 		}
 
 		// Now format response from JSON.
-		$lists_raw        = json_decode( wp_remote_retrieve_body( $response ), true );
-		$lists            = $lists_raw['lists'] ?? array();
-		$sanitized_values = array();
-		foreach ( $lists as $index => $values ) {
-			$sanitized_values[ $index ] = array(
-				'label' => sanitize_text_field( $lists[ $index ]['name'] ),
-				'value' => sanitize_text_field( $lists[ $index ]['id'] ),
+		$forms_raw             = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
+		$tags_raw              = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
+		$forms                 = $forms_raw['forms'] ?? array();
+		$tags                  = $tags_raw['tags'] ?? array();
+		$sanitized_form_values = array();
+		$sanitized_tag_values  = array();
+		foreach ( $forms as $index => $values ) {
+			$sanitized_form_values[ $index ] = array(
+				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
+				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
+			);
+		}
+		foreach ( $tags as $index => $values ) {
+			$sanitized_tag_values[ $index ] = array(
+				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
+				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
 			);
 		}
 
 		// Save list in option.
 		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_lists', $sanitized_values );
+			update_site_option( 'sce_convertkit_forms', $sanitized_form_values );
+			update_site_option( 'sce_convertkit_tags', $sanitized_tag_values );
 		} else {
-			update_option( 'sce_convertkit_lists', $sanitized_values );
+			update_option( 'sce_convertkit_forms', $sanitized_form_values );
+			update_option( 'sce_convertkit_tags', $sanitized_tag_values );
 		}
 
-		// When no lists were found, return error.
-		if ( empty( $sanitized_values ) ) {
-			wp_send_json_error( array( 'message' => __( 'There are no ConvertKit lists that were found.', 'comment-edit-pro' ) ) );
+		// When no forms were found, return error. Tags can be empty.
+		if ( empty( $sanitized_form_values ) && 'form' === $form_or_tag ) {
+			wp_send_json_error( array( 'message' => __( 'There are no ConvertKit forms that were found.', 'comment-edit-pro' ) ) );
 			exit;
 		}
 
 		wp_send_json_success(
 			array(
-				'list'          => true,
-				'lists'         => $sanitized_values,
-				'selected_list' => $options['convertkit_selected_list'],
+				'forms'         => $sanitized_form_values,
+				'tags'          => $sanitized_tag_values,
+				'selected_form' => $selected_form,
+				'selected_tags' => $selected_tags,
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Refresh or initialize ConvertKit connection.
+	 */
+	public function ajax_refresh_convertkit_connection() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-connection' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Nonce passed, let's get post vars.
+		$convertkit_enabled = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
+		$api_key            = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_secret_key     = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
+
+		// Now let's set aside some options to save.
+		$options_to_save = array(
+			'enable_convertkit'     => $convertkit_enabled,
+			'convertkit_api_key'    => $api_key,
+			'convertkit_secret_key' => $api_secret_key,
+		);
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Bearer ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+		$http_args['body']    = array(
+			'api_key' => $api_key,
+		);
+
+		// Get endpoints.
+		$forms_api_url   = esc_url_raw( $this->convertkit_api . '/forms' );
+		$tags_api_url    = esc_url_raw( $this->convertkit_api . '/tags' );
+		$account_api_url = esc_url_raw( $this->convertkit_api . '/account' );
+
+		// Check Account.
+		$account_http_args                       = $http_args;
+		$account_http_args['body']['api_secret'] = $api_secret_key;
+
+		// Make Credentials/Account check Call.
+		$account_api_response = wp_remote_get( $account_api_url, $account_http_args );
+		if ( is_wp_error( $account_api_response ) || 200 !== wp_remote_retrieve_response_code( $account_api_response ) ) {
+			$options_to_save['convertkit_api_valid'] = false;
+			Options::update_options( $options_to_save );
+			wp_send_json_error( array( 'message' => __( 'Could not connect to ConvertKit.', 'comment-edit-pro' ) ) );
+		}
+
+		// Make API call.
+		$forms_api_response = wp_remote_get( $forms_api_url, $http_args );
+		$tags_api_response  = wp_remote_get( $tags_api_url, $http_args );
+
+		if ( is_wp_error( $forms_api_response ) || 200 !== wp_remote_retrieve_response_code( $forms_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve ConvertKit forms.', 'comment-edit-pro' ) ) );
+		}
+		if ( is_wp_error( $tags_api_response ) || 200 !== wp_remote_retrieve_response_code( $tags_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve ConvertKit tags.', 'comment-edit-pro' ) ) );
+		}
+
+		// Now format response from JSON.
+		$forms_raw             = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
+		$tags_raw              = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
+		$forms                 = $forms_raw['forms'] ?? array();
+		$tags                  = $tags_raw['tags'] ?? array();
+		$sanitized_form_values = array();
+		$sanitized_tag_values  = array();
+		foreach ( $forms as $index => $values ) {
+			$sanitized_form_values[ $index ] = array(
+				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
+				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
+			);
+		}
+		foreach ( $tags as $index => $values ) {
+			$sanitized_tag_values[ $index ] = array(
+				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
+				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
+			);
+		}
+
+		// Save list in option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_convertkit_forms', $sanitized_form_values );
+			update_site_option( 'sce_convertkit_tags', $sanitized_tag_values );
+		} else {
+			update_option( 'sce_convertkit_forms', $sanitized_form_values );
+			update_option( 'sce_convertkit_tags', $sanitized_tag_values );
+		}
+
+		// Save options.
+		$options_to_save['convertkit_api_valid'] = true;
+		Options::update_options( $options_to_save );
+
+		wp_send_json_success(
+			array(
+				'forms'    => $sanitized_form_values,
+				'tags'     => $sanitized_tag_values,
+				'apiValid' => true,
 			)
 		);
 		exit;
@@ -371,7 +519,7 @@ class ConvertKit {
 	public function add_frontend_scripts_styles() {
 		// Determine if comments are open.
 		if ( comments_open() ) {
-			$options = Options::get_options();
+			$options            = Options::get_options();
 			$convertkit_enabled = (bool) $options['enable_convertkit'];
 			if ( ! $convertkit_enabled ) {
 				return;
@@ -386,5 +534,20 @@ class ConvertKit {
 				'all'
 			);
 		}
+	}
+
+	/**
+	 * Callback for adding localized vars to integration settings.
+	 *
+	 * @param array $vars Associative array of key/value pairs.
+	 */
+	public function add_convertkit_localized_vars( $vars ) {
+		$convertkit_vars = array(
+			'ck_save_nonce'    => wp_create_nonce( 'sce-save-convertkit-options' ),
+			'ck_refresh_nonce' => wp_create_nonce( 'sce-refresh-convertkit-connection' ),
+			'ck_get_nonce'     => wp_create_nonce( 'sce-retrieve-convertkit-options' ),
+			'ck_reset_nonce'   => wp_create_nonce( 'sce-reset-convertkit-options' ),
+		);
+		return array_merge( $vars, $convertkit_vars );
 	}
 }

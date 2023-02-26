@@ -329,7 +329,7 @@ const Interface = ( props ) => {
 						rules={ { required: true } }
 						render={ ( { field } ) => (
 							<TextControl
-								label={ __( 'Mailchimp Server Prefix', 'quotes-dlx' ) }
+								label={ __( 'Mailchimp Server Prefix', 'comment-edit-pro' ) }
 								{ ...field }
 								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.apiKey?.type,
@@ -360,7 +360,7 @@ const Interface = ( props ) => {
 						rules={ { required: true } }
 						render={ ( { field } ) => (
 							<TextControl
-								label={ __( 'Mailchimp API Key', 'quotes-dlx' ) }
+								label={ __( 'Mailchimp API Key', 'comment-edit-pro' ) }
 								{ ...field }
 								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.apiKey?.type,
@@ -409,22 +409,22 @@ const Interface = ( props ) => {
 
 	const getSaveText = () => {
 		if ( saving ) {
-			return __( 'Saving…', 'quotes-dlx' );
+			return __( 'Saving…', 'comment-edit-pro' );
 		}
 		if ( isSaved ) {
-			return __( 'Saved', 'quotes-dlx' );
+			return __( 'Saved', 'comment-edit-pro' );
 		}
-		return __( 'Save Mailchimp Options', 'quotes-dlx' );
+		return __( 'Save Mailchimp Options', 'comment-edit-pro' );
 	};
 
 	const getResetText = () => {
 		if ( resetting ) {
-			return __( 'Disconnecting…', 'quotes-dlx' );
+			return __( 'Disconnecting…', 'comment-edit-pro' );
 		}
 		if ( isReset ) {
-			return __( 'Disconnected', 'quotes-dlx' );
+			return __( 'Disconnected', 'comment-edit-pro' );
 		}
-		return __( 'Disconnect From Mailchimp', 'quotes-dlx' );
+		return __( 'Disconnect From Mailchimp', 'comment-edit-pro' );
 	};
 
 	return (

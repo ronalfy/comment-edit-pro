@@ -1,1 +1,876 @@
-(self.webpackChunksimple_comment_editing_options=self.webpackChunksimple_comment_editing_options||[]).push([[185],{80199:(e,t,n)=>{"use strict";n.d(t,{f:()=>o});var r=n(67294);const i=(0,r.createContext)({flexItemDisplay:void 0}),o=()=>(0,r.useContext)(i)},9545:(e,t,n)=>{"use strict";n.d(t,{Z:()=>c});var r=n(87462),i=n(67294),o=n(24428),a=n(66819);const l=(0,i.forwardRef)((function(e,t){const{__nextHasNoMarginBottom:n,label:c,hideLabelFromVision:s,value:u,help:m,className:d,onChange:p,type:f="text",...h}=e,b=`inspector-text-control-${(0,o.Z)(l)}`;return(0,i.createElement)(a.ZP,{__nextHasNoMarginBottom:n,label:c,hideLabelFromVision:s,id:b,help:m,className:d},(0,i.createElement)("input",(0,r.Z)({className:"components-text-control__input",type:f,id:b,value:u,onChange:e=>p(e.target.value),"aria-describedby":m?b+"__help":void 0,ref:t},h)))})),c=l},60610:(e,t,n)=>{"use strict";n.d(t,{eb:()=>s});var r=n(67294),i=n(62991),o=n.n(i),a=n(96486),l=n(42290);const c=(0,r.createContext)({}),s=()=>(0,r.useContext)(c);(0,r.memo)((e=>{let{children:t,value:n}=e;const i=function(e){let{value:t}=e;const n=s(),i=(0,r.useRef)(t);return(0,l.Z)((()=>{o()(i.current,t)&&i.current!==t&&"undefined"!=typeof process&&process.env}),[t]),(0,r.useMemo)((()=>(0,a.merge)(JSON.parse(JSON.stringify(n)),t)),[n,t])}({value:n});return(0,r.createElement)(c.Provider,{value:i},t)}))},66724:(e,t,n)=>{"use strict";function r(e){return null!=e}n.d(t,{Jf:()=>r})},98004:(e,t,n)=>{"use strict";n.d(t,{__:()=>a});var r=n(28886),i=n(34225);const o=(0,r.o)(void 0,void 0,i.JQ);o.getLocaleData.bind(o),o.setLocaleData.bind(o),o.resetLocaleData.bind(o),o.subscribe.bind(o);const a=o.__.bind(o);o._x.bind(o),o._n.bind(o),o._nx.bind(o),o.isRTL.bind(o),o.hasTranslation.bind(o)},78246:(e,t,n)=>{"use strict";n.d(t,{__:()=>r.__}),n(70797),n(28886);var r=n(98004)},36191:(e,t,n)=>{"use strict";n.d(t,{Z:()=>l});var r=n(9669),i=n.n(r),o=n(80129),a=n.n(o);function l(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"",r={action:e},o={nonce:!1,action:e};for(var l in void 0===t&&(t={}),o)t.hasOwnProperty(l)||(t[l]=o[l]);var c={method:"post",url:"undefined"==typeof ajaxurl?n:ajaxurl,params:r,paramsSerializer:function(e){return a().stringify(e,{arrayFormat:"brackets"})},data:a().stringify(t)};return i()(c)}},13118:(e,t,n)=>{"use strict";function r(e){return r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},r(e)}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function a(e,t){return a=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},a(e,t)}function l(e,t){if(t&&("object"===r(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return c(e)}function c(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function s(e){return s=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},s(e)}function u(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}n.d(t,{Z:()=>m});const m=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&a(e,t)}(f,e);var t,n,r,m,d,p=(m=f,d=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}(),function(){var e,t=s(m);if(d){var n=s(this).constructor;e=Reflect.construct(t,arguments,n)}else e=t.apply(this,arguments);return l(this,e)});function f(){var e;i(this,f);for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];return u(c(e=p.call.apply(p,[this].concat(n))),"state",{hasError:!1,error:null}),e}return t=f,r=[{key:"getDerivedStateFromError",value:function(e){return{hasError:!0,error:e}}}],(n=[{key:"render",value:function(){return this.state.hasError?this.props.fallback:this.props.children}}])&&o(t.prototype,n),r&&o(t,r),Object.defineProperty(t,"prototype",{writable:!1}),f}(n(67294).Component)},27202:(e,t,n)=>{"use strict";n.d(t,{Z:()=>p});var r=n(67294),i=n(45697),o=n.n(i),a=n(74364),l=n(34244),c=n(94184),s=n.n(c);function u(){return u=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},u.apply(this,arguments)}function m(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var d=function(e){var t,n=e.message,i=e.status,o=e.politeness,c=e.icon,d=e.className,p=e.inline,f=e.children;(0,r.useEffect)((function(){(0,a.D)(n,o)}),[n,i,o]);var h,b=function(){return null!==c},_=s()(d,"sce-admin__notice",(m(t={"sce-admin__notice--has-icon":b()},"sce-admin__notice-type--".concat(i),!0),m(t,"sce-admin__notice-appearance--inline",p),m(t,"sce-admin__notice-appearance--block",!p),t));return r.createElement("div",{className:_},r.createElement(l.Z,u({isDismissible:!1,spokenMessage:n,actions:[]},e),b()&&r.createElement("div",{className:"sce-admin__notice-icon"},(h=c,r.createElement(h,{width:16,height:16,fill:"#6c757d"}))),r.createElement("div",{className:"sce-admin__notice-message"},r.createElement(r.Fragment,null,n," ",f," "))))};d.defaultProps={message:"",status:"info",politeness:"polite",icon:null,className:"",inline:!1},d.propTypes={message:o().string.isRequired,status:o().oneOf(["info","warning","success","error"]),politeness:o().oneOf(["assertive","polite"]),icon:o().func,className:o().string,inline:o().bool};const p=d},8194:(e,t,n)=>{"use strict";n.d(t,{Z:()=>l});var r=n(67294),i=n(45697),o=n.n(i),a=function(e){return r.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 512 512",width:e.width,height:e.height},r.createElement("path",{fill:"var( ".concat(e.var,")"),d:"M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"}))};a.defaultProps={width:16,height:16,fill:"#333333"},a.propTypes={width:o().number,height:o().number,fill:o().string};const l=a},80419:(e,t,n)=>{"use strict";n.d(t,{Z:()=>o});var r=n(67294);function i(){return i=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},i.apply(this,arguments)}const o=function(e){return r.createElement("svg",i({"aria-hidden":"true","data-prefix":"fas","data-icon":"clipboard-check",className:"prefix__svg-inline--fa prefix__fa-clipboard-check prefix__fa-w-12",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 384 512",width:"16",height:"16"},e),r.createElement("path",{fill:"currentColor",d:"M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"}))}},36937:(e,t,n)=>{"use strict";n.d(t,{Z:()=>l});var r=n(67294),i=n(45697),o=n.n(i),a=function(e){return r.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 576 512",width:e.width,height:e.height},r.createElement("path",{className:"fa-primary",fill:e.primaryColor,d:"M256 32c0-17.67 14.3-32 32-32 141.4 0 256 114.6 256 256 0 46.6-12.5 90.4-34.3 128-8.8 15.3-28.4 20.6-44.6 11.7-14.4-8.8-19.6-28.4-10.8-44.6 16.3-27.3 25.7-60.1 25.7-96 0-106-86-192-192-192-17.7 0-32-13.43-32-32v.9z"}),r.createElement("path",{d:"M287.1 64c-106 0-192 85.1-192 192 0 106 86 192 192 192 71 0 132.2-37.5 165.8-93.6l.1.1c-6.9 14.9-1.5 32.8 12.1 41.2 16.2 8.9 35.8 3.6 44.6-11.7.2-.3.4-.6.5-.9C466.1 460.1 383.1 512 288 512 146.6 512 32 397.4 32 256S146.6 0 288 0c-17.7 0-32 14.33-32 32s14.3 32 32 32h-.9z",fill:e.secondaryColor,style:{opacity:.4}}))};a.defaultProps={width:24,height:24,primaryColor:"currentColor",secondaryColor:"currentColor"},a.propTypes={width:o().number,height:o().number,primaryColor:o().string.isRequired,secondaryColor:o().string.isRequired};const l=a},2520:(e,t,n)=>{"use strict";n.r(t),n.d(t,{default:()=>F});var r=n(67294),i=n(87536),o=n(94184),a=n.n(o),l=n(15302),c=n(32304),s=n(18498),u=n.n(s),m=n(87462),d=n(24428),p=n(66819),f=n(66243),h=n(4693),b=n(21726),_=n(61642);const v=(0,f.Iq)((function(e,t){const n=function(e){const{expanded:t=!1,...n}=(0,b.y)(e,"VStack");return(0,_.R)({direction:"column",expanded:t,...n})}(e);return(0,r.createElement)(h.Z,(0,m.Z)({},n,{ref:t}))}),"VStack"),g=function e(t){const{label:n,className:i,selected:o,help:l,onChange:c,hideLabelFromVision:s,options:u=[],...f}=t,h=`inspector-radio-control-${(0,d.Z)(e)}`,b=e=>c(e.target.value);return null!=u&&u.length?(0,r.createElement)(p.ZP,{__nextHasNoMarginBottom:!0,label:n,id:h,hideLabelFromVision:s,help:l,className:a()(i,"components-radio-control")},(0,r.createElement)(v,{spacing:1},u.map(((e,t)=>(0,r.createElement)("div",{key:`${h}-${t}`,className:"components-radio-control__option"},(0,r.createElement)("input",(0,m.Z)({id:`${h}-${t}`,className:"components-radio-control__input",type:"radio",name:h,value:e.value,onChange:b,checked:e.value===o,"aria-describedby":l?`${h}__help`:void 0},f)),(0,r.createElement)("label",{htmlFor:`${h}-${t}`},e.label)))))):null};var y=n(9545),E=n(40314),w=n(62248),x=n(36937),O=n(80419),S=n(36191),P=n(8194),Z=n(27202),L=n(13118);function j(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,r)}return n}function q(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function C(){return C=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},C.apply(this,arguments)}function k(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var n=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=n){var r,i,o=[],a=!0,l=!1;try{for(n=n.call(e);!(a=(r=n.next()).done)&&(o.push(r.value),!t||o.length!==t);a=!0);}catch(e){l=!0,i=e}finally{try{a||null==n.return||n.return()}finally{if(l)throw i}}return o}}(e,t)||function(e,t){if(e){if("string"==typeof e)return N(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?N(e,t):void 0}}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function N(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}var M=function(){return(0,S.Z)("sce_get_mailchimp_options",{nonce:sceIntegrations.get_nonce})},D=function(e){var t,n,o,l,s=(0,e.defaults)().data,u=s.data,m=(s.success,k((0,r.useState)(!1),2)),d=m[0],p=m[1],f=k((0,r.useState)(!1),2),h=f[0],b=f[1],_=k((0,r.useState)(!1),2),v=_[0],L=_[1],N=k((0,r.useState)(!1),2),M=N[0],D=N[1],F=(0,i.cI)({defaultValues:{enableMailchimp:u.enableMailchimp,apiKey:u.apiKey,mailchimpServerPrefix:u.mailchimpServerPrefix,mailchimpLists:u.mailchimpLists,selectedList:u.selectedList,signUpLabel:u.signUpLabel,checkboxEnabled:u.checkboxEnabled}}),T=(F.register,F.control),I=F.handleSubmit,K=F.setValue,R=F.getValues,A=F.reset,U=F.setError,z=(0,i.qo)({control:T}),V=(0,i.cl)({control:T}),$=V.errors,B=(V.isDirty,V.dirtyFields,V.touchedFields,function(){return Object.keys($).length>0});return(0,r.useEffect)((function(){var e=R("apiKey");if(""!==e&&null!==e){var t=new RegExp(/-(\w+)$/),n=e.match(t);if(null!==n){var r=n[1];K("mailchimpServerPrefix",r,{shouldDirty:!1,shouldValidate:!1,shouldTouch:!1})}}}),[z.apiKey]),r.createElement(r.Fragment,null,r.createElement("h2",null,(0,c.__)("Mailchimp","comment-edit-pro")," ",r.createElement("a",{className:"sce-admin-heading-docs",target:"_blank",rel:"noreferrer",href:"https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"},"(",(0,c.__)("Docs","comment-edit-pro"),")")),r.createElement("p",{className:"description"},(0,c.__)("When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.","comment-edit-pro")),r.createElement("form",{onSubmit:I((function(e){p(!0),(0,S.Z)("sce_save_mailchimp_options",function(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?j(Object(n),!0).forEach((function(t){q(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):j(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}({nonce:sceIntegrations.save_nonce},e)).then((function(e){var t=e.data.data;if(e.data.success){var n=t.lists,r=t.mailchimp_selected_list,i=t.mailchimp_signup_label,o=[];n.forEach((function(e,t){o.push(e)})),K("selectedList",r),K("mailchimpLists",o),K("signUpLabel",i),b(!0),setTimeout((function(){b(!1)}),3e3)}else U("apiKey",{type:"noLists",message:t.message})})).catch((function(e){})).then((function(e){p(!1)}))}))},r.createElement("table",{className:"form-table"},r.createElement("tbody",null,r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("Mailchimp","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"enableMailchimp",control:T,render:function(e){var t=e.field,n=t.onChange,i=t.value;return r.createElement(E.Z,{label:(0,c.__)("Enable Mailchimp","comment-edit-pro"),className:"sce-admin__toggle-control",checked:i,onChange:function(e){n(e)},help:(0,c.__)("Enable or Disable the Mailchimp Integration.","comment-edit-pro")})}}))),R("enableMailchimp")&&r.createElement(r.Fragment,null,r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("API Key","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"apiKey",control:T,rules:{required:!0},render:function(e){var t,n=e.field;return r.createElement(y.Z,C({label:(0,c.__)("Mailchimp API Key","quotes-dlx")},n,{className:a()("sce-admin__text-control",{"has-error":"required"===(null===(t=$.apiKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,c.__)("Enter your Mailchimp API Key in order to choose a default list.","comment-edit-pro"),"aria-required":"true"}))}}),"required"===(null===(o=$.apiKey)||void 0===o?void 0:o.type)&&r.createElement(Z.Z,{message:(0,c.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:P.Z}),"noLists"===(null===(l=$.apiKey)||void 0===l?void 0:l.type)&&r.createElement(Z.Z,{message:(0,c.__)("No Mailchimp lists for the API key were found."),status:"error",politeness:"assertive",inline:!0,icon:P.Z}))),""===R("apiKey")?r.createElement(r.Fragment,null):r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("Server Prefix","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"mailchimpServerPrefix",control:T,rules:{required:!0},render:function(e){var t,n=e.field;return r.createElement(y.Z,C({label:(0,c.__)("Mailchimp Server Prefix","quotes-dlx")},n,{className:a()("sce-admin__text-control",{"has-error":"required"===(null===(t=$.apiKey)||void 0===t?void 0:t.type),"is-required":!0}),disabled:!0,help:(0,c.__)("A server prefix is automatically generated for API access.","comment-edit-pro"),"aria-required":"true"}))}}))),0===R("mailchimpLists").length?r.createElement(r.Fragment,null):r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("Mailchimp Lists","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"mailchimpLists",control:T,rules:{required:!0},render:function(e){var t=e.field,n=t.onChange;return t.value,r.createElement(g,{label:(0,c.__)("Select a default list","comment-edit-pro"),help:(0,c.__)("Select a default list that will be used for your newsletter prompt","comment-edit-pro"),selected:R("selectedList"),options:R("mailchimpLists"),onChange:function(e){n(R("mailchimpLists")),K("selectedList",e)}})}}),r.createElement(i.Qr,{name:"selectedList",control:T,rules:{required:!0},render:function(e){var t=e.field;return r.createElement(y.Z,C({},t,{type:"hidden","aria-hidden":"true"}))}}),"required"===(null===(n=$.selectedList)||void 0===n?void 0:n.type)&&r.createElement(Z.Z,{message:(0,c.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:P.Z}))),R("selectedList")?r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("Sign Up Label","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"signUpLabel",control:T,rules:{required:!0},render:function(e){var t,n=e.field;return r.createElement(y.Z,C({},n,{label:(0,c.__)("Sign-up Label","comment-edit-pro"),className:a()("sce-admin__text-control",{"has-error":"required"===(null===(t=$.signUpLabel)||void 0===t?void 0:t.type),"is-required":!0}),"aria-required":"true",help:(0,c.__)("This text will be shown in the comment section when a user leaves a comment.","comment-edit-pro")}))}}),"required"===(null===(t=$.signUpLabel)||void 0===t?void 0:t.type)&&r.createElement(Z.Z,{message:(0,c.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:P.Z}))):r.createElement(r.Fragment,null),R("selectedList")?r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,c.__)("Sign Up Checkbox","comment-edit-pro")),r.createElement("td",null,r.createElement(i.Qr,{name:"checkboxEnabled",control:T,render:function(e){var t=e.field,n=t.onChange,i=t.value;return r.createElement(E.Z,{label:(0,c.__)("Sign Up Checkbox Checked","comment-edit-pro"),className:"sce-admin__toggle-control",checked:i,onChange:function(e){n(e)},help:(0,c.__)("Check the newsletter checkbox by default (not recommended).","comment-edit-pro")})}}))):r.createElement(r.Fragment,null)))),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(w.ZP,{className:a()("qdlx__btn qdlx__btn-primary qdlx__btn--icon-right",{"has-error":B()},{"has-icon":d||h},{"is-saving":d&&!h},{"is-saved":h}),type:"submit",text:d?(0,c.__)("Saving…","quotes-dlx"):h?(0,c.__)("Saved","quotes-dlx"):(0,c.__)("Save Mailchimp Options","quotes-dlx"),icon:d?x.Z:!!h&&O.Z,iconSize:"18",iconPosition:"right",disabled:d}),""!==R("selectedList")&&r.createElement(w.ZP,{className:a()("qdlx__btn qdlx__btn-danger qdlx__btn--icon-right",{"has-icon":v},{"is-resetting":{resetting:v}}),type:"button",text:v?(0,c.__)("Disconnecting…","quotes-dlx"):M?(0,c.__)("Disconnected","quotes-dlx"):(0,c.__)("Disconnect From Mailchimp","quotes-dlx"),icon:!!v&&x.Z,iconSize:"18",iconPosition:"right",disabled:d||v,onClick:function(e){L(!0),L(!0),(0,S.Z)("sce_reset_mailchimp_options",{nonce:sceIntegrations.reset_nonce}).then((function(e){e.data.data,e.data.success&&(D(!0),A({enableMailchimp:!1,mailchimpServerPrefix:"",apiKey:"",mailchimpLists:[],selectedList:"",signUpLabel:(0,c.__)("Sign Up for Updates","comment-edit-pro")}),setTimeout((function(){D(!1)}),3e3))})).catch((function(e){})).then((function(e){L(!1)}))}})),B()&&r.createElement(Z.Z,{message:(0,c.__)("There are form validation errors. Please correct them above.","comment-edit-pro"),status:"error",politeness:"polite"}),h&&r.createElement(Z.Z,{message:(0,c.__)("Your settings have been saved.","comment-edit-pro"),status:"success",politeness:"assertive"}),M&&r.createElement(Z.Z,{message:(0,c.__)("Your settings have been reset.","comment-edit-pro"),status:"success",politeness:"assertive"})))};const F=function(e){var t=k((0,l.useAsyncResource)(M,[]),2),n=t[0];return t[1],r.createElement(L.Z,{fallback:r.createElement("p",null,(0,c.__)("Could not load Mailchimp Settings.","comment-edit-pro"),r.createElement("br",null),r.createElement("a",{href:"https://dlxplugins.com/support/",target:"_blank",rel:"noopener noreferrer"},"DLX Plugins Support"))},r.createElement(r.Suspense,{fallback:r.createElement(r.Fragment,null,r.createElement("h2",null,(0,c.__)("Mailchimp","comment-edit-pro")),r.createElement(u(),{color:"#9c68b0",loading:!0,cssOverride:!0,size:25,speedMultiplier:.65}))},r.createElement(D,C({defaults:n},e))))}},24654:()=>{}}]);
+"use strict";
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["Mailchimp0.0.2"],{
+
+/***/ "./node_modules/@wordpress/components/build-module/radio-control/index.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/radio-control/index.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "RadioControl": () => (/* binding */ RadioControl),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
+/* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
+/* harmony import */ var _v_stack__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../v-stack */ "./node_modules/@wordpress/components/build-module/v-stack/component.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Render a user interface to select the user type using radio inputs.
+ *
+ * ```jsx
+ * import { RadioControl } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * const MyRadioControl = () => {
+ *   const [ option, setOption ] = useState( 'a' );
+ *
+ *   return (
+ *     <RadioControl
+ *       label="User type"
+ *       help="The type of the current user"
+ *       selected={ option }
+ *       options={ [
+ *         { label: 'Author', value: 'a' },
+ *         { label: 'Editor', value: 'e' },
+ *       ] }
+ *       onChange={ ( value ) => setOption( value ) }
+ *     />
+ *   );
+ * };
+ * ```
+ */
+
+function RadioControl(props) {
+  const {
+    label,
+    className,
+    selected,
+    help,
+    onChange,
+    hideLabelFromVision,
+    options = [],
+    ...additionalProps
+  } = props;
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__["default"])(RadioControl);
+  const id = `inspector-radio-control-${instanceId}`;
+
+  const onChangeValue = event => onChange(event.target.value);
+
+  if (!(options !== null && options !== void 0 && options.length)) {
+    return null;
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_base_control__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    __nextHasNoMarginBottom: true,
+    label: label,
+    id: id,
+    hideLabelFromVision: hideLabelFromVision,
+    help: help,
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()(className, 'components-radio-control')
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_v_stack__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    spacing: 1
+  }, options.map((option, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("div", {
+    key: `${id}-${index}`,
+    className: "components-radio-control__option"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("input", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    id: `${id}-${index}`,
+    className: "components-radio-control__input",
+    type: "radio",
+    name: id,
+    value: option.value,
+    onChange: onChangeValue,
+    checked: option.value === selected,
+    "aria-describedby": !!help ? `${id}__help` : undefined
+  }, additionalProps)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("label", {
+    htmlFor: `${id}-${index}`
+  }, option.label)))));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RadioControl);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/text-control/index.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/text-control/index.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TextControl": () => (/* binding */ TextControl),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
+/* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function UnforwardedTextControl(props, ref) {
+  const {
+    __nextHasNoMarginBottom,
+    label,
+    hideLabelFromVision,
+    value,
+    help,
+    className,
+    onChange,
+    type = 'text',
+    ...additionalProps
+  } = props;
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__["default"])(TextControl);
+  const id = `inspector-text-control-${instanceId}`;
+
+  const onChangeValue = event => onChange(event.target.value);
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_base_control__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    __nextHasNoMarginBottom: __nextHasNoMarginBottom,
+    label: label,
+    hideLabelFromVision: hideLabelFromVision,
+    id: id,
+    help: help,
+    className: className
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("input", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    className: "components-text-control__input",
+    type: type,
+    id: id,
+    value: value,
+    onChange: onChangeValue,
+    "aria-describedby": !!help ? id + '__help' : undefined,
+    ref: ref
+  }, additionalProps)));
+}
+/**
+ * TextControl components let users enter and edit text.
+ *
+ * ```jsx
+ * import { TextControl } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * const MyTextControl = () => {
+ *   const [ className, setClassName ] = useState( '' );
+ *
+ *   return (
+ *     <TextControl
+ *       label="Additional CSS Class"
+ *       value={ className }
+ *       onChange={ ( value ) => setClassName( value ) }
+ *     />
+ *   );
+ * };
+ * ```
+ */
+
+
+const TextControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.forwardRef)(UnforwardedTextControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TextControl);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/v-stack/component.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/v-stack/component.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VStack": () => (/* binding */ VStack),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ui_context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ui/context */ "./node_modules/@wordpress/components/build-module/ui/context/context-connect.js");
+/* harmony import */ var _view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../view */ "./node_modules/@wordpress/components/build-module/view/component.js");
+/* harmony import */ var _hook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hook */ "./node_modules/@wordpress/components/build-module/v-stack/hook.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+function UnconnectedVStack(props, forwardedRef) {
+  const vStackProps = (0,_hook__WEBPACK_IMPORTED_MODULE_1__.useVStack)(props);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_view__WEBPACK_IMPORTED_MODULE_3__["default"], (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, vStackProps, {
+    ref: forwardedRef
+  }));
+}
+/**
+ * `VStack` (or Vertical Stack) is a layout component that arranges child
+ * elements in a vertical line.
+ *
+ * `VStack` can render anything inside.
+ *
+ * ```jsx
+ * import {
+ * 	__experimentalText as Text,
+ * 	__experimentalVStack as VStack,
+ * } from `@wordpress/components`;
+ *
+ * function Example() {
+ * 	return (
+ * 		<VStack>
+ * 			<Text>Code</Text>
+ * 			<Text>is</Text>
+ * 			<Text>Poetry</Text>
+ * 		</VStack>
+ * 	);
+ * }
+ * ```
+ */
+
+
+const VStack = (0,_ui_context__WEBPACK_IMPORTED_MODULE_4__.contextConnect)(UnconnectedVStack, 'VStack');
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VStack);
+//# sourceMappingURL=component.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/v-stack/hook.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/v-stack/hook.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useVStack": () => (/* binding */ useVStack)
+/* harmony export */ });
+/* harmony import */ var _ui_context__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/context */ "./node_modules/@wordpress/components/build-module/ui/context/use-context-system.js");
+/* harmony import */ var _h_stack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../h-stack */ "./node_modules/@wordpress/components/build-module/h-stack/hook.js");
+/**
+ * Internal dependencies
+ */
+
+
+function useVStack(props) {
+  const {
+    expanded = false,
+    ...otherProps
+  } = (0,_ui_context__WEBPACK_IMPORTED_MODULE_0__.useContextSystem)(props, 'VStack');
+  const hStackProps = (0,_h_stack__WEBPACK_IMPORTED_MODULE_1__.useHStack)({
+    direction: 'column',
+    expanded,
+    ...otherProps
+  });
+  return hStackProps;
+}
+//# sourceMappingURL=hook.js.map
+
+/***/ }),
+
+/***/ "./src/js/react/views/integrations/Mailchimp.js":
+/*!******************************************************!*\
+  !*** ./src/js/react/views/integrations/Mailchimp.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! use-async-resource */ "./node_modules/use-async-resource/lib/index.js");
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(use_async_resource__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
+/* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
+/* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
+/* harmony import */ var _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/icons/CircularExplanation */ "./src/js/react/components/icons/CircularExplanation.js");
+/* harmony import */ var _components_Notice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/Notice */ "./src/js/react/components/Notice/index.js");
+/* harmony import */ var _components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../components/ErrorBoundary */ "./src/js/react/components/ErrorBoundary/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/* eslint-disable no-unused-vars */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var retrieveAvatarOptions = function retrieveAvatarOptions() {
+  return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_mailchimp_options', {
+    nonce: sceIntegrations.get_nonce
+  });
+};
+
+var Mailchimp = function Mailchimp(props) {
+  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveAvatarOptions, []),
+      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+      defaults = _useAsyncResource2[0],
+      getDefaults = _useAsyncResource2[1];
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Could not load Mailchimp Settings.', 'comment-edit-pro'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+      href: "https://dlxplugins.com/support/",
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }, "DLX Plugins Support"))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_10___default()), {
+      color: '#9c68b0',
+      loading: true,
+      cssOverride: true,
+      size: 25,
+      speedMultiplier: 0.65
+    }))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Interface, _extends({
+    defaults: defaults
+  }, props))));
+};
+
+var Interface = function Interface(props) {
+  var defaults = props.defaults;
+  var response = defaults();
+  var _response$data = response.data,
+      data = _response$data.data,
+      success = _response$data.success;
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      saving = _useState2[0],
+      setSaving = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isSaved = _useState4[0],
+      setIsSaved = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      resetting = _useState6[0],
+      setResetting = _useState6[1];
+
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isReset = _useState8[0],
+      setIsReset = _useState8[1];
+
+  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useForm)({
+    defaultValues: {
+      enableMailchimp: data.enableMailchimp,
+      apiKey: data.apiKey,
+      mailchimpServerPrefix: data.mailchimpServerPrefix,
+      mailchimpLists: data.mailchimpLists,
+      selectedList: data.selectedList,
+      signUpLabel: data.signUpLabel,
+      checkboxEnabled: data.checkboxEnabled
+    }
+  }),
+      register = _useForm.register,
+      control = _useForm.control,
+      handleSubmit = _useForm.handleSubmit,
+      setValue = _useForm.setValue,
+      getValues = _useForm.getValues,
+      reset = _useForm.reset,
+      setError = _useForm.setError;
+
+  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useWatch)({
+    control: control
+  });
+
+  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useFormState)({
+    control: control
+  }),
+      errors = _useFormState.errors,
+      isDirty = _useFormState.isDirty,
+      dirtyFields = _useFormState.dirtyFields,
+      touchedFields = _useFormState.touchedFields;
+
+  var hasErrors = function hasErrors() {
+    return Object.keys(errors).length > 0;
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var apiKey = getValues('apiKey');
+
+    if ('' === apiKey || null === apiKey) {
+      return;
+    } // Try to get server prefix for Mailchimp API key.
+
+
+    var regex = new RegExp(/-(\w+)$/);
+    var matches = apiKey.match(regex); // If no matches, return empty string.
+
+    if (null === matches) {
+      return;
+    } // We have matches! Match should be index 1.
+
+
+    var serverPrefix = matches[1];
+    setValue('mailchimpServerPrefix', serverPrefix, {
+      shouldDirty: false,
+      shouldValidate: false,
+      shouldTouch: false
+    });
+  }, [formValues.apiKey]);
+
+  var onSubmit = function onSubmit(formData) {
+    setSaving(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_mailchimp_options', _objectSpread({
+      nonce: sceIntegrations.save_nonce
+    }, formData)).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var lists = ajaxData.lists,
+            mailchimp_selected_list = ajaxData.mailchimp_selected_list,
+            mailchimp_signup_label = ajaxData.mailchimp_signup_label;
+        var listsValues = [];
+        lists.forEach(function (keys, index) {
+          listsValues.push(keys);
+        });
+        setValue('selectedList', mailchimp_selected_list);
+        setValue('mailchimpLists', listsValues);
+        setValue('signUpLabel', mailchimp_signup_label);
+        setIsSaved(true);
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {
+        setError('apiKey', {
+          type: 'noLists',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setSaving(false);
+    });
+  };
+
+  var handleReset = function handleReset() {
+    setResetting(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_mailchimp_options', {
+      nonce: sceIntegrations.reset_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        setIsReset(true);
+        reset({
+          enableMailchimp: false,
+          mailchimpServerPrefix: '',
+          apiKey: '',
+          mailchimpLists: [],
+          selectedList: '',
+          signUpLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up for Updates', 'comment-edit-pro')
+        });
+        setTimeout(function () {
+          setIsReset(false);
+        }, 3000);
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setResetting(false);
+    });
+  };
+
+  var getNewsletterLabel = function getNewsletterLabel() {
+    var _errors$signUpLabel2;
+
+    if (!getValues('selectedList')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Label', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "signUpLabel",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref) {
+        var _errors$signUpLabel;
+
+        var field = _ref.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({}, field, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign-up Label', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$signUpLabel = errors.signUpLabel) === null || _errors$signUpLabel === void 0 ? void 0 : _errors$signUpLabel.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This text will be shown in the comment section when a user leaves a comment.', 'comment-edit-pro')
+        }));
+      }
+    }), 'required' === ((_errors$signUpLabel2 = errors.signUpLabel) === null || _errors$signUpLabel2 === void 0 ? void 0 : _errors$signUpLabel2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSignupCheckbox = function getSignupCheckbox() {
+    if (!getValues('selectedList')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "checkboxEnabled",
+      control: control,
+      render: function render(_ref2) {
+        var _ref2$field = _ref2.field,
+            _onChange = _ref2$field.onChange,
+            value = _ref2$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox Checked', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Check the newsletter checkbox by default (not recommended).', 'comment-edit-pro')
+        });
+      }
+    })));
+  };
+
+  var getMailchimpLists = function getMailchimpLists() {
+    var _errors$selectedList;
+
+    var mailchimpCurrentLists = getValues('mailchimpLists');
+
+    if (mailchimpCurrentLists.length === 0) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp Lists', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "mailchimpLists",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref3) {
+        var _ref3$field = _ref3.field,
+            _onChange2 = _ref3$field.onChange,
+            value = _ref3$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list', 'comment-edit-pro'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default list that will be used for your newsletter prompt', 'comment-edit-pro'),
+          selected: getValues('selectedList'),
+          options: getValues('mailchimpLists'),
+          onChange: function onChange(listValue) {
+            _onChange2(getValues('mailchimpLists'));
+
+            setValue('selectedList', listValue);
+          }
+        });
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "selectedList",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref4) {
+        var field = _ref4.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({}, field, {
+          type: "hidden",
+          "aria-hidden": "true"
+        }));
+      }
+    }), 'required' === ((_errors$selectedList = errors.selectedList) === null || _errors$selectedList === void 0 ? void 0 : _errors$selectedList.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getServerPrefix = function getServerPrefix() {
+    var apiKey = getValues('apiKey');
+
+    if ('' === apiKey) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    } // Output server prefix in readonly mode.
+
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Server Prefix', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "mailchimpServerPrefix",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref5) {
+        var _errors$apiKey;
+
+        var field = _ref5.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp Server Prefix', 'comment-edit-pro')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$apiKey = errors.apiKey) === null || _errors$apiKey === void 0 ? void 0 : _errors$apiKey.type),
+            'is-required': true
+          }),
+          disabled: true,
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('A server prefix is automatically generated for API access.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    })));
+  };
+
+  var getAPIKey = function getAPIKey() {
+    var _errors$apiKey3, _errors$apiKey4;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('API Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+      name: "apiKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref6) {
+        var _errors$apiKey2;
+
+        var field = _ref6.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], _extends({
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp API Key', 'comment-edit-pro')
+        }, field, {
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Mailchimp API Key in order to choose a default list.', 'comment-edit-pro'),
+          "aria-required": "true"
+        }));
+      }
+    }), 'required' === ((_errors$apiKey3 = errors.apiKey) === null || _errors$apiKey3 === void 0 ? void 0 : _errors$apiKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), 'noLists' === ((_errors$apiKey4 = errors.apiKey) === null || _errors$apiKey4 === void 0 ? void 0 : _errors$apiKey4.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No Mailchimp lists for the API key were found.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSaveIcon = function getSaveIcon() {
+    if (saving) {
+      return _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"];
+    }
+
+    if (isSaved) {
+      return _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__["default"];
+    }
+
+    return false;
+  };
+
+  var getSaveText = function getSaveText() {
+    if (saving) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'comment-edit-pro');
+    }
+
+    if (isSaved) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'comment-edit-pro');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Mailchimp Options', 'comment-edit-pro');
+  };
+
+  var getResetText = function getResetText() {
+    if (resetting) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'comment-edit-pro');
+    }
+
+    if (isReset) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'comment-edit-pro');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Mailchimp', 'comment-edit-pro');
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro'), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    className: "sce-admin-heading-docs",
+    target: "_blank",
+    rel: "noreferrer",
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"
+  }, "(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "description"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+    onSubmit: handleSubmit(onSubmit)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
+    className: "form-table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Mailchimp', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "enableMailchimp",
+    control: control,
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange3 = _ref7$field.onChange,
+          value = _ref7$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Mailchimp', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          //setShowButtonOptions( boolValue );
+          _onChange3(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the Mailchimp Integration.', 'comment-edit-pro')
+      });
+    }
+  }))), getValues('enableMailchimp') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getServerPrefix(), getMailchimpLists(), getNewsletterLabel(), getSignupCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin-buttons"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
+      'has-error': hasErrors()
+    }, {
+      'has-icon': saving || isSaved
+    }, {
+      'is-saving': saving && !isSaved
+    }, {
+      'is-saved': isSaved
+    }),
+    type: "submit",
+    text: getSaveText(),
+    icon: getSaveIcon(),
+    iconSize: "18",
+    iconPosition: "right",
+    disabled: saving
+  }), '' !== getValues('selectedList') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
+      'has-icon': resetting
+    }, {
+      'is-resetting': {
+        resetting: resetting
+      }
+    }),
+    type: "button",
+    text: getResetText(),
+    icon: resetting ? _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"] : false,
+    iconSize: "18",
+    iconPosition: "right",
+    disabled: saving || resetting,
+    onClick: function onClick(e) {
+      setResetting(true);
+      handleReset(e);
+    }
+  })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "polite"
+  }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  }), isReset && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been reset.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  })));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Mailchimp);
+
+/***/ })
+
+}]);
+//# sourceMappingURL=Mailchimp0.0.2.chunk.bundle.js.map
