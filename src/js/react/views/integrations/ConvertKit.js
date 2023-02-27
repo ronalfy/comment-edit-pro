@@ -12,6 +12,7 @@ import {
 	RadioControl,
 	ToggleControl,
 	CheckboxControl,
+	SelectControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
@@ -19,6 +20,7 @@ import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import RequestHeaderFields from '../webhooks/RequestHeaderFields';
 
 const retrieveConvertKitOptions = () => {
 	return sendCommand( 'sce_get_convertkit_options', {
@@ -69,6 +71,7 @@ const ConvertKit = ( props ) => {
 
 const Interface = ( props ) => {
 	const tagInput = useRef( null );
+	const customFieldInputRef = useRef( null );
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
@@ -79,7 +82,9 @@ const Interface = ( props ) => {
 	const [ credentialsRefreshing, setCredentialsRefreshing ] = useState( false );
 	const [ isRefreshingTags, setIsRefreshingTags ] = useState( false );
 	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
+	const [ isRefreshingCustomFields, setIsRefreshingCustomFields ] = useState( false );
 	const [ isAddingTag, setIsAddingTag ] = useState( false );
+	const [ isAddingCustomField, setIsAddingCustomField ] = useState( false );
 
 	const {
 		register,
@@ -100,10 +105,11 @@ const Interface = ( props ) => {
 			signUpLabel: data.signUpLabel,
 			checkboxEnabled: data.checkboxEnabled,
 			formOrTag: data.formOrTag,
-			forms: data.forms ?? [ { label: '', value: '', selected: '' } ],
-			tags: data.tags ?? [ { label: '', value: '', selected: '' } ],
-			customFields: data.customFields ?? [ { label: '', value: '', field: '' } ],
+			forms: data.forms ?? [],
+			tags: data.tags ?? [],
+			customFields: data.customFields ?? [],
 			tagInput: '',
+			customFieldInput: '',
 		},
 	} );
 
@@ -169,8 +175,6 @@ const Interface = ( props ) => {
 	};
 
 	const onSubmit = ( formData ) => {
-		console.log( formData );
-		return;
 		setSaving( true );
 		sendCommand( 'sce_save_convertkit_options', {
 			nonce: sceIntegrations.ck_save_nonce,
@@ -180,23 +184,13 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { forms, tags } = ajaxData;
-					const newFormValues = [];
-					forms.forEach( ( keys, index ) => {
-						newFormValues.push( keys );
-					} );
-					const newTagValues = [];
-					tags.forEach( ( keys, index ) => {
-						newTagValues.push( keys );
-					} );
-					setValue( 'forms', newFormValues );
-					setValue( 'tags', newTagValues );
 					setIsSaved( true );
 					setTimeout( () => {
 						setIsSaved( false );
 					}, 3000 );
 				} else {
-					setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
+					// todo - set save error.
+					// setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
@@ -287,6 +281,7 @@ const Interface = ( props ) => {
 					tags.forEach( ( keys, index ) => {
 						newTagValues.push( keys );
 					} );
+					setValue( 'tagInput', '' );
 					setValue( 'tags', newTagValues );
 				} else {
 					setError( 'tagInput', { type: 'addTagError', message: ajaxData.message } );
@@ -296,6 +291,48 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				setIsAddingTag( false );
 				tagInput.current.focus();
+			} );
+	};
+
+	const onAddCustomField = ( customFieldLabel ) => {
+		customFieldLabel = customFieldLabel.trim();
+		if ( '' === customFieldLabel ) {
+			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'The Custom Field name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentCustomFields = getValues( 'currentCustomFields' );
+		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
+		if ( customFieldExists ) {
+			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'Tag name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the Custom Field.
+		setIsAddingCustomField( true );
+		sendCommand( 'sce_add_convertkit_custom_field', {
+			nonce: sceIntegrations.ck_add_custom_field_nonce,
+			label: customFieldLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { customFields } = ajaxData;
+					const newCustomFieldValues = [];
+					customFields.forEach( ( keys, index ) => {
+						newCustomFieldValues.push( keys );
+					} );
+					setValue( 'customFields', newCustomFieldValues );
+				} else {
+					setError( 'customFieldInput', { type: 'addCustomFieldError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingCustomField( false );
+				customFieldInputRef.current.focus();
 			} );
 	};
 
@@ -432,7 +469,7 @@ const Interface = ( props ) => {
 	};
 
 	const getNewsletterLabel = () => {
-		if ( ! getValues( 'selectedList' ) ) {
+		if ( ! canShowSaveButton() ) {
 			return <></>;
 		}
 		return (
@@ -474,7 +511,7 @@ const Interface = ( props ) => {
 	};
 
 	const getSignupCheckbox = () => {
-		if ( ! getValues( 'selectedList' ) ) {
+		if ( ! canShowSaveButton() ) {
 			return <></>;
 		}
 		return (
@@ -626,6 +663,7 @@ const Interface = ( props ) => {
 
 	const getConvertKitTags = () => {
 		const convertKitTags = getValues( 'tags' );
+		console.log( convertKitTags );
 		return (
 			<tr>
 				<th scope="row">
@@ -648,16 +686,16 @@ const Interface = ( props ) => {
 						{ convertKitTags.length > 0 && getValues( 'apiValid' ) &&
 						convertKitTags.map( ( tag, index ) => (
 							<Controller
-								key={ tag.value }
+								key={ index }
 								name={ `tags[${ index }].selected` }
 								control={ control }
 								render={ ( { field: { onChange, value } } ) => (
 									<CheckboxControl
 										label={ tag.label }
-										onChange={ ( tagSelectedValue ) => {
-											onChange( tagSelectedValue );
+										onChange={ ( enableValue ) => {
+											onChange( enableValue );
 										} }
-										value={ tag.value }
+										checked={ getValues( 'tags' )[ index ].selected ?? false }
 									/>
 								) }
 							/>
@@ -743,6 +781,138 @@ const Interface = ( props ) => {
 							{ 'addTagError' === errors.tagInput?.type && (
 								<Notice
 									message={ errors.tagInput?.message }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</div>
+					</>
+				</td>
+			</tr>
+		);
+	};
+
+	const getCustomFields = () => {
+		const convertKitCustomFields = getValues( 'customFields' );
+		return (
+			<tr>
+				<th scope="row">
+					{ __( 'Custom Fields', 'comment-edit-pro' ) }
+				</th>
+				<td>
+					<>
+						{ getValues( 'customFields' ).length === 0 && (
+							<Notice
+								message={ __(
+									'There are no custom fields available. You can create one below.',
+									'comment-edit-pro'
+								) }
+								status="warning"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						{ convertKitCustomFields.length > 0 && getValues( 'apiValid' ) &&
+						convertKitCustomFields.map( ( tag, index ) => (
+							<Controller
+								key={ tag.value }
+								name={ `customFields[${ index }].field` }
+								control={ control }
+								render={ ( { field: { onChange, value } } ) => (
+									<SelectControl
+										label={ tag.label }
+										onChange={ ( customFieldSelectedValue ) => {
+											onChange( customFieldSelectedValue );
+										} }
+										selected={ value }
+										options={ RequestHeaderFields }
+									/>
+								) }
+							/>
+						) ) }
+						<div className="sce-admin-buttons">
+							<Button
+								isBusy={ isRefreshingTags }
+								disabled={ isRefreshingTags }
+								onClick={ () => {
+									onHandleTagsRefresh();
+								} }
+								className={ classNames(
+									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+									{ 'has-error': hasErrors() },
+									{ 'has-icon': isRefreshingTags },
+									{ 'is-saving': isRefreshingTags },
+								) }
+								text={ isRefreshingTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Custom Fields', 'comment-edit-pro' ) }
+							/>
+						</div>
+						{ 'noCustomFields' === errors.customFields?.type && (
+							<Notice
+								message={ errors.customFields?.message }
+								status="error"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						<div className="sce-convertkit-add-tag">
+							<div className="sce-convertkit-add-tag-group">
+								<Controller
+									name="customFieldInput"
+									control={ control }
+									rules={ {
+										pattern: /[-_ 0-9A-Za-z]/,
+									} }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											type="text"
+											value={ value }
+											onChange={ ( customFieldValue ) => {
+												clearErrors( 'customFieldInput' );
+												onChange( customFieldValue );
+											} }
+											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.customFieldInput?.type,
+											} ) }
+											placeholder={ __( 'Custom Field Name', 'comment-edit-pro' ) }
+											ref={ customFieldInputRef }
+										/>
+									) }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										onClick={ async( e ) => {
+											const validationResult = await trigger( 'customFieldInput' );
+											if ( validationResult ) {
+												onAddCustomField( getValues( 'customFieldInput' ) );
+											}
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
+										) }
+										text={
+											isAddingTag
+												? __( 'Adding…', 'comment-edit-pro' )
+												: __( 'Add Custom Field', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</div>
+							{ 'pattern' === errors.customFieldInput?.type && (
+								<Notice
+									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+							{ 'addCustomFieldError' === errors.customFieldInput?.type && (
+								<Notice
+									message={ errors.customFieldInput?.message }
 									status="error"
 									politeness="assertive"
 									inline={ false }
@@ -964,6 +1134,7 @@ const Interface = ( props ) => {
 								{ getFormOrTag() }
 								{ getConvertKitForms() }
 								{ getConvertKitTags() }
+								{ getCustomFields() }
 								{ getNewsletterLabel() }
 								{ getSignupCheckbox() }
 							</>

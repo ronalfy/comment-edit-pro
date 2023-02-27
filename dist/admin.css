@@ -740,7 +740,7 @@ h3.sce-panel-heading {
 .sce-panel-row .sce-admin__button-group--align .components-radio-control__option {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .sce-panel-row .components-base-control .components-radio-control__option:last-child,
 .sce-panel-row .components-form-token-field .components-radio-control__option:last-child,
@@ -750,13 +750,38 @@ h3.sce-panel-heading {
 .sce-panel-row .components-base-control .components-radio-control__option input[type=radio],
 .sce-panel-row .components-form-token-field .components-radio-control__option input[type=radio],
 .sce-panel-row .sce-admin__button-group--align .components-radio-control__option input[type=radio] {
+  position: relative;
   margin: 0;
   margin-right: 5px;
+  height: 20px;
+  width: 20px;
+}
+.sce-panel-row .components-base-control .components-radio-control__option input[type=radio]:checked,
+.sce-panel-row .components-form-token-field .components-radio-control__option input[type=radio]:checked,
+.sce-panel-row .sce-admin__button-group--align .components-radio-control__option input[type=radio]:checked {
+  background: #9949cf;
+  border-color: #9949cf;
+  color: #FFF;
+}
+.sce-panel-row .components-base-control .components-radio-control__option input[type=radio]:checked:before,
+.sce-panel-row .components-form-token-field .components-radio-control__option input[type=radio]:checked:before,
+.sce-panel-row .sce-admin__button-group--align .components-radio-control__option input[type=radio]:checked:before {
+  position: absolute;
+  background-color: #fff;
+  border: 4px solid #fff;
+  box-sizing: inherit;
+  height: 8px;
+  margin: 0;
+  transform: translate(5px, 5px);
+  width: 8px;
+  left: 0;
+  top: 0;
 }
 .sce-panel-row .components-base-control .components-radio-control__option label,
 .sce-panel-row .components-form-token-field .components-radio-control__option label,
 .sce-panel-row .sce-admin__button-group--align .components-radio-control__option label {
   font-weight: 400;
+  vertical-align: middle;
 }
 .sce-panel-row label.components-base-control__label {
   position: relative;
@@ -1453,16 +1478,55 @@ h2 a.sce-admin-heading-docs {
 }
 .components-checkbox-control .components-checkbox-control__label {
   display: inline-block;
-  padding-left: 10px;
   line-height: normal;
   font-size: 14px;
 }
 .components-checkbox-control .components-checkbox-control__input-container {
+  position: relative;
   display: inline-block;
-  line-height: normal;
+  margin-right: 12px;
 }
 .components-checkbox-control .components-checkbox-control__input {
-  margin: 0;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  -webkit-appearance: none;
+  background: #fff;
+  border: 1px solid #393838;
+  border-radius: 2px;
+  box-shadow: 0 0 0 transparent;
+  clear: none;
+  color: #393838;
+  cursor: pointer;
+  display: inline-block;
+  line-height: normal;
+  line-height: 0;
+  margin: 0 4px 0 0;
+  outline: 0;
+  padding: 6px 8px;
+  padding: 0 !important;
+  text-align: center;
+  transition: box-shadow 0.1s linear;
+  transition: none;
+  transition: border-color 0.1s ease-in-out;
+  vertical-align: top;
+}
+.components-checkbox-control .components-checkbox-control__input:before, .components-checkbox-control .components-checkbox-control__input:checked:before {
+  display: none;
+}
+.components-checkbox-control .components-checkbox-control__input:checked {
+  background: #8019c4;
+  border-color: #393838;
+}
+.components-checkbox-control .components-checkbox-control__input ~ svg {
+  position: absolute;
+  cursor: pointer;
+  pointer-events: none;
+  fill: #FFF;
+  height: 20px;
+  width: 20px;
+  top: 0;
+  left: 0;
 }
 
 /*# sourceMappingURL=admin.css.map*/

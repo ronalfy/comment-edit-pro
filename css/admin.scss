@@ -868,19 +868,41 @@ h3.sce-panel-heading {
 		.components-radio-control__option {
 			display: flex;
 			align-items: center;
-			margin-bottom: 10px;
+			margin-bottom: 5px;
 
 			&:last-child {
 				margin-bottom: 0;
 			}
 
 			input[type='radio'] {
+				position: relative;
 				margin: 0;
 				margin-right: 5px;
+				height: 20px;
+				width: 20px;
+
+				&:checked {
+					background: #9949cf;
+					border-color: #9949cf;
+					color: #FFF;
+					&:before {
+						position: absolute;
+						background-color: #fff;
+						border: 4px solid #fff;
+						box-sizing: inherit;
+						height: 8px;
+						margin: 0;
+						transform: translate(5px,5px);
+						width: 8px;
+						left: 0;
+						top: 0;
+					}
+				}
 			}
 
 			label {
 				font-weight: 400;
+				vertical-align: middle;;
 			}
 		}
 	}
@@ -1711,16 +1733,57 @@ h2 a.sce-admin-heading-docs {
 
 	.components-checkbox-control__label {
 		display: inline-block;
-		padding-left: 10px;
 		line-height: normal;
 		font-size: 14px;
 	}
 	.components-checkbox-control__input-container {
+		position: relative;
 		display: inline-block;
-		line-height: normal;
+		
+		margin-right: 12px;
 	}
 
 	.components-checkbox-control__input {
-		margin: 0;
+		appearance: none;
+		height: 20px;
+		width: 20px;
+		-webkit-appearance: none;
+   		 background: #fff;
+    	border: 1px solid #393838;
+    	border-radius: 2px;
+    	box-shadow: 0 0 0 transparent;
+   		clear: none;
+    color: #393838;
+    cursor: pointer;
+    display: inline-block;
+    line-height: normal;
+    line-height: 0;
+    margin: 0 4px 0 0;
+    outline: 0;
+    padding: 6px 8px;
+    padding: 0!important;
+    text-align: center;
+    transition: box-shadow .1s linear;
+    transition: none;
+    transition: border-color .1s ease-in-out;
+    vertical-align: top;
+		&:before, &:checked:before{
+			display: none;
+		}
+		&:checked {
+			background: #8019c4;
+			border-color: #393838;
+		}
+
+		& ~ svg {
+			position: absolute;
+			cursor: pointer;
+			pointer-events: none;
+			fill: #FFF;
+			height: 20px;
+			width: 20px;
+			top: 0;
+			left: 0;
+		}
 	}
 }

@@ -260,11 +260,6 @@ class Options {
 			'convertkit_form_or_tag'             => 'tag',
 			'convertkit_signup_label'            => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
 			'convertkit_checkbox_enabled'        => false,
-			'convertkit_form_id'                 => '',
-			'convertkit_tag_ids'                 => array(),
-			'convertkit_custom_fields'           => array(),
-			'convertkit_selected_form'           => 0,
-			'convertkit_selected_tags'           => array(),
 			'convertkit_api_valid'               => false,
 
 		);
