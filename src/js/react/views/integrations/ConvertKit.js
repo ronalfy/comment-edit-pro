@@ -302,10 +302,10 @@ const Interface = ( props ) => {
 		}
 
 		// Check to see if label is in use.
-		const currentCustomFields = getValues( 'currentCustomFields' );
+		const currentCustomFields = getValues( 'customFields' );
 		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
 		if ( customFieldExists ) {
-			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'Tag name already in use.', 'comment-edit-pro' ) } );
+			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'Custom Field name already in use.', 'comment-edit-pro' ) } );
 			return;
 		}
 
@@ -438,6 +438,56 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const onHandleCustomFieldsRefresh = ( formData ) => {
+		setIsRefreshingCustomFields( true );
+		sendCommand( 'sce_refresh_convertkit_custom_fields', {
+			nonce: sceIntegrations.ck_refresh_custom_fields_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { customFields, apiValid } = ajaxData;
+					const newCustomFieldValues = [];
+					const oldCustomFieldValues = getValues( 'customFields' );
+					customFields.forEach( ( keys, index ) => {
+						// Use old selection state for new tags.
+						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === customField.value );
+						if ( oldCustomFields ) {
+							keys.field = oldCustomFields.field;
+							keys.field_value = oldCustomFields.field_value ?? '';
+						}
+						newCustomFieldValues.push( keys );
+					} );
+					const updatedFormValues = {
+						customFields: newCustomFieldValues,
+						apiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'customFields', { type: 'noFields', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingCustomFields( false );
+			} );
+	};
 
 	const handleReset = () => {
 		setResetting( true );
@@ -554,7 +604,7 @@ const Interface = ( props ) => {
 		const tags = getValues( 'tags' );
 		return (
 			<tr>
-				<th scope="row">{ __( 'Forms or Tags', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'Forms and Tags', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="formOrTag"
@@ -574,11 +624,11 @@ const Interface = ( props ) => {
 									selected={ getValues( 'formOrTag' ) }
 									options={ [
 										{
-											label: __( 'Forms', 'comment-edit-pro' ),
+											label: __( 'Forms and Tags', 'comment-edit-pro' ),
 											value: 'form',
 										},
 										{
-											label: __( 'Tags', 'comment-edit-pro' ),
+											label: __( 'Tags Only', 'comment-edit-pro' ),
 											value: 'tag',
 										},
 									] }
@@ -799,7 +849,7 @@ const Interface = ( props ) => {
 		return (
 			<tr>
 				<th scope="row">
-					{ __( 'Custom Fields', 'comment-edit-pro' ) }
+					{ __( 'Map Custom Fields', 'comment-edit-pro' ) }
 				</th>
 				<td>
 					<>
@@ -817,36 +867,70 @@ const Interface = ( props ) => {
 						) }
 						{ convertKitCustomFields.length > 0 && getValues( 'apiValid' ) &&
 						convertKitCustomFields.map( ( tag, index ) => (
-							<Controller
-								key={ tag.value }
-								name={ `customFields[${ index }].field` }
-								control={ control }
-								render={ ( { field: { onChange, value } } ) => (
-									<SelectControl
-										label={ tag.label }
-										onChange={ ( customFieldSelectedValue ) => {
-											onChange( customFieldSelectedValue );
-										} }
-										selected={ value }
-										options={ RequestHeaderFields }
-									/>
+							<div className="sce-convertkit-custom-field" key={ index }>
+								{ 'custom' !== getValues( 'customFields' )[ index ].field && (
+									<>
+										<Controller
+											name={ `customFields[${ index }].field` }
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ tag.label }
+													onChange={ ( customFieldSelectedValue ) => {
+														onChange( customFieldSelectedValue );
+													} }
+													value={ getValues( 'customFields' )[ index ].field ?? false }
+													options={ RequestHeaderFields }
+													className="sce-admin__select-control"
+												/>
+											) }
+										/>
+									</>
 								) }
-							/>
+								{ 'custom' === getValues( 'customFields' )[ index ].field && (
+									<>
+										<Controller
+											name={ `customFields[${ index }].field_value` }
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													value={ value ?? '' }
+													className={ classNames( 'sce-admin__text-control', {
+													} ) }
+													onChange={ ( methodValue ) => {
+														onChange( methodValue );
+													} }
+													label={ tag.label }
+												/>
+											) }
+										/>
+										<Button
+											className="sce-admin__text-control-reset button-reset"
+											icon="no-alt"
+											label={ __( 'Clear Text Input', 'comment-edit-pro' ) }
+											onClick={ () => {
+												setValue( `customFields[${ index }].field`, 'none' );
+											} }
+											showTooltip={ false }
+										/>
+									</>
+								) }
+							</div>
 						) ) }
 						<div className="sce-admin-buttons">
 							<Button
-								isBusy={ isRefreshingTags }
-								disabled={ isRefreshingTags }
+								isBusy={ isRefreshingCustomFields }
+								disabled={ isRefreshingCustomFields }
 								onClick={ () => {
-									onHandleTagsRefresh();
+									onHandleCustomFieldsRefresh();
 								} }
 								className={ classNames(
 									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
 									{ 'has-error': hasErrors() },
-									{ 'has-icon': isRefreshingTags },
-									{ 'is-saving': isRefreshingTags },
+									{ 'has-icon': isRefreshingCustomFields },
+									{ 'is-saving': isRefreshingCustomFields },
 								) }
-								text={ isRefreshingTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Custom Fields', 'comment-edit-pro' ) }
+								text={ isRefreshingCustomFields ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Custom Fields', 'comment-edit-pro' ) }
 							/>
 						</div>
 						{ 'noCustomFields' === errors.customFields?.type && (

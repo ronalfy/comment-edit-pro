@@ -46,8 +46,11 @@ class ConvertKit {
 		// Add a custom field to ConvertKit account.
 		add_action( 'wp_ajax_sce_add_convertkit_custom_field', array( $this, 'ajax_add_convertkit_custom_field' ) );
 
-		// Add a tag to ConvertKit account.
+		// Refresh tags for a ConvertKit account.
 		add_action( 'wp_ajax_sce_refresh_convertkit_tags', array( $this, 'ajax_refresh_convertkit_tags' ) );
+
+		// Refresh custom fields for a ConvertKit account.
+		add_action( 'wp_ajax_sce_refresh_convertkit_custom_fields', array( $this, 'ajax_refresh_convertkit_custom_fields' ) );
 
 		// Reset ConvertKit API key.
 		add_action( 'wp_ajax_sce_reset_convertkit_options', array( $this, 'ajax_reset_convertkit_options' ) );
@@ -519,6 +522,92 @@ class ConvertKit {
 	}
 
 	/**
+	 * Refresh ConvertKit Custom Fields.
+	 */
+	public function ajax_refresh_convertkit_custom_fields() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-custom-fields' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get saved vars.
+		$options        = Options::get_options();
+		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
+		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Bearer ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+		$http_args['body']    = array(
+			'api_key'    => $api_key,
+			'api_secret' => $api_secret_key,
+		);
+
+		// Get endpoints.
+		$custom_fields_api_endpoint = esc_url_raw( $this->convertkit_api . '/custom_fields' );
+
+		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
+		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get custom fields as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_custom_fields = (array) get_site_option( 'sce_convertkit_custom_fields', array() );
+		} else {
+			$existing_custom_fields = (array) get_option( 'sce_convertkit_custom_fields', array() );
+		}
+
+		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
+		$custom_fields                 = $custom_fields_raw['custom_fields'];
+		$sanitized_custom_field_values = array();
+		foreach ( $custom_fields as $index => $values ) {
+			$sanitized_custom_field_values[ $index ] = array(
+				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
+				'id'    => absint( $custom_fields[ $index ]['id'] ),
+			);
+
+			// Add in the field map.
+			if ( ! empty( $existing_custom_fields ) ) {
+				foreach ( $existing_custom_fields as $existing_custom_field ) {
+					if ( $existing_custom_fields['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
+						continue;
+					}
+					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_fields['field'] ?? 'none';
+					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_fields['field_custom'] ?? '';
+				}
+			}
+		}
+
+		// Save custom fields as an option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
+		} else {
+			update_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
+		}
+
+		// Return tags.
+		wp_send_json_success(
+			array(
+				'customFields' => $sanitized_custom_field_values,
+				'apiValid'     => true,
+			)
+		);
+	}
+
+	/**
 	 * Add a new Tag to ConvertKit.
 	 */
 	public function ajax_add_convertkit_tag() {
@@ -585,7 +674,7 @@ class ConvertKit {
 		}
 
 		// Tag has been created. Let's get the new tag ID.
-		$tag_body = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
+		$tag_body     = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
 		$added_tag_id = $tag_body['id'];
 
 		// Start building up HTTP args.
@@ -603,8 +692,6 @@ class ConvertKit {
 		if ( is_wp_error( $tags_api_response ) || 200 !== wp_remote_retrieve_response_code( $tags_api_response ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
 		}
-
-		
 
 		// Get tags as an option.
 		if ( Functions::is_multisite() ) {
@@ -739,6 +826,13 @@ class ConvertKit {
 			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from ConvertKit.', 'comment-edit-pro' ) ) );
 		}
 
+		// Get tags as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_custom_fields = (array) get_site_option( 'sce_convertkit_custom_fields', array() );
+		} else {
+			$existing_custom_fields = (array) get_option( 'sce_convertkit_custom_fields', array() );
+		}
+
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw['custom_fields'];
 		$sanitized_custom_field_values = array();
@@ -748,9 +842,20 @@ class ConvertKit {
 				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
 				'id'    => absint( $custom_fields[ $index ]['id'] ),
 			);
+
+			// Add in the field map.
+			if ( ! empty( $existing_custom_fields ) ) {
+				foreach ( $existing_custom_fields as $existing_custom_field ) {
+					if ( $existing_custom_fields['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
+						continue;
+					}
+					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_fields['field'] ?? 'none';
+					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_fields['field_custom'] ?? '';
+				}
+			}
 		}
 
-		// Save tags as an option.
+		// Save custom fields as an option.
 		if ( Functions::is_multisite() ) {
 			update_site_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
 		} else {

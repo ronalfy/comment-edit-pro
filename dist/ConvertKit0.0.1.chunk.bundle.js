@@ -609,7 +609,7 @@ var Interface = function Interface(props) {
     } // Check to see if label is in use.
 
 
-    var currentCustomFields = getValues('currentCustomFields');
+    var currentCustomFields = getValues('customFields');
     var customFieldExists = currentCustomFields.find(function (customField) {
       return customField.label === customFieldLabel;
     });
@@ -617,7 +617,7 @@ var Interface = function Interface(props) {
     if (customFieldExists) {
       setError('customFieldInput', {
         type: 'addCustomFieldError',
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name already in use.', 'comment-edit-pro')
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field name already in use.', 'comment-edit-pro')
       });
       return;
     } // Start adding the Custom Field.
@@ -750,6 +750,58 @@ var Interface = function Interface(props) {
     });
   };
 
+  var onHandleCustomFieldsRefresh = function onHandleCustomFieldsRefresh(formData) {
+    setIsRefreshingCustomFields(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_custom_fields', {
+      nonce: sceIntegrations.ck_refresh_custom_fields_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var customFields = ajaxData.customFields,
+            apiValid = ajaxData.apiValid;
+        var newCustomFieldValues = [];
+        var oldCustomFieldValues = getValues('customFields');
+        customFields.forEach(function (keys, index) {
+          // Use old selection state for new tags.
+          var oldCustomFields = oldCustomFieldValues.find(function (customField) {
+            return customField.value === customField.value;
+          });
+
+          if (oldCustomFields) {
+            var _oldCustomFields$fiel;
+
+            keys.field = oldCustomFields.field;
+            keys.field_value = (_oldCustomFields$fiel = oldCustomFields.field_value) !== null && _oldCustomFields$fiel !== void 0 ? _oldCustomFields$fiel : '';
+          }
+
+          newCustomFieldValues.push(keys);
+        });
+        var updatedFormValues = {
+          customFields: newCustomFieldValues,
+          apiValid: apiValid
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues4 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues4), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('customFields', {
+          type: 'noFields',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingCustomFields(false);
+    });
+  };
+
   var handleReset = function handleReset() {
     setResetting(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_convertkit_options', {
@@ -857,7 +909,7 @@ var Interface = function Interface(props) {
     var tags = getValues('tags');
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms or Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
       name: "formOrTag",
       control: control,
       rules: {
@@ -872,10 +924,10 @@ var Interface = function Interface(props) {
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select whether to add new subscribers to a an existing ConvertKit form or tag(s).', 'comment-edit-pro'),
           selected: getValues('formOrTag'),
           options: [{
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms', 'comment-edit-pro'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro'),
             value: 'form'
           }, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tags', 'comment-edit-pro'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tags Only', 'comment-edit-pro'),
             value: 'tag'
           }],
           onChange: function onChange(formOrTagValue) {
@@ -1090,18 +1142,22 @@ var Interface = function Interface(props) {
     var convertKitCustomFields = getValues('customFields');
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Fields', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getValues('customFields').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map Custom Fields', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getValues('customFields').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no custom fields available. You can create one below.', 'comment-edit-pro'),
       status: "warning",
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     }), convertKitCustomFields.length > 0 && getValues('apiValid') && convertKitCustomFields.map(function (tag, index) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
-        key: tag.value,
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+        className: "sce-convertkit-custom-field",
+        key: index
+      }, 'custom' !== getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
         name: "customFields[".concat(index, "].field"),
         control: control,
         render: function render(_ref9) {
+          var _getValues$index$fiel;
+
           var _ref9$field = _ref9.field,
               _onChange6 = _ref9$field.onChange,
               value = _ref9$field.value;
@@ -1110,27 +1166,52 @@ var Interface = function Interface(props) {
             onChange: function onChange(customFieldSelectedValue) {
               _onChange6(customFieldSelectedValue);
             },
-            selected: value,
-            options: _webhooks_RequestHeaderFields__WEBPACK_IMPORTED_MODULE_10__["default"]
+            value: (_getValues$index$fiel = getValues('customFields')[index].field) !== null && _getValues$index$fiel !== void 0 ? _getValues$index$fiel : false,
+            options: _webhooks_RequestHeaderFields__WEBPACK_IMPORTED_MODULE_10__["default"],
+            className: "sce-admin__select-control"
           });
         }
-      });
+      })), 'custom' === getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
+        name: "customFields[".concat(index, "].field_value"),
+        control: control,
+        render: function render(_ref10) {
+          var _ref10$field = _ref10.field,
+              _onChange7 = _ref10$field.onChange,
+              value = _ref10$field.value;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
+            value: value !== null && value !== void 0 ? value : '',
+            className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {}),
+            onChange: function onChange(methodValue) {
+              _onChange7(methodValue);
+            },
+            label: tag.label
+          });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+        className: "sce-admin__text-control-reset button-reset",
+        icon: "no-alt",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
+        onClick: function onClick() {
+          setValue("customFields[".concat(index, "].field"), 'none');
+        },
+        showTooltip: false
+      })));
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      isBusy: isRefreshingTags,
-      disabled: isRefreshingTags,
+      isBusy: isRefreshingCustomFields,
+      disabled: isRefreshingCustomFields,
       onClick: function onClick() {
-        onHandleTagsRefresh();
+        onHandleCustomFieldsRefresh();
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
         'has-error': hasErrors()
       }, {
-        'has-icon': isRefreshingTags
+        'has-icon': isRefreshingCustomFields
       }, {
-        'is-saving': isRefreshingTags
+        'is-saving': isRefreshingCustomFields
       }),
-      text: isRefreshingTags ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Custom Fields', 'comment-edit-pro')
+      text: isRefreshingCustomFields ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Custom Fields', 'comment-edit-pro')
     })), 'noCustomFields' === ((_errors$customFields = errors.customFields) === null || _errors$customFields === void 0 ? void 0 : _errors$customFields.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (_errors$customFields2 = errors.customFields) === null || _errors$customFields2 === void 0 ? void 0 : _errors$customFields2.message,
       status: "error",
@@ -1147,19 +1228,19 @@ var Interface = function Interface(props) {
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
       },
-      render: function render(_ref10) {
+      render: function render(_ref11) {
         var _errors$customFieldIn;
 
-        var _ref10$field = _ref10.field,
-            _onChange7 = _ref10$field.onChange,
-            value = _ref10$field.value;
+        var _ref11$field = _ref11.field,
+            _onChange8 = _ref11$field.onChange,
+            value = _ref11$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
           type: "text",
           value: value,
           onChange: function onChange(customFieldValue) {
             clearErrors('customFieldInput');
 
-            _onChange7(customFieldValue);
+            _onChange8(customFieldValue);
           },
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Custom Field', 'comment-edit-pro'),
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
@@ -1173,7 +1254,7 @@ var Interface = function Interface(props) {
       className: "sce-admin-buttons"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       onClick: /*#__PURE__*/function () {
-        var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+        var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
           var validationResult;
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) {
@@ -1198,7 +1279,7 @@ var Interface = function Interface(props) {
         }));
 
         return function (_x2) {
-          return _ref11.apply(this, arguments);
+          return _ref12.apply(this, arguments);
         };
       }(),
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
@@ -1229,18 +1310,18 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref12) {
+      render: function render(_ref13) {
         var _errors$apiKey;
 
-        var _ref12$field = _ref12.field,
-            _onChange8 = _ref12$field.onChange,
-            value = _ref12$field.value;
+        var _ref13$field = _ref13.field,
+            _onChange9 = _ref13$field.onChange,
+            value = _ref13$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit API Key', 'comment-edit-pro'),
           type: "text",
           value: value,
           onChange: function onChange(apiKeyValue) {
-            _onChange8(apiKeyValue);
+            _onChange9(apiKeyValue);
 
             clearErrors();
           },
@@ -1278,18 +1359,18 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref13) {
+      render: function render(_ref14) {
         var _errors$secretKey;
 
-        var _ref13$field = _ref13.field,
-            _onChange9 = _ref13$field.onChange,
-            value = _ref13$field.value;
+        var _ref14$field = _ref14.field,
+            _onChange10 = _ref14$field.onChange,
+            value = _ref14$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Secret Key', 'comment-edit-pro'),
           type: "text",
           value: value,
           onChange: function onChange(secretKey) {
-            _onChange9(secretKey);
+            _onChange10(secretKey);
 
             clearErrors();
           },
@@ -1388,17 +1469,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
     name: "enableConvertKit",
     control: control,
-    render: function render(_ref14) {
-      var _ref14$field = _ref14.field,
-          _onChange10 = _ref14$field.onChange,
-          value = _ref14$field.value;
+    render: function render(_ref15) {
+      var _ref15$field = _ref15.field,
+          _onChange11 = _ref15$field.onChange,
+          value = _ref15$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable ConvertKit', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange10(boolValue);
+          _onChange11(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the ConvertKit Integration.', 'comment-edit-pro')
       });

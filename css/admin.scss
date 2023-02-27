@@ -151,7 +151,6 @@ $danger_button_color_text: #fff;
 	display: none;
 }
 
-
 /* Button Options */
 .sce-button {
 	padding: 10px 20px;
@@ -182,14 +181,13 @@ $danger_button_color_text: #fff;
 
 	&.sce-button-primary {
 		background: #9c68b0;
-		color: #FFF;
+		color: #fff;
 
 		&:hover {
 			background: lighten(#9c68b0, 10%);
 		}
 	}
 
-	
 	&.sce-button-danger {
 		background: $danger_button_color;
 		color: $danger_button_color_text;
@@ -264,8 +262,8 @@ h3.sce-panel-heading {
 
 .sce-admin-panel-area {
 	position: relative;
-	background-color: #FFF;
-	border: 1px solid #DDD;
+	background-color: #fff;
+	border: 1px solid #ddd;
 	box-shadow: 1px 1px 7px 2px rgba(221, 221, 221, 0.6);
 	padding: 20px;
 	margin-bottom: 2.2em;
@@ -283,14 +281,11 @@ h3.sce-panel-heading {
 	}
 }
 
-
 .sce-admin-logo {
-
 	img {
 		width: 100%;
 		max-width: 450px;
 		display: inline-block;
-
 	}
 }
 
@@ -442,7 +437,7 @@ h3.sce-panel-heading {
 				}
 
 				.components-form-toggle__thumb {
-					background-color: #FFF;
+					background-color: #fff;
 					border-width: 0;
 					transform: translateX(18px);
 				}
@@ -462,7 +457,7 @@ h3.sce-panel-heading {
 	.components-range-control__track {
 		color: #8019c4;
 
-		&~span {
+		& ~ span {
 			background-color: #8019c4;
 		}
 	}
@@ -540,7 +535,6 @@ h3.sce-panel-heading {
 			}
 
 			&:hover {
-
 				&:before,
 				&:after {
 					background: #8019c4;
@@ -566,7 +560,6 @@ h3.sce-panel-heading {
 				}
 
 				&:hover {
-
 					&:before,
 					&:after {
 						background: #8019c4;
@@ -621,7 +614,7 @@ h3.sce-panel-heading {
 			justify-content: center;
 			grid-column-gap: 0.5em;
 			grid-row-gap: 0.4em;
-			padding: 1.0rem 0.5rem 1.0rem 1rem;
+			padding: 1rem 0.5rem 1rem 1rem;
 			font-size: 16px;
 			text-decoration: none;
 			margin: 0;
@@ -642,7 +635,6 @@ h3.sce-panel-heading {
 					grid-column-start: 2;
 					grid-column-end: 4;
 				}
-
 			}
 		}
 
@@ -658,7 +650,7 @@ h3.sce-panel-heading {
 	.sce-admin-tab-content {
 		order: 3;
 
-		&~span {
+		& ~ span {
 			display: inline-block;
 			order: 2;
 			background: #8019c4;
@@ -678,14 +670,14 @@ h3.sce-panel-heading {
 	}
 
 	button {
-		background: #FFF;
+		background: #fff;
 		color: #017e01;
 		border-style: solid;
 		border-color: #017e01;
 		padding: 10px 20px;
 		cursor: pointer;
 		border-radius: 5px;
-		transition: all .4s ease-in-out;
+		transition: all 0.4s ease-in-out;
 
 		&:hover {
 			border-radius: 5px;
@@ -703,12 +695,12 @@ h3.sce-panel-heading {
 		}
 
 		&.qdlx__btn-white {
-			background: #FFF;
+			background: #fff;
 			color: #333;
 			border-color: #111;
 
 			&:hover {
-				background: darken( #FFF, 10% );
+				background: darken(#fff, 10%);
 				color: #111;
 				border-color: #000;
 			}
@@ -716,13 +708,13 @@ h3.sce-panel-heading {
 
 		&.qdlx__btn-secondary {
 			background: #333;
-			color: #FFFFFF;
+			color: #ffffff;
 			border-color: #111;
 
 			&:hover {
-				background: lighten( #333, 10% );
-				color: #FFFFFF;
-				border-color: lighten( #111, 10% );
+				background: lighten(#333, 10%);
+				color: #ffffff;
+				border-color: lighten(#111, 10%);
 			}
 		}
 
@@ -735,7 +727,7 @@ h3.sce-panel-heading {
 		}
 
 		&.qdlx__btn-danger {
-			background: #FFF;
+			background: #fff;
 			color: #822700;
 			border-color: #822700;
 
@@ -749,7 +741,7 @@ h3.sce-panel-heading {
 		&.sce__btn-action {
 			display: flex;
 			align-items: center;
-			background: #FFF;
+			background: #fff;
 			color: #9949cf;
 			border-color: #9949cf;
 			font-weight: 600;
@@ -829,11 +821,22 @@ h3.sce-panel-heading {
 
 /* Text fields */
 .sce-panel-row {
-
 	p.components-base-control__help,
 	p.components-form-token-field__help {
 		font-size: 13px;
 		font-style: italic;
+	}
+
+	// Select control styles.
+	.components-select-control,
+	.components-radio-control {
+		label {
+			font-weight: 700 !important; /* override core styles */
+			font-size: 0.8125rem !important /* override core styles */
+		}
+	}
+	.components-select-control {
+		margin-bottom: 25px !important; /* override core styles */
 	}
 
 	// Text control styles.
@@ -884,7 +887,7 @@ h3.sce-panel-heading {
 				&:checked {
 					background: #9949cf;
 					border-color: #9949cf;
-					color: #FFF;
+					color: #fff;
 					&:before {
 						position: absolute;
 						background-color: #fff;
@@ -892,7 +895,7 @@ h3.sce-panel-heading {
 						box-sizing: inherit;
 						height: 8px;
 						margin: 0;
-						transform: translate(5px,5px);
+						transform: translate(5px, 5px);
 						width: 8px;
 						left: 0;
 						top: 0;
@@ -902,7 +905,7 @@ h3.sce-panel-heading {
 
 			label {
 				font-weight: 400;
-				vertical-align: middle;;
+				vertical-align: middle;
 			}
 		}
 	}
@@ -915,7 +918,7 @@ h3.sce-panel-heading {
 		position: absolute;
 		display: inline-block;
 		vertical-align: middle;
-		content: "*";
+		content: '*';
 		top: -3px;
 		right: -12px;
 		color: #b53b07;
@@ -1116,7 +1119,7 @@ h2 a.sce-admin-heading-docs {
 		width: 40px;
 		height: 40px;
 		overflow: hidden;
-		top: calc(50% - (0.6875rem/2) - 4px);
+		top: calc(50% - (0.6875rem / 2) - 4px);
 		/* 50% height - padding/2 - bottom margin/2) */
 		right: 0.5rem;
 		line-height: 0;
@@ -1135,7 +1138,7 @@ h2 a.sce-admin-heading-docs {
 			padding: 0;
 
 			&:hover {
-				&~label {
+				& ~ label {
 					svg path {
 						fill: var(--sce-admin--color-text-link-color--hover);
 					}
@@ -1250,7 +1253,7 @@ h2 a.sce-admin-heading-docs {
 /* Table Styles when rows are sections */
 .form-table-row-sections {
 	tr {
-		border-bottom: 1px solid #EEE;
+		border-bottom: 1px solid #eee;
 
 		&:last-child {
 			border-bottom: 0;
@@ -1296,7 +1299,7 @@ h2 a.sce-admin-heading-docs {
 .sce-admin-panel-card {
 	background: #fff;
 	border-radius: 15px;
-	box-shadow: 0 1px 3px rgba(156, 104, 176, .45);
+	box-shadow: 0 1px 3px rgba(156, 104, 176, 0.45);
 	padding: 20px;
 	overflow: hidden;
 
@@ -1415,7 +1418,7 @@ h2 a.sce-admin-heading-docs {
 		border: 0;
 		border-radius: 0;
 		box-shadow: none;
-		color: var(--wp-admin-theme-color,#007cba);
+		color: var(--wp-admin-theme-color, #007cba);
 		height: auto;
 		margin: 0;
 		outline: none;
@@ -1423,12 +1426,12 @@ h2 a.sce-admin-heading-docs {
 		cursor: pointer;
 		text-align: left;
 		text-decoration: underline;
-		transition-duration: .05s;
-		transition-property: border,background,color;
+		transition-duration: 0.05s;
+		transition-property: border, background, color;
 		transition-timing-function: ease-in-out;
 
 		&.sce__btn-delete {
-			color: var( --wp-components-color-accent, #cc1818 );
+			color: var(--wp-components-color-accent, #cc1818);
 			outline: 1px solid transparent;
 		}
 	}
@@ -1458,7 +1461,7 @@ h2 a.sce-admin-heading-docs {
 		height: unset !important
 			/* override core style */
 		;
-		padding: .4575rem 2rem .4575rem 1rem !important;
+		padding: 0.4575rem 2rem 0.4575rem 1rem !important;
 		/* override core style */
 		width: 100% !important;
 		max-width: unset !important;
@@ -1480,9 +1483,9 @@ h2 a.sce-admin-heading-docs {
 
 	.sce-admin__text-control-reset {
 		position: absolute;
-		top: calc(50% - 0.5em - (0.4575rem/2));
+		top: calc(50% - 0.5em - (0.4575rem / 2));
 		right: 10px;
-		color: #CCC;
+		color: #ccc;
 	}
 
 	&:not(:last-child) {
@@ -1529,8 +1532,6 @@ h2 a.sce-admin-heading-docs {
 			padding-bottom: 0;
 		}
 	}
-
-
 }
 
 @keyframes sceAdminModalFadeIn {
@@ -1571,9 +1572,8 @@ h2 a.sce-admin-heading-docs {
 	// Use the entire viewport on smaller screens.
 	margin: 0;
 	width: 100%;
-	background: #FFFFFF;
+	background: #ffffff;
 	box-shadow: 1px 1px 7px 2px rgba(221, 221, 221, 0.6);
-	;
 	border-radius: 4px;
 	overflow: hidden;
 	// Have the content element fill the vertical space yet not overflow.
@@ -1599,7 +1599,7 @@ h2 a.sce-admin-heading-docs {
 		}
 	}
 
-	@include respond-to( 'large' ) {
+	@include respond-to('large') {
 		max-height: 70%;
 	}
 }
@@ -1613,7 +1613,7 @@ h2 a.sce-admin-heading-docs {
 	height: 60px;
 	justify-content: space-between;
 	width: 100%;
-	background: #FFF;
+	background: #fff;
 	z-index: 100000;
 	position: absolute;
 	top: 0;
@@ -1677,7 +1677,8 @@ h2 a.sce-admin-heading-docs {
 	}
 
 	&.is-scrollable:focus-visible {
-		box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+		box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus)
+			var(--wp-admin-theme-color);
 
 		// Windows High Contrast mode will show this outline, but not the box-shadow.
 		outline: 2px solid transparent;
@@ -1709,7 +1710,7 @@ h2 a.sce-admin-heading-docs {
 	.components-base-control__field {
 		margin-bottom: 0 !important; /* override core style */
 	}
-	.sce-admin__text-control input[type=text] {
+	.sce-admin__text-control input[type='text'] {
 		width: 100%;
 		max-width: 100%;
 	}
@@ -1739,7 +1740,7 @@ h2 a.sce-admin-heading-docs {
 	.components-checkbox-control__input-container {
 		position: relative;
 		display: inline-block;
-		
+
 		margin-right: 12px;
 	}
 
@@ -1748,26 +1749,27 @@ h2 a.sce-admin-heading-docs {
 		height: 20px;
 		width: 20px;
 		-webkit-appearance: none;
-   		 background: #fff;
-    	border: 1px solid #393838;
-    	border-radius: 2px;
-    	box-shadow: 0 0 0 transparent;
-   		clear: none;
-    color: #393838;
-    cursor: pointer;
-    display: inline-block;
-    line-height: normal;
-    line-height: 0;
-    margin: 0 4px 0 0;
-    outline: 0;
-    padding: 6px 8px;
-    padding: 0!important;
-    text-align: center;
-    transition: box-shadow .1s linear;
-    transition: none;
-    transition: border-color .1s ease-in-out;
-    vertical-align: top;
-		&:before, &:checked:before{
+		background: #fff;
+		border: 1px solid #393838;
+		border-radius: 2px;
+		box-shadow: 0 0 0 transparent;
+		clear: none;
+		color: #393838;
+		cursor: pointer;
+		display: inline-block;
+		line-height: normal;
+		line-height: 0;
+		margin: 0 4px 0 0;
+		outline: 0;
+		padding: 6px 8px;
+		padding: 0 !important;
+		text-align: center;
+		transition: box-shadow 0.1s linear;
+		transition: none;
+		transition: border-color 0.1s ease-in-out;
+		vertical-align: top;
+		&:before,
+		&:checked:before {
 			display: none;
 		}
 		&:checked {
@@ -1779,11 +1781,34 @@ h2 a.sce-admin-heading-docs {
 			position: absolute;
 			cursor: pointer;
 			pointer-events: none;
-			fill: #FFF;
+			fill: #fff;
 			height: 20px;
 			width: 20px;
 			top: 0;
 			left: 0;
 		}
+	}
+}
+
+/* Select Control for ConvertKit */
+.sce-convertkit-custom-field {
+	position: relative;
+	.components-select-control__input,
+	.components-text-control__input {
+		height: unset !important
+			/* override core style */
+		;
+		padding: 0.4575rem 2rem 0.4575rem 1rem !important;
+		/* override core style */
+		width: 100% !important;
+		max-width: unset !important;
+		/* override core style */
+	}
+
+	.sce-admin__text-control-reset {
+		position: absolute;
+		bottom: calc(13px/2 + (0.4575rem/2));
+		right: 10px;
+		color: #ccc;
 	}
 }
