@@ -21,6 +21,7 @@ import CircularExclamationIcon from '../../components/icons/CircularExplanation'
 import Notice from '../../components/Notice';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import RequestHeaderFields from '../webhooks/RequestHeaderFields';
+import ConvertKitIcon from '../../components/icons/ConvertKit';
 
 const retrieveConvertKitOptions = () => {
 	return sendCommand( 'sce_get_convertkit_options', {
@@ -1158,23 +1159,29 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>
-				{ __( 'ConvertKit', 'comment-edit-pro' ) }{ ' ' }
-				<a
-					className="sce-admin-heading-docs"
-					target="_blank"
-					rel="noreferrer"
-					href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"
-				>
-					({ __( 'Docs', 'comment-edit-pro' ) })
-				</a>
-			</h2>
-			<p className="description">
-				{ __(
-					'When someone leaves a comment, they can be given the option to subscribe to your ConvertKit account.',
-					'comment-edit-pro'
-				) }
-			</p>
+			<div className="sce-admin__tabs--content-heading">
+				<h2>
+					<ConvertKitIcon width={ 48 } height={ 45 } fill={ '#FB6068' } aria-hidden="true" />
+					<span className="sce-admin__heading--text">
+						{ __( 'ConvertKit', 'comment-edit-pro' ) }
+					</span>
+					<a
+						className="sce-admin-heading-docs"
+						target="_blank"
+						rel="noreferrer"
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"
+					>
+						({ __( 'Docs', 'comment-edit-pro' ) })
+					</a>
+				</h2>
+
+				<p className="description">
+					{ __(
+						'When someone leaves a comment, they can be given the option to subscribe to your ConvertKit account.',
+						'comment-edit-pro'
+					) }
+				</p>
+			</div>
 			<form
 				onSubmit={ handleSubmit( ( submitData, e ) => {
 					e.preventDefault();

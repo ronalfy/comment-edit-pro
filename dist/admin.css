@@ -1032,6 +1032,7 @@ h2 a.sce-admin-heading-docs {
 }
 .sce-admin__tabs--content-heading h2 span.sce-admin__heading--text {
   margin-left: 8px;
+  margin-right: 8px;
 }
 
 /* License Table */

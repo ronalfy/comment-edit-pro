@@ -20,6 +20,7 @@ import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import SlackIcon from '../../components/icons/Slack';
 
 const retrieveRecaptchaSettings = () => {
 	return sendCommand( 'sce_get_slack_options', {
@@ -65,7 +66,6 @@ const Slack = ( props ) => {
 				<Interface defaults={ defaults } { ...props } />
 			</Suspense>
 		</ErrorBoundary>
-
 	);
 };
 
@@ -173,7 +173,9 @@ const Interface = ( props ) => {
 								label={ __( 'Slack Webhook URL', 'quotes-dlx' ) }
 								value={ escapeAttribute( value ) }
 								className={ classNames( 'sce-admin__text-control', {
-									'has-error': ( 'required' === errors.slackWebhookUrl?.type || 'validate' === errors.slackWebhookUrl?.type ),
+									'has-error':
+										'required' === errors.slackWebhookUrl?.type ||
+										'validate' === errors.slackWebhookUrl?.type,
 									'is-required': true,
 								} ) }
 								help={ __( 'Enter your Slack webhook URL', 'comment-edit-pro' ) }
@@ -301,23 +303,33 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>
-				{ __( 'Slack Notifications', 'comment-edit-pro' ) }{ ' ' }
-				<a
-					className="sce-admin-heading-docs"
-					target="_blank"
-					rel="noreferrer"
-					href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/slack-integration"
-				>
-					({ __( 'Docs', 'comment-edit-pro' ) })
-				</a>
-			</h2>
-			<p className="description">
-				{ __(
-					'Receive a Slack notification when someone leaves a comment.',
-					'comment-edit-pro'
-				) }
-			</p>
+			<div className="sce-admin__tabs--content-heading">
+				<h2>
+					<SlackIcon
+						width={ 48 }
+						height={ 48 }
+						fill={ '#FB6068' }
+						aria-hidden="true"
+					/>
+					<span className="sce-admin__heading--text">
+						{ __( 'Slack Notifications', 'comment-edit-pro' ) }
+					</span>
+					<a
+						className="sce-admin-heading-docs"
+						target="_blank"
+						rel="noreferrer"
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/slack-integration"
+					>
+						({ __( 'Docs', 'comment-edit-pro' ) })
+					</a>
+				</h2>
+				<p className="description">
+					{ __(
+						'Receive a Slack notification when someone leaves a comment.',
+						'comment-edit-pro'
+					) }
+				</p>
+			</div>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
 					<tbody>

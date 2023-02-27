@@ -18,6 +18,7 @@ import sendCommand from '../../../SendCommand';
 import CircularExclamationIcon from '../../components/icons/CircularExplanation';
 import Notice from '../../components/Notice';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import MailChimpIcon from '../../components/icons/Mailchimp';
 
 const retrieveAvatarOptions = () => {
 	return sendCommand( 'sce_get_mailchimp_options', {
@@ -429,13 +430,22 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Mailchimp', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
-			<p className="description">
-				{ __(
-					'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.',
-					'comment-edit-pro'
-				) }
-			</p>
+			<div className="sce-admin__tabs--content-heading">
+				<h2>
+					<MailChimpIcon width={ 48 } height={ 51 } fill={ '#FB6068' } aria-hidden="true" />
+					<span className="sce-admin__heading--text">
+						{ __( 'Mailchimp', 'comment-edit-pro' ) }
+					</span>
+					<a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration">({ __( 'Docs', 'comment-edit-pro' ) })</a>
+				</h2>
+				<p className="description">
+					{ __(
+						'When someone leaves a comment, they can be given the option to subscribe to your newsletter on Mailchimp.',
+						'comment-edit-pro'
+					) }
+				</p>
+			</div>
+
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
 					<tbody>
