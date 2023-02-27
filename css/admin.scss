@@ -702,6 +702,18 @@ h3.sce-panel-heading {
 			}
 		}
 
+		&.qdlx__btn-white {
+			background: #FFF;
+			color: #333;
+			border-color: #111;
+
+			&:hover {
+				background: darken( #FFF, 10% );
+				color: #111;
+				border-color: #000;
+			}
+		}
+
 		&.qdlx__btn-secondary {
 			background: #333;
 			color: #FFFFFF;
@@ -1669,6 +1681,7 @@ h2 a.sce-admin-heading-docs {
 	grid-template-columns: 1fr 150px;
 	grid-gap: 20px;
 	align-items: end;
+	margin-top: 15px;
 
 	.components-base-control,
 	.components-base-control__field {

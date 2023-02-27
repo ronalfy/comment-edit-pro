@@ -24,8 +24,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
 /* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
@@ -143,13 +143,18 @@ var Interface = function Interface(props) {
 
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      isRefreshingFormsAndTags = _useState12[0],
-      setIsRefreshingFormsAndTags = _useState12[1];
+      isRefreshingTags = _useState12[0],
+      setIsRefreshingTags = _useState12[1];
 
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
       _useState14 = _slicedToArray(_useState13, 2),
-      isAddingTag = _useState14[0],
-      setIsAddingTag = _useState14[1];
+      isRefreshingForms = _useState14[0],
+      setIsRefreshingForms = _useState14[1];
+
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState16 = _slicedToArray(_useState15, 2),
+      isAddingTag = _useState16[0],
+      setIsAddingTag = _useState16[1];
 
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useForm)({
     defaultValues: {
@@ -464,6 +469,55 @@ var Interface = function Interface(props) {
     });
   };
 
+  var onHandleTagsRefresh = function onHandleTagsRefresh(formData) {
+    setIsRefreshingTags(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_tags', {
+      nonce: sceIntegrations.ck_refresh_tags_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var tags = ajaxData.tags,
+            apiValid = ajaxData.apiValid;
+        var newTagValues = [];
+        var oldTagValues = getValues('tags');
+        tags.forEach(function (keys, index) {
+          // Use old selection state for new tags.
+          var oldTag = oldTagValues.find(function (tag) {
+            return tag.value === keys.value;
+          });
+
+          if (oldTag) {
+            keys.selected = oldTag.selected;
+          }
+
+          newTagValues.push(keys);
+        });
+        var updatedFormValues = {
+          tags: newTagValues,
+          apiValid: apiValid
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues3 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues3), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('tags', {
+          type: 'noTags',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingTags(false);
+    });
+  };
+
   var handleReset = function handleReset() {
     setResetting(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_convertkit_options', {
@@ -595,25 +649,7 @@ var Interface = function Interface(props) {
           onChange: function onChange(formOrTagValue) {
             _onChange2(formOrTagValue);
           }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-          className: "sce-admin-buttons"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
-          variant: "tertiary",
-          isBusy: isRefreshingFormsAndTags,
-          disabled: isRefreshingFormsAndTags,
-          onClick: function onClick() {
-            setIsRefreshingFormsAndTags(true);
-            refreshFormsAndTags();
-          },
-          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
-            'has-error': hasErrors()
-          }, {
-            'has-icon': isRefreshingFormsAndTags
-          }, {
-            'is-saving': isRefreshingFormsAndTags
-          }),
-          text: isRefreshingFormsAndTags ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Forms and Tags', 'comment-edit-pro')
-        })));
+        }));
       }
     }), 'form' === getValues('formOrTag') && forms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.', 'comment-edit-pro'),
@@ -686,7 +722,7 @@ var Interface = function Interface(props) {
   };
 
   var getConvertKitTags = function getConvertKitTags() {
-    var _errors$tagInput2, _errors$tagInput3, _errors$tagInput4;
+    var _errors$tags, _errors$tags2, _errors$tagInput2, _errors$tagInput3, _errors$tagInput4;
 
     var convertKitTags = getValues('tags');
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
@@ -700,7 +736,7 @@ var Interface = function Interface(props) {
           var _ref6$field = _ref6.field,
               _onChange4 = _ref6$field.onChange,
               value = _ref6$field.value;
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
             label: tag.label,
             onChange: function onChange(tagSelectedValue) {
               _onChange4(tagSelectedValue);
@@ -709,6 +745,28 @@ var Interface = function Interface(props) {
           });
         }
       });
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+      isBusy: isRefreshingTags,
+      disabled: isRefreshingTags,
+      onClick: function onClick() {
+        onHandleTagsRefresh();
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
+        'has-error': hasErrors()
+      }, {
+        'has-icon': isRefreshingTags
+      }, {
+        'is-saving': isRefreshingTags
+      }),
+      text: isRefreshingTags ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Tags', 'comment-edit-pro')
+    })), 'noTags' === ((_errors$tags = errors.tags) === null || _errors$tags === void 0 ? void 0 : _errors$tags.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$tags2 = errors.tags) === null || _errors$tags2 === void 0 ? void 0 : _errors$tags2.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-convertkit-add-tag"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -744,7 +802,7 @@ var Interface = function Interface(props) {
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
       onClick: /*#__PURE__*/function () {
         var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
           var validationResult;
@@ -978,7 +1036,7 @@ var Interface = function Interface(props) {
     }
   }))), getValues('enableConvertKit') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getSecretKey(), getFormOrTag(), getConvertKitForms(), getConvertKitTags(), getNewsletterLabel(), getSignupCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, getValues('apiValid') && canShowSaveButton() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+  }, getValues('apiValid') && canShowSaveButton() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {
@@ -994,7 +1052,7 @@ var Interface = function Interface(props) {
     iconSize: "18",
     iconPosition: "right",
     disabled: saving
-  }), needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+  }), needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }),
@@ -1002,7 +1060,7 @@ var Interface = function Interface(props) {
     text: getRefreshCredentialsText(),
     icon: false,
     disabled: credentialsRefreshing
-  }), !needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+  }), !needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
       'has-icon': resetting
     }, {

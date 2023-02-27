@@ -77,8 +77,8 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 	const [ credentialsRefreshing, setCredentialsRefreshing ] = useState( false );
-	const [ isRefreshingFormsAndTags, setIsRefreshingFormsAndTags ] =
-		useState( false );
+	const [ isRefreshingTags, setIsRefreshingTags ] = useState( false );
+	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
 	const [ isAddingTag, setIsAddingTag ] = useState( false );
 
 	const {
@@ -358,6 +358,57 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const onHandleTagsRefresh = ( formData ) => {
+		setIsRefreshingTags( true );
+		sendCommand( 'sce_refresh_convertkit_tags', {
+			nonce: sceIntegrations.ck_refresh_tags_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { tags, apiValid } = ajaxData;
+					const newTagValues = [];
+					const oldTagValues = getValues( 'tags' );
+					tags.forEach( ( keys, index ) => {
+						// Use old selection state for new tags.
+						const oldTag = oldTagValues.find( ( tag ) => tag.value === keys.value );
+						if ( oldTag ) {
+							keys.selected = oldTag.selected;
+						}
+						newTagValues.push( keys );
+					} );
+					const updatedFormValues = {
+						tags: newTagValues,
+						apiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'tags', { type: 'noTags', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingTags( false );
+			} );
+	};
+
+
 	const handleReset = () => {
 		setResetting( true );
 		sendCommand( 'sce_reset_convertkit_options', {
@@ -505,24 +556,6 @@ const Interface = ( props ) => {
 										onChange( formOrTagValue );
 									} }
 								/>
-								<div className="sce-admin-buttons">
-									<Button
-										variant="tertiary"
-										isBusy={ isRefreshingFormsAndTags }
-										disabled={ isRefreshingFormsAndTags }
-										onClick={ () => {
-											setIsRefreshingFormsAndTags( true );
-											refreshFormsAndTags();
-										} }
-										className={ classNames(
-											'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
-											{ 'has-error': hasErrors() },
-											{ 'has-icon': isRefreshingFormsAndTags },
-											{ 'is-saving': isRefreshingFormsAndTags },
-										) }
-										text={ isRefreshingFormsAndTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Forms and Tags', 'comment-edit-pro' ) }
-									/>
-								</div>
 							</>
 						) }
 					/>
@@ -614,7 +647,9 @@ const Interface = ( props ) => {
 		const convertKitTags = getValues( 'tags' );
 		return (
 			<tr>
-				<th scope="row">{ __( 'ConvertKit Tags', 'comment-edit-pro' ) }</th>
+				<th scope="row">
+					{ __( 'ConvertKit Tags', 'comment-edit-pro' ) }		
+				</th>
 				<td>
 					<>
 						{ convertKitTags.length > 0 && getValues( 'apiValid' ) &&
@@ -634,6 +669,31 @@ const Interface = ( props ) => {
 								) }
 							/>
 						) ) }
+						<div className="sce-admin-buttons">
+							<Button
+								isBusy={ isRefreshingTags }
+								disabled={ isRefreshingTags }
+								onClick={ () => {
+									onHandleTagsRefresh();
+								} }
+								className={ classNames(
+									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+									{ 'has-error': hasErrors() },
+									{ 'has-icon': isRefreshingTags },
+									{ 'is-saving': isRefreshingTags },
+								) }
+								text={ isRefreshingTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Tags', 'comment-edit-pro' ) }
+							/>
+						</div>
+						{ 'noTags' === errors.tags?.type && (
+							<Notice
+								message={ errors.tags?.message }
+								status="error"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
 						<div className="sce-convertkit-add-tag">
 							<div className="sce-convertkit-add-tag-group">
 								<Controller

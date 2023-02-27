@@ -594,6 +594,16 @@ h3.sce-panel-heading {
 .sce-admin-buttons button.has-error:hover {
   cursor: not-allowed;
 }
+.sce-admin-buttons button.qdlx__btn-white {
+  background: #FFF;
+  color: #333;
+  border-color: #111;
+}
+.sce-admin-buttons button.qdlx__btn-white:hover {
+  background: #e6e6e6;
+  color: #111;
+  border-color: #000;
+}
 .sce-admin-buttons button.qdlx__btn-secondary {
   background: #333;
   color: #FFFFFF;
@@ -1414,6 +1424,7 @@ h2 a.sce-admin-heading-docs {
   grid-template-columns: 1fr 150px;
   grid-gap: 20px;
   align-items: end;
+  margin-top: 15px;
 }
 .sce-convertkit-add-tag-group .components-base-control,
 .sce-convertkit-add-tag-group .components-base-control__field {
