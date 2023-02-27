@@ -107,7 +107,7 @@ var ConvertKit = function ConvertKit(props) {
 };
 
 var Interface = function Interface(props) {
-  var _data$tags;
+  var _data$forms, _data$tags, _data$customFields;
 
   var tagInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var defaults = props.defaults;
@@ -165,17 +165,20 @@ var Interface = function Interface(props) {
       signUpLabel: data.signUpLabel,
       checkboxEnabled: data.checkboxEnabled,
       formOrTag: data.formOrTag,
-      forms: data.forms,
+      forms: (_data$forms = data.forms) !== null && _data$forms !== void 0 ? _data$forms : [{
+        label: '',
+        value: '',
+        selected: ''
+      }],
       tags: (_data$tags = data.tags) !== null && _data$tags !== void 0 ? _data$tags : [{
         label: '',
         value: '',
         selected: ''
       }],
-      selectedForm: data.selectedForm,
-      selectedTags: [{
+      customFields: (_data$customFields = data.customFields) !== null && _data$customFields !== void 0 ? _data$customFields : [{
         label: '',
         value: '',
-        selected: ''
+        field: ''
       }],
       tagInput: ''
     }
@@ -188,16 +191,7 @@ var Interface = function Interface(props) {
       reset = _useForm.reset,
       setError = _useForm.setError,
       clearErrors = _useForm.clearErrors,
-      trigger = _useForm.trigger; // Get tags array.
-
-
-  var _useFieldArray = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useFieldArray)({
-    control: control,
-    name: 'selectedTags'
-  }),
-      tagFields = _useFieldArray.fields,
-      appendTag = _useFieldArray.append,
-      removeTag = _useFieldArray.remove;
+      trigger = _useForm.trigger;
 
   var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_11__.useWatch)({
     control: control
@@ -657,12 +651,6 @@ var Interface = function Interface(props) {
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
-    }), 'tag' === getValues('formOrTag') && tags.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no tags available. Try creating a tag below.', 'comment-edit-pro'),
-      status: "warning",
-      politeness: "assertive",
-      inline: false,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
 
@@ -727,7 +715,13 @@ var Interface = function Interface(props) {
     var convertKitTags = getValues('tags');
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, convertKitTags.length > 0 && getValues('apiValid') && convertKitTags.map(function (tag, index) {
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, 'tag' === getValues('formOrTag') && getValues('tags').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no tags available. Try creating a tag below.', 'comment-edit-pro'),
+      status: "warning",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), convertKitTags.length > 0 && getValues('apiValid') && convertKitTags.map(function (tag, index) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
         key: tag.value,
         name: "tags[".concat(index, "].selected"),

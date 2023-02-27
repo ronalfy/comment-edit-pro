@@ -502,9 +502,9 @@ class ConvertKit {
 		$api_secret_key     = sanitize_text_field( $options['convertkit_secret_key'] );
 		// Save tags as an option.
 		if ( Functions::is_multisite() ) {
-			$existing_tags =  filter_var( get_site_option( 'sce_convertkit_tags', array() ), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+			$existing_tags = (array) get_site_option( 'sce_convertkit_tags', array() );
 		} else {
-			$existing_tags = filter_var( get_option( 'sce_convertkit_tags', array() ), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+			$existing_tags = (array) get_option( 'sce_convertkit_tags', array() );
 		}
 
 		// Start building up HTTP args.
@@ -528,6 +528,7 @@ class ConvertKit {
 
 		$tags_raw = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
 		$tags     = $tags_raw['tags'];
+		$sanitized_tag_values = array();
 		foreach ( $tags as $index => $values ) {
 			$sanitized_tag_values[ $index ] = array(
 				'label' => sanitize_text_field( $tags[ $index ]['name'] ),
@@ -595,13 +596,16 @@ class ConvertKit {
 		$http_args['body']    = array(
 			'api_key'    => $api_key,
 			'api_secret' => $api_secret_key,
+			'tag'        => array(
+				'name' => sanitize_text_field( filter_input( INPUT_POST, 'label', FILTER_DEFAULT ) ),
+			),
 		);
 
 		// Get endpoints.
 		$tags_api_endpoint = esc_url_raw( $this->convertkit_api . '/tags' );
 
 		// Make Credentials/Account check Call.
-		$tags_api_response = wp_remote_get( $tags_api_endpoint, $http_args );
+		$tags_api_response = wp_remote_post( $tags_api_endpoint, $http_args );
 		if ( is_wp_error( $tags_api_response ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not communicate with ConvertKit.', 'comment-edit-pro' ) ) );
 		}

@@ -100,20 +100,13 @@ const Interface = ( props ) => {
 			signUpLabel: data.signUpLabel,
 			checkboxEnabled: data.checkboxEnabled,
 			formOrTag: data.formOrTag,
-			forms: data.forms,
+			forms: data.forms ?? [ { label: '', value: '', selected: '' } ],
 			tags: data.tags ?? [ { label: '', value: '', selected: '' } ],
-			selectedForm: data.selectedForm,
-			selectedTags: [ { label: '', value: '', selected: '' } ],
+			customFields: data.customFields ?? [ { label: '', value: '', field: '' } ],
 			tagInput: '',
 		},
 	} );
-	// Get tags array.
-	const { fields: tagFields, append: appendTag, remove: removeTag } = useFieldArray(
-		{
-			control,
-			name: 'selectedTags',
-		}
-	);
+
 	const formValues = useWatch( { control } );
 	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
 		control,
@@ -571,18 +564,6 @@ const Interface = ( props ) => {
 							icon={ CircularExclamationIcon }
 						/>
 					) }
-					{ 'tag' === getValues( 'formOrTag' ) && tags.length === 0 && (
-						<Notice
-							message={ __(
-								'There are no tags available. Try creating a tag below.',
-								'comment-edit-pro'
-							) }
-							status="warning"
-							politeness="assertive"
-							inline={ false }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
 				</td>
 			</tr>
 		);
@@ -648,10 +629,22 @@ const Interface = ( props ) => {
 		return (
 			<tr>
 				<th scope="row">
-					{ __( 'ConvertKit Tags', 'comment-edit-pro' ) }		
+					{ __( 'ConvertKit Tags', 'comment-edit-pro' ) }
 				</th>
 				<td>
 					<>
+						{ 'tag' === getValues( 'formOrTag' ) && getValues( 'tags' ).length === 0 && (
+							<Notice
+								message={ __(
+									'There are no tags available. Try creating a tag below.',
+									'comment-edit-pro'
+								) }
+								status="warning"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
 						{ convertKitTags.length > 0 && getValues( 'apiValid' ) &&
 						convertKitTags.map( ( tag, index ) => (
 							<Controller
