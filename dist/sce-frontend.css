@@ -117,6 +117,7 @@
   transition: opacity 0.75s ease-in-out;
   opacity: 1;
   visibility: visible;
+  overflow: hidden;
   height: 100%;
   padding: 0;
   margin: 0;
@@ -192,17 +193,33 @@
   opacity: 0;
 }
 .sce-meatball-content li.sce-meatball-menu-item {
-  border-bottom: 0;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
 }
-.sce-meatball-content li.sce-meatball-menu-item button.button-reset {
+.sce-meatball-content li.sce-meatball-menu-item a.button-reset {
+  display: flex;
+  align-items: center;
+  width: 100%;
   color: #333333;
+  line-height: normal;
+  font-size: 1.3rem;
+  padding: 0.75rem 1rem;
 }
-.sce-meatball-content li.sce-meatball-menu-item button.button-reset:hover {
-  background: red;
-  color: #FFF;
+.sce-meatball-content li.sce-meatball-menu-item a.button-reset .sce-meatball-menu-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  line-height: normal;
 }
-.sce-meatball-content li.sce-meatball-menu-item button.button-reset:hover svg use {
-  fill: #FFF;
+.sce-meatball-content li.sce-meatball-menu-item a.button-reset:hover {
+  background: #CCC;
+  color: #111;
+}
+.sce-meatball-content li.sce-meatball-menu-item a.button-reset:hover svg use {
+  line-height: normal;
+  fill: #555;
 }
 .sce-meatball-content input {
   cursor: pointer;

@@ -258,6 +258,14 @@ class Frontend_Editing {
 			),
 			admin_url( 'admin-ajax.php' )
 		);
+		$edit_comment_link = add_query_arg(
+			array(
+				'action' => 'comment_edit_pro_get_frontend_comment',
+				'cid'    => $comment->comment_ID,
+				'nonce'  =>  wp_create_nonce( 'edit-comment-' . $comment->comment_ID ),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
 
 		// Get comment status.
 		$comment_status = 'approved';
@@ -274,6 +282,14 @@ class Frontend_Editing {
 					aria-label="<?php esc_attr_e( 'Open Moderation Menu Options', 'comment-edit-pro' ); ?>"
 				/>
 				<ul>
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-edit-comment" data-comment-action="edit">
+						<a class="button-reset" data-sce-fancybox data-type="iframe" data-preload="false" data-src="<?php echo esc_url( $edit_comment_link ); ?>" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $edit_comment_link ); ?>">
+							<span class="sce-meatball-menu-icon">
+								<svg width="24" height="24"><use xlink:href="#sce-edit-icon"></use></svg>
+							</span>
+							<?php esc_html_e( 'Edit Comment', 'comment-edit-pro' ); ?>
+						</a>
+					</li>
 					<li class="sce-meatball-menu-item sce-meatball-menu-item-approve-comment" data-comment-action="approve" style="<?php echo 'approved' === $comment_status ? 'display: none;' : ''; ?>">
 						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $approve_comment_link ); ?>">
 							<span class="sce-meatball-menu-icon">
@@ -431,6 +447,9 @@ class Frontend_Editing {
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2134 2134" id="sce-trash-icon">
 				<path d="M1105.24,985.408l0,439.787c0,0.014 0,0.028 0,0.042c0,21.136 -17.392,38.528 -38.528,38.528c-0.014,0 -0.028,0 -0.042,0l-1.771,0c-20.474,-0.93 -36.81,-18.033 -36.8,-38.528l0,-439.829c-0.021,-20.499 16.322,-37.609 36.8,-38.528c0,0 1.785,-0 1.792,-0c21.139,-0 38.538,17.389 38.549,38.528Zm179.755,-37.696c-21.094,-1.746 -39.89,14.171 -41.643,35.264l-36.266,438.272c-0.107,1.088 -0.15,2.133 -0.15,3.243c0.135,21.077 17.514,38.345 38.592,38.345c19.897,-0 36.699,-15.388 38.443,-35.209l36.267,-438.272c-0,-1.088 0.128,-2.134 0.128,-3.243c-0.02,-19.94 -15.499,-36.746 -35.371,-38.4Zm-395.008,35.264c-1.744,-19.821 -18.546,-35.209 -38.443,-35.209c-21.078,-0 -38.457,17.268 -38.592,38.345c0,1.088 0,2.133 0.128,3.243l36.267,438.272c1.744,19.821 18.546,35.209 38.443,35.209c21.078,-0 38.457,-17.268 38.592,-38.345c-0,-1.067 -0,-2.134 -0.128,-3.243l-36.267,-438.272Zm1211.35,83.691c0,571.434 -463.232,1034.67 -1034.67,1034.67c-571.435,0 -1034.67,-463.232 -1034.67,-1034.67c0,-571.435 463.232,-1034.67 1034.67,-1034.67c571.434,-0 1034.67,463.232 1034.67,1034.67Zm-695.85,-294.848l-681.195,-0c-31.947,0.004 -58.233,26.293 -58.233,58.24c0,1.795 0.083,3.588 0.249,5.376l70.955,765.589c2.762,29.796 28.06,52.86 57.984,52.864l541.866,-0c30.033,0.052 55.428,-23.142 58.091,-53.056l68.267,-765.589c0.152,-1.717 0.229,-3.44 0.229,-5.163c-0,-31.943 -26.27,-58.235 -58.213,-58.261Zm120.832,-109.312c-0,-0.015 -0,-0.029 -0,-0.043c-0,-35.999 -29.623,-65.621 -65.622,-65.621c-0.014,-0 -0.028,-0 -0.042,-0l-224.811,-0c-7.117,-66.407 -63.815,-117.345 -130.603,-117.334l-77.141,0c-66.787,-0.011 -123.486,50.927 -130.603,117.334l-224.81,-0c-36.023,-0 -65.664,29.641 -65.664,65.664c-0,36.022 29.641,65.664 65.664,65.664l787.968,-0c36.022,-0 65.664,-29.642 65.664,-65.664Z" style="fill-rule:nonzero;"/>
+			</symbol>
+			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1867 1867" id="sce-edit-icon">
+				<g><path d="M933.333,0c-515.332,0 -933.333,417.997 -933.333,933.333c0,515.332 418.001,933.334 933.333,933.334c515.332,-0 933.334,-418.002 933.334,-933.334c-0,-515.336 -418.002,-933.333 -933.334,-933.333Zm-409.334,1404.67c-17.334,5.998 -37.333,1.998 -50.667,-11.336c-13.33,-13.33 -17.33,-33.333 -11.332,-50.663l99.333,-275.333l238,237.996l-275.334,99.336Zm356.669,-155.334l-263.334,-263.334l419.332,-419.332l263.334,263.334l-419.332,419.332Zm542.664,-543.335l-54.663,55.335l-263.334,-263.334l55.33,-54.668c49.337,-50 130.668,-50 180.001,0l82.666,82.67c50,49.332 50,130.664 0,179.997Z" style="fill-rule:nonzero;"/></g>
 			</symbol>
 		</svg>
 		<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>
