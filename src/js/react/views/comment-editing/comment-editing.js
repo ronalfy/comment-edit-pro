@@ -74,6 +74,7 @@ const Interface = ( props ) => {
 			enableCommentEditing: data.enableCommentEditing,
 			allowCommentLogging: data.allowCommentLogging,
 			allowFrontEndEditing: data.allowFrontEndEditing,
+			allowFrontEndModerationMenu: data.allowFrontEndModerationMenu,
 			allowUnlimitedEditing: data.allowUnlimitedEditing,
 			showStopTimer: data.showStopTimer,
 			allowDelete: data.allowDelete,
@@ -254,28 +255,53 @@ const Interface = ( props ) => {
 						<tr>
 							<th scope="row">{ __( 'Frontend Editing', 'comment-edit-pro' ) }</th>
 							<td>
-								<Controller
-									name="allowFrontEndEditing"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Frontend Editing For Admins.',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
+								<div className="sce-panel-row">
+									<Controller
+										name="allowFrontEndEditing"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __(
+													'Enable Frontend Editing For Admins.',
+													'comment-edit-pro'
+												) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
 												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will allow you to edit comments from the frontend of your site.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will allow you to edit comments from the frontend of your site.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="allowFrontEndModerationMenu"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __(
+													'Enable Frontend Moderation Menu',
+													'comment-edit-pro'
+												) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will show a small horizontal menu on each comment, which will allow you to edit, delete, approve, or spam comments from the frontend of your site.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
 							</td>
 						</tr>
 						{ getValues( 'enableCommentEditing' ) && (

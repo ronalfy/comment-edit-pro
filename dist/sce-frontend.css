@@ -58,4 +58,224 @@
   opacity: 0.74 !important;
 }
 
+/* Moderation Meatball Menu */
+.sce-front-end-comment {
+  position: relative;
+}
+
+.sce-meatball-menu {
+  position: absolute;
+  top: 15px;
+  right: 3.75rem;
+}
+
+.sce-meatball-content {
+  position: relative;
+  min-width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+}
+.sce-meatball-content input {
+  position: relative;
+  display: block;
+  min-width: 40px;
+  min-height: 40px;
+  right: 0;
+  top: 0;
+  z-index: 3;
+  order: 3;
+  opacity: 0;
+}
+.sce-meatball-content input ~ ul {
+  z-index: -1;
+  list-style-type: none;
+  width: 0;
+}
+.sce-meatball-content input:not(:checked) ~ ul {
+  background: #FFF;
+  position: relative;
+  transition: opacity 0.75s ease-in-out;
+  margin-right: 2px;
+  margin-top: 0;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  width: 0;
+}
+.sce-meatball-content input:not(:checked) ~ ul li {
+  background: inherit;
+}
+.sce-meatball-content input:checked ~ ul {
+  position: relative;
+  width: 100%;
+  left: 0;
+  transition: opacity 0.75s ease-in-out;
+  opacity: 1;
+  visibility: visible;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border-radius: 5px;
+  margin-right: 12px;
+  background: #FFF;
+  border: 1px solid #333;
+  z-index: 10;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper {
+  z-index: 2;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  top: 0;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div:before, .sce-meatball-content input ~ .sce-meatball-icon-wrapper > div:after,
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div span {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  transform: rotate(0deg);
+  transition: all 0.3s ease-in-out;
+  background: #FFF;
+  margin-right: 5px;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div:after {
+  margin-bottom: 0;
+  margin-right: 0;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div {
+  transition: all 0.3s linear;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:before, .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:after,
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span {
+  transition: all 0.3s linear;
+  background: #FFF;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:after {
+  position: absolute;
+  transition: all 0.3s linear;
+  border-radius: 2px;
+  height: 4px;
+  z-index: 1;
+  width: 50%;
+  height: 4px;
+  bottom: unset;
+  transform: rotate(-45deg) translate(0px, 0px);
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:before {
+  position: absolute;
+  transition: all 0.3s linear;
+  border-radius: 2px;
+  height: 4px;
+  z-index: 3;
+  width: 50%;
+  height: 4px;
+  margin: 0;
+  bottom: unset;
+  transform: rotate(45deg) translate(0px, 0px);
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper span {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.sce-meatball-content li.sce-meatball-menu-item {
+  border-bottom: 0;
+}
+.sce-meatball-content li.sce-meatball-menu-item button.button-reset {
+  color: #333333;
+}
+.sce-meatball-content li.sce-meatball-menu-item button.button-reset:hover {
+  background: red;
+  color: #FFF;
+}
+.sce-meatball-content li.sce-meatball-menu-item button.button-reset:hover svg use {
+  fill: #FFF;
+}
+.sce-meatball-content input {
+  cursor: pointer;
+}
+.sce-meatball-content input:hover .sce-meatball-icon-wrapper {
+  background: #FFF;
+}
+.sce-meatball-content input:hover ~ .sce-meatball-icon-wrapper {
+  background: #FFF;
+}
+.sce-meatball-content input:hover ~ .sce-meatball-icon-wrapper > div:before, .sce-meatball-content input:hover ~ .sce-meatball-icon-wrapper > div:after,
+.sce-meatball-content input:hover ~ .sce-meatball-icon-wrapper > div span {
+  transition: all 0.3s linear;
+  background: #333;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper {
+  max-width: 30px;
+  max-height: 30px;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  z-index: 2;
+  padding: 20px;
+  background: #FFF;
+  box-shadow: none;
+  border-radius: 100%;
+  text-align: center;
+  line-height: 1;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: 30px;
+  max-height: 30px;
+  transition: all 0.3s linear;
+  box-sizing: border-box;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover {
+  transition: all 0.3s linear;
+  background: #FFF;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:before, .sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:after,
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div span {
+  transition: all 0.3s linear;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:before:before, .sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:before:after, .sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:after:before, .sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div:after:after,
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div span:before,
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper:hover > div span:after {
+  background: #333;
+}
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div:before, .sce-meatball-content input ~ .sce-meatball-icon-wrapper > div:after,
+.sce-meatball-content input ~ .sce-meatball-icon-wrapper > div span {
+  transition: all 0.3s linear;
+  background: #333;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper {
+  background: #FFF;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:before, .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div:after,
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span {
+  transition: all 0.3s linear;
+  background: #333;
+}
+.sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:before, .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:after {
+  display: inline-block;
+  background: #333;
+}
+
 /*# sourceMappingURL=sce-frontend.css.map*/

@@ -27462,6 +27462,7 @@ var Interface = function Interface(props) {
       enableCommentEditing: data.enableCommentEditing,
       allowCommentLogging: data.allowCommentLogging,
       allowFrontEndEditing: data.allowFrontEndEditing,
+      allowFrontEndModerationMenu: data.allowFrontEndModerationMenu,
       allowUnlimitedEditing: data.allowUnlimitedEditing,
       showStopTimer: data.showStopTimer,
       allowDelete: data.allowDelete,
@@ -27629,7 +27630,9 @@ var Interface = function Interface(props) {
     icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Frontend Editing', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Frontend Editing', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowFrontEndEditing",
     control: control,
     render: function render(_ref2) {
@@ -27647,7 +27650,26 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to edit comments from the frontend of your site.', 'comment-edit-pro')
       });
     }
-  }))), getValues('enableCommentEditing') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "allowFrontEndModerationMenu",
+    control: control,
+    render: function render(_ref3) {
+      var _ref3$field = _ref3.field,
+          _onChange3 = _ref3$field.onChange,
+          value = _ref3$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Frontend Moderation Menu', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange3(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a small horizontal menu on each comment, which will allow you to edit, delete, approve, or spam comments from the frontend of your site.', 'comment-edit-pro')
+      });
+    }
+  })))), getValues('enableCommentEditing') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Countdown Timer', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "timer",
@@ -27656,12 +27678,12 @@ var Interface = function Interface(props) {
       required: true,
       pattern: '\d+'
     },
-    render: function render(_ref3) {
+    render: function render(_ref4) {
       var _errors$timer;
 
-      var _ref3$field = _ref3.field,
-          onChange = _ref3$field.onChange,
-          value = _ref3$field.value;
+      var _ref4$field = _ref4.field,
+          onChange = _ref4$field.onChange,
+          value = _ref4$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Timer Length', 'quotes-dlx'),
         type: "number",
@@ -27684,17 +27706,17 @@ var Interface = function Interface(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowUnlimitedEditing",
     control: control,
-    render: function render(_ref4) {
-      var _ref4$field = _ref4.field,
-          _onChange3 = _ref4$field.onChange,
-          value = _ref4$field.value;
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange4 = _ref5$field.onChange,
+          value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Unlimited Timer for Logged-in Users.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange3(boolValue);
+          _onChange4(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow unlimited editing for logged-in users.', 'comment-edit-pro')
       });
@@ -27702,17 +27724,17 @@ var Interface = function Interface(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "showStopTimer",
     control: control,
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-          _onChange4 = _ref5$field.onChange,
-          value = _ref5$field.value;
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          _onChange5 = _ref6$field.onChange,
+          value = _ref6$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow Timer To Be Canceled by Users', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange4(boolValue);
+          _onChange5(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show an extra button that will allow users to cancel their edit timer.', 'comment-edit-pro')
       });
@@ -27722,17 +27744,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Logging', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowCommentLogging",
     control: control,
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-          _onChange5 = _ref6$field.onChange,
-          value = _ref6$field.value;
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          _onChange6 = _ref7$field.onChange,
+          value = _ref7$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Comment Logging for Edited Comments.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange5(boolValue);
+          _onChange6(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow you to restore edited comments and view an edit history for comments.', 'comment-edit-pro')
       });
@@ -27742,17 +27764,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deletion', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowDelete",
     control: control,
-    render: function render(_ref7) {
-      var _ref7$field = _ref7.field,
-          _onChange6 = _ref7$field.onChange,
-          value = _ref7$field.value;
+    render: function render(_ref8) {
+      var _ref8$field = _ref8.field,
+          _onChange7 = _ref8$field.onChange,
+          value = _ref8$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow Comment Deletion for Users', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange6(boolValue);
+          _onChange7(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this option will allow users to delete their own comments.', 'comment-edit-pro')
       });
@@ -27760,17 +27782,17 @@ var Interface = function Interface(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "deleteOnly",
     control: control,
-    render: function render(_ref8) {
-      var _ref8$field = _ref8.field,
-          _onChange7 = _ref8$field.onChange,
-          value = _ref8$field.value;
+    render: function render(_ref9) {
+      var _ref9$field = _ref9.field,
+          _onChange8 = _ref9$field.onChange,
+          value = _ref9$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow Comment Deletion Only', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange7(boolValue);
+          _onChange8(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will hide the editing options and only allows the user to delete comments only.', 'comment-edit-pro')
       });
@@ -27778,17 +27800,17 @@ var Interface = function Interface(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowDeleteConfirmation",
     control: control,
-    render: function render(_ref9) {
-      var _ref9$field = _ref9.field,
-          _onChange8 = _ref9$field.onChange,
-          value = _ref9$field.value;
+    render: function render(_ref10) {
+      var _ref10$field = _ref10.field,
+          _onChange9 = _ref10$field.onChange,
+          value = _ref10$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Comment Deletion Confirmation', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange8(boolValue);
+          _onChange9(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a confirmation before the user is allowed to delete their own comments.', 'comment-edit-pro')
       });
@@ -27798,17 +27820,17 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Email Notifications', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "allowEditNotification",
     control: control,
-    render: function render(_ref10) {
-      var _ref10$field = _ref10.field,
-          _onChange9 = _ref10$field.onChange,
-          value = _ref10$field.value;
+    render: function render(_ref11) {
+      var _ref11$field = _ref11.field,
+          _onChange10 = _ref11$field.onChange,
+          value = _ref11$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Email Notifications for Edited Comments', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           //setShowButtonOptions( boolValue );
-          _onChange9(boolValue);
+          _onChange10(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will send an email notification when someone edits their comment.', 'comment-edit-pro')
       });
@@ -27819,12 +27841,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref11) {
+    render: function render(_ref12) {
       var _errors$editNotificat;
 
-      var _ref11$field = _ref11.field,
-          _onChange10 = _ref11$field.onChange,
-          value = _ref11$field.value;
+      var _ref12$field = _ref12.field,
+          _onChange11 = _ref12$field.onChange,
+          value = _ref12$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('To Email Address', 'highlight-and-share'),
         value: value,
@@ -27837,7 +27859,7 @@ var Interface = function Interface(props) {
             clearErrors('editNotificationTo');
           }
 
-          _onChange10(newValue);
+          _onChange11(newValue);
         },
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$editNotificat = errors.editNotificationTo) === null || _errors$editNotificat === void 0 ? void 0 : _errors$editNotificat.type),
@@ -27858,12 +27880,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref12) {
+    render: function render(_ref13) {
       var _errors$editNotificat2;
 
-      var _ref12$field = _ref12.field,
-          _onChange11 = _ref12$field.onChange,
-          value = _ref12$field.value;
+      var _ref13$field = _ref13.field,
+          _onChange12 = _ref13$field.onChange,
+          value = _ref13$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email Address', 'highlight-and-share'),
         value: value,
@@ -27876,7 +27898,7 @@ var Interface = function Interface(props) {
             clearErrors('editNotificationFrom');
           }
 
-          _onChange11(newValue);
+          _onChange12(newValue);
         },
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$editNotificat2 = errors.editNotificationFrom) === null || _errors$editNotificat2 === void 0 ? void 0 : _errors$editNotificat2.type),
@@ -27897,17 +27919,17 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref13) {
+    render: function render(_ref14) {
       var _errors$editNotificat3;
 
-      var _ref13$field = _ref13.field,
-          _onChange12 = _ref13$field.onChange,
-          value = _ref13$field.value;
+      var _ref14$field = _ref14.field,
+          _onChange13 = _ref14$field.onChange,
+          value = _ref14$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Email Subject', 'highlight-and-share'),
         value: value,
         onChange: function onChange(newValue) {
-          _onChange12(newValue);
+          _onChange13(newValue);
         },
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
           'has-error': 'required' === ((_errors$editNotificat3 = errors.editNotificationSubject) === null || _errors$editNotificat3 === void 0 ? void 0 : _errors$editNotificat3.type),
@@ -27927,16 +27949,16 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Appearance', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "showTimer",
     control: control,
-    render: function render(_ref14) {
-      var _ref14$field = _ref14.field,
-          _onChange13 = _ref14$field.onChange,
-          value = _ref14$field.value;
+    render: function render(_ref15) {
+      var _ref15$field = _ref15.field,
+          _onChange14 = _ref15$field.onChange,
+          value = _ref15$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show the timer', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange13(boolValue);
+          _onChange14(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show the timer to the user when editing.', 'comment-edit-pro')
       });
@@ -27947,10 +27969,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref15) {
-      var _ref15$field = _ref15.field,
-          _onChange14 = _ref15$field.onChange,
-          value = _ref15$field.value;
+    render: function render(_ref16) {
+      var _ref16$field = _ref16.field,
+          _onChange15 = _ref16$field.onChange,
+          value = _ref16$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Timer Appearance', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select how the timer should appear to the user.', 'comment-edit-pro'),
@@ -27963,7 +27985,7 @@ var Interface = function Interface(props) {
           value: 'compact'
         }],
         onChange: function onChange(timerAppearanceValue) {
-          _onChange14(timerAppearanceValue);
+          _onChange15(timerAppearanceValue);
         }
       });
     }
@@ -27973,10 +27995,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref16) {
-      var _ref16$field = _ref16.field,
-          _onChange15 = _ref16$field.onChange,
-          value = _ref16$field.value;
+    render: function render(_ref17) {
+      var _ref17$field = _ref17.field,
+          _onChange16 = _ref17$field.onChange,
+          value = _ref17$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Choose a Button Theme', 'comment-edit-pro'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a button theme for editing interface.', 'comment-edit-pro'),
@@ -27995,23 +28017,23 @@ var Interface = function Interface(props) {
           value: 'dark'
         }],
         onChange: function onChange(buttonThemeValue) {
-          _onChange15(buttonThemeValue);
+          _onChange16(buttonThemeValue);
         }
       });
     }
   }), 'default' !== getValues('buttonTheme') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "showIcons",
     control: control,
-    render: function render(_ref17) {
-      var _ref17$field = _ref17.field,
-          _onChange16 = _ref17$field.onChange,
-          value = _ref17$field.value;
+    render: function render(_ref18) {
+      var _ref18$field = _ref18.field,
+          _onChange17 = _ref18$field.onChange,
+          value = _ref18$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show Icons on Buttons', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange16(boolValue);
+          _onChange17(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow icons for the buttons. Recommended if you have selected a button theme.', 'comment-edit-pro')
       });
@@ -28056,12 +28078,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref18) {
+    render: function render(_ref19) {
       var _errors$saveText;
 
-      var _ref18$field = _ref18.field,
-          onChange = _ref18$field.onChange,
-          value = _ref18$field.value;
+      var _ref19$field = _ref19.field,
+          onChange = _ref19$field.onChange,
+          value = _ref19$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Button Text', 'quotes-dlx'),
         type: "text",
@@ -28080,12 +28102,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref19) {
+    render: function render(_ref20) {
       var _errors$cancelText;
 
-      var _ref19$field = _ref19.field,
-          onChange = _ref19$field.onChange,
-          value = _ref19$field.value;
+      var _ref20$field = _ref20.field,
+          onChange = _ref20$field.onChange,
+          value = _ref20$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cancel Button Text', 'quotes-dlx'),
         type: "text",
@@ -28104,12 +28126,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref20) {
+    render: function render(_ref21) {
       var _errors$deleteText;
 
-      var _ref20$field = _ref20.field,
-          onChange = _ref20$field.onChange,
-          value = _ref20$field.value;
+      var _ref21$field = _ref21.field,
+          onChange = _ref21$field.onChange,
+          value = _ref21$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Delete Button Text', 'quotes-dlx'),
         type: "text",
@@ -28128,12 +28150,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref21) {
+    render: function render(_ref22) {
       var _errors$stopTimerText;
 
-      var _ref21$field = _ref21.field,
-          onChange = _ref21$field.onChange,
-          value = _ref21$field.value;
+      var _ref22$field = _ref22.field,
+          onChange = _ref22$field.onChange,
+          value = _ref22$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Stop Timer Button Text', 'quotes-dlx'),
         type: "text",
@@ -28152,12 +28174,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref22) {
+    render: function render(_ref23) {
       var _errors$clickToEditTe;
 
-      var _ref22$field = _ref22.field,
-          onChange = _ref22$field.onChange,
-          value = _ref22$field.value;
+      var _ref23$field = _ref23.field,
+          onChange = _ref23$field.onChange,
+          value = _ref23$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click to Edit Text', 'quotes-dlx'),
         type: "text",
@@ -28176,12 +28198,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref23) {
+    render: function render(_ref24) {
       var _errors$confirmDelete;
 
-      var _ref23$field = _ref23.field,
-          onChange = _ref23$field.onChange,
-          value = _ref23$field.value;
+      var _ref24$field = _ref24.field,
+          onChange = _ref24$field.onChange,
+          value = _ref24$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deletion Confirmation Text', 'quotes-dlx'),
         type: "text",
@@ -28200,12 +28222,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref24) {
+    render: function render(_ref25) {
       var _errors$commentDelete;
 
-      var _ref24$field = _ref24.field,
-          onChange = _ref24$field.onChange,
-          value = _ref24$field.value;
+      var _ref25$field = _ref25.field,
+          onChange = _ref25$field.onChange,
+          value = _ref25$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Text', 'quotes-dlx'),
         type: "text",
@@ -28224,12 +28246,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref25) {
+    render: function render(_ref26) {
       var _errors$commentDelete2;
 
-      var _ref25$field = _ref25.field,
-          onChange = _ref25$field.onChange,
-          value = _ref25$field.value;
+      var _ref26$field = _ref26.field,
+          onChange = _ref26$field.onChange,
+          value = _ref26$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Deleted Error Text', 'quotes-dlx'),
         type: "text",
@@ -28248,12 +28270,12 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref26) {
+    render: function render(_ref27) {
       var _errors$commentEmptyE;
 
-      var _ref26$field = _ref26.field,
-          onChange = _ref26$field.onChange,
-          value = _ref26$field.value;
+      var _ref27$field = _ref27.field,
+          onChange = _ref27$field.onChange,
+          value = _ref27$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Empty Error Text', 'quotes-dlx'),
         type: "text",

@@ -74,32 +74,33 @@ class Comment_Editing {
 		$options = Options::get_options();
 
 		$json_array = array(
-			'timer'                   => absint( $options['timer'] ),
-			'enableCommentEditing'    => (bool) $options['enable_comment_editing'],
-			'allowCommentLogging'     => (bool) $options['allow_comment_logging'],
-			'allowFrontEndEditing'    => (bool) $options['allow_front_end_editing'],
-			'allowUnlimitedEditing'   => (bool) $options['allow_unlimited_editing'],
-			'showStopTimer'           => (bool) $options['show_stop_timer'],
-			'allowDelete'             => (bool) $options['allow_delete'],
-			'deleteOnly'              => (bool) $options['delete_only'],
-			'allowDeleteConfirmation' => (bool) $options['allow_delete_confirmation'],
-			'allowEditNotification'   => (bool) $options['allow_edit_notification'],
-			'editNotificationTo'      => sanitize_text_field( $options['edit_notification_to'] ),
-			'editNotificationFrom'    => sanitize_text_field( $options['edit_notification_from'] ),
-			'editNotificationSubject' => sanitize_text_field( $options['edit_notification_subject'] ),
-			'showTimer'               => (bool) $options['show_timer'],
-			'buttonTheme'             => sanitize_text_field( $options['button_theme'] ),
-			'showIcons'               => (bool) $options['show_icons'],
-			'timerAppearance'         => sanitize_text_field( $options['timer_appearance'] ),
-			'saveText'                => sanitize_text_field( $options['save_text'] ),
-			'cancelText'              => sanitize_text_field( $options['cancel_text'] ),
-			'deleteText'              => sanitize_text_field( $options['delete_text'] ),
-			'stopTimerText'           => sanitize_text_field( $options['stop_timer_text'] ),
-			'clickToEditText'         => sanitize_text_field( $options['click_to_edit_text'] ),
-			'confirmDelete'           => sanitize_text_field( $options['confirm_delete'] ),
-			'commentDeleted'          => sanitize_text_field( $options['comment_deleted'] ),
-			'commentDeletedError'     => sanitize_text_field( $options['comment_deleted_error'] ),
-			'commentEmptyError'       => sanitize_text_field( $options['comment_empty_error'] ),
+			'timer'                       => absint( $options['timer'] ),
+			'enableCommentEditing'        => (bool) $options['enable_comment_editing'],
+			'allowCommentLogging'         => (bool) $options['allow_comment_logging'],
+			'allowFrontEndEditing'        => (bool) $options['allow_front_end_editing'],
+			'allowFrontEndModerationMenu' => (bool) $options['allow_front_end_moderation_menu'],
+			'allowUnlimitedEditing'       => (bool) $options['allow_unlimited_editing'],
+			'showStopTimer'               => (bool) $options['show_stop_timer'],
+			'allowDelete'                 => (bool) $options['allow_delete'],
+			'deleteOnly'                  => (bool) $options['delete_only'],
+			'allowDeleteConfirmation'     => (bool) $options['allow_delete_confirmation'],
+			'allowEditNotification'       => (bool) $options['allow_edit_notification'],
+			'editNotificationTo'          => sanitize_text_field( $options['edit_notification_to'] ),
+			'editNotificationFrom'        => sanitize_text_field( $options['edit_notification_from'] ),
+			'editNotificationSubject'     => sanitize_text_field( $options['edit_notification_subject'] ),
+			'showTimer'                   => (bool) $options['show_timer'],
+			'buttonTheme'                 => sanitize_text_field( $options['button_theme'] ),
+			'showIcons'                   => (bool) $options['show_icons'],
+			'timerAppearance'             => sanitize_text_field( $options['timer_appearance'] ),
+			'saveText'                    => sanitize_text_field( $options['save_text'] ),
+			'cancelText'                  => sanitize_text_field( $options['cancel_text'] ),
+			'deleteText'                  => sanitize_text_field( $options['delete_text'] ),
+			'stopTimerText'               => sanitize_text_field( $options['stop_timer_text'] ),
+			'clickToEditText'             => sanitize_text_field( $options['click_to_edit_text'] ),
+			'confirmDelete'               => sanitize_text_field( $options['confirm_delete'] ),
+			'commentDeleted'              => sanitize_text_field( $options['comment_deleted'] ),
+			'commentDeletedError'         => sanitize_text_field( $options['comment_deleted_error'] ),
+			'commentEmptyError'           => sanitize_text_field( $options['comment_empty_error'] ),
 		);
 
 		// Exit gracefully.
@@ -121,33 +122,34 @@ class Comment_Editing {
 			);
 		}
 
-		$options                              = array();
-		$options['timer']                     = absint( filter_input( INPUT_POST, 'timer', FILTER_DEFAULT ) );
-		$options['enable_comment_editing']    = (bool) filter_input( INPUT_POST, 'enableCommentEditing', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_comment_logging']     = (bool) filter_input( INPUT_POST, 'allowCommentLogging', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_front_end_editing']   = (bool) filter_input( INPUT_POST, 'allowFrontEndEditing', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_unlimited_editing']   = (bool) filter_input( INPUT_POST, 'allowUnlimitedEditing', FILTER_VALIDATE_BOOLEAN );
-		$options['show_stop_timer']           = (bool) filter_input( INPUT_POST, 'showStopTimer', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_delete']              = (bool) filter_input( INPUT_POST, 'allowDelete', FILTER_VALIDATE_BOOLEAN );
-		$options['delete_only']               = (bool) filter_input( INPUT_POST, 'deleteOnly', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_delete_confirmation'] = (bool) filter_input( INPUT_POST, 'allowDeleteConfirmation', FILTER_VALIDATE_BOOLEAN );
-		$options['allow_edit_notification']   = (bool) filter_input( INPUT_POST, 'allowEditNotification', FILTER_VALIDATE_BOOLEAN );
-		$options['edit_notification_to']      = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationTo', FILTER_DEFAULT ) );
-		$options['edit_notification_from']    = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationFrom', FILTER_DEFAULT ) );
-		$options['edit_notification_subject'] = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationSubject', FILTER_DEFAULT ) );
-		$options['show_timer']                = (bool) filter_input( INPUT_POST, 'showTimer', FILTER_VALIDATE_BOOLEAN );
-		$options['button_theme']              = sanitize_text_field( filter_input( INPUT_POST, 'buttonTheme', FILTER_DEFAULT ) );
-		$options['show_icons']                = (bool) filter_input( INPUT_POST, 'showIcons', FILTER_VALIDATE_BOOLEAN );
-		$options['timer_appearance']          = sanitize_text_field( filter_input( INPUT_POST, 'timerAppearance', FILTER_DEFAULT ) );
-		$options['save_text']                 = sanitize_text_field( filter_input( INPUT_POST, 'saveText', FILTER_DEFAULT ) );
-		$options['cancel_text']               = sanitize_text_field( filter_input( INPUT_POST, 'cancelText', FILTER_DEFAULT ) );
-		$options['delete_text']               = sanitize_text_field( filter_input( INPUT_POST, 'deleteText', FILTER_DEFAULT ) );
-		$options['stop_timer_text']           = sanitize_text_field( filter_input( INPUT_POST, 'stopTimerText', FILTER_DEFAULT ) );
-		$options['click_to_edit_text']        = sanitize_text_field( filter_input( INPUT_POST, 'clickToEditText', FILTER_DEFAULT ) );
-		$options['confirm_delete']            = sanitize_text_field( filter_input( INPUT_POST, 'confirmDelete', FILTER_DEFAULT ) );
-		$options['comment_deleted']           = sanitize_text_field( filter_input( INPUT_POST, 'commentDeleted', FILTER_DEFAULT ) );
-		$options['comment_deleted_error']     = sanitize_text_field( filter_input( INPUT_POST, 'commentDeletedError', FILTER_DEFAULT ) );
-		$options['comment_empty_error']       = sanitize_text_field( filter_input( INPUT_POST, 'commentEmptyError', FILTER_DEFAULT ) );
+		$options                                    = array();
+		$options['timer']                           = absint( filter_input( INPUT_POST, 'timer', FILTER_DEFAULT ) );
+		$options['enable_comment_editing']          = (bool) filter_input( INPUT_POST, 'enableCommentEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_comment_logging']           = (bool) filter_input( INPUT_POST, 'allowCommentLogging', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_front_end_editing']         = (bool) filter_input( INPUT_POST, 'allowFrontEndEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_front_end_moderation_menu'] = (bool) filter_input( INPUT_POST, 'allowFrontEndModerationMenu', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_unlimited_editing']         = (bool) filter_input( INPUT_POST, 'allowUnlimitedEditing', FILTER_VALIDATE_BOOLEAN );
+		$options['show_stop_timer']                 = (bool) filter_input( INPUT_POST, 'showStopTimer', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_delete']                    = (bool) filter_input( INPUT_POST, 'allowDelete', FILTER_VALIDATE_BOOLEAN );
+		$options['delete_only']                     = (bool) filter_input( INPUT_POST, 'deleteOnly', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_delete_confirmation']       = (bool) filter_input( INPUT_POST, 'allowDeleteConfirmation', FILTER_VALIDATE_BOOLEAN );
+		$options['allow_edit_notification']         = (bool) filter_input( INPUT_POST, 'allowEditNotification', FILTER_VALIDATE_BOOLEAN );
+		$options['edit_notification_to']            = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationTo', FILTER_DEFAULT ) );
+		$options['edit_notification_from']          = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationFrom', FILTER_DEFAULT ) );
+		$options['edit_notification_subject']       = sanitize_text_field( filter_input( INPUT_POST, 'editNotificationSubject', FILTER_DEFAULT ) );
+		$options['show_timer']                      = (bool) filter_input( INPUT_POST, 'showTimer', FILTER_VALIDATE_BOOLEAN );
+		$options['button_theme']                    = sanitize_text_field( filter_input( INPUT_POST, 'buttonTheme', FILTER_DEFAULT ) );
+		$options['show_icons']                      = (bool) filter_input( INPUT_POST, 'showIcons', FILTER_VALIDATE_BOOLEAN );
+		$options['timer_appearance']                = sanitize_text_field( filter_input( INPUT_POST, 'timerAppearance', FILTER_DEFAULT ) );
+		$options['save_text']                       = sanitize_text_field( filter_input( INPUT_POST, 'saveText', FILTER_DEFAULT ) );
+		$options['cancel_text']                     = sanitize_text_field( filter_input( INPUT_POST, 'cancelText', FILTER_DEFAULT ) );
+		$options['delete_text']                     = sanitize_text_field( filter_input( INPUT_POST, 'deleteText', FILTER_DEFAULT ) );
+		$options['stop_timer_text']                 = sanitize_text_field( filter_input( INPUT_POST, 'stopTimerText', FILTER_DEFAULT ) );
+		$options['click_to_edit_text']              = sanitize_text_field( filter_input( INPUT_POST, 'clickToEditText', FILTER_DEFAULT ) );
+		$options['confirm_delete']                  = sanitize_text_field( filter_input( INPUT_POST, 'confirmDelete', FILTER_DEFAULT ) );
+		$options['comment_deleted']                 = sanitize_text_field( filter_input( INPUT_POST, 'commentDeleted', FILTER_DEFAULT ) );
+		$options['comment_deleted_error']           = sanitize_text_field( filter_input( INPUT_POST, 'commentDeletedError', FILTER_DEFAULT ) );
+		$options['comment_empty_error']             = sanitize_text_field( filter_input( INPUT_POST, 'commentEmptyError', FILTER_DEFAULT ) );
 
 		// Save options.
 		Options::update_options( $options );
@@ -177,32 +179,33 @@ class Comment_Editing {
 
 		// Populate defaults.
 		$return = array(
-			'timer'                   => absint( $defaults['timer'] ),
-			'enableCommentEditing'    => (bool) $defaults['enable_comment_editing'],
-			'allowCommentLogging'     => (bool) $defaults['allow_comment_logging'],
-			'allowFrontEndEditing'    => (bool) $defaults['allow_front_end_editing'],
-			'allowUnlimitedEditing'   => (bool) $defaults['allow_unlimited_editing'],
-			'showStopTimer'           => (bool) $defaults['show_stop_timer'],
-			'allowDelete'             => (bool) $defaults['allow_delete'],
-			'deleteOnly'              => (bool) $defaults['delete_only'],
-			'allowDeleteConfirmation' => (bool) $defaults['allow_delete_confirmation'],
-			'allowEditNotification'   => (bool) $defaults['allow_edit_notification'],
-			'editNotificationTo'      => sanitize_text_field( $defaults['edit_notification_to'] ),
-			'editNotificationFrom'    => sanitize_text_field( $defaults['edit_notification_from'] ),
-			'editNotificationSubject' => sanitize_text_field( $defaults['edit_notification_subject'] ),
-			'showTimer'               => (bool) $defaults['show_timer'],
-			'buttonTheme'             => sanitize_text_field( $defaults['button_theme'] ),
-			'showIcons'               => (bool) $defaults['show_icons'],
-			'timerAppearance'         => sanitize_text_field( $defaults['timer_appearance'] ),
-			'saveText'                => sanitize_text_field( $defaults['save_text'] ),
-			'cancelText'              => sanitize_text_field( $defaults['cancel_text'] ),
-			'deleteText'              => sanitize_text_field( $defaults['delete_text'] ),
-			'stopTimerText'           => sanitize_text_field( $defaults['stop_timer_text'] ),
-			'clickToEditText'         => sanitize_text_field( $defaults['click_to_edit_text'] ),
-			'confirmDelete'           => sanitize_text_field( $defaults['confirm_delete'] ),
-			'commentDeleted'          => sanitize_text_field( $defaults['comment_deleted'] ),
-			'commentDeletedError'     => sanitize_text_field( $defaults['comment_deleted_error'] ),
-			'commentEmptyError'       => sanitize_text_field( $defaults['comment_empty_error'] ),
+			'timer'                       => absint( $defaults['timer'] ),
+			'enableCommentEditing'        => (bool) $defaults['enable_comment_editing'],
+			'allowCommentLogging'         => (bool) $defaults['allow_comment_logging'],
+			'allowFrontEndEditing'        => (bool) $defaults['allow_front_end_editing'],
+			'allowFrontEndModerationMenu' => (bool) $defaults['allow_front_end_moderation_menu'],
+			'allowUnlimitedEditing'       => (bool) $defaults['allow_unlimited_editing'],
+			'showStopTimer'               => (bool) $defaults['show_stop_timer'],
+			'allowDelete'                 => (bool) $defaults['allow_delete'],
+			'deleteOnly'                  => (bool) $defaults['delete_only'],
+			'allowDeleteConfirmation'     => (bool) $defaults['allow_delete_confirmation'],
+			'allowEditNotification'       => (bool) $defaults['allow_edit_notification'],
+			'editNotificationTo'          => sanitize_text_field( $defaults['edit_notification_to'] ),
+			'editNotificationFrom'        => sanitize_text_field( $defaults['edit_notification_from'] ),
+			'editNotificationSubject'     => sanitize_text_field( $defaults['edit_notification_subject'] ),
+			'showTimer'                   => (bool) $defaults['show_timer'],
+			'buttonTheme'                 => sanitize_text_field( $defaults['button_theme'] ),
+			'showIcons'                   => (bool) $defaults['show_icons'],
+			'timerAppearance'             => sanitize_text_field( $defaults['timer_appearance'] ),
+			'saveText'                    => sanitize_text_field( $defaults['save_text'] ),
+			'cancelText'                  => sanitize_text_field( $defaults['cancel_text'] ),
+			'deleteText'                  => sanitize_text_field( $defaults['delete_text'] ),
+			'stopTimerText'               => sanitize_text_field( $defaults['stop_timer_text'] ),
+			'clickToEditText'             => sanitize_text_field( $defaults['click_to_edit_text'] ),
+			'confirmDelete'               => sanitize_text_field( $defaults['confirm_delete'] ),
+			'commentDeleted'              => sanitize_text_field( $defaults['comment_deleted'] ),
+			'commentDeletedError'         => sanitize_text_field( $defaults['comment_deleted_error'] ),
+			'commentEmptyError'           => sanitize_text_field( $defaults['comment_empty_error'] ),
 		);
 
 		// Go through return defaults and format into options.

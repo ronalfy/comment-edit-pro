@@ -62,6 +62,7 @@ class Options {
 				case 'allow_unlimited_editing':
 				case 'allow_front_end_character_limit':
 				case 'allow_front_end_editing':
+				case 'allow_front_end_moderation_menu':
 				case 'enable_avatars':
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
@@ -206,6 +207,7 @@ class Options {
 			'allow_unlimited_editing'            => false,
 			'allow_front_end_character_limit'    => false,
 			'allow_front_end_editing'            => false,
+			'allow_front_end_moderation_menu'    => false,
 			'enable_avatars'                     => false,
 			'avatar_size'                        => 90,
 			'enable_avatars_logged_in'           => true,
