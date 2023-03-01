@@ -1,3 +1,8 @@
+@keyframes sce-rotate {
+  100% {
+    transform: rotate(360deg) translate(0, 0);
+  }
+}
 .tribute-container {
   position: absolute;
   top: 0;
@@ -293,6 +298,16 @@
 .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:before, .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:after {
   display: inline-block;
   background: #333;
+}
+
+/* Loading animation */
+.sce-rotate {
+  animation-name: sce-rotate;
+  animation-duration: 0.8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 50%;
+  /* From: https://codepen.io/Souleste/pen/oNvVdYx */
 }
 
 /*# sourceMappingURL=sce-frontend.css.map*/

@@ -206,7 +206,7 @@ class Frontend_Editing {
 
 		// Return.
 		$comment_wrapper = sprintf(
-			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d">%s%s</div>',
+			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d">%s<div class"sce-front-end-comment-content">%s</div></div>',
 			$comment_id,
 			$comment_id,
 			$allow_frontend_moderation_menu ? $this->get_moderation_menu_html( $comment ) : '',
@@ -275,7 +275,7 @@ class Frontend_Editing {
 			$comment_status = 'spam';
 		}
 		?>
-		<div class="sce-meatball-menu" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
+		<div class="sce-meatball-menu sce-meatball-comment-status-<?php echo esc_attr( $comment_status ); ?>" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
 			<div class="sce-meatball-content">
 				<input
 					type="checkbox"
@@ -287,39 +287,49 @@ class Frontend_Editing {
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-edit-icon"></use></svg>
 							</span>
-							<?php esc_html_e( 'Edit Comment', 'comment-edit-pro' ); ?>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Edit Comment', 'comment-edit-pro' ); ?>
+							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-approve-comment" data-comment-action="approve" style="<?php echo 'approved' === $comment_status ? 'display: none;' : ''; ?>">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $approve_comment_link ); ?>">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-approve-comment" data-comment-action="approve" data-loading-text="<?php echo esc_attr__( 'Approving...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Approved', 'comment-edit-pro' ); ?>">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $approve_comment_link ); ?>"  onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-approve-icon"></use></svg>
 							</span>
-							<?php esc_html_e( 'Mark Approved', 'comment-edit-pro' ); ?>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Mark Approved', 'comment-edit-pro' ); ?>
+							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-moderate-comment" data-comment-action="moderate" style="<?php echo 'unapproved' === $comment_status ? 'display: none;' : ''; ?>">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $moderate_comment_link ); ?>">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-moderate-comment" data-comment-action="moderate">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $moderate_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Updating comment...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Updated', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-pending-icon"></use></svg>
 							</span>
-							<?php esc_html_e( 'Mark Pending', 'comment-edit-pro' ); ?>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Mark Pending', 'comment-edit-pro' ); ?>
+							</span>
 						</a>
 					</li>
 					<li class="sce-meatball-menu-item sce-meatball-menu-item-spam-comment" data-comment-action="spam">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $spam_comment_link ); ?>">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $spam_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Updating comment..', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Updated', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-spam-icon"></use></svg>
 							</span>
-							<?php esc_html_e( 'Mark as Spam', 'comment-edit-pro' ); ?>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Mark as Spam', 'comment-edit-pro' ); ?>
+							</span>
 						</a>
 					</li>
 					<li class="sce-meatball-menu-item sce-meatball-menu-item-spam-comment" data-comment-action="delete">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $delete_comment_link ); ?>">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $delete_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Deleting...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Deleted', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-trash-icon"></use></svg>
 							</span>
-							<?php esc_html_e( 'Delete Comment', 'comment-edit-pro' ); ?>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Delete Comment', 'comment-edit-pro' ); ?>
+							</span>
 						</a>
 					</li>
 				</ul>
@@ -450,6 +460,14 @@ class Frontend_Editing {
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1867 1867" id="sce-edit-icon">
 				<g><path d="M933.333,0c-515.332,0 -933.333,417.997 -933.333,933.333c0,515.332 418.001,933.334 933.333,933.334c515.332,-0 933.334,-418.002 933.334,-933.334c-0,-515.336 -418.002,-933.333 -933.334,-933.333Zm-409.334,1404.67c-17.334,5.998 -37.333,1.998 -50.667,-11.336c-13.33,-13.33 -17.33,-33.333 -11.332,-50.663l99.333,-275.333l238,237.996l-275.334,99.336Zm356.669,-155.334l-263.334,-263.334l419.332,-419.332l263.334,263.334l-419.332,419.332Zm542.664,-543.335l-54.663,55.335l-263.334,-263.334l55.33,-54.668c49.337,-50 130.668,-50 180.001,0l82.666,82.67c50,49.332 50,130.664 0,179.997Z" style="fill-rule:nonzero;"/></g>
+			</symbol>
+			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"  id="sce-loading-icon" x="0px" y="0px">
+			<g class="cir">
+				<path d="m 20 5 a 1 1 0 0 0 0 30 a 1 1 0 0 0 0 -30" stroke="rgba(0,0,0,0.2)" stroke-width="5" fill="none" stroke-linecap="round"/>
+			</g>
+			<g class="sce-rotate">
+				<path d="m 20 5 a 1 1 0 0 0 0 30" stroke="#333" stroke-width="5" fill="none" stroke-linecap="round"/>
+			</g>
 			</symbol>
 		</svg>
 		<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>

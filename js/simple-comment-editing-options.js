@@ -67,6 +67,13 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	}
 
+	// Frontend menu actions.
+	window.sceFrontendMenuAction = function( e ) {
+		console.log( e );
+		e.preventDefault();
+		console.log( e );
+	};
+
 	const simplecommenteditingoptions = $.simplecommenteditingoptions = $.fn.simplecommenteditingoptions = function() {
 		const $this = this;
 		return this.each( function() {
