@@ -221,7 +221,6 @@
 		align-items: center;
 		border-bottom: 1px solid #ddd;
 		box-sizing: border-box;
-
 		a.button-reset {
 			display: flex;
 			align-items: center;
@@ -245,6 +244,28 @@
 				svg use {
 					line-height: normal;
 					fill: #555;
+				}
+			}
+		}
+		&[data-loading="true"] {
+			a.button-reset {
+				color: #FFF;
+				background: #3CB371;
+				
+				svg use {
+					line-height: normal;
+					fill: #FFF;
+					stroke: #FFF;
+				}
+
+				&:hover {
+					background: #3CB371;
+					color: #FFF;
+	
+					svg use {
+						line-height: normal;
+						fill: #FFF;
+					}
 				}
 			}
 		}
@@ -361,6 +382,26 @@
 		}
 	}
 }
+
+/* Control the visibility of the meatball menu items */
+.sce-meatball-menu {
+	&[data-comment-status="approve"] {
+		li.sce-meatball-menu-item[data-comment-action="approve"] {
+			display: none;
+		}
+	}
+	&[data-comment-status="pending"] {
+		li.sce-meatball-menu-item[data-comment-action="pending"] {
+			display: none;
+		}
+	}
+	&[data-comment-status="spam"] {
+		li.sce-meatball-menu-item[data-comment-action="spam"] {
+			display: none;
+		}
+	}
+}
+
 
 /* Loading animation */
 .sce-rotate {

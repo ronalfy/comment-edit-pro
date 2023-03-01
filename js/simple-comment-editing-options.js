@@ -69,9 +69,71 @@ jQuery( document ).ready( function( $ ) {
 
 	// Frontend menu actions.
 	window.sceFrontendMenuAction = function( e ) {
-		console.log( e );
 		e.preventDefault();
-		console.log( e );
+		const anchor = e.target.closest( 'a' );
+		const anchorHref = anchor.getAttribute( 'href' );
+		const ajaxParams = wpAjax.unserialize( anchorHref );
+		const originalText = anchor.querySelector( '.sce-meatball-menu-label' ).innerHTML;
+
+		// Get comment status.
+		const commentStatus = ajaxParams.status;
+		// todo - after ajax call, update status.
+
+		// Change to loading.
+		const anchorSvg = anchor.querySelector( 'use' );
+		const anchorText = anchor.querySelector( '.sce-meatball-menu-label' );
+		if ( null !== anchorSvg && undefined !== anchorSvg ) {
+			anchorSvg.setAttribute( 'xlink:href', '#sce-loading-icon' );
+		}
+		if ( null !== anchorText && undefined !== anchorText ) {
+			anchorText.innerHTML = anchor.getAttribute( 'data-loading-text' );
+		}
+
+		// Set loading data attribute to LI.
+		const anchorContainer = anchor.closest( 'li' );
+		anchorContainer.setAttribute( 'data-loading', 'true' );
+
+		// Simulate loading state for 3 seconds.
+		setTimeout( function() {
+			// Change to success text.
+			if ( null !== anchorText && undefined !== anchorText ) {
+				// Set finished loading text.
+				anchorText.innerHTML = anchor.getAttribute( 'data-loading-done' );
+
+				// Get the container and action type of the anchor and set SVG with current action icon (original icon).
+
+				const anchorAction = anchorContainer.getAttribute( 'data-comment-action' );
+				anchorSvg.setAttribute( 'xlink:href', '#sce-' + anchorAction + '-icon' );
+
+				// Get the parent/parent container with the comment status.
+				const commentStatusContainer = anchorContainer.closest( 'div.sce-meatball-menu' );
+
+				// If approve, pending, spam, update the commentStatusContainer.
+				switch ( anchorAction ) {
+					case 'approve':
+					case 'pending':
+					case 'spam':
+						setTimeout( function() {
+							// Add fadeout class to container.
+							jQuery( anchorContainer ).fadeOut( 1000, function() {
+								commentStatusContainer.setAttribute( 'data-comment-status', anchorAction );
+								// Update link label with original text.
+								anchor.querySelector( '.sce-meatball-menu-label' ).innerHTML = originalText;
+
+								// Remove loading data attribute from LI.
+								anchorContainer.setAttribute( 'data-loading', 'false' );
+
+								// jQuery's fadeout adds display: none to dom element. Remove it.
+								jQuery( anchorContainer ).css( { display: '' } );
+							} );
+						}, 2500 );
+						break;
+				}
+			}
+		}, 3000 );
+
+		// const ajax_params = wpAjax.unserialize( e.target.url );
+		// console.log( ajax_params );
 	};
 
 	const simplecommenteditingoptions = $.simplecommenteditingoptions = $.fn.simplecommenteditingoptions = function() {

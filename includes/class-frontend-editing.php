@@ -231,6 +231,7 @@ class Frontend_Editing {
 				'action' => 'sce-moderation-approve-comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-approve-comment-' . $comment->comment_ID ),
+				'status' => 'approve',
 			),
 			admin_url( 'admin-ajax.php' )
 		);
@@ -239,6 +240,7 @@ class Frontend_Editing {
 				'action' => 'sce-moderation-moderate-comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-moderate-comment-' . $comment->comment_ID ),
+				'status' => 'pending',
 			),
 			admin_url( 'admin-ajax.php' )
 		);
@@ -247,6 +249,7 @@ class Frontend_Editing {
 				'action' => 'sce-moderation-delete-comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-delete-comment-' . $comment->comment_ID ),
+				'status' => 'delete',
 			),
 			admin_url( 'admin-ajax.php' )
 		);
@@ -255,27 +258,28 @@ class Frontend_Editing {
 				'action' => 'sce-moderation-spam-comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-spam-comment-' . $comment->comment_ID ),
+				'status' => 'spam',
 			),
 			admin_url( 'admin-ajax.php' )
 		);
-		$edit_comment_link = add_query_arg(
+		$edit_comment_link     = add_query_arg(
 			array(
 				'action' => 'comment_edit_pro_get_frontend_comment',
 				'cid'    => $comment->comment_ID,
-				'nonce'  =>  wp_create_nonce( 'edit-comment-' . $comment->comment_ID ),
+				'nonce'  => wp_create_nonce( 'edit-comment-' . $comment->comment_ID ),
 			),
 			admin_url( 'admin-ajax.php' )
 		);
 
 		// Get comment status.
-		$comment_status = 'approved';
+		$comment_status = 'approve';
 		if ( '0' === $comment->comment_approved ) {
-			$comment_status = 'unapproved';
+			$comment_status = 'pending';
 		} elseif ( 'spam' === $comment->comment_approved ) {
 			$comment_status = 'spam';
 		}
 		?>
-		<div class="sce-meatball-menu sce-meatball-comment-status-<?php echo esc_attr( $comment_status ); ?>" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
+		<div class="sce-meatball-menu" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
 			<div class="sce-meatball-content">
 				<input
 					type="checkbox"
@@ -292,8 +296,8 @@ class Frontend_Editing {
 							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-approve-comment" data-comment-action="approve" data-loading-text="<?php echo esc_attr__( 'Approving...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Approved', 'comment-edit-pro' ); ?>">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $approve_comment_link ); ?>"  onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-approve-comment" data-comment-action="approve">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $approve_comment_link ); ?>"  onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);" data-loading-text="<?php echo esc_attr__( 'Approving...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Approved', 'comment-edit-pro' ); ?>">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-approve-icon"></use></svg>
 							</span>
@@ -302,8 +306,8 @@ class Frontend_Editing {
 							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-moderate-comment" data-comment-action="moderate">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $moderate_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Updating comment...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Updated', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-moderate-comment" data-comment-action="pending">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $moderate_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Marking as Pending...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment is Now Pending', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-pending-icon"></use></svg>
 							</span>
@@ -313,7 +317,7 @@ class Frontend_Editing {
 						</a>
 					</li>
 					<li class="sce-meatball-menu-item sce-meatball-menu-item-spam-comment" data-comment-action="spam">
-						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $spam_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Updating comment..', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Updated', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
+						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $spam_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Marking as spam...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Marked as Spam', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-spam-icon"></use></svg>
 							</span>
@@ -322,7 +326,7 @@ class Frontend_Editing {
 							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-spam-comment" data-comment-action="delete">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-spam-comment" data-comment-action="trash">
 						<a class="button-reset" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $delete_comment_link ); ?>" data-loading-text="<?php echo esc_attr__( 'Deleting...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Comment Deleted', 'comment-edit-pro' ); ?>" onClick="(function(e){window.sceFrontendMenuAction(e)})(arguments[0]);">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-trash-icon"></use></svg>
@@ -463,10 +467,10 @@ class Frontend_Editing {
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"  id="sce-loading-icon" x="0px" y="0px">
 			<g class="cir">
-				<path d="m 20 5 a 1 1 0 0 0 0 30 a 1 1 0 0 0 0 -30" stroke="rgba(0,0,0,0.2)" stroke-width="5" fill="none" stroke-linecap="round"/>
+				<path d="m 20 5 a 1 1 0 0 0 0 30 a 1 1 0 0 0 0 -30" stroke="#daf0e4" stroke-width="5" fill="none" stroke-linecap="round"/>
 			</g>
 			<g class="sce-rotate">
-				<path d="m 20 5 a 1 1 0 0 0 0 30" stroke="#333" stroke-width="5" fill="none" stroke-linecap="round"/>
+				<path d="m 20 5 a 1 1 0 0 0 0 30" stroke="#FFF" stroke-width="5" fill="none" stroke-linecap="round"/>
 			</g>
 			</symbol>
 		</svg>

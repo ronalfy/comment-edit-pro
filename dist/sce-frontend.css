@@ -226,6 +226,23 @@
   line-height: normal;
   fill: #555;
 }
+.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset {
+  color: #FFF;
+  background: #3CB371;
+}
+.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset svg use {
+  line-height: normal;
+  fill: #FFF;
+  stroke: #FFF;
+}
+.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset:hover {
+  background: #3CB371;
+  color: #FFF;
+}
+.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset:hover svg use {
+  line-height: normal;
+  fill: #FFF;
+}
 .sce-meatball-content input {
   cursor: pointer;
 }
@@ -298,6 +315,17 @@
 .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:before, .sce-meatball-content input:checked ~ .sce-meatball-icon-wrapper > div span:after {
   display: inline-block;
   background: #333;
+}
+
+/* Control the visibility of the meatball menu items */
+.sce-meatball-menu[data-comment-status=approve] li.sce-meatball-menu-item[data-comment-action=approve] {
+  display: none;
+}
+.sce-meatball-menu[data-comment-status=pending] li.sce-meatball-menu-item[data-comment-action=pending] {
+  display: none;
+}
+.sce-meatball-menu[data-comment-status=spam] li.sce-meatball-menu-item[data-comment-action=spam] {
+  display: none;
 }
 
 /* Loading animation */
