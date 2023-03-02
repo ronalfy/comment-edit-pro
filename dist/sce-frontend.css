@@ -219,29 +219,15 @@
   line-height: normal;
 }
 .sce-meatball-content li.sce-meatball-menu-item a.button-reset:hover {
-  background: #CCC;
+  background: #EEE;
   color: #111;
 }
 .sce-meatball-content li.sce-meatball-menu-item a.button-reset:hover svg use {
   line-height: normal;
-  fill: #555;
 }
 .sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset {
-  color: #FFF;
-  background: #3CB371;
-}
-.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset svg use {
-  line-height: normal;
-  fill: #FFF;
-  stroke: #FFF;
-}
-.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset:hover {
-  background: #3CB371;
-  color: #FFF;
-}
-.sce-meatball-content li.sce-meatball-menu-item[data-loading=true] a.button-reset:hover svg use {
-  line-height: normal;
-  fill: #FFF;
+  color: #111;
+  background: #EEE;
 }
 .sce-meatball-content input {
   cursor: pointer;
@@ -336,6 +322,36 @@
   animation-iteration-count: infinite;
   transform-origin: 50% 50%;
   /* From: https://codepen.io/Souleste/pen/oNvVdYx */
+}
+
+/* Frontend Menu Icon colors */
+li.sce-meatball-menu-item[data-comment-action=edit] a svg use {
+  fill: #2073BA;
+}
+li.sce-meatball-menu-item[data-comment-action=approve] a svg use {
+  fill: #20BA2C;
+}
+li.sce-meatball-menu-item[data-comment-action=approve][data-loading=true] a svg use {
+  color: #20BA2C;
+}
+li.sce-meatball-menu-item[data-comment-action=pending] a svg use {
+  fill: #BA9920;
+  color: #BA9920;
+}
+li.sce-meatball-menu-item[data-comment-action=pending][data-loading=true] a svg use {
+  color: #BA9920;
+}
+li.sce-meatball-menu-item[data-comment-action=spam] a svg use {
+  fill: #BA7420;
+}
+li.sce-meatball-menu-item[data-comment-action=spam][data-loading=true] a svg use {
+  color: #BA7420;
+}
+li.sce-meatball-menu-item[data-comment-action=trash] a svg use {
+  fill: #BA2E20;
+}
+li.sce-meatball-menu-item[data-comment-action=trash][data-loading=true] a svg use {
+  color: #BA2E20;
 }
 
 /*# sourceMappingURL=sce-frontend.css.map*/

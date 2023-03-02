@@ -238,35 +238,20 @@
 			}
 
 			&:hover {
-				background: #CCC;
+				background: #EEE;
 				color: #111;
 
 				svg use {
 					line-height: normal;
-					fill: #555;
 				}
 			}
 		}
 		&[data-loading="true"] {
 			a.button-reset {
-				color: #FFF;
-				background: #3CB371;
+				color: #111;
+				background: #EEE;
 				
-				svg use {
-					line-height: normal;
-					fill: #FFF;
-					stroke: #FFF;
-				}
-
-				&:hover {
-					background: #3CB371;
-					color: #FFF;
-	
-					svg use {
-						line-height: normal;
-						fill: #FFF;
-					}
-				}
+				
 			}
 		}
 	}
@@ -411,4 +396,91 @@
 	animation-iteration-count: infinite;
 	transform-origin: 50% 50%;
 	/* From: https://codepen.io/Souleste/pen/oNvVdYx */
+}
+
+/* Frontend Menu Icon colors */
+li.sce-meatball-menu-item {
+	&[data-comment-action="edit"] {
+		a {
+			svg {
+				use {
+					fill: #2073BA;
+				}
+			}
+		}
+		
+	}
+	&[data-comment-action="approve"] {
+		a {
+			svg {
+				use {
+					fill: #20BA2C;
+				}
+			}
+		}
+		&[data-loading="true"] {
+			a {
+				svg {
+					use {
+						color: #20BA2C;
+					}
+				}
+			}
+		}
+	}
+	&[data-comment-action="pending"] {
+		a {
+			svg {
+				use {
+					fill: #BA9920;
+					color: #BA9920;
+				}
+			}
+		}
+		&[data-loading="true"] {
+			a {
+				svg {
+					use {
+						color: #BA9920;
+					}
+				}
+			}
+		}
+	}
+	&[data-comment-action="spam"] {
+		a {
+			svg {
+				use {
+					fill: #BA7420;
+				}
+			}
+		}
+		&[data-loading="true"] {
+			a {
+				svg {
+					use {
+						color: #BA7420;
+					}
+				}
+			}
+		}
+	}
+	&[data-comment-action="trash"] {
+		a {
+			svg {
+				use {
+					fill: #BA2E20;
+				}
+			}
+		}
+		&[data-loading="true"] {
+			a {
+				svg {
+					use {
+						color: #BA2E20;
+					}
+				}
+			}
+		}
+	}
 }

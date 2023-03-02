@@ -467,7 +467,7 @@ class Frontend_Editing {
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"  id="sce-loading-icon" x="0px" y="0px">
 			<g class="cir">
-				<path d="m 20 5 a 1 1 0 0 0 0 30 a 1 1 0 0 0 0 -30" stroke="#daf0e4" stroke-width="5" fill="none" stroke-linecap="round"/>
+				<path d="m 20 5 a 1 1 0 0 0 0 30 a 1 1 0 0 0 0 -30" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
 			</g>
 			<g class="sce-rotate">
 				<path d="m 20 5 a 1 1 0 0 0 0 30" stroke="#FFF" stroke-width="5" fill="none" stroke-linecap="round"/>
