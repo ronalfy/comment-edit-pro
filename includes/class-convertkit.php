@@ -78,7 +78,7 @@ class ConvertKit {
 	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
 	 */
 	public function comment_posted( $comment_id, $maybe_comment_approved ) {
-		$signup_enabled = (bool) filter_input( INPUT_POST, 'sce-mailchimp-signup', FILTER_VALIDATE_BOOLEAN );
+		$signup_enabled = (bool) filter_input( INPUT_POST, 'sce-convertkit-signup', FILTER_VALIDATE_BOOLEAN );
 
 		if ( $signup_enabled && 'spam' !== $maybe_comment_approved ) {
 			// Get the comment.
@@ -101,50 +101,124 @@ class ConvertKit {
 			return false;
 		}
 
+		// Get options.
 		$options = Options::get_options();
-		$list    = $options['convertkit_selected_list'] ?? '';
-		if ( empty( $list ) ) {
+
+		// Make sure convertkit is enabled and valid.
+		if ( ! (bool) $options['enable_convertkit'] || ! (bool) $options['convertkit_api_valid'] ) {
 			return false;
 		}
 
-		// Format API url for a server prefix..
-		$convertkit_api_url = str_replace(
-			'<sp>',
-			$options['convertkit_api_key_server_prefix'],
-			$this->convertkit_api
-		);
+		// Get API and secret.
+		$api_key        = $options['convertkit_api_key'];
+		$api_secret_key = $options['convertkit_secret_key'];
 
-		$commenter_name     = $comment->comment_author;
-		$convertkit_api_key = $options['convertkit_api_key'];
-
-		$endpoint = $convertkit_api_url . 'lists/' . $list . '/members/';
+		// Determine if we're using forms or tags.
+		$form_or_tag = $options['convertkit_form_or_tag'];
 
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $convertkit_api_key,
+			'Authorization' => 'Bearer ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
 		);
-		$http_args['body']    = wp_json_encode(
-			array(
-				'email_address' => $email,
-				'status'        => 'pending',
-				'merge_fields'  => array(
-					'FNAME' => $commenter_name,
-				),
-			)
+		$http_args['body']    = array(
+			'api_key' => $api_key,
 		);
-		$response             = wp_remote_post( esc_url_raw( $endpoint ), $http_args );
-		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			// Response code can be 400 if the member already exists.
-			return false;
+
+		// Get any tags.
+		$tags = array();
+		if ( Functions::is_multisite() ) {
+			$tags = get_site_option( 'sce_convertkit_tags', array() );
+		} else {
+			$tags = get_option( 'sce_convertkit_tags', array() );
 		}
 
-		// Now format response from JSON.
-		$response_array = json_decode( wp_remote_retrieve_body( $response ), true );
-		// Save subscription ID to comment meta.
-		add_comment_meta( $comment_id, 'sce_convertkit_id', $response_array['id'] );
+		// Get selected tags.
+		$selected_tag_ids = array();
+		foreach ( $tags as $tag ) {
+			if ( isset( $tag['selected'] ) && (bool) $tag['selected'] ) {
+				$selected_tag_ids[] = $tag['id'];
+			}
+		}
+
+		// Get any custom fields.
+		$custom_fields = array();
+		if ( Functions::is_multisite() ) {
+			$custom_fields = get_site_option( 'sce_convertkit_custom_fields', array() );
+		} else {
+			$custom_fields = get_option( 'sce_convertkit_custom_fields', array() );
+		}
+
+		// Map custom fields to value.
+		$selected_custom_fields = array();
+		foreach ( $custom_fields as $index => $custom_field ) {
+			if ( 'none' !== $custom_field['field'] ) {
+				$custom_field_value     = '';
+				$custom_field_raw_value = $custom_field['field'];
+				if ( 'custom' === $custom_field_raw_value ) {
+					$custom_field_value = $custom_field['field_custom'];
+				} else {
+					$custom_field_value = $this->map_request_header( $custom_field_raw_value, $comment );
+				}
+				$selected_custom_fields[] = array(
+					'key'   => $custom_field['label'],
+					'value' => $custom_field_value,
+				);
+			}
+		}
+
+		// Get API Endpoint.
+		$api_endpoint = $this->convertkit_api;
+		if ( 'form' === $form_or_tag ) {
+			$selected_form = $options['convertkit_selected_form'];
+			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
+		}
+
 		return true;
+	}
+
+	/**
+	 * Map a request header to a comment value.
+	 *
+	 * @param string     $request_key Request key to retrieve the value for.
+	 * @param WP_Comment $comment     The comment object.
+	 */
+	private function map_request_header( $request_key, $comment ) {
+		switch ( $request_key ) {
+			case 'commenter_name':
+				return $comment->comment_author;
+			case 'commenter_email':
+				return $comment->comment_author_email;
+			case 'commenter_website':
+				return $comment->comment_author_url;
+			case 'comment_content':
+				return $comment->comment_content;
+			case 'comment_id':
+				return $comment->comment_ID;
+			case 'comment_parent_id':
+				return $comment->comment_parent;
+			case 'comment_post_id':
+				return $comment->comment_post_ID;
+			case 'comment_post_title':
+				return get_the_title( $comment->comment_post_ID );
+			case 'comment_post_url':
+				return get_permalink( $comment->comment_post_ID );
+			case 'comment_author_ip':
+				return $comment->comment_author_IP;
+			case 'comment_author_user_agent':
+				return $comment->comment_agent;
+			case 'comment_date':
+				return $comment->comment_date;
+			case 'comment_date_gmt':
+				return $comment->comment_date_gmt;
+			case 'comment_approved':
+				return $comment->comment_approved;
+			case 'comment_type':
+				return $comment->comment_type;
+			default:
+				return '';
+		}
 	}
 
 	/**
@@ -153,24 +227,25 @@ class ConvertKit {
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
 	public function add_convertkit_checkbox( $comment_fields ) {
-		$options            = Options::get_options();
-		$convertkit_enabled = (bool) $options['enable_convertkit'];
+		$options              = Options::get_options();
+		$convertkit_enabled   = (bool) $options['enable_convertkit'];
+		$convertkit_api_valid = (bool) $options['convertkit_api_valid'];
 
-		// Chceck to see if ConvertKit is enabled.
-		if ( ! $convertkit_enabled || current_user_can( 'moderate_comments' ) ) {
-			return $comment_fields;
-		}
+		// Chceck to see if ConvertKit is enabled. Skip if can moderate.
+		// if ( ( ! $convertkit_enabled || ! $convertkit_api_valid ) || current_user_can( 'moderate_comments' ) ) {
+		// return $comment_fields;
+		// }
 
 		// Now get the checkbox details.
 		$checked_by_default              = (bool) $options['convertkit_checkbox_enabled'];
 		$convertkit_html                 = array(
-			'sce-mailchimp' => sprintf(
-				'<section class="comment-form-sce-mailchimp"><label><input type="checkbox" name="sce-mailchimp-signup" %s /> %s</label></section>',
+			'sce-convertkit' => sprintf(
+				'<section class="comment-form-sce-convertkit"><label><input type="checkbox" name="sce-convertkit-signup" %s /> %s</label></section>',
 				checked( $checked_by_default, true, false ),
 				esc_html( $options['convertkit_signup_label'] )
 			),
 		);
-		$comment_fields['submit_button'] = $convertkit_html['sce-mailchimp'] . $comment_fields['submit_button'];
+		$comment_fields['submit_button'] = $convertkit_html['sce-convertkit'] . $comment_fields['submit_button'];
 		return $comment_fields;
 	}
 
@@ -671,7 +746,7 @@ class ConvertKit {
 		// Return tags.
 		wp_send_json_success(
 			array(
-				'forms'     => $sanitized_form_values,
+				'forms'    => $sanitized_form_values,
 				'apiValid' => true,
 			)
 		);
