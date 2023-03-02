@@ -178,6 +178,19 @@ const Interface = ( props ) => {
 			if ( '0' === getValues( 'selectedForm' ) ) {
 				return false;
 			}
+			if ( '0' !== getValues( 'selectedForm' ) ) {
+				// Check if selectedForm is not in the forms array.
+				const selectedForm = getValues( 'selectedForm' );
+				let selected = false;
+				forms.forEach( ( form ) => {
+					if ( form.value === selectedForm ) {
+						selected = true;
+					}
+				} );
+				if ( ! selected ) {
+					return false;
+				}
+			}
 		}
 
 		// Check to see if any tags are selected.
@@ -216,7 +229,7 @@ const Interface = ( props ) => {
 
 					// Reset form.
 					reset(
-						{ ...ajaxData },
+						{ ...formData, ...ajaxData },
 						{
 							keepErrors: false,
 							keepDirty: false,
@@ -248,7 +261,7 @@ const Interface = ( props ) => {
 				if ( ajaxSuccess ) {
 					// Reset form state.
 					reset(
-						{ ...ajaxData },
+						{ ...formValues, ...ajaxData },
 						{
 							keepErrors: false,
 							keepDirty: false,
@@ -360,58 +373,6 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const refreshFormsAndTags = ( formData ) => {
-		setSaving( true );
-		sendCommand( 'sce_refresh_convertkit_forms_tags', {
-			nonce: sceIntegrations.ck_refresh_forms_tags_nonce,
-			...formData,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					const { forms, tags, apiValid } = ajaxData;
-					const newFormValues = [];
-					forms.forEach( ( keys, index ) => {
-						newFormValues.push( keys );
-					} );
-					const newTagValues = [];
-					tags.forEach( ( keys, index ) => {
-						newTagValues.push( keys );
-					} );
-					const updatedFormValues = {
-						forms: newFormValues,
-						tags: newTagValues,
-						apiValid,
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: false,
-							keepDirty: false,
-						}
-					);
-				} else {
-					const updatedFormValues = {
-						apiValid: false,
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: false,
-							keepDirty: false,
-						}
-					);
-					setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
-					setError( 'secretKey', { type: 'noForms', message: ajaxData.message } );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setSaving( false );
-			} );
-	};
-
 	const onHandleTagsRefresh = ( formData ) => {
 		setIsRefreshingTags( true );
 		sendCommand( 'sce_refresh_convertkit_tags', {
@@ -462,6 +423,46 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const onHandleFormsRefresh = ( formData ) => {
+		setIsRefreshingForms( true );
+		sendCommand( 'sce_refresh_convertkit_forms', {
+			nonce: sceIntegrations.ck_refresh_forms_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { forms, apiValid } = ajaxData;
+
+					const updatedFormValues = {
+						forms,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'forms', { type: 'noForms', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingForms( false );
+			} );
+	};
+
 	const onHandleCustomFieldsRefresh = ( formData ) => {
 		setIsRefreshingCustomFields( true );
 		sendCommand( 'sce_refresh_convertkit_custom_fields', {
@@ -476,7 +477,7 @@ const Interface = ( props ) => {
 					const oldCustomFieldValues = getValues( 'customFields' );
 					customFields.forEach( ( keys, index ) => {
 						// Use old selection state for new tags.
-						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === customField.value );
+						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === keys.value );
 						if ( oldCustomFields ) {
 							keys.field = oldCustomFields.field;
 							keys.field_value = oldCustomFields.field_value ?? '';
@@ -640,6 +641,8 @@ const Interface = ( props ) => {
 	};
 
 	const getConvertKitForms = () => {
+		// Get forms.
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const convertKitForms = getValues( 'forms' );
 		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || 'form' !== getValues( 'formOrTag' ) ) {
 			return <></>;
@@ -649,8 +652,8 @@ const Interface = ( props ) => {
 			<tr>
 				<th scope="row">{ __( 'ConvertKit Forms (Required)', 'comment-edit-pro' ) }</th>
 				<td>
-					{ convertKitForms.length === 0 && (
-						<>
+					<>
+						{ convertKitForms.length !== 0 && (
 							<Controller
 								name="selectedForm"
 								control={ control }
@@ -677,17 +680,33 @@ const Interface = ( props ) => {
 									/>
 								) }
 							/>
-							{ 'required' === errors.selectedForm?.type && (
-								<Notice
-									message={ __( 'This field is a required field.' ) }
-									status="error"
-									politeness="assertive"
-									inline={ true }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-						</>
-					) }
+						) }
+						<div className="sce-admin-buttons">
+							<Button
+								isBusy={ isRefreshingForms }
+								disabled={ isRefreshingForms }
+								onClick={ () => {
+									onHandleFormsRefresh();
+								} }
+								className={ classNames(
+									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+									{ 'has-error': hasErrors() },
+									{ 'has-icon': isRefreshingForms },
+									{ 'is-saving': isRefreshingForms },
+								) }
+								text={ isRefreshingForms ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Forms', 'comment-edit-pro' ) }
+							/>
+						</div>
+						{ 'required' === errors.selectedForm?.type && (
+							<Notice
+								message={ __( 'This field is a required field.' ) }
+								status="error"
+								politeness="assertive"
+								inline={ true }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+					</>
 					{ 'form' === getValues( 'formOrTag' ) && convertKitForms.length === 0 && (
 						<Notice
 							message={ __(

@@ -266,8 +266,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
 /* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
@@ -518,6 +518,21 @@ var Interface = function Interface(props) {
       if ('0' === getValues('selectedForm')) {
         return false;
       }
+
+      if ('0' !== getValues('selectedForm')) {
+        // Check if selectedForm is not in the forms array.
+        var selectedForm = getValues('selectedForm');
+        var selected = false;
+        forms.forEach(function (form) {
+          if (form.value === selectedForm) {
+            selected = true;
+          }
+        });
+
+        if (!selected) {
+          return false;
+        }
+      }
     } // Check to see if any tags are selected.
 
 
@@ -526,14 +541,14 @@ var Interface = function Interface(props) {
         return false;
       }
 
-      var selected = false;
+      var _selected = false;
       tags.forEach(function (tag) {
         if (tag.selected) {
-          selected = true;
+          _selected = true;
         }
       });
 
-      if (!selected) {
+      if (!_selected) {
         return false;
       }
     }
@@ -556,7 +571,7 @@ var Interface = function Interface(props) {
       if (ajaxSuccess) {
         setIsSaved(true); // Reset form.
 
-        reset(_objectSpread({}, ajaxData), {
+        reset(_objectSpread(_objectSpread({}, formData), ajaxData), {
           keepErrors: false,
           keepDirty: false
         });
@@ -581,7 +596,7 @@ var Interface = function Interface(props) {
 
       if (ajaxSuccess) {
         // Reset form state.
-        reset(_objectSpread({}, ajaxData), {
+        reset(_objectSpread(_objectSpread({}, formValues), ajaxData), {
           keepErrors: false,
           keepDirty: false
         });
@@ -714,57 +729,6 @@ var Interface = function Interface(props) {
     });
   };
 
-  var refreshFormsAndTags = function refreshFormsAndTags(formData) {
-    setSaving(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_forms_tags', _objectSpread({
-      nonce: sceIntegrations.ck_refresh_forms_tags_nonce
-    }, formData)).then(function (ajaxResponse) {
-      var ajaxData = ajaxResponse.data.data;
-      var ajaxSuccess = ajaxResponse.data.success;
-
-      if (ajaxSuccess) {
-        var forms = ajaxData.forms,
-            tags = ajaxData.tags,
-            apiValid = ajaxData.apiValid;
-        var newFormValues = [];
-        forms.forEach(function (keys, index) {
-          newFormValues.push(keys);
-        });
-        var newTagValues = [];
-        tags.forEach(function (keys, index) {
-          newTagValues.push(keys);
-        });
-        var updatedFormValues = {
-          forms: newFormValues,
-          tags: newTagValues,
-          apiValid: apiValid
-        };
-        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
-          keepErrors: false,
-          keepDirty: false
-        });
-      } else {
-        var _updatedFormValues = {
-          apiValid: false
-        };
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues), {
-          keepErrors: false,
-          keepDirty: false
-        });
-        setError('apiKey', {
-          type: 'noForms',
-          message: ajaxData.message
-        });
-        setError('secretKey', {
-          type: 'noForms',
-          message: ajaxData.message
-        });
-      }
-    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
-      setSaving(false);
-    });
-  };
-
   var onHandleTagsRefresh = function onHandleTagsRefresh(formData) {
     setIsRefreshingTags(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_tags', {
@@ -799,8 +763,8 @@ var Interface = function Interface(props) {
           keepDirty: true
         });
       } else {
-        var _updatedFormValues2 = {};
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues2), {
+        var _updatedFormValues = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues), {
           keepErrors: true,
           keepDirty: true
         });
@@ -811,6 +775,40 @@ var Interface = function Interface(props) {
       }
     })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
       setIsRefreshingTags(false);
+    });
+  };
+
+  var onHandleFormsRefresh = function onHandleFormsRefresh(formData) {
+    setIsRefreshingForms(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_forms', {
+      nonce: sceIntegrations.ck_refresh_forms_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var forms = ajaxData.forms,
+            apiValid = ajaxData.apiValid;
+        var updatedFormValues = {
+          forms: forms
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues2 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues2), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('forms', {
+          type: 'noForms',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingForms(false);
     });
   };
 
@@ -830,7 +828,7 @@ var Interface = function Interface(props) {
         customFields.forEach(function (keys, index) {
           // Use old selection state for new tags.
           var oldCustomFields = oldCustomFieldValues.find(function (customField) {
-            return customField.value === customField.value;
+            return customField.value === keys.value;
           });
 
           if (oldCustomFields) {
@@ -978,6 +976,8 @@ var Interface = function Interface(props) {
   var getConvertKitForms = function getConvertKitForms() {
     var _errors$selectedForm;
 
+    // Get forms.
+    // eslint-disable-next-line @wordpress/no-unused-vars-before-return
     var convertKitForms = getValues('forms');
 
     if (!getValues('apiValid') || needsCredentialRefresh() || 'form' !== getValues('formOrTag')) {
@@ -986,7 +986,7 @@ var Interface = function Interface(props) {
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Forms (Required)', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, convertKitForms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Forms (Required)', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, convertKitForms.length !== 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
       name: "selectedForm",
       control: control,
       rules: {
@@ -1012,7 +1012,23 @@ var Interface = function Interface(props) {
           })
         });
       }
-    }), 'required' === ((_errors$selectedForm = errors.selectedForm) === null || _errors$selectedForm === void 0 ? void 0 : _errors$selectedForm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      isBusy: isRefreshingForms,
+      disabled: isRefreshingForms,
+      onClick: function onClick() {
+        onHandleFormsRefresh();
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
+        'has-error': hasErrors()
+      }, {
+        'has-icon': isRefreshingForms
+      }, {
+        'is-saving': isRefreshingForms
+      }),
+      text: isRefreshingForms ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Forms', 'comment-edit-pro')
+    })), 'required' === ((_errors$selectedForm = errors.selectedForm) === null || _errors$selectedForm === void 0 ? void 0 : _errors$selectedForm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
@@ -1055,7 +1071,7 @@ var Interface = function Interface(props) {
           var _ref5$field = _ref5.field,
               _onChange4 = _ref5$field.onChange,
               value = _ref5$field.value;
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
             label: tag.label,
             onChange: function onChange(enableValue) {
               _onChange4(enableValue);
@@ -1066,7 +1082,7 @@ var Interface = function Interface(props) {
       });
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       isBusy: isRefreshingTags,
       disabled: isRefreshingTags,
       onClick: function onClick() {
@@ -1121,7 +1137,7 @@ var Interface = function Interface(props) {
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       onClick: /*#__PURE__*/function () {
         var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
           var validationResult;
@@ -1224,7 +1240,7 @@ var Interface = function Interface(props) {
             label: tag.label
           });
         }
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
         className: "sce-admin__text-control-reset button-reset",
         icon: "no-alt",
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
@@ -1235,7 +1251,7 @@ var Interface = function Interface(props) {
       })));
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       isBusy: isRefreshingCustomFields,
       disabled: isRefreshingCustomFields,
       onClick: function onClick() {
@@ -1289,7 +1305,7 @@ var Interface = function Interface(props) {
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-buttons"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       onClick: /*#__PURE__*/function () {
         var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
           var validationResult;
@@ -1521,7 +1537,7 @@ var Interface = function Interface(props) {
     }
   }))), getValues('enableConvertKit') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getSecretKey(), getFormOrTag(), getConvertKitForms(), getConvertKitTags(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
-  }, getValues('apiValid') && canShowSaveButton() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+  }, getValues('apiValid') && canShowSaveButton() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }, {
@@ -1537,7 +1553,7 @@ var Interface = function Interface(props) {
     iconSize: "18",
     iconPosition: "right",
     disabled: saving
-  }), needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+  }), needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
       'has-error': hasErrors()
     }),

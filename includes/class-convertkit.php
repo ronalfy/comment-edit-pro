@@ -46,6 +46,9 @@ class ConvertKit {
 		// Add a custom field to ConvertKit account.
 		add_action( 'wp_ajax_sce_add_convertkit_custom_field', array( $this, 'ajax_add_convertkit_custom_field' ) );
 
+		// Refresh forms for a ConvertKit account.
+		add_action( 'wp_ajax_sce_refresh_convertkit_forms', array( $this, 'ajax_refresh_convertkit_forms' ) );
+
 		// Refresh tags for a ConvertKit account.
 		add_action( 'wp_ajax_sce_refresh_convertkit_tags', array( $this, 'ajax_refresh_convertkit_tags' ) );
 
@@ -487,7 +490,7 @@ class ConvertKit {
 
 		// If convertkit enabled, update options with convert kit enabled.
 		if ( $convertkit_enabled ) {
-			$options_to_save['convertkit_enabled'] = true;
+			$options_to_save['enable_convertkit'] = true;
 			Options::update_options( $options_to_save );
 		}
 
@@ -587,6 +590,94 @@ class ConvertKit {
 	}
 
 	/**
+	 * Refresh ConvertKit Forms.
+	 */
+	public function ajax_refresh_convertkit_forms() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-forms' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get saved vars.
+		$options        = Options::get_options();
+		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
+		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
+		// Get tags as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_forms = (array) get_site_option( 'sce_convertkit_forms', array() );
+		} else {
+			$existing_forms = (array) get_option( 'sce_convertkit_forms', array() );
+		}
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Bearer ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+		$http_args['body']    = array(
+			'api_key'    => $api_key,
+			'api_secret' => $api_secret_key,
+		);
+
+		// Get endpoints.
+		$forms_api_endpoint = esc_url_raw( $this->convertkit_api . '/forms' );
+
+		$forms_api_response = wp_remote_get( $forms_api_endpoint, $http_args );
+		if ( is_wp_error( $forms_api_response ) || 200 !== wp_remote_retrieve_response_code( $forms_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve forms from ConvertKit.', 'comment-edit-pro' ) ) );
+		}
+
+		$forms_raw             = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
+		$forms                 = $forms_raw['forms'];
+		$sanitized_form_values = array();
+		foreach ( $forms as $index => $values ) {
+			$sanitized_form_values[ $index ] = array(
+				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
+				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
+			);
+
+			// Check if tag is selected (saved).
+			if ( ! empty( $existing_forms ) ) {
+				foreach ( $existing_forms as $existing_form ) {
+					if ( $existing_form['value'] !== $sanitized_form_values[ $index ]['value'] ) {
+						continue;
+					}
+					$selected_value = (bool) $existing_form['selected'] ?? false;
+					if ( true === $selected_value ) {
+						$sanitized_form_values[ $index ]['selected'] = true;
+					} else {
+						$sanitized_form_values[ $index ]['selected'] = false;
+					}
+				}
+			}
+		}
+
+		// Save tags as an option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_convertkit_forms', $sanitized_form_values );
+		} else {
+			update_option( 'sce_convertkit_forms', $sanitized_form_values );
+		}
+
+		// Return tags.
+		wp_send_json_success(
+			array(
+				'forms'     => $sanitized_form_values,
+				'apiValid' => true,
+			)
+		);
+	}
+
+	/**
 	 * Refresh ConvertKit Custom Fields.
 	 */
 	public function ajax_refresh_convertkit_custom_fields() {
@@ -641,17 +732,17 @@ class ConvertKit {
 			$sanitized_custom_field_values[ $index ] = array(
 				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
 				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
-				'id'    => absint( $custom_fields[ $index ]['id'] ),
+				'id'    => sanitize_text_field( $custom_fields[ $index ]['id'] ),
 			);
 
 			// Add in the field map.
 			if ( ! empty( $existing_custom_fields ) ) {
 				foreach ( $existing_custom_fields as $existing_custom_field ) {
-					if ( $existing_custom_fields['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
+					if ( $existing_custom_field['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
 						continue;
 					}
-					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_fields['field'] ?? 'none';
-					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_fields['field_custom'] ?? '';
+					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_field['field'] ?? 'none';
+					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_field['field_custom'] ?? '';
 				}
 			}
 		}
