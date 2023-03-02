@@ -186,6 +186,24 @@ class ConvertKit {
 			);
 		}
 
+		// Refresh ConvertKit API data if needed once per day.
+		$refresh_transient = get_transient( 'sce_convertkit_refresh' );
+		if ( ! $refresh_transient ) {
+			$options = Options::get_options();
+
+			// Get the API key credentials.
+			$api_valid          = (bool) $options['convertkit_api_valid'];
+			$convertkit_enabled = (bool) $options['enable_convertkit'];
+
+			// If API key is valid, get the keys.
+			if ( $api_valid && $convertkit_enabled ) {
+				$api_key        = $options['convertkit_api_key'];
+				$api_secret_key = $options['convertkit_secret_key'];
+				$this->connect_to_api_return_fresh_data( $api_key, $api_secret_key );
+				exit;
+			}
+		}
+
 		// Retrieve ConvertKit options for return.
 		$json_array = $this->get_convertkit_options_for_return();
 
@@ -220,8 +238,36 @@ class ConvertKit {
 			'forms'            => $forms,
 			'tags'             => $tags,
 			'customFields'     => $custom_fields,
+			'selectedForm'     => $options['convertkit_selected_form'],
 		);
 		return $json_array;
+	}
+
+	/**
+	 * Clears out the ConvertKit Options and resets to defaults.
+	 */
+	private function reset_convertkit_credentials() {
+		$options_to_save = array(
+			'enable_convertkit'           => false,
+			'convertkit_api_key'          => '',
+			'convertkit_secret_key'       => '',
+			'convertkit_signup_label'     => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'convertkit_checkbox_enabled' => false,
+			'convertkit_form_or_tag'      => 'tag',
+			'convertkit_api_valid'        => false,
+			'convertkit_selected_form'    => 0,
+		);
+		if ( Functions::is_multisite() ) {
+			delete_site_option( 'sce_convertkit_forms' );
+			delete_site_option( 'sce_convertkit_tags' );
+			delete_site_option( 'sce_convertkit_custom_fields' );
+		} else {
+			delete_option( 'sce_convertkit_forms' );
+			delete_option( 'sce_convertkit_tags' );
+			delete_option( 'sce_convertkit_custom_fields' );
+		}
+
+		Options::update_options( $options_to_save );
 	}
 
 	/**
@@ -244,26 +290,7 @@ class ConvertKit {
 
 		// If convertkit is disabled, let's clear out some keys.
 		if ( ! $convertkit_enabled ) {
-			$options_to_save = array(
-				'enable_convertkit'           => false,
-				'convertkit_api_key'          => '',
-				'convertkit_secret_key'       => '',
-				'convertkit_signup_label'     => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'convertkit_checkbox_enabled' => false,
-				'convertkit_form_or_tag'      => 'tag',
-				'convertkit_api_valid'        => false,
-			);
-			if ( Functions::is_multisite() ) {
-				delete_site_option( 'sce_convertkit_forms' );
-				delete_site_option( 'sce_convertkit_tags' );
-				delete_site_option( 'sce_convertkit_custom_fields' );
-			} else {
-				delete_option( 'sce_convertkit_forms' );
-				delete_option( 'sce_convertkit_tags' );
-				delete_option( 'sce_convertkit_custom_fields' );
-			}
-
-			Options::update_options( $options_to_save );
+			$this->reset_convertkit_credentials();
 
 			// Return new options.
 			$json_array = $this->get_convertkit_options_for_return();
@@ -285,6 +312,7 @@ class ConvertKit {
 		$forms                       = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'forms', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
 		$tags                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'tags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
 		$custom_fields               = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$selected_form               = sanitize_text_field( filter_input( INPUT_POST, 'selectedForm', FILTER_DEFAULT ) );
 
 		// Check that form or tag is set.
 		if ( empty( $form_or_tag ) ) {
@@ -300,6 +328,7 @@ class ConvertKit {
 			'convertkit_checkbox_enabled' => $convertkit_checkbox_enabled,
 			'convertkit_form_or_tag'      => $form_or_tag,
 			'convertkit_api_valid'        => true,
+			'convertkit_selected_form'    => $selected_form,
 		);
 		Options::update_options( $options_to_save );
 
@@ -321,30 +350,20 @@ class ConvertKit {
 	}
 
 	/**
-	 * Refresh or initialize ConvertKit connection.
+	 * Update ConvertKit API data periodically.
+	 *
+	 * @param string $api_key    API key.
+	 * @param string $secret_key Secret key.
+	 *
+	 * @return void JSON errors|success if any.
 	 */
-	public function ajax_refresh_convertkit_connection() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-connection' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Nonce passed, let's get post vars.
-		$convertkit_enabled = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
-		$api_key            = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_secret_key     = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
-
+	private function connect_to_api_return_fresh_data( $api_key, $secret_key ) {
+		$options = Options::get_options( true );
 		// Now let's set aside some options to save.
 		$options_to_save = array(
-			'enable_convertkit'     => $convertkit_enabled,
+			'enable_convertkit'     => (bool) $options['enable_convertkit'],
 			'convertkit_api_key'    => $api_key,
-			'convertkit_secret_key' => $api_secret_key,
+			'convertkit_secret_key' => $secret_key,
 		);
 
 		// Start building up HTTP args.
@@ -365,7 +384,7 @@ class ConvertKit {
 
 		// Check Account.
 		$account_http_args                       = $http_args;
-		$account_http_args['body']['api_secret'] = $api_secret_key;
+		$account_http_args['body']['api_secret'] = $secret_key;
 
 		// Make Credentials/Account check Call.
 		$account_api_response = wp_remote_get( $account_api_url, $account_http_args );
@@ -408,15 +427,15 @@ class ConvertKit {
 		}
 		foreach ( $tags as $index => $values ) {
 			$sanitized_tag_values[ $index ] = array(
-				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
-				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
+				'label' => sanitize_text_field( $tags[ $index ]['name'] ),
+				'value' => sanitize_text_field( $tags[ $index ]['id'] ),
 			);
 		}
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
-				'label' => sanitize_text_field( $forms[ $index ]['label'] ),
-				'value' => sanitize_text_field( $forms[ $index ]['key'] ),
-				'id'    => sanitize_text_field( $forms[ $index ]['id'] ),
+				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
+				'id'    => sanitize_text_field( $custom_fields[ $index ]['id'] ),
 			);
 		}
 
@@ -435,14 +454,47 @@ class ConvertKit {
 		$options_to_save['convertkit_api_valid'] = true;
 		Options::update_options( $options_to_save );
 
-		wp_send_json_success(
-			array(
-				'forms'        => $sanitized_form_values,
-				'tags'         => $sanitized_tag_values,
-				'customFields' => $sanitized_custom_field_values,
-				'apiValid'     => true,
-			)
-		);
+		// Save transient for refresh.
+		set_transient( 'sce_convertkit_refresh', true, DAY_IN_SECONDS );
+
+		// Return saved form fields.
+		$json_array = $this->get_convertkit_options_for_return();
+		wp_send_json_success( $json_array );
+	}
+
+	/**
+	 * Refresh or initialize ConvertKit connection.
+	 */
+	public function ajax_refresh_convertkit_connection() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-connection' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Clear old options.
+		$this->reset_convertkit_credentials();
+
+		// Nonce passed, let's get post vars.
+		$convertkit_enabled = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
+		$api_key            = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_secret_key     = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
+
+		// If convertkit enabled, update options with convert kit enabled.
+		if ( $convertkit_enabled ) {
+			$options_to_save['convertkit_enabled'] = true;
+			Options::update_options( $options_to_save );
+		}
+
+		// Get API data. Expect a json return exit if credentials are bad.
+		$this->connect_to_api_return_fresh_data( $api_key, $api_secret_key );
+
+		// We shouldn't make it this far, but exit just in case.
 		exit;
 	}
 

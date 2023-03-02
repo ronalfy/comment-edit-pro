@@ -426,6 +426,7 @@ var Interface = function Interface(props) {
       forms: (_data$forms = data.forms) !== null && _data$forms !== void 0 ? _data$forms : [],
       tags: (_data$tags = data.tags) !== null && _data$tags !== void 0 ? _data$tags : [],
       customFields: (_data$customFields = data.customFields) !== null && _data$customFields !== void 0 ? _data$customFields : [],
+      selectedForm: data.selectedForm,
       tagInput: '',
       customFieldInput: ''
     }
@@ -506,6 +507,17 @@ var Interface = function Interface(props) {
 
     if (needsCredentialRefresh()) {
       return false;
+    } // Check to see if any forms are selected.
+
+
+    if (getValues('formOrTag') === 'form') {
+      if (forms.length === 0) {
+        return false;
+      }
+
+      if ('0' === getValues('selectedForm')) {
+        return false;
+      }
     } // Check to see if any tags are selected.
 
 
@@ -568,31 +580,16 @@ var Interface = function Interface(props) {
       var ajaxSuccess = ajaxResponse.data.success;
 
       if (ajaxSuccess) {
-        var forms = ajaxData.forms,
-            tags = ajaxData.tags,
-            apiValid = ajaxData.apiValid;
-        var newFormValues = [];
-        forms.forEach(function (keys, index) {
-          newFormValues.push(keys);
-        });
-        var newTagValues = [];
-        tags.forEach(function (keys, index) {
-          newTagValues.push(keys);
-        });
-        var updatedFormValues = {
-          forms: newFormValues,
-          tags: newTagValues,
-          apiValid: apiValid
-        };
-        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+        // Reset form state.
+        reset(_objectSpread({}, ajaxData), {
           keepErrors: false,
           keepDirty: false
         });
       } else {
-        var _updatedFormValues = {
+        var updatedFormValues = {
           apiValid: false
         };
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues), {
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
           keepErrors: false,
           keepDirty: false
         });
@@ -747,10 +744,10 @@ var Interface = function Interface(props) {
           keepDirty: false
         });
       } else {
-        var _updatedFormValues2 = {
+        var _updatedFormValues = {
           apiValid: false
         };
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues2), {
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues), {
           keepErrors: false,
           keepDirty: false
         });
@@ -802,8 +799,8 @@ var Interface = function Interface(props) {
           keepDirty: true
         });
       } else {
-        var _updatedFormValues3 = {};
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues3), {
+        var _updatedFormValues2 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues2), {
           keepErrors: true,
           keepDirty: true
         });
@@ -854,8 +851,8 @@ var Interface = function Interface(props) {
           keepDirty: true
         });
       } else {
-        var _updatedFormValues4 = {};
-        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues4), {
+        var _updatedFormValues3 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues3), {
           keepErrors: true,
           keepDirty: true
         });
@@ -872,7 +869,7 @@ var Interface = function Interface(props) {
   var getNewsletterLabel = function getNewsletterLabel() {
     var _errors$signUpLabel2;
 
-    if (!canShowSaveButton()) {
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
@@ -908,7 +905,7 @@ var Interface = function Interface(props) {
   };
 
   var getSignupCheckbox = function getSignupCheckbox() {
-    if (!canShowSaveButton()) {
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
@@ -975,12 +972,6 @@ var Interface = function Interface(props) {
           }
         }));
       }
-    }), 'form' === getValues('formOrTag') && forms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.', 'comment-edit-pro'),
-      status: "error",
-      politeness: "assertive",
-      inline: false,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
 
@@ -989,52 +980,49 @@ var Interface = function Interface(props) {
 
     var convertKitForms = getValues('forms');
 
-    if (convertKitForms.length === 0) {
+    if (!getValues('apiValid') || needsCredentialRefresh() || 'form' !== getValues('formOrTag')) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Forms', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
-      name: "convertKitForms",
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Forms (Required)', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, convertKitForms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "selectedForm",
       control: control,
       rules: {
         required: true
       },
       render: function render(_ref4) {
+        var _errors$apiKey;
+
         var _ref4$field = _ref4.field,
             _onChange3 = _ref4$field.onChange,
             value = _ref4$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a form for your subscribers', 'comment-edit-pro'),
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default form that will be used when signing up your subscribers.', 'comment-edit-pro'),
-          selected: getValues('selectedForm'),
+          selected: value,
           options: getValues('forms'),
           onChange: function onChange(formSelectedValue) {
             _onChange3(formSelectedValue);
-
-            setValue('selectedForm', formSelectedValue);
-          }
+          },
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
+            'has-error': 'required' === ((_errors$apiKey = errors.apiKey) === null || _errors$apiKey === void 0 ? void 0 : _errors$apiKey.type),
+            'is-required': true
+          })
         });
-      }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
-      name: "selectedForm",
-      control: control,
-      rules: {
-        required: true
-      },
-      render: function render(_ref5) {
-        var field = _ref5.field;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], _extends({}, field, {
-          type: "hidden",
-          "aria-hidden": "true"
-        }));
       }
     }), 'required' === ((_errors$selectedForm = errors.selectedForm) === null || _errors$selectedForm === void 0 ? void 0 : _errors$selectedForm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
       inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })), 'form' === getValues('formOrTag') && convertKitForms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
@@ -1043,7 +1031,7 @@ var Interface = function Interface(props) {
     var _errors$tags, _errors$tags2, _errors$tagInput2, _errors$tagInput3, _errors$tagInput4;
 
     // Don't show tags if api is invalid.
-    if (!getValues('apiValid')) {
+    if (!getValues('apiValid') || needsCredentialRefresh()) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
@@ -1061,12 +1049,12 @@ var Interface = function Interface(props) {
         key: index,
         name: "tags[".concat(index, "].selected"),
         control: control,
-        render: function render(_ref6) {
+        render: function render(_ref5) {
           var _getValues$index$sele;
 
-          var _ref6$field = _ref6.field,
-              _onChange4 = _ref6$field.onChange,
-              value = _ref6$field.value;
+          var _ref5$field = _ref5.field,
+              _onChange4 = _ref5$field.onChange,
+              value = _ref5$field.value;
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
             label: tag.label,
             onChange: function onChange(enableValue) {
@@ -1108,12 +1096,12 @@ var Interface = function Interface(props) {
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
       },
-      render: function render(_ref7) {
+      render: function render(_ref6) {
         var _errors$tagInput;
 
-        var _ref7$field = _ref7.field,
-            _onChange5 = _ref7$field.onChange,
-            value = _ref7$field.value;
+        var _ref6$field = _ref6.field,
+            _onChange5 = _ref6$field.onChange,
+            value = _ref6$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
           type: "text",
           value: value,
@@ -1135,7 +1123,7 @@ var Interface = function Interface(props) {
       className: "sce-admin-buttons"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       onClick: /*#__PURE__*/function () {
-        var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
           var validationResult;
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) {
@@ -1160,7 +1148,7 @@ var Interface = function Interface(props) {
         }));
 
         return function (_x) {
-          return _ref8.apply(this, arguments);
+          return _ref7.apply(this, arguments);
         };
       }(),
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
@@ -1184,7 +1172,7 @@ var Interface = function Interface(props) {
     var _errors$customFields, _errors$customFields2, _errors$customFieldIn2, _errors$customFieldIn3, _errors$customFieldIn4;
 
     // Don't show custom fields if api is invalid.
-    if (!getValues('apiValid')) {
+    if (!getValues('apiValid') || needsCredentialRefresh()) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
     }
 
@@ -1204,12 +1192,12 @@ var Interface = function Interface(props) {
       }, 'custom' !== getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
         name: "customFields[".concat(index, "].field"),
         control: control,
-        render: function render(_ref9) {
+        render: function render(_ref8) {
           var _getValues$index$fiel;
 
-          var _ref9$field = _ref9.field,
-              _onChange6 = _ref9$field.onChange,
-              value = _ref9$field.value;
+          var _ref8$field = _ref8.field,
+              _onChange6 = _ref8$field.onChange,
+              value = _ref8$field.value;
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
             label: tag.label,
             onChange: function onChange(customFieldSelectedValue) {
@@ -1223,10 +1211,10 @@ var Interface = function Interface(props) {
       })), 'custom' === getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
         name: "customFields[".concat(index, "].field_value"),
         control: control,
-        render: function render(_ref10) {
-          var _ref10$field = _ref10.field,
-              _onChange7 = _ref10$field.onChange,
-              value = _ref10$field.value;
+        render: function render(_ref9) {
+          var _ref9$field = _ref9.field,
+              _onChange7 = _ref9$field.onChange,
+              value = _ref9$field.value;
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
             value: value !== null && value !== void 0 ? value : '',
             className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {}),
@@ -1277,12 +1265,12 @@ var Interface = function Interface(props) {
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
       },
-      render: function render(_ref11) {
+      render: function render(_ref10) {
         var _errors$customFieldIn;
 
-        var _ref11$field = _ref11.field,
-            _onChange8 = _ref11$field.onChange,
-            value = _ref11$field.value;
+        var _ref10$field = _ref10.field,
+            _onChange8 = _ref10$field.onChange,
+            value = _ref10$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
           type: "text",
           value: value,
@@ -1303,7 +1291,7 @@ var Interface = function Interface(props) {
       className: "sce-admin-buttons"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
       onClick: /*#__PURE__*/function () {
-        var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+        var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
           var validationResult;
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) {
@@ -1328,7 +1316,7 @@ var Interface = function Interface(props) {
         }));
 
         return function (_x2) {
-          return _ref12.apply(this, arguments);
+          return _ref11.apply(this, arguments);
         };
       }(),
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
@@ -1349,7 +1337,7 @@ var Interface = function Interface(props) {
   };
 
   var getAPIKey = function getAPIKey() {
-    var _errors$apiKey2, _errors$apiKey3, _errors$apiKey4;
+    var _errors$apiKey3, _errors$apiKey4, _errors$apiKey5;
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
@@ -1359,12 +1347,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref13) {
-        var _errors$apiKey;
+      render: function render(_ref12) {
+        var _errors$apiKey2;
 
-        var _ref13$field = _ref13.field,
-            _onChange9 = _ref13$field.onChange,
-            value = _ref13$field.value;
+        var _ref12$field = _ref12.field,
+            _onChange9 = _ref12$field.onChange,
+            value = _ref12$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit API Key', 'comment-edit-pro'),
           type: "text",
@@ -1375,21 +1363,21 @@ var Interface = function Interface(props) {
             clearErrors();
           },
           className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-            'has-error': 'required' === ((_errors$apiKey = errors.apiKey) === null || _errors$apiKey === void 0 ? void 0 : _errors$apiKey.type),
+            'has-error': 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type),
             'is-required': true
           }),
           help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your ConvertKit API Key in order to choose a form or tag.', 'comment-edit-pro'),
           "aria-required": "true"
         });
       }
-    }), 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), 'required' === ((_errors$apiKey3 = errors.apiKey) === null || _errors$apiKey3 === void 0 ? void 0 : _errors$apiKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
       inline: true,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
-    }), 'noForms' === ((_errors$apiKey3 = errors.apiKey) === null || _errors$apiKey3 === void 0 ? void 0 : _errors$apiKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      message: (_errors$apiKey4 = errors.apiKey) === null || _errors$apiKey4 === void 0 ? void 0 : _errors$apiKey4.message,
+    }), 'noForms' === ((_errors$apiKey4 = errors.apiKey) === null || _errors$apiKey4 === void 0 ? void 0 : _errors$apiKey4.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$apiKey5 = errors.apiKey) === null || _errors$apiKey5 === void 0 ? void 0 : _errors$apiKey5.message,
       status: "error",
       politeness: "assertive",
       inline: true,
@@ -1408,12 +1396,12 @@ var Interface = function Interface(props) {
       rules: {
         required: true
       },
-      render: function render(_ref14) {
+      render: function render(_ref13) {
         var _errors$secretKey;
 
-        var _ref14$field = _ref14.field,
-            _onChange10 = _ref14$field.onChange,
-            value = _ref14$field.value;
+        var _ref13$field = _ref13.field,
+            _onChange10 = _ref13$field.onChange,
+            value = _ref13$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Secret Key', 'comment-edit-pro'),
           type: "text",
@@ -1515,10 +1503,10 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
     name: "enableConvertKit",
     control: control,
-    render: function render(_ref15) {
-      var _ref15$field = _ref15.field,
-          _onChange11 = _ref15$field.onChange,
-          value = _ref15$field.value;
+    render: function render(_ref14) {
+      var _ref14$field = _ref14.field,
+          _onChange11 = _ref14$field.onChange,
+          value = _ref14$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable ConvertKit', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",

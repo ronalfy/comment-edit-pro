@@ -109,6 +109,7 @@ const Interface = ( props ) => {
 			forms: data.forms ?? [],
 			tags: data.tags ?? [],
 			customFields: data.customFields ?? [],
+			selectedForm: data.selectedForm,
 			tagInput: '',
 			customFieldInput: '',
 		},
@@ -167,6 +168,16 @@ const Interface = ( props ) => {
 		}
 		if ( needsCredentialRefresh() ) {
 			return false;
+		}
+
+		// Check to see if any forms are selected.
+		if ( getValues( 'formOrTag' ) === 'form' ) {
+			if ( forms.length === 0 ) {
+				return false;
+			}
+			if ( '0' === getValues( 'selectedForm' ) ) {
+				return false;
+			}
 		}
 
 		// Check to see if any tags are selected.
@@ -235,22 +246,9 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { forms, tags, apiValid } = ajaxData;
-					const newFormValues = [];
-					forms.forEach( ( keys, index ) => {
-						newFormValues.push( keys );
-					} );
-					const newTagValues = [];
-					tags.forEach( ( keys, index ) => {
-						newTagValues.push( keys );
-					} );
-					const updatedFormValues = {
-						forms: newFormValues,
-						tags: newTagValues,
-						apiValid,
-					};
+					// Reset form state.
 					reset(
-						{ ...formValues, ...updatedFormValues },
+						{ ...ajaxData },
 						{
 							keepErrors: false,
 							keepDirty: false,
@@ -516,7 +514,7 @@ const Interface = ( props ) => {
 	};
 
 	const getNewsletterLabel = () => {
-		if ( ! canShowSaveButton() ) {
+		if ( ! canShowSaveButton() || needsCredentialRefresh() ) {
 			return <></>;
 		}
 		return (
@@ -558,7 +556,7 @@ const Interface = ( props ) => {
 	};
 
 	const getSignupCheckbox = () => {
-		if ( ! canShowSaveButton() ) {
+		if ( ! canShowSaveButton() || needsCredentialRefresh() ) {
 			return <></>;
 		}
 		return (
@@ -636,7 +634,61 @@ const Interface = ( props ) => {
 							</>
 						) }
 					/>
-					{ 'form' === getValues( 'formOrTag' ) && forms.length === 0 && (
+				</td>
+			</tr>
+		);
+	};
+
+	const getConvertKitForms = () => {
+		const convertKitForms = getValues( 'forms' );
+		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || 'form' !== getValues( 'formOrTag' ) ) {
+			return <></>;
+		}
+
+		return (
+			<tr>
+				<th scope="row">{ __( 'ConvertKit Forms (Required)', 'comment-edit-pro' ) }</th>
+				<td>
+					{ convertKitForms.length === 0 && (
+						<>
+							<Controller
+								name="selectedForm"
+								control={ control }
+								rules={ { required: true } }
+								render={ ( { field: { onChange, value } } ) => (
+									<RadioControl
+										label={ __(
+											'Select a form for your subscribers',
+											'comment-edit-pro'
+										) }
+										help={ __(
+											'Select a default form that will be used when signing up your subscribers.',
+											'comment-edit-pro'
+										) }
+										selected={ value }
+										options={ getValues( 'forms' ) }
+										onChange={ ( formSelectedValue ) => {
+											onChange( formSelectedValue );
+										} }
+										className={ classNames( {
+											'has-error': 'required' === errors.apiKey?.type,
+											'is-required': true,
+										} ) }
+									/>
+								) }
+							/>
+							{ 'required' === errors.selectedForm?.type && (
+								<Notice
+									message={ __( 'This field is a required field.' ) }
+									status="error"
+									politeness="assertive"
+									inline={ true }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</>
+					) }
+					{ 'form' === getValues( 'formOrTag' ) && convertKitForms.length === 0 && (
 						<Notice
 							message={ __(
 								'There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.',
@@ -653,64 +705,9 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getConvertKitForms = () => {
-		const convertKitForms = getValues( 'forms' );
-		if ( convertKitForms.length === 0 ) {
-			return <></>;
-		}
-
-		return (
-			<tr>
-				<th scope="row">{ __( 'ConvertKit Forms', 'comment-edit-pro' ) }</th>
-				<td>
-					<Controller
-						name="convertKitForms"
-						control={ control }
-						rules={ { required: true } }
-						render={ ( { field: { onChange, value } } ) => (
-							<RadioControl
-								label={ __(
-									'Select a form for your subscribers',
-									'comment-edit-pro'
-								) }
-								help={ __(
-									'Select a default form that will be used when signing up your subscribers.',
-									'comment-edit-pro'
-								) }
-								selected={ getValues( 'selectedForm' ) }
-								options={ getValues( 'forms' ) }
-								onChange={ ( formSelectedValue ) => {
-									onChange( formSelectedValue );
-									setValue( 'selectedForm', formSelectedValue );
-								} }
-							/>
-						) }
-					/>
-					<Controller
-						name="selectedForm"
-						control={ control }
-						rules={ { required: true } }
-						render={ ( { field } ) => (
-							<TextControl { ...field } type="hidden" aria-hidden="true" />
-						) }
-					/>
-					{ 'required' === errors.selectedForm?.type && (
-						<Notice
-							message={ __( 'This field is a required field.' ) }
-							status="error"
-							politeness="assertive"
-							inline={ true }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-				</td>
-			</tr>
-		);
-	};
-
 	const getConvertKitTags = () => {
 		// Don't show tags if api is invalid.
-		if ( ! getValues( 'apiValid' ) ) {
+		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
 			return <></>;
 		}
 
@@ -847,7 +844,7 @@ const Interface = ( props ) => {
 
 	const getCustomFields = () => {
 		// Don't show custom fields if api is invalid.
-		if ( ! getValues( 'apiValid' ) ) {
+		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
 			return <></>;
 		}
 
