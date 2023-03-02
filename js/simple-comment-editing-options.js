@@ -93,8 +93,7 @@ jQuery( document ).ready( function( $ ) {
 		const anchorContainer = anchor.closest( 'li' );
 		anchorContainer.setAttribute( 'data-loading', 'true' );
 
-		// Simulate loading state for 3 seconds.
-		setTimeout( function() {
+		$.post( anchorHref, { action: ajaxParams.action, comment_id: ajaxParams.cid, nonce: ajaxParams.nonce }, function( response ) {
 			// Change to success text.
 			if ( null !== anchorText && undefined !== anchorText ) {
 				// Set finished loading text.
@@ -112,7 +111,6 @@ jQuery( document ).ready( function( $ ) {
 				switch ( anchorAction ) {
 					case 'approve':
 					case 'pending':
-					case 'spam':
 						setTimeout( function() {
 							// Add fadeout class to container.
 							jQuery( anchorContainer ).fadeOut( 1000, function() {
@@ -128,9 +126,20 @@ jQuery( document ).ready( function( $ ) {
 							} );
 						}, 2500 );
 						break;
+					case 'spam':
+					case 'trash':
+						// Remove comment from dom.
+						const comment_id = ajaxParams.cid;
+						jQuery( commentStatusContainer.closest( 'div.comment' ) ).fadeOut( 'slow' ); // attempt to hide parent DIV.
+						jQuery( commentStatusContainer.closest( 'li.comment' ) ).fadeOut( 'slow' ); // attempt to hide parent LI.
+						jQuery( commentStatusContainer ).fadeOut( 'slow' ); // hide meatball menu.
+						jQuery( '#comment-' + comment_id ).fadeOut( 'slow' ); // hide comment.
+						break;
 				}
 			}
-		}, 3000 );
+		}, 'json' );
+
+		
 
 		// const ajax_params = wpAjax.unserialize( e.target.url );
 		// console.log( ajax_params );

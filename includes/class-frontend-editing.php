@@ -50,6 +50,10 @@ class Frontend_Editing {
 				// Add SVG icons in footer if moderation menu is enabled.
 				if ( $allow_frontend_moderation_menu ) {
 					add_action( 'wp_footer', array( $this, 'add_svg_icons' ) );
+					add_action( 'wp_ajax_sce_moderation_approve_comment', array( $this, 'ajax_approve_comment' ) );
+					add_action( 'wp_ajax_sce_moderation_moderate_comment', array( $this, 'ajax_moderate_comment' ) );
+					add_action( 'wp_ajax_sce_moderation_spam_comment', array( $this, 'ajax_spam_comment' ) );
+					add_action( 'wp_ajax_sce_moderation_delete_comment', array( $this, 'ajax_delete_comment' ) );
 				}
 
 				// Common actions/Ajax.
@@ -59,6 +63,109 @@ class Frontend_Editing {
 				add_action( 'wp_ajax_sce_frontend_delete_comment', array( $this, 'ajax_delete_frontend_comment' ) );
 			}
 		}
+	}
+
+	/**
+	 * Approve a comment.
+	 */
+	public function ajax_approve_comment() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_GET, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-approve-comment-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Let's approve the comment.
+		$comment = get_comment( $comment_id, ARRAY_A );
+		if ( ! $comment ) {
+			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
+		}
+		$comment['comment_approved'] = 1;
+		wp_update_comment( $comment );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Moderate (mark as pending) a comment.
+	 */
+	public function ajax_moderate_comment() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_GET, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-moderate-comment-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Let's moderate the comment.
+		$comment = get_comment( $comment_id, ARRAY_A );
+		if ( ! $comment ) {
+			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
+		}
+		$comment['comment_approved'] = 0;
+		wp_update_comment( $comment );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Spam a comment.
+	 */
+	public function ajax_spam_comment() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_GET, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-spam-comment-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Let's spam the comment.
+		$comment = get_comment( $comment_id, ARRAY_A );
+		if ( ! $comment ) {
+			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
+		}
+		$comment['comment_approved'] = 'spam';
+		wp_update_comment( $comment );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Delete a comment.
+	 */
+	public function ajax_delete_comment() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_GET, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-delete-comment-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Let's delete the comment.
+		wp_delete_comment( $comment_id );
+		wp_send_json_success();
 	}
 
 	/**
@@ -228,7 +335,7 @@ class Frontend_Editing {
 		// Get comment menu links.
 		$approve_comment_link  = add_query_arg(
 			array(
-				'action' => 'sce-moderation-approve-comment',
+				'action' => 'sce_moderation_approve_comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-approve-comment-' . $comment->comment_ID ),
 				'status' => 'approve',
@@ -237,7 +344,7 @@ class Frontend_Editing {
 		);
 		$moderate_comment_link = add_query_arg(
 			array(
-				'action' => 'sce-moderation-moderate-comment',
+				'action' => 'sce_moderation_moderate_comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-moderate-comment-' . $comment->comment_ID ),
 				'status' => 'pending',
@@ -246,7 +353,7 @@ class Frontend_Editing {
 		);
 		$delete_comment_link   = add_query_arg(
 			array(
-				'action' => 'sce-moderation-delete-comment',
+				'action' => 'sce_moderation_delete_comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-delete-comment-' . $comment->comment_ID ),
 				'status' => 'delete',
@@ -255,7 +362,7 @@ class Frontend_Editing {
 		);
 		$spam_comment_link     = add_query_arg(
 			array(
-				'action' => 'sce-moderation-spam-comment',
+				'action' => 'sce_moderation_spam_comment',
 				'cid'    => $comment->comment_ID,
 				'nonce'  => wp_create_nonce( 'sce-moderation-spam-comment-' . $comment->comment_ID ),
 				'status' => 'spam',
@@ -312,7 +419,7 @@ class Frontend_Editing {
 								<svg width="24" height="24"><use xlink:href="#sce-pending-icon"></use></svg>
 							</span>
 							<span class="sce-meatball-menu-label">
-								<?php esc_html_e( 'Mark Pending', 'comment-edit-pro' ); ?>
+								<?php esc_html_e( 'Mark as Pending', 'comment-edit-pro' ); ?>
 							</span>
 						</a>
 					</li>

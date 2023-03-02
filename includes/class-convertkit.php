@@ -186,7 +186,19 @@ class ConvertKit {
 			);
 		}
 
-		$options = Options::get_options();
+		// Retrieve ConvertKit options for return.
+		$json_array = $this->get_convertkit_options_for_return();
+
+		// Exit gracefully.
+		wp_send_json_success( $json_array );
+	}
+
+	/**
+	 * Return the options for Convertkit for return.
+	 */
+	private function get_convertkit_options_for_return() {
+		$force   = true;
+		$options = Options::get_options( $force );
 		if ( Functions::is_multisite() ) {
 			$forms         = get_site_option( 'sce_convertkit_forms', array() );
 			$tags          = get_site_option( 'sce_convertkit_tags', array() );
@@ -209,9 +221,7 @@ class ConvertKit {
 			'tags'             => $tags,
 			'customFields'     => $custom_fields,
 		);
-
-		// Exit gracefully.
-		wp_send_json_success( $json_array );
+		return $json_array;
 	}
 
 	/**
@@ -229,24 +239,8 @@ class ConvertKit {
 			);
 		}
 
-		// Return any errors.
-		$this->output_connection_json_errors();
-
-		// Nonce passed, let's get post vars.
-		$convertkit_enabled          = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
-		$api_key                     = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
-		$convertkit_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
-		$signup_label                = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
-		$form_or_tag                 = sanitize_text_field( filter_input( INPUT_POST, 'formOrTag', FILTER_DEFAULT ) );
-		$forms                       = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'forms', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-		$tags                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'tags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-		$custom_fields               = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-
-		// Check that form or tag is set.
-		if ( empty( $form_or_tag ) ) {
-			$form_or_tag = 'tag';
-		}
+		// Get enabled status.
+		$convertkit_enabled = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
 
 		// If convertkit is disabled, let's clear out some keys.
 		if ( ! $convertkit_enabled ) {
@@ -270,14 +264,31 @@ class ConvertKit {
 			}
 
 			Options::update_options( $options_to_save );
+
+			// Return new options.
+			$json_array = $this->get_convertkit_options_for_return();
 			wp_send_json_success(
-				array(
-					'forms'        => array(),
-					'tags'         => array(),
-					'customFields' => array(),
-				)
+				$json_array
 			);
 			exit;
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get post vars.
+		$api_key                     = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$api_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
+		$convertkit_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$signup_label                = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
+		$form_or_tag                 = sanitize_text_field( filter_input( INPUT_POST, 'formOrTag', FILTER_DEFAULT ) );
+		$forms                       = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'forms', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$tags                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'tags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$custom_fields               = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+
+		// Check that form or tag is set.
+		if ( empty( $form_or_tag ) ) {
+			$form_or_tag = 'tag';
 		}
 
 		// Now let's save options.
@@ -303,7 +314,9 @@ class ConvertKit {
 			update_option( 'sce_convertkit_custom_fields', $custom_fields );
 		}
 
-		wp_send_json_success();
+		// Return saved form fields.
+		$json_array = $this->get_convertkit_options_for_return();
+		wp_send_json_success( $json_array );
 		exit;
 	}
 

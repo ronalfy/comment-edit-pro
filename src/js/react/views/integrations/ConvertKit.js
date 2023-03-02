@@ -125,6 +125,12 @@ const Interface = ( props ) => {
 	 * @return {boolean} true if we need to re-connect, false if not.
 	 */
 	const needsCredentialRefresh = () => {
+		// If convertkit is disabled, no need to refresh.
+		if ( ! getValues( 'enableConvertKit' ) ) {
+			return false;
+		}
+
+		// If api isn't valid, refresh.
 		if ( ! getValues( 'apiValid' ) ) {
 			return true;
 		}
@@ -140,6 +146,16 @@ const Interface = ( props ) => {
 	 * @return {boolean} true to show the save button, false to hide it.
 	 */
 	const canShowSaveButton = () => {
+		// If convertkit is disabled and form is not dirty, no save button.
+		if ( ! getValues( 'enableConvertKit' ) && ! isDirty ) {
+			return false;
+		}
+
+		// If convertKit is disabled, we can always save.
+		if ( ! getValues( 'enableConvertKit' ) ) {
+			return true;
+		}
+
 		const forms = getValues( 'forms' );
 		const tags = getValues( 'tags' );
 
@@ -186,6 +202,15 @@ const Interface = ( props ) => {
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					setIsSaved( true );
+
+					// Reset form.
+					reset(
+						{ ...ajaxData },
+						{
+							keepErrors: false,
+							keepDirty: false,
+						}
+					);
 					setTimeout( () => {
 						setIsSaved( false );
 					}, 3000 );
@@ -490,35 +515,6 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const handleReset = () => {
-		setResetting( true );
-		sendCommand( 'sce_reset_convertkit_options', {
-			nonce: sceIntegrations.reset_nonce,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					setIsReset( true );
-					reset( {
-						enableMailchimp: false,
-						mailchimpServerPrefix: '',
-						apiKey: '',
-						mailchimpLists: [],
-						selectedList: '',
-						signUpLabel: __( 'Sign Up for Updates', 'comment-edit-pro' ),
-					} );
-					setTimeout( () => {
-						setIsReset( false );
-					}, 3000 );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setResetting( false );
-			} );
-	};
-
 	const getNewsletterLabel = () => {
 		if ( ! canShowSaveButton() ) {
 			return <></>;
@@ -713,8 +709,12 @@ const Interface = ( props ) => {
 	};
 
 	const getConvertKitTags = () => {
+		// Don't show tags if api is invalid.
+		if ( ! getValues( 'apiValid' ) ) {
+			return <></>;
+		}
+
 		const convertKitTags = getValues( 'tags' );
-		console.log( convertKitTags );
 		return (
 			<tr>
 				<th scope="row">
@@ -846,6 +846,11 @@ const Interface = ( props ) => {
 	};
 
 	const getCustomFields = () => {
+		// Don't show custom fields if api is invalid.
+		if ( ! getValues( 'apiValid' ) ) {
+			return <></>;
+		}
+
 		const convertKitCustomFields = getValues( 'customFields' );
 		return (
 			<tr>
@@ -1147,16 +1152,6 @@ const Interface = ( props ) => {
 		return __( 'Connect to ConvertKit', 'comment-edit-pro' );
 	};
 
-	const getResetText = () => {
-		if ( resetting ) {
-			return __( 'Disconnecting…', 'comment-edit-pro' );
-		}
-		if ( isReset ) {
-			return __( 'Disconnected', 'comment-edit-pro' );
-		}
-		return __( 'Disconnect From ConvertKit', 'comment-edit-pro' );
-	};
-
 	return (
 		<>
 			<div className="sce-admin__tabs--content-heading">
@@ -1206,7 +1201,7 @@ const Interface = ( props ) => {
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
+												clearErrors();
 												onChange( boolValue );
 											} }
 											help={ __(
@@ -1262,25 +1257,6 @@ const Interface = ( props ) => {
 							disabled={ credentialsRefreshing }
 						/>
 					) }
-					{ ! needsCredentialRefresh() && (
-						<Button
-							className={ classNames(
-								'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
-								{ 'has-icon': resetting },
-								{ 'is-resetting': { resetting } }
-							) }
-							type="button"
-							text={ getResetText() }
-							icon={ resetting ? Spinner : false }
-							iconSize="18"
-							iconPosition="right"
-							disabled={ saving || resetting }
-							onClick={ ( e ) => {
-								setResetting( true );
-								handleReset( e );
-							} }
-						/>
-					) }
 				</div>
 				{ hasErrors() && (
 					<Notice
@@ -1295,13 +1271,6 @@ const Interface = ( props ) => {
 				{ isSaved && (
 					<Notice
 						message={ __( 'Your settings have been saved.', 'comment-edit-pro' ) }
-						status="success"
-						politeness="assertive"
-					/>
-				) }
-				{ isReset && (
-					<Notice
-						message={ __( 'Your settings have been reset.', 'comment-edit-pro' ) }
 						status="success"
 						politeness="assertive"
 					/>

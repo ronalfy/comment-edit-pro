@@ -459,6 +459,12 @@ var Interface = function Interface(props) {
 
 
   var needsCredentialRefresh = function needsCredentialRefresh() {
+    // If convertkit is disabled, no need to refresh.
+    if (!getValues('enableConvertKit')) {
+      return false;
+    } // If api isn't valid, refresh.
+
+
     if (!getValues('apiValid')) {
       return true;
     }
@@ -477,6 +483,16 @@ var Interface = function Interface(props) {
 
 
   var canShowSaveButton = function canShowSaveButton() {
+    // If convertkit is disabled and form is not dirty, no save button.
+    if (!getValues('enableConvertKit') && !isDirty) {
+      return false;
+    } // If convertKit is disabled, we can always save.
+
+
+    if (!getValues('enableConvertKit')) {
+      return true;
+    }
+
     var forms = getValues('forms');
     var tags = getValues('tags');
 
@@ -526,7 +542,12 @@ var Interface = function Interface(props) {
       var ajaxSuccess = ajaxResponse.data.success;
 
       if (ajaxSuccess) {
-        setIsSaved(true);
+        setIsSaved(true); // Reset form.
+
+        reset(_objectSpread({}, ajaxData), {
+          keepErrors: false,
+          keepDirty: false
+        });
         setTimeout(function () {
           setIsSaved(false);
         }, 3000);
@@ -848,33 +869,6 @@ var Interface = function Interface(props) {
     });
   };
 
-  var handleReset = function handleReset() {
-    setResetting(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_convertkit_options', {
-      nonce: sceIntegrations.reset_nonce
-    }).then(function (ajaxResponse) {
-      var ajaxData = ajaxResponse.data.data;
-      var ajaxSuccess = ajaxResponse.data.success;
-
-      if (ajaxSuccess) {
-        setIsReset(true);
-        reset({
-          enableMailchimp: false,
-          mailchimpServerPrefix: '',
-          apiKey: '',
-          mailchimpLists: [],
-          selectedList: '',
-          signUpLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up for Updates', 'comment-edit-pro')
-        });
-        setTimeout(function () {
-          setIsReset(false);
-        }, 3000);
-      }
-    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
-      setResetting(false);
-    });
-  };
-
   var getNewsletterLabel = function getNewsletterLabel() {
     var _errors$signUpLabel2;
 
@@ -1048,8 +1042,12 @@ var Interface = function Interface(props) {
   var getConvertKitTags = function getConvertKitTags() {
     var _errors$tags, _errors$tags2, _errors$tagInput2, _errors$tagInput3, _errors$tagInput4;
 
+    // Don't show tags if api is invalid.
+    if (!getValues('apiValid')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
     var convertKitTags = getValues('tags');
-    console.log(convertKitTags);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, 'tag' === getValues('formOrTag') && getValues('tags').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -1184,6 +1182,11 @@ var Interface = function Interface(props) {
 
   var getCustomFields = function getCustomFields() {
     var _errors$customFields, _errors$customFields2, _errors$customFieldIn2, _errors$customFieldIn3, _errors$customFieldIn4;
+
+    // Don't show custom fields if api is invalid.
+    if (!getValues('apiValid')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
 
     var convertKitCustomFields = getValues('customFields');
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
@@ -1479,18 +1482,6 @@ var Interface = function Interface(props) {
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Connect to ConvertKit', 'comment-edit-pro');
   };
 
-  var getResetText = function getResetText() {
-    if (resetting) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'comment-edit-pro');
-    }
-
-    if (isReset) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'comment-edit-pro');
-    }
-
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From ConvertKit', 'comment-edit-pro');
-  };
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin__tabs--content-heading"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_ConvertKit__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -1533,7 +1524,8 @@ var Interface = function Interface(props) {
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          //setShowButtonOptions( boolValue );
+          clearErrors();
+
           _onChange11(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the ConvertKit Integration.', 'comment-edit-pro')
@@ -1565,34 +1557,12 @@ var Interface = function Interface(props) {
     text: getRefreshCredentialsText(),
     icon: false,
     disabled: credentialsRefreshing
-  }), !needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
-    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-danger qdlx__btn--icon-right', {
-      'has-icon': resetting
-    }, {
-      'is-resetting': {
-        resetting: resetting
-      }
-    }),
-    type: "button",
-    text: getResetText(),
-    icon: resetting ? _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"] : false,
-    iconSize: "18",
-    iconPosition: "right",
-    disabled: saving || resetting,
-    onClick: function onClick(e) {
-      setResetting(true);
-      handleReset(e);
-    }
   })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
     status: "error",
     politeness: "polite"
   }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
-    status: "success",
-    politeness: "assertive"
-  }), isReset && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
-    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been reset.', 'comment-edit-pro'),
     status: "success",
     politeness: "assertive"
   })));
