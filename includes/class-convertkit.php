@@ -184,19 +184,19 @@ class ConvertKit {
 			$selected_form = $options['convertkit_selected_form'];
 			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
 
-			$form_http_args = $http_args;
+			$form_http_args         = $http_args;
 			$form_http_args['body'] = array(
-				'api_key' => $api_key,
-				'email'   => $comment->comment_author_email,
+				'api_key'    => $api_key,
+				'email'      => $comment->comment_author_email,
 				'first_name' => $comment->comment_author,
-				'tags' => $selected_tag_ids,
+				'tags'       => $selected_tag_ids,
 			);
 
 			if ( ! empty( $selected_custom_fields ) ) {
 				$form_http_args['body']['fields'] = $selected_custom_fields;
 			}
 			if ( ! empty( $selected_tag_ids ) ) {
-				$form_http_args['body']['tags'] = count( $selected_tag_ids) > 1 ? $selected_tag_ids : $selected_tag_ids[0];
+				$form_http_args['body']['tags'] = count( $selected_tag_ids ) > 1 ? $selected_tag_ids : $selected_tag_ids[0];
 			}
 
 			$response = wp_remote_post(
