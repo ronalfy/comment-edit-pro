@@ -138,7 +138,7 @@ class ConvertKit {
 		$selected_tag_ids = array();
 		foreach ( $tags as $tag ) {
 			if ( isset( $tag['selected'] ) && (bool) $tag['selected'] ) {
-				$selected_tag_ids[] = $tag['id'];
+				$selected_tag_ids[] = absint( $tag['value'] );
 			}
 		}
 
@@ -157,22 +157,54 @@ class ConvertKit {
 				$custom_field_value     = '';
 				$custom_field_raw_value = $custom_field['field'];
 				if ( 'custom' === $custom_field_raw_value ) {
-					$custom_field_value = $custom_field['field_custom'];
+					$custom_field_value = $custom_field['field_value'];
 				} else {
 					$custom_field_value = $this->map_request_header( $custom_field_raw_value, $comment );
 				}
-				$selected_custom_fields[] = array(
-					'key'   => $custom_field['label'],
-					'value' => $custom_field_value,
-				);
+				$selected_custom_fields[ $custom_field['value'] ] = $custom_field_value;
 			}
 		}
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Bearer ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+		$http_args['body']    = array(
+			'api_key' => $api_key,
+		);
+
+		// Get comment.
+		$comment = get_comment( $comment_id );
 
 		// Get API Endpoint.
 		$api_endpoint = $this->convertkit_api;
 		if ( 'form' === $form_or_tag ) {
 			$selected_form = $options['convertkit_selected_form'];
 			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
+
+			$form_http_args = $http_args;
+			$form_http_args['body'] = array(
+				'api_key' => $api_key,
+				'email'   => $comment->comment_author_email,
+				'first_name' => $comment->comment_author,
+				'tags' => $selected_tag_ids,
+			);
+
+			if ( ! empty( $selected_custom_fields ) ) {
+				$form_http_args['body']['fields'] = $selected_custom_fields;
+			}
+			if ( ! empty( $selected_tag_ids ) ) {
+				$form_http_args['body']['tags'] = count( $selected_tag_ids) > 1 ? $selected_tag_ids : $selected_tag_ids[0];
+			}
+
+			$response = wp_remote_post(
+				$api_endpoint,
+				$form_http_args
+			);
+
+			return;
 		}
 
 		return true;
