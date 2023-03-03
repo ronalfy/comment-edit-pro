@@ -180,7 +180,7 @@ class ConvertKit {
 
 		// Get API Endpoint.
 		$api_endpoint = $this->convertkit_api;
-		if ( 'form' === $form_or_tag ) {
+		if ( 'form' === $form_or_tag && $options['convertkit_selected_form'] ) {
 			$selected_form = $options['convertkit_selected_form'];
 			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
 
@@ -204,7 +204,29 @@ class ConvertKit {
 				$form_http_args
 			);
 
-			return;
+			return $response;
+		}
+
+		// Check for tags.
+		if ( ! empty( $selected_tag_ids ) && 'tag' === $form_or_tag ) {
+			foreach ( $selected_tag_ids as $tag_id ) {
+				$api_endpoint          = $this->convertkit_api . '/tags/' . $tag_id . '/subscribe';
+				$tag_http_args         = $http_args;
+				$tag_http_args['body'] = array(
+					'api_key'    => $api_key,
+					'email'      => $comment->comment_author_email,
+					'first_name' => $comment->comment_author,
+				);
+				if ( ! empty( $selected_custom_fields ) ) {
+					$tag_http_args['body']['fields'] = $selected_custom_fields;
+				}
+
+				$response = wp_remote_post(
+					$api_endpoint,
+					$tag_http_args
+				);
+				$response = true;
+			}
 		}
 
 		return true;
