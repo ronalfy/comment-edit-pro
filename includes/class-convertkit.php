@@ -69,6 +69,40 @@ class ConvertKit {
 
 		// Add ConvertKit localized nonces.
 		add_filter( 'sce_integrations_localized_vars', array( $this, 'add_convertkit_localized_vars' ) );
+
+		// Add Comment Meta Box for convertkit status.
+		add_action( 'admin_init', array( $this, 'add_comment_meta_box' ) );
+	}
+
+	/**
+	 * Return if ConvertKit is active and valid.
+	 *
+	 * @return bool true if active, false if not.
+	 */
+	private function is_convertkit_enabled_and_valid() {
+		$options = Options::get_options();
+
+		// Make sure convertkit is enabled and valid.
+		if ( ! (bool) $options['enable_convertkit'] || ! (bool) $options['convertkit_api_valid'] ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Add a comment meta box for convertkit status displays.
+	 */
+	public function add_comment_meta_box() {
+		if ( $this->is_convertkit_enabled_and_valid() ) {
+			add_meta_box(
+				'sce-convertkit',
+				__( 'Comment ConvertKit History', 'comment-edit-pro' ),
+				array( $this, 'output_convertkit_comment_meta' ),
+				'comment',
+				'normal'
+			);
+		}
 	}
 
 	/**
@@ -165,6 +199,12 @@ class ConvertKit {
 			}
 		}
 
+		// Get comment meta with convertkit data.
+		$comment_meta = get_comment_meta( $comment_id, 'sce_convertkit_data', true );
+		if ( ! is_array( $comment_meta ) ) {
+			$comment_meta = array();
+		}
+
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
@@ -203,8 +243,7 @@ class ConvertKit {
 				$api_endpoint,
 				$form_http_args
 			);
-
-			return $response;
+			$this->add_convertkit_comment_meta( $comment_id, $response, 'form' );
 		}
 
 		// Check for tags.
@@ -225,11 +264,76 @@ class ConvertKit {
 					$api_endpoint,
 					$tag_http_args
 				);
-				$response = true;
+				$this->add_convertkit_comment_meta( $comment_id, $response, 'tag' );
 			}
 		}
 
+		// Add comment meta.
+
 		return true;
+	}
+
+	/**
+	 * Add ConvertKit comment meta.
+	 *
+	 * @param int             $comment_id The Comment ID.
+	 * @param WP_Error|Object $response The response object.
+	 * @param string          $form_or_tag form or tag.
+	 */
+	private function add_convertkit_comment_meta( $comment_id, $response, $form_or_tag ) {
+		$comment_meta = get_comment_meta( $comment_id, 'sce_convertkit_data', true );
+		if ( ! is_array( $comment_meta ) ) {
+			$comment_meta = array();
+		}
+
+		if ( is_wp_error( $response ) ) {
+			// Log error.
+			$comment_meta[] = array(
+				'type'        => $form_or_tag,
+				'success'     => false,
+				'error'       => $response->get_error_message(),
+				'status_code' => false,
+			);
+		} elseif ( null === $response ) {
+			// Log error.
+			$comment_meta[] = array(
+				'type'        => $form_or_tag,
+				'success'     => false,
+				'error'       => __( 'No response received.', 'comment-edit-pro' ),
+				'status_code' => false,
+			);
+		} else {
+			// Get status code.
+			$status_code                   = wp_remote_retrieve_response_code( $response );
+			if ( 200 === $status_code ) {
+				$comment_meta[] = array(
+					'type'        => $form_or_tag,
+					'success'     => true,
+					'error'       => false,
+					'status_code' => $status_code,
+				);
+			} else {
+				$error_comment_meta = array(
+					'type'        => $form_or_tag,
+					'success'     => false,
+					'status_code' => $status_code,
+				);
+				// Try to get error code from webhook.
+				$response_body = wp_remote_retrieve_body( $response );
+				$response_body = json_decode( $response_body, true );
+				if ( is_array( $response_body ) && isset( $response_body['error'] ) ) {
+					if ( isset( $response_body['error']['message'] ) ) {
+						$error_comment_meta['error'] = $response_body['error']['message'];
+					}
+				} elseif ( is_array( $response_body ) && isset( $response_body['message'] ) ) {
+					$error_comment_meta['error'] = $response_body['message'];
+				} else {
+					$error_comment_meta['error'] = $status_code;
+				}
+			}
+		}
+
+		update_comment_meta( $comment_id, 'sce_convertkit_data', $comment_meta );
 	}
 
 	/**
@@ -1272,5 +1376,95 @@ class ConvertKit {
 			'ck_add_custom_field_nonce'      => wp_create_nonce( 'sce-add-convertkit-custom-field' ),
 		);
 		return array_merge( $vars, $convertkit_vars );
+	}
+
+	/**
+	 * Output ConvertKit status for a commment.
+	 *
+	 * @param WP_Comment $comment The comment object.
+	 */
+	public function output_convertkit_comment_meta( $comment ) {
+		$comment_meta = get_comment_meta( $comment->comment_ID, 'sce_convertkit_data', true );
+		if ( ! $comment_meta ) {
+			?>
+			<p><?php esc_html_e( 'No ConvertKit events have been sent for this comment.', 'comment-edit-pro' ); ?></p>
+			<?php
+			return;
+		}
+
+		?>
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ( $comment_meta as $index => $convertkit_data ) :
+						?>
+						<tr>
+							<td>
+								<?php
+								if ( isset( $convertkit_data['type'] ) ) {
+									echo esc_html( strtoupper( $convertkit_data['type'] ) );
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $convertkit_data['success'] ) ) {
+									if ( $convertkit_data['success'] ) {
+										esc_html_e( 'Yes', 'comment-edit-pro' );
+									} else {
+										esc_html_e( 'No', 'comment-edit-pro' );
+									}
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $convertkit_data['status_code'] ) ) {
+									echo esc_html( $convertkit_data['status_code'] );
+								} else {
+									esc_html_e( 'Unknown', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if ( isset( $convertkit_data['error'] ) && $convertkit_data['error'] ) {
+									if ( is_string( $convertkit_data['error'] ) ) {
+										echo esc_html( $convertkit_data['error'] );
+									} else {
+										esc_html_e( 'Unknown error', 'comment-edit-pro' );
+									}
+								} else {
+									esc_html_e( 'No known errors', 'comment-edit-pro' );
+								}
+								?>
+							</td>
+						</tr>
+						<?php
+						endforeach;
+					?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
+					</tr>
+				</tfoot>
+			</table>
+			<?php
 	}
 }
