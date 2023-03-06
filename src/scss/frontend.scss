@@ -77,6 +77,72 @@
 	right: 3.75rem;
 }
 
+/* Color vars for the meatball menu */
+.sce-meatball-menu-theme-default {
+	--meatball-menu-background: #FFF;
+	--meatball-menu-border: #333;
+	--meatball-menu-item-border-bottom: #DDD;
+	--meatball-menu-item-text: #333;
+	--meatball-menu-item-text-hover: #111;
+	--meatball-menu-item-background-hover: #EEE;
+	--meatball-menu-item-text-loading: #111;
+	--meatball-menu-item-background-loading: #EEE;
+	--meatball-menu-color: #333;
+	--meatball-menu-item-button-edit-icon-color: #2073BA;
+	--meatball-menu-item-button-approve-icon-color: #20BA2C;
+	--meatball-menu-item-button-approve-icon-color-loading: #20BA2C;
+	--meatball-menu-item-button-pending-icon-color: #BA9920;
+	--meatball-menu-item-button-pending-icon-color-loading: #BA9920;
+	--meatball-menu-item-button-spam-icon-color: #BA7420;
+	--meatball-menu-item-button-spam-icon-color-loading: #BA7420;
+	--meatball-menu-item-button-trash-icon-color: #BA2E20;
+	--meatball-menu-item-button-trash-icon-color-loading: #BA2E20;
+}
+
+.sce-meatball-menu-theme-light {
+	--meatball-menu-background: #FFF;
+	--meatball-menu-border: #DDD;
+	--meatball-menu-item-border-bottom: #DDD;
+	--meatball-menu-item-text: #333;
+	--meatball-menu-item-text-hover: #111;
+	--meatball-menu-item-background-hover: #EEE;
+	--meatball-menu-item-text-loading: #111;
+	--meatball-menu-item-background-loading: #EEE;
+	--meatball-menu-color: #111;
+	--meatball-menu-item-button-edit-icon-color: #111;
+	--meatball-menu-item-button-approve-icon-color: #111;
+	--meatball-menu-item-button-approve-icon-color-loading: #111;
+	--meatball-menu-item-button-pending-icon-color: #111;
+	--meatball-menu-item-button-pending-icon-color-loading: #111;
+	--meatball-menu-item-button-spam-icon-color: #111;
+	--meatball-menu-item-button-spam-icon-color-loading: #111;
+	--meatball-menu-item-button-trash-icon-color: #111;
+	--meatball-menu-item-button-trash-icon-color-loading: #111;
+
+}
+
+.sce-meatball-menu-theme-dark {
+	--meatball-menu-background: #333;
+	--meatball-menu-border: #333;
+	--meatball-menu-item-border-bottom: #333;
+	--meatball-menu-item-text: #EEE;
+	--meatball-menu-item-text-hover: #FFF;
+	--meatball-menu-item-background-hover: #111;
+	--meatball-menu-item-text-loading: #FFF;
+	--meatball-menu-item-background-loading: #111;
+	--meatball-menu-color: #FFF;
+	--meatball-menu-item-button-edit-icon-color: #FFF;
+	--meatball-menu-item-button-approve-icon-color: #FFF;
+	--meatball-menu-item-button-approve-icon-color-loading: #FFF;
+	--meatball-menu-item-button-pending-icon-color: #FFF;
+	--meatball-menu-item-button-pending-icon-color-loading: #FFF;
+	--meatball-menu-item-button-spam-icon-color: #FFF;
+	--meatball-menu-item-button-spam-icon-color-loading: #FFF;
+	--meatball-menu-item-button-trash-icon-color: #FFF;
+	--meatball-menu-item-button-trash-icon-color-loading: #FFF;
+
+}
+
 .sce-meatball-content {
 	position: relative;
 	min-width: 100%;
@@ -103,7 +169,7 @@
 		}
 
 		&:not(:checked) ~ ul {
-			background: #FFF;
+			background: var( --meatball-menu-background );
 			position: relative;
 			transition: opacity 0.75s ease-in-out;
 			margin-right: 2px;
@@ -133,8 +199,8 @@
 			margin: 0;
 			border-radius: 5px;
 			margin-right: 12px;
-			background: #FFF;
-			border: 1px solid #333;
+			background: var( --meatball-menu-background );
+			border: 1px solid var( --meatball-menu-border );
 			z-index: 10;
 		}
 	}
@@ -161,7 +227,7 @@
 				border-radius: 100%;
 				transform: rotate(0deg);
 				transition: all 0.3s ease-in-out;
-				background: #FFF;
+				background: var( --meatball-menu-background );
 				margin-right: 5px;
 			}
 			&:after {
@@ -179,7 +245,7 @@
 			&:after,
 			span {
 				transition: all 0.3s linear;
-				background: #FFF;
+				background: var( --meatball-menu-background );
 			}
 
 			&:after {
@@ -219,13 +285,14 @@
 	li.sce-meatball-menu-item {
 		display: flex;
 		align-items: center;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid var( --meatball-menu-item-border-bottom );
 		box-sizing: border-box;
+		padding: 0 !important; // No padding on LI, but add padding to anchor.
 		a.button-reset {
 			display: flex;
 			align-items: center;
 			width: 100%;
-			color: #333333;
+			color: var( --meatball-menu-item-text );
 			line-height: normal;
 			font-size: 1.3rem;
 			padding: 0.75rem 1rem;
@@ -238,8 +305,8 @@
 			}
 
 			&:hover {
-				background: #EEE;
-				color: #111;
+				background: var( --meatball-menu-item-background-hover );
+				color: var( --meatball-menu-item-text-hover );
 
 				svg use {
 					line-height: normal;
@@ -248,8 +315,8 @@
 		}
 		&[data-loading="true"] {
 			a.button-reset {
-				color: #111;
-				background: #EEE;
+				color: var( --meatball-menu-item-text-loading );
+				background: var( --meatball-menu-item-background-loading );
 				
 				
 			}
@@ -261,7 +328,7 @@
 
 		&:hover {
 			.sce-meatball-icon-wrapper {
-				background: #FFF;
+				background: var( --meatball-menu-background );
 
 
 			}
@@ -269,7 +336,7 @@
 	}
 
 	input:hover~.sce-meatball-icon-wrapper {
-		background: #FFF;
+		background: var( --meatball-menu-background );
 
 		&>div {
 
@@ -277,7 +344,7 @@
 			&:after,
 			span {
 				transition: all 0.3s linear;
-				background: #333;
+				background: var( --meatball-menu-color );
 			}
 		}
 	}
@@ -295,7 +362,7 @@
 		display: flex;
 		z-index: 2;
 		padding: 20px;
-		background: #FFF;
+		background: var( --meatball-menu-background );
 		box-shadow: none;
 		border-radius: 100%;
 		text-align: center;
@@ -315,7 +382,7 @@
 
 		&:hover {
 			transition: all 0.3s linear;
-			background: #FFF;
+			background: var( --meatball-menu-background );
 
 			&>div {
 
@@ -326,7 +393,7 @@
 
 					&:before,
 					&:after {
-						background: #333;
+						background: var( --meatball-menu-color );
 					}
 				}
 			}
@@ -338,14 +405,14 @@
 			&:after,
 			span {
 				transition: all 0.3s linear;
-				background: #333;
+				background: var( --meatball-menu-color );
 			}
 		}
 
 	}
 
 	input:checked~.sce-meatball-icon-wrapper {
-		background: #FFF;
+		background: var( --meatball-menu-background );
 
 		&>div {
 
@@ -353,7 +420,7 @@
 			&:after,
 			span {
 				transition: all 0.3s linear;
-				background: #333;
+				background: var( --meatball-menu-color );
 			}
 
 			span {
@@ -361,7 +428,7 @@
 				&:before,
 				&:after {
 					display: inline-block;
-					background: #333;
+					background: var( --meatball-menu-color );
 				}
 			}
 		}
@@ -404,7 +471,7 @@ li.sce-meatball-menu-item {
 		a {
 			svg {
 				use {
-					fill: #2073BA;
+					fill: var( --meatball-menu-item-button-edit-icon-color );
 				}
 			}
 		}
@@ -414,7 +481,7 @@ li.sce-meatball-menu-item {
 		a {
 			svg {
 				use {
-					fill: #20BA2C;
+					fill: var( --meatball-menu-item-button-approve-icon-color );
 				}
 			}
 		}
@@ -422,7 +489,7 @@ li.sce-meatball-menu-item {
 			a {
 				svg {
 					use {
-						color: #20BA2C;
+						color: var( --meatball-menu-item-button-approve-icon-color-loading );
 					}
 				}
 			}
@@ -432,8 +499,8 @@ li.sce-meatball-menu-item {
 		a {
 			svg {
 				use {
-					fill: #BA9920;
-					color: #BA9920;
+					fill: var( --meatball-menu-item-button-pending-icon-color );
+					color: var( --meatball-menu-item-button-pending-icon-color );
 				}
 			}
 		}
@@ -441,7 +508,7 @@ li.sce-meatball-menu-item {
 			a {
 				svg {
 					use {
-						color: #BA9920;
+						color: var( --meatball-menu-item-button-pending-icon-color-loading );
 					}
 				}
 			}
@@ -451,7 +518,7 @@ li.sce-meatball-menu-item {
 		a {
 			svg {
 				use {
-					fill: #BA7420;
+					fill: var( --meatball-menu-item-button-spam-icon-color);
 				}
 			}
 		}
@@ -459,7 +526,7 @@ li.sce-meatball-menu-item {
 			a {
 				svg {
 					use {
-						color: #BA7420;
+						color: var( --meatball-menu-item-button-spam-icon-color-loading );
 					}
 				}
 			}
@@ -469,7 +536,7 @@ li.sce-meatball-menu-item {
 		a {
 			svg {
 				use {
-					fill: #BA2E20;
+					fill: var( --meatball-menu-item-button-trash-icon-color);
 				}
 			}
 		}
@@ -477,7 +544,7 @@ li.sce-meatball-menu-item {
 			a {
 				svg {
 					use {
-						color: #BA2E20;
+						color: var( --meatball-menu-item-button-trash-icon-color-loading );
 					}
 				}
 			}

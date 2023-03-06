@@ -1813,3 +1813,8 @@ h2 a.sce-admin-heading-docs {
 		color: #ccc;
 	}
 }
+
+/* For Fancybox in the admin */
+.fancybox-container {
+	z-index: 1000000 !important; /* yes, that is super high */
+}

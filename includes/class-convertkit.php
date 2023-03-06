@@ -389,10 +389,10 @@ class ConvertKit {
 		$convertkit_enabled   = (bool) $options['enable_convertkit'];
 		$convertkit_api_valid = (bool) $options['convertkit_api_valid'];
 
-		// Chceck to see if ConvertKit is enabled. Skip if can moderate.
-		// if ( ( ! $convertkit_enabled || ! $convertkit_api_valid ) || current_user_can( 'moderate_comments' ) ) {
-		// return $comment_fields;
-		// }
+		// Check to see if ConvertKit is enabled. Skip if can moderate.
+		if ( ! $this->is_convertkit_enabled_and_valid() || current_user_can( 'moderate_comments' ) ) {
+			return $comment_fields;
+		}
 
 		// Now get the checkbox details.
 		$checked_by_default              = (bool) $options['convertkit_checkbox_enabled'];

@@ -101,6 +101,7 @@ class Comment_Editing {
 			'commentDeleted'              => sanitize_text_field( $options['comment_deleted'] ),
 			'commentDeletedError'         => sanitize_text_field( $options['comment_deleted_error'] ),
 			'commentEmptyError'           => sanitize_text_field( $options['comment_empty_error'] ),
+			'frontEndModerationMenuTheme' => sanitize_text_field( $options['front_end_moderation_menu_theme'] ),
 		);
 
 		// Exit gracefully.
@@ -150,6 +151,7 @@ class Comment_Editing {
 		$options['comment_deleted']                 = sanitize_text_field( filter_input( INPUT_POST, 'commentDeleted', FILTER_DEFAULT ) );
 		$options['comment_deleted_error']           = sanitize_text_field( filter_input( INPUT_POST, 'commentDeletedError', FILTER_DEFAULT ) );
 		$options['comment_empty_error']             = sanitize_text_field( filter_input( INPUT_POST, 'commentEmptyError', FILTER_DEFAULT ) );
+		$options['front_end_moderation_menu_theme'] = sanitize_text_field( filter_input( INPUT_POST, 'frontEndModerationMenuTheme', FILTER_DEFAULT ) );
 
 		// Save options.
 		Options::update_options( $options );
@@ -206,6 +208,7 @@ class Comment_Editing {
 			'commentDeleted'              => sanitize_text_field( $defaults['comment_deleted'] ),
 			'commentDeletedError'         => sanitize_text_field( $defaults['comment_deleted_error'] ),
 			'commentEmptyError'           => sanitize_text_field( $defaults['comment_empty_error'] ),
+			'frontEndModerationMenuTheme' => sanitize_text_field( $defaults['front_end_moderation_menu_theme'] ),
 		);
 
 		// Go through return defaults and format into options.
@@ -240,14 +243,17 @@ class Comment_Editing {
 				'sce-comment-editing',
 				'sceCommentEditing',
 				array(
-					'save_nonce'       => wp_create_nonce( 'sce-save-comment-editing-options' ),
-					'get_nonce'        => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
-					'reset_nonce'      => wp_create_nonce( 'sce-reset-comment-editing-options' ),
-					'ajaxurl'          => esc_url( admin_url( 'admin-ajax.php' ) ),
-					'default_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
-					'light_theme'      => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
-					'dark_theme'       => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
-					'is_sce_installed' => $comment_edit_pro->is_sce_enabled(),
+					'save_nonce'         => wp_create_nonce( 'sce-save-comment-editing-options' ),
+					'get_nonce'          => wp_create_nonce( 'sce-retrieve-comment-editing-options' ),
+					'reset_nonce'        => wp_create_nonce( 'sce-reset-comment-editing-options' ),
+					'ajaxurl'            => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'default_theme'      => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-default.png' ) ),
+					'light_theme'        => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-light.png' ) ),
+					'dark_theme'         => esc_url( Functions::get_plugin_url( '/images/screenshot-theme-dark.png' ) ),
+					'default_menu_theme' => esc_url( Functions::get_plugin_url( '/images/screenshot-menu-theme-default.png' ) ),
+					'light_menu_theme'   => esc_url( Functions::get_plugin_url( '/images/screenshot-menu-theme-light.png' ) ),
+					'dark_menu_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-menu-theme-dark.png' ) ),
+					'is_sce_installed'   => $comment_edit_pro->is_sce_enabled(),
 				)
 			);
 		}

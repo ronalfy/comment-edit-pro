@@ -208,6 +208,7 @@ class Options {
 			'allow_front_end_character_limit'    => false,
 			'allow_front_end_editing'            => false,
 			'allow_front_end_moderation_menu'    => false,
+			'front_end_moderation_menu_theme'    => 'default',
 			'enable_avatars'                     => false,
 			'avatar_size'                        => 90,
 			'enable_avatars_logged_in'           => true,

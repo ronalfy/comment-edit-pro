@@ -385,8 +385,13 @@ class Frontend_Editing {
 		} elseif ( 'spam' === $comment->comment_approved ) {
 			$comment_status = 'spam';
 		}
+
+		// Get moderation menu theme.
+		$options     = Options::get_options();
+		$theme       = $options['front_end_moderation_menu_theme'];
+		$theme_class = 'sce-meatball-menu-theme-' . $theme;
 		?>
-		<div class="sce-meatball-menu" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
+		<div class="sce-meatball-menu <?php echo esc_attr( $theme_class ); ?>" data-comment-status="<?php echo esc_attr( $comment_status ); ?>" style="display: none;">
 			<div class="sce-meatball-content">
 				<input
 					type="checkbox"
