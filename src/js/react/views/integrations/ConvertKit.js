@@ -1180,7 +1180,7 @@ const Interface = ( props ) => {
 						className="sce-admin-heading-docs"
 						target="_blank"
 						rel="noreferrer"
-						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/mailchimp-integration"
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/convertkit-integration"
 					>
 						({ __( 'Docs', 'comment-edit-pro' ) })
 					</a>

@@ -55,9 +55,6 @@ class ConvertKit {
 		// Refresh custom fields for a ConvertKit account.
 		add_action( 'wp_ajax_sce_refresh_convertkit_custom_fields', array( $this, 'ajax_refresh_convertkit_custom_fields' ) );
 
-		// Reset ConvertKit API key.
-		add_action( 'wp_ajax_sce_reset_convertkit_options', array( $this, 'ajax_reset_convertkit_options' ) );
-
 		// Add ConvertKit Checkbox.
 		add_filter( 'comment_form_defaults', array( $this, 'add_convertkit_checkbox' ), 100 );
 
@@ -495,7 +492,7 @@ class ConvertKit {
 			'enable_convertkit'           => false,
 			'convertkit_api_key'          => '',
 			'convertkit_secret_key'       => '',
-			'convertkit_signup_label'     => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'convertkit_signup_label'     => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
 			'convertkit_checkbox_enabled' => false,
 			'convertkit_form_or_tag'      => 'tag',
 			'convertkit_api_valid'        => false,
@@ -1266,46 +1263,6 @@ class ConvertKit {
 				'apiValid'     => true,
 			)
 		);
-	}
-
-	/**
-	 * Reset ConvertKit Options.
-	 */
-	public function ajax_reset_convertkit_options() {
-		// Security.
-		if ( ! wp_verify_nonce( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ), 'sce-reset-integrations-options' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Remove list options.
-		if ( Functions::is_multisite() ) {
-			delete_site_option( 'sce_convertkit_lists' );
-		} else {
-			delete_option( 'sce_convertkit_lists' );
-		}
-
-		// Clear options.
-		Options::update_options(
-			array(
-				'enable_convertkit'                => false,
-				'convertkit_api_key'               => '',
-				'convertkit_api_key_server_prefix' => '',
-				'convertkit_selected_list'         => '',
-				'convertkit_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'convertkit_checkbox_enabled'      => false,
-			)
-		);
-
-		wp_send_json_success(
-			array(
-				'message' => __( 'ConvertKit options have been reset.', 'comment-edit-pro' ),
-			)
-		);
-
 	}
 
 	/**
