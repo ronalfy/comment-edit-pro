@@ -273,7 +273,6 @@ const Interface = ( props ) => {
 						<tbody>
 							{ existingWebhooks.length > 0 &&
 								existingWebhooks.map( ( webhook, index ) => {
-									console.log( webhook );
 									return (
 										<tr
 											key={ webhook.id }

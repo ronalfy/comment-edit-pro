@@ -62,6 +62,7 @@ class Options {
 				case 'allow_unlimited_editing':
 				case 'allow_front_end_character_limit':
 				case 'allow_front_end_editing':
+				case 'allow_front_end_moderation_menu':
 				case 'enable_avatars':
 				case 'enable_avatars_logged_in':
 				case 'enable_avatars_anonymous':
@@ -82,6 +83,8 @@ class Options {
 				case 'turnstile_logged_in_users_enabled':
 				case 'enable_comment_editing':
 				case 'enable_avatar_gravatar_fallback':
+				case 'enable_convertkit':
+				case 'convertkit_api_valid':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -104,7 +107,11 @@ class Options {
 					$option = esc_url( $option );
 					break;
 				default:
-					$option = sanitize_text_field( $options[ $key ] );
+					if ( is_array( $option ) ) {
+						$option = Functions::sanitize_array_recursive( $option );
+					} else {
+						$option = sanitize_text_field( $options[ $key ] );
+					}
 					break;
 			}
 		}
@@ -200,6 +207,8 @@ class Options {
 			'allow_unlimited_editing'            => false,
 			'allow_front_end_character_limit'    => false,
 			'allow_front_end_editing'            => false,
+			'allow_front_end_moderation_menu'    => false,
+			'front_end_moderation_menu_theme'    => 'default',
 			'enable_avatars'                     => false,
 			'avatar_size'                        => 90,
 			'enable_avatars_logged_in'           => true,
@@ -248,6 +257,14 @@ class Options {
 			'turnstile_widget_size'              => 'normal',
 			'turnstile_comment_submit_button_id' => 'submit',
 			'turnstile_logged_in_users_enabled'  => true,
+			'enable_convertkit'                  => false,
+			'convertkit_api_key'                 => '',
+			'convertkit_secret_key'              => '',
+			'convertkit_form_or_tag'             => 'tag',
+			'convertkit_signup_label'            => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'convertkit_checkbox_enabled'        => false,
+			'convertkit_api_valid'               => false,
+			'convertkit_selected_form' => 0,
 
 		);
 		return $defaults;

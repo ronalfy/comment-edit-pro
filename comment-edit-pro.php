@@ -4,7 +4,7 @@ Plugin Name: Comment Edit Pro
 Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 3.0.0
+Version: 3.1.0-beta2
 Requires at least: 5.0
 Author URI: https://dlxplugins.com
 Contributors: DLX Plugins
@@ -23,7 +23,7 @@ use CommentEditPro\Includes\Plugin_Updater as Plugin_Updater;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '3.0.0' );
+define( 'COMMENTEDITPRO_VERSION', '3.1.0-beta2' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
@@ -330,6 +330,8 @@ class Comment_Edit_Pro {
 		$this->character_control->run();
 		$this->webhooks = new \CommentEditPro\Includes\Webhooks();
 		$this->webhooks->run();
+		$this->wprocket = new \CommentEditPro\Includes\WP_Rocket();
+		$this->wprocket->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

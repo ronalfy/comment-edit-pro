@@ -111,6 +111,18 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Character Control', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Set a minimum and maximum length for a comment.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><?php esc_html_e( 'View Character Control Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
 						<a href="<?php echo esc_url( Functions::get_settings_url( 'spam-protection' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/turnstile.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Cloudflare Turnstile', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
@@ -135,18 +147,6 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-						<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" /></a>
-						</div>
-						<div class="sce-admin-panel-card-body">
-							<h3><?php esc_html_e( 'Character Control', 'comment-edit-pro' ); ?></h3>
-							<p><?php esc_html_e( 'Set a minimum and maximum length for a comment.', 'comment-edit-pro' ); ?></p>
-						</div>
-						<div class="sce-admin-panel-card-footer">
-							<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><?php esc_html_e( 'View Character Control Settings', 'comment-edit-pro' ); ?></a>
-						</div>
-					</div>
-					<div class="sce-admin-panel-card">
-						<div class="sce-admin-panel-card-header">
 						<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-editing' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-editing.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Editing', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
@@ -155,6 +155,18 @@ class Main {
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-editing' ) ); ?>"><?php esc_html_e( 'View Comment Editing Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/convertkit.jpg' ) ); ?>" alt="<?php esc_html_e( 'ConvertKit logo', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'ConvertKit', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Integrate seamlessly with ConvertKit and turn commenters into subscribers.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><?php esc_html_e( 'View ConvertKit Settings', 'comment-edit-pro' ); ?></a>
 						</div>
 					</div>
 					<div class="sce-admin-panel-card">

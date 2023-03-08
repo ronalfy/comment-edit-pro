@@ -28,6 +28,10 @@ class Integrations {
 		$slack = new Slack();
 		$slack->run();
 
+		// Init Convertkit.
+		$convertkit = new ConvertKit();
+		$convertkit->run();
+
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 	}
@@ -48,15 +52,25 @@ class Integrations {
 				Functions::get_plugin_version(),
 				true
 			);
+			$localized_vars = array(
+				'save_nonce' => wp_create_nonce( 'sce-save-integrations-options' ),
+				'get_nonce'  => wp_create_nonce( 'sce-retrieve-integrations-options' ),
+				'reset_nonce' => wp_create_nonce( 'sce-reset-integrations-options' ),
+				'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
+			);
+			/**
+			 * Filter the localized vars for the integrations admin script.
+			 * Other integrations can add their own variables here.
+			 *
+			 * @param array $localized_vars The localized vars.
+			 *
+			 * @since 3.0.0
+			 */
+			$localized_vars = apply_filters( 'sce_integrations_localized_vars', $localized_vars );
 			wp_localize_script(
 				'sce-integrations',
 				'sceIntegrations',
-				array(
-					'save_nonce' => wp_create_nonce( 'sce-save-integrations-options' ),
-					'get_nonce'  => wp_create_nonce( 'sce-retrieve-integrations-options' ),
-					'reset_nonce' => wp_create_nonce( 'sce-reset-integrations-options' ),
-					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
-				)
+				$localized_vars
 			);
 		}
 	}

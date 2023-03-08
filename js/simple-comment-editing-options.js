@@ -44,6 +44,107 @@ jQuery( document ).ready( function( $ ) {
 			return timer_text;
 		} );
 	}
+
+	// Get frontend comments menus.
+	const sceFrontendCommentMenus = document.querySelectorAll( '.sce-meatball-menu' );
+	if ( null !== sceFrontendCommentMenus && undefined !== sceFrontendCommentMenus ) {
+		// Loop through comment menus and try to attach to comment LI.
+		sceFrontendCommentMenus.forEach( function( sceFrontendCommentMenu ) {
+			// Find closest LI.
+			const sceFrontendCommentMenuLI = sceFrontendCommentMenu.closest( 'li' );
+
+			// If no LI found, go ahead and show the menu.
+			if ( null === sceFrontendCommentMenuLI || undefined === sceFrontendCommentMenuLI ) {
+				sceFrontendCommentMenu.style.display = 'block';
+			} else {
+				// If LI found, move the menu into the LI at the top.
+				sceFrontendCommentMenuLI.insertBefore( sceFrontendCommentMenu, sceFrontendCommentMenuLI.firstChild );
+
+				// Set LI to position relative.
+				sceFrontendCommentMenuLI.style.position = 'relative';
+				sceFrontendCommentMenu.style.display = 'block';
+			}
+		} );
+	}
+
+	// Frontend menu actions.
+	window.sceFrontendMenuAction = function( e ) {
+		e.preventDefault();
+		const anchor = e.target.closest( 'a' );
+		const anchorHref = anchor.getAttribute( 'href' );
+		const ajaxParams = wpAjax.unserialize( anchorHref );
+		const originalText = anchor.querySelector( '.sce-meatball-menu-label' ).innerHTML;
+
+		// Get comment status.
+		const commentStatus = ajaxParams.status;
+		// todo - after ajax call, update status.
+
+		// Change to loading.
+		const anchorSvg = anchor.querySelector( 'use' );
+		const anchorText = anchor.querySelector( '.sce-meatball-menu-label' );
+		if ( null !== anchorSvg && undefined !== anchorSvg ) {
+			anchorSvg.setAttribute( 'xlink:href', '#sce-loading-icon' );
+		}
+		if ( null !== anchorText && undefined !== anchorText ) {
+			anchorText.innerHTML = anchor.getAttribute( 'data-loading-text' );
+		}
+
+		// Set loading data attribute to LI.
+		const anchorContainer = anchor.closest( 'li' );
+		anchorContainer.setAttribute( 'data-loading', 'true' );
+
+		$.post( anchorHref, { action: ajaxParams.action, comment_id: ajaxParams.cid, nonce: ajaxParams.nonce }, function( response ) {
+			// Change to success text.
+			if ( null !== anchorText && undefined !== anchorText ) {
+				// Set finished loading text.
+				anchorText.innerHTML = anchor.getAttribute( 'data-loading-done' );
+
+				// Get the container and action type of the anchor and set SVG with current action icon (original icon).
+
+				const anchorAction = anchorContainer.getAttribute( 'data-comment-action' );
+				anchorSvg.setAttribute( 'xlink:href', '#sce-' + anchorAction + '-icon' );
+
+				// Get the parent/parent container with the comment status.
+				const commentStatusContainer = anchorContainer.closest( 'div.sce-meatball-menu' );
+
+				// If approve, pending, spam, update the commentStatusContainer.
+				switch ( anchorAction ) {
+					case 'approve':
+					case 'pending':
+						setTimeout( function() {
+							// Add fadeout class to container.
+							jQuery( anchorContainer ).fadeOut( 1000, function() {
+								commentStatusContainer.setAttribute( 'data-comment-status', anchorAction );
+								// Update link label with original text.
+								anchor.querySelector( '.sce-meatball-menu-label' ).innerHTML = originalText;
+
+								// Remove loading data attribute from LI.
+								anchorContainer.setAttribute( 'data-loading', 'false' );
+
+								// jQuery's fadeout adds display: none to dom element. Remove it.
+								jQuery( anchorContainer ).css( { display: '' } );
+							} );
+						}, 2500 );
+						break;
+					case 'spam':
+					case 'trash':
+						// Remove comment from dom.
+						const comment_id = ajaxParams.cid;
+						jQuery( commentStatusContainer.closest( 'div.comment' ) ).fadeOut( 'slow' ); // attempt to hide parent DIV.
+						jQuery( commentStatusContainer.closest( 'li.comment' ) ).fadeOut( 'slow' ); // attempt to hide parent LI.
+						jQuery( commentStatusContainer ).fadeOut( 'slow' ); // hide meatball menu.
+						jQuery( '#comment-' + comment_id ).fadeOut( 'slow' ); // hide comment.
+						break;
+				}
+			}
+		}, 'json' );
+
+		
+
+		// const ajax_params = wpAjax.unserialize( e.target.url );
+		// console.log( ajax_params );
+	};
+
 	const simplecommenteditingoptions = $.simplecommenteditingoptions = $.fn.simplecommenteditingoptions = function() {
 		const $this = this;
 		return this.each( function() {

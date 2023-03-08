@@ -52,6 +52,7 @@ class Admin {
 	public function admin_scripts() {
 		$screen = get_current_screen();
 		if ( isset( $screen->base ) && 'settings_page_comment-edit-pro' === $screen->base ) {
+			wp_enqueue_style( 'sce-fancybox', Functions::get_plugin_url( 'dist/sce-fancybox-css.css' ), array(), COMMENTEDITPRO_VERSION, 'all' );
 			wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), COMMENTEDITPRO_VERSION, 'all' );
 			wp_enqueue_style( 'sce-styles-admin', Functions::get_plugin_url( 'dist/admin.css' ), array( 'sce-styles' ), COMMENTEDITPRO_VERSION, 'all' );
 
