@@ -236,7 +236,15 @@ class ConvertKit {
 				$form_http_args['body']['fields'] = $selected_custom_fields;
 			}
 			if ( ! empty( $selected_tag_ids ) ) {
-				$form_http_args['body']['tags'] = count( $selected_tag_ids ) > 1 ? $selected_tag_ids : $selected_tag_ids[0];
+				$test_array = array();
+				$test_array[] = 1234;
+				$tag_json = wp_json_encode(
+					array_merge(
+						$test_array,
+						$selected_tag_ids
+					)
+				);
+				$form_http_args['body']['tags'] = count( $selected_tag_ids ) > 1 ? $tag_json : $selected_tag_ids[0];
 			}
 
 			$response = wp_remote_post(

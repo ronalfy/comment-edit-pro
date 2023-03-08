@@ -289,6 +289,10 @@ class Frontend_Editing {
 	 * @return string The comment wrapper.
 	 */
 	public function add_edit_interface( $comment_content, $passed_comment = false ) {
+		// Make sure we can process text.
+		if ( defined( 'DOING_SCE' ) && DOING_SCE ) {
+			return $comment_content;
+		}
 		if ( ! current_user_can( 'moderate_comments' ) ) {
 			return $comment_content;
 		}
@@ -313,10 +317,11 @@ class Frontend_Editing {
 
 		// Return.
 		$comment_wrapper = sprintf(
-			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d">%s<div class"sce-front-end-comment-content">%s</div></div>',
+			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d"><div class="sce-front-end-comment-meta">%s%s</div><div class="sce-front-end-comment-content">%s</div></div>',
 			$comment_id,
 			$comment_id,
 			$allow_frontend_moderation_menu ? $this->get_moderation_menu_html( $comment ) : '',
+			! did_filter( 'edit_comment_link' ) ? $this->get_edit_link_html( $comment_id ) : '',
 			$comment_content
 		);
 		return $comment_wrapper;
@@ -530,15 +535,13 @@ class Frontend_Editing {
 	}
 
 	/**
-	 * Modify the edit link HTML
+	 * Modify the comment reply link HTML
 	 *
-	 * @param string $link The link HTML.
-	 * @param int    $comment_id The comment ID.
-	 * @param string $text       The edit text.
+	 * @param int $comment_id The post ID.
 	 *
-	 * @return string modified edit link.
+	 * @return string html for the edit link.
 	 */
-	public function modify_edit_link( $link, $comment_id, $text ) {
+	public function get_edit_link_html( $comment_id ) {
 		$nonce = wp_create_nonce( 'edit-comment-' . $comment_id );
 		$url   = add_query_arg(
 			array(
@@ -551,9 +554,22 @@ class Frontend_Editing {
 		$html  = sprintf(
 			'<a data-sce-fancybox data-type="iframe" data-preload="false" data-src="%1$s" href="%1$s">%2$s</a>',
 			esc_url_raw( $url ),
-			__( 'Edit', 'comment-edit-pro' )
+			esc_html__( 'Edit', 'comment-edit-pro' )
 		);
 		return $html;
+	}
+
+	/**
+	 * Modify the edit link HTML
+	 *
+	 * @param string $link The link HTML.
+	 * @param int    $comment_id The comment ID.
+	 * @param string $text       The edit text.
+	 *
+	 * @return string modified edit link.
+	 */
+	public function modify_edit_link( $link, $comment_id, $text ) {
+		return $this->get_edit_link_html( $comment_id );
 	}
 
 	/**

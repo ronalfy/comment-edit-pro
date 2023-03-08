@@ -46,7 +46,8 @@
 
 /* Frontend checkboxes */
 .comment-form-sce-mentions,
-.comment-form-sce-mailchimp {
+.comment-form-sce-mailchimp,
+.comment-form-sce-convertkit {
   font-weight: 500;
   margin-bottom: 5px;
 }

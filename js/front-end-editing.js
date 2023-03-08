@@ -13,6 +13,7 @@ jQuery( document ).ready( function( $ ) {
 			if ( 'spam' === status ) {
 				window.parent.jQuery( '#comment-' + comment_id ).fadeOut( 'slow' );
 			} else {
+				console.log( comment_id );
 				window.parent.jQuery( '#sce-front-end-comment-' + comment_id + ' .sce-front-end-comment-content').html( response.data.comment );
 				window.parent.jQuery( '#comment-' + comment_id ).find( '.comment-author-link' ).html( comment_name );
 			}
