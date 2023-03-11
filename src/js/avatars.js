@@ -59,6 +59,25 @@ window.addEventListener( 'load', function( event ) {
 		} );
 	}
 
+	// Get the current avatar image from local storage.
+	if ( sceAvatars.canRemember ) {
+		const currentAvatar = document.querySelector(
+			'.comment-form-sce-avatar img.avatar'
+		);
+		const commentFormInput = document.querySelector( '#sce-comment-form-avatar' );
+		const currentAvatarValue = localStorage.getItem( 'sce_avatar_value' );
+		if ( null !== currentAvatarValue ) {
+			// Loop through avatars and find match.
+			sceAvatars.avatars.forEach( ( avatarData, index ) => {
+				if ( avatarData.avatar_key === currentAvatarValue ) {
+					const currentAvatarUrl = sceAvatars.avatars[ index ].avatar_url;
+					currentAvatar.setAttribute( 'src', currentAvatarUrl );
+					commentFormInput.setAttribute( 'value', currentAvatarValue );
+				}
+			} );
+		}
+	}
+
 	// Avatar modal - Actions to run for when the modal is visible.
 	// Credit: https://codepen.io/rebelchris/pen/MWyyLXR
 	const modalWrapper = document.querySelector( '#sce-avatar-form-modal' );
@@ -82,6 +101,11 @@ window.addEventListener( 'load', function( event ) {
 				);
 				commentFormInput.setAttribute( 'value', filename );
 				currentAvatar.setAttribute( 'src', imgUrl );
+
+				// Set local storage with the new avatar.
+				if ( sceAvatars.canRemember ) {
+					localStorage.setItem( 'sce_avatar_value', filename );
+				}
 				toggleModalState();
 			} );
 		} );

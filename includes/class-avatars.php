@@ -299,13 +299,14 @@ class Avatars {
 		$avatar_options = Options::get_options();
 
 		$json_array = array(
-			'enableAvatars'                => $avatar_options['enable_avatars'],
-			'avatarSize'                   => $avatar_options['avatar_size'],
-			'enableAvatarsLoggedIn'        => $avatar_options['enable_avatars_logged_in'],
-			'enableAvatarsAnonymous'       => $avatar_options['enable_avatars_anonymous'],
-			'chooseAvatarText'             => $avatar_options['choose_avatar_text'],
-			'enableCustomAvatarSize'       => $avatar_options['enable_custom_avatar_size'],
-			'enableAvatarGravatarFallback' => $avatar_options['enable_avatar_gravatar_fallback'],
+			'enableAvatars'                  => $avatar_options['enable_avatars'],
+			'avatarSize'                     => $avatar_options['avatar_size'],
+			'enableAvatarsLoggedIn'          => $avatar_options['enable_avatars_logged_in'],
+			'enableAvatarsAnonymous'         => $avatar_options['enable_avatars_anonymous'],
+			'enableAvatarsAnonymousRemember' => $avatar_options['enable_avatars_anonymous_remember'],
+			'chooseAvatarText'               => $avatar_options['choose_avatar_text'],
+			'enableCustomAvatarSize'         => $avatar_options['enable_custom_avatar_size'],
+			'enableAvatarGravatarFallback'   => $avatar_options['enable_avatar_gravatar_fallback'],
 		);
 
 		// Exit gracefully.
@@ -345,12 +346,14 @@ class Avatars {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		$options_to_save = array(
-			'enable_avatars'                  => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
-			'avatar_size'                     => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
-			'enable_avatars_logged_in'        => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
-			'enable_custom_avatar_size'       => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
-			'choose_avatar_text'              => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
-			'enable_avatar_gravatar_fallback' => filter_input( INPUT_POST, 'enableAvatarGravatarFallback', FILTER_VALIDATE_BOOLEAN ),
+			'enable_avatars'                    => filter_input( INPUT_POST, 'enableAvatars', FILTER_VALIDATE_BOOLEAN ),
+			'avatar_size'                       => absint( filter_input( INPUT_POST, 'avatarSize', FILTER_VALIDATE_INT ) ),
+			'enable_avatars_logged_in'          => filter_input( INPUT_POST, 'enableAvatarsLoggedIn', FILTER_VALIDATE_BOOLEAN ),
+			'enable_custom_avatar_size'         => filter_input( INPUT_POST, 'enableCustomAvatarSize', FILTER_VALIDATE_BOOLEAN ),
+			'choose_avatar_text'                => sanitize_text_field( filter_input( INPUT_POST, 'chooseAvatarText', FILTER_DEFAULT ) ),
+			'enable_avatar_gravatar_fallback'   => filter_input( INPUT_POST, 'enableAvatarGravatarFallback', FILTER_VALIDATE_BOOLEAN ),
+			'enable_avatars_anonymous'          => filter_input( INPUT_POST, 'enableAvatarsAnonymous', FILTER_VALIDATE_BOOLEAN ),
+			'enable_avatars_anonymous_remember' => filter_input( INPUT_POST, 'enableAvatarsAnonymousRemember', FILTER_VALIDATE_BOOLEAN ),
 		);
 
 		// Security.
@@ -423,12 +426,16 @@ class Avatars {
 		foreach ( $avatars as &$avatar_file_name ) {
 			$avatar_file_name = esc_url( Functions::get_plugin_url( '/images/avatars/' . $avatar_file_name . '.png' ) );
 		}
+		// Get whether we try to save the user's avatar if not logged in.
+		$options      = Options::get_options();
+		$can_remember = (bool) $options['enable_avatars_anonymous_remember'];
 		wp_localize_script(
 			'sce-avatars',
 			'sceAvatars',
 			array(
-				'avatars' => $avatar_data,
-				'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'avatars'     => $avatar_data,
+				'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'canRemember' => $can_remember && ! is_user_logged_in(),
 			)
 		);
 
@@ -838,7 +845,7 @@ class Avatars {
 
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 
-		$options = Options::get_options();
+		$options                 = Options::get_options();
 		$fallback_avatar_enabled = (bool) $options['enable_avatar_gravatar_fallback'];
 
 		// Get user data.

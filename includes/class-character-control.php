@@ -243,7 +243,7 @@ class Character_Control {
 		}
 		$options = Options::get_options();
 		wp_enqueue_style( 'sce-ccc', Functions::get_plugin_url( '/dist/sce-ccc-progress-bar.css' ), array(), Functions::get_plugin_version(), 'all' );
-		wp_enqueue_script( 'sce-ccc', Functions::get_plugin_url( '/js/comment-character-control.js' ), array(), Functions::get_plugin_version(), true );
+		wp_enqueue_script( 'sce-ccc', Functions::get_plugin_url( '/js/comment-character-control.js' ), array( 'jquery' ), Functions::get_plugin_version(), true );
 		wp_localize_script(
 			'sce-ccc',
 			'sce_ccc',

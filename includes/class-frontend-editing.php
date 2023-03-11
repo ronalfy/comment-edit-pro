@@ -37,14 +37,16 @@ class Frontend_Editing {
 		/* Begin Filters */
 		if ( ! is_feed() && ! defined( 'DOING_SCE' ) && ( $allow_frontend_editing || $allow_frontend_moderation_menu ) && current_user_can( 'moderate_comments' ) ) {
 			if ( current_user_can( 'moderate_comments' ) ) {
-				add_filter( 'comment_excerpt', array( $this, 'add_edit_interface' ), 1000, 2 );
-				add_filter( 'comment_text', array( $this, 'add_edit_interface' ), 1000, 2 );
-				add_filter( 'thesis_comment_text', array( $this, 'add_edit_interface' ), 1000, 2 );
-				add_filter( 'sce_can_edit', '__return_false' );
+				if ( ! is_admin() ) {
+					add_filter( 'comment_excerpt', array( $this, 'add_edit_interface' ), 1000, 2 );
+					add_filter( 'comment_text', array( $this, 'add_edit_interface' ), 1000, 2 );
+					add_filter( 'thesis_comment_text', array( $this, 'add_edit_interface' ), 1000, 2 );
+					add_filter( 'sce_can_edit', '__return_false' );
 
-				// Only modify edit link if frontend editing is enabled.
-				if ( $allow_frontend_editing ) {
-					add_filter( 'edit_comment_link', array( $this, 'modify_edit_link' ), 10, 3 );
+					// Only modify edit link if frontend editing is enabled.
+					if ( $allow_frontend_editing ) {
+						add_filter( 'edit_comment_link', array( $this, 'modify_edit_link' ), 10, 3 );
+					}
 				}
 
 				// Add SVG icons in footer if moderation menu is enabled.

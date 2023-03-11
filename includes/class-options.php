@@ -85,6 +85,7 @@ class Options {
 				case 'enable_avatar_gravatar_fallback':
 				case 'enable_convertkit':
 				case 'convertkit_api_valid':
+				case 'enable_avatars_anonymous_remember':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -213,6 +214,7 @@ class Options {
 			'avatar_size'                        => 90,
 			'enable_avatars_logged_in'           => true,
 			'enable_avatars_anonymous'           => true,
+			'enable_avatars_anonymous_remember'  => true,
 			'enable_custom_avatar_size'          => false,
 			'enable_avatar_gravatar_fallback'    => false,
 			'choose_avatar_text'                 => __( 'Choose an Avatar', 'comment-edit-pro' ),

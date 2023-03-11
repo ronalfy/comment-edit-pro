@@ -92,6 +92,7 @@ const Interface = ( props ) => {
 				chooseAvatarText: data.chooseAvatarText,
 				enableCustomAvatarSize: data.enableCustomAvatarSize,
 				enableAvatarGravatarFallback: data.enableAvatarGravatarFallback,
+				enableAvatarsAnonymousRemember: data.enableAvatarsAnonymousRemember,
 			},
 		} );
 
@@ -245,6 +246,31 @@ const Interface = ( props ) => {
 							</>
 						) }
 					/>
+					{ getValues( 'enableAvatarsAnonymous' ) && (
+						<>
+							<Controller
+								name="enableAvatarsAnonymousRemember"
+								control={ control }
+								render={ ( { field: { onChange, value } } ) => (
+									<>
+										<ToggleControl
+											label={ __( 'Remember Avatars for Anonymous Users', 'comment-edit-pro' ) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Try to remember an anonymous user\'s avatar for future comments.',
+												'comment-edit-pro'
+											) }
+										/>
+									</>
+								) }
+							/>
+						</>
+					) }
+
 				</td>
 			</tr>
 		);
