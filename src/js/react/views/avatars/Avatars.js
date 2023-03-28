@@ -91,6 +91,8 @@ const Interface = ( props ) => {
 				enableAvatarsAnonymous: data.enableAvatarsAnonymous,
 				chooseAvatarText: data.chooseAvatarText,
 				enableCustomAvatarSize: data.enableCustomAvatarSize,
+				enableAvatarGravatarFallback: data.enableAvatarGravatarFallback,
+				enableAvatarsAnonymousRemember: data.enableAvatarsAnonymousRemember,
 			},
 		} );
 
@@ -244,6 +246,61 @@ const Interface = ( props ) => {
 							</>
 						) }
 					/>
+					{ getValues( 'enableAvatarsAnonymous' ) && (
+						<>
+							<Controller
+								name="enableAvatarsAnonymousRemember"
+								control={ control }
+								render={ ( { field: { onChange, value } } ) => (
+									<>
+										<ToggleControl
+											label={ __( 'Remember Avatars for Anonymous Users', 'comment-edit-pro' ) }
+											className="sce-admin__toggle-control"
+											checked={ value }
+											onChange={ ( boolValue ) => {
+												onChange( boolValue );
+											} }
+											help={ __(
+												'Try to remember an anonymous user\'s avatar for future comments.',
+												'comment-edit-pro'
+											) }
+										/>
+									</>
+								) }
+							/>
+						</>
+					) }
+
+				</td>
+			</tr>
+		);
+	};
+
+	const getAvatarFallback = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Gravatars', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="enableAvatarGravatarFallback"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<>
+								<ToggleControl
+									label={ __( 'Gravatar Fallback', 'comment-edit-pro' ) }
+									className="sce-admin__toggle-control"
+									checked={ value }
+									onChange={ ( boolValue ) => {
+										onChange( boolValue );
+									} }
+									help={ __(
+										'If a user does not have an avatar, use their Gravatar if available.',
+										'comment-edit-pro'
+									) }
+								/>
+							</>
+						) }
+					/>
 				</td>
 			</tr>
 		);
@@ -344,6 +401,7 @@ const Interface = ( props ) => {
 						{ getValues( 'enableAvatars' ) && (
 							<>
 								{ getAvatarPermissions() }
+								{ getAvatarFallback() }
 								{ getAvatarLabel() }
 								{ getAvatarWidth() }
 							</>

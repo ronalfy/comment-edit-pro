@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { Fancybox } from '@fancyapps/ui/dist/fancybox/fancybox.esm.js';
 
 import {
 	TextControl,
@@ -74,6 +75,7 @@ const Interface = ( props ) => {
 			enableCommentEditing: data.enableCommentEditing,
 			allowCommentLogging: data.allowCommentLogging,
 			allowFrontEndEditing: data.allowFrontEndEditing,
+			allowFrontEndModerationMenu: data.allowFrontEndModerationMenu,
 			allowUnlimitedEditing: data.allowUnlimitedEditing,
 			showStopTimer: data.showStopTimer,
 			allowDelete: data.allowDelete,
@@ -96,6 +98,7 @@ const Interface = ( props ) => {
 			commentDeleted: data.commentDeleted,
 			commentDeletedError: data.commentDeletedError,
 			commentEmptyError: data.commentEmptyError,
+			frontEndModerationMenuTheme: data.frontEndModerationMenuTheme,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -254,28 +257,121 @@ const Interface = ( props ) => {
 						<tr>
 							<th scope="row">{ __( 'Frontend Editing', 'comment-edit-pro' ) }</th>
 							<td>
-								<Controller
-									name="allowFrontEndEditing"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __(
-												'Enable Frontend Editing For Admins.',
-												'comment-edit-pro'
-											) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
+								<div className="sce-panel-row">
+									<Controller
+										name="allowFrontEndEditing"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __(
+													'Enable Frontend Editing For Admins.',
+													'comment-edit-pro'
+												) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
 												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Enabling this will allow you to edit comments from the frontend of your site.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will allow you to edit comments from the frontend of your site.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="allowFrontEndModerationMenu"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __(
+													'Enable Frontend Moderation Menu',
+													'comment-edit-pro'
+												) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will show a small horizontal menu on each comment, which will allow you to edit, delete, approve, or spam comments from the frontend of your site.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								{
+									getValues( 'allowFrontEndModerationMenu' ) && (
+										<>
+											<div className="sce-panel-row">
+												<Controller
+													name="frontEndModerationMenuTheme"
+													control={ control }
+													render={ ( { field: { onChange, value } } ) => (
+														<SelectControl
+															label={ __( 'Moderation Menu Theme', 'comment-edit-pro' ) }
+															value={ value }
+															options={ [
+																{
+																	label: __( 'Default', 'comment-edit-pro' ),
+																	value: 'default',
+																},
+																{
+																	label: __( 'Light', 'comment-edit-pro' ),
+																	value: 'light',
+																},
+																{
+																	label: __( 'Dark', 'comment-edit-pro' ),
+																	value: 'dark',
+																},
+															] }
+															onChange={ ( newValue ) => {
+																onChange( newValue );
+															} }
+															help={ __(
+																'Choose a theme for the moderation menu.',
+																'comment-edit-pro'
+															) }
+														/>
+													) }
+												/>
+											</div>
+											<div className="sce-panel-row">
+												<p className="sce-admin__theme-preview fancybox-previews">
+													<strong>{ __( 'Preview:', 'comment-edit-pro' ) }</strong>
+													{ ` ` }
+													<a
+														href={ sceCommentEditing.default_menu_theme }
+														data-fancybox="moderation-menu-themes" data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Default Menu Theme', 'comment-edit-pro' ) }
+														className="sce-admin__theme-preview-link"
+													>
+														{ __( 'Default Theme', 'comment-edit-pro' ) }
+													</a>
+													{ ` | ` }
+													<a
+														href={ sceCommentEditing.light_menu_theme }
+														className="sce-admin__theme-preview-link"
+														data-fancybox="moderation-menu-themes" data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Light Menu Theme', 'comment-edit-pro' ) }
+													>
+														{ __( 'Light Theme', 'comment-edit-pro' ) }
+													</a>
+													{ ` | ` }
+													<a
+														href={ sceCommentEditing.dark_menu_theme }
+														className="sce-admin__theme-preview-link"
+														data-fancybox="moderation-menu-themes" data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Dark Menu Theme', 'comment-edit-pro' ) }
+													>
+														{ __( 'Dark Theme', 'comment-edit-pro' ) }
+													</a>
+												</p>
+											</div></>
+
+									)
+								}
 							</td>
 						</tr>
 						{ getValues( 'enableCommentEditing' ) && (
@@ -736,14 +832,8 @@ const Interface = ( props ) => {
 											{ ` ` }
 											<a
 												href={ sceCommentEditing.default_theme }
+												data-fancybox data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Default Theme', 'comment-edit-pro' ) }
 												className="sce-admin__theme-preview-link"
-												onClick={ ( e ) => {
-													e.preventDefault();
-													jQuery.fancybox.open( {
-														src: e.target.href,
-														type: 'image',
-													} );
-												} }
 											>
 												{ __( 'Default Theme', 'comment-edit-pro' ) }
 											</a>
@@ -751,13 +841,7 @@ const Interface = ( props ) => {
 											<a
 												href={ sceCommentEditing.light_theme }
 												className="sce-admin__theme-preview-link"
-												onClick={ ( e ) => {
-													e.preventDefault();
-													jQuery.fancybox.open( {
-														src: e.target.href,
-														type: 'image',
-													} );
-												} }
+												data-fancybox data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Light Theme', 'comment-edit-pro' ) }
 											>
 												{ __( 'Light Theme', 'comment-edit-pro' ) }
 											</a>
@@ -765,13 +849,7 @@ const Interface = ( props ) => {
 											<a
 												href={ sceCommentEditing.dark_theme }
 												className="sce-admin__theme-preview-link"
-												onClick={ ( e ) => {
-													e.preventDefault();
-													jQuery.fancybox.open( {
-														src: e.target.href,
-														type: 'image',
-													} );
-												} }
+												data-fancybox data-initial-size="fit" data-zoom="false" data-width="800px" data-caption={ __( 'Dark Theme', 'comment-edit-pro' ) }
 											>
 												{ __( 'Dark Theme', 'comment-edit-pro' ) }
 											</a>

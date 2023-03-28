@@ -234,7 +234,7 @@ class Mailchimp {
 				'mailchimp_api_key_server_prefix' => '',
 				'mailchimp_selected_list'         => '',
 				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
-				'mailchimp_checkbox_enabled'      => true,
+				'mailchimp_checkbox_enabled'      => false,
 			);
 			if ( Functions::is_multisite() ) {
 				delete_site_option( 'sce_mailchimp_lists' );

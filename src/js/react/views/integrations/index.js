@@ -6,6 +6,9 @@ const Mailchimp = lazy( () =>
 const Slack = lazy( () =>
 	import( /* webpackChunkName: "Slack0.0.2" */ './Slack' )
 );
+const ConvertKit = lazy( () =>
+	import( /* webpackChunkName: "ConvertKit0.0.1" */ './ConvertKit' )
+);
 
 const container = document.getElementById( 'sce-tab-mailchimp' );
 const root = createRoot( container );
@@ -20,5 +23,13 @@ const slackIntegration = createRoot( slackContainer );
 slackIntegration.render(
 	<React.StrictMode>
 		<Slack />
+	</React.StrictMode>
+);
+
+const convertkitContainer = document.getElementById( 'sce-tab-convertkit' );
+const convertkitIntegration = createRoot( convertkitContainer );
+convertkitIntegration.render(
+	<React.StrictMode>
+		<ConvertKit />
 	</React.StrictMode>
 );
