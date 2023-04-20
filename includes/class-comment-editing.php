@@ -102,6 +102,10 @@ class Comment_Editing {
 			'commentDeletedError'         => sanitize_text_field( $options['comment_deleted_error'] ),
 			'commentEmptyError'           => sanitize_text_field( $options['comment_empty_error'] ),
 			'frontEndModerationMenuTheme' => sanitize_text_field( $options['front_end_moderation_menu_theme'] ),
+			'deleteBehaviorUsers'         => sanitize_text_field( $options['delete_behavior_users'] ),
+			'deleteBehaviorModerators'    => sanitize_text_field( $options['delete_behavior_moderators'] ),
+			'spamBehaviorModerators'      => sanitize_text_field( $options['spam_behavior_moderators'] ),
+
 		);
 
 		// Exit gracefully.
@@ -152,6 +156,9 @@ class Comment_Editing {
 		$options['comment_deleted_error']           = sanitize_text_field( filter_input( INPUT_POST, 'commentDeletedError', FILTER_DEFAULT ) );
 		$options['comment_empty_error']             = sanitize_text_field( filter_input( INPUT_POST, 'commentEmptyError', FILTER_DEFAULT ) );
 		$options['front_end_moderation_menu_theme'] = sanitize_text_field( filter_input( INPUT_POST, 'frontEndModerationMenuTheme', FILTER_DEFAULT ) );
+		$options['delete_behavior_users']           = sanitize_text_field( filter_input( INPUT_POST, 'deleteBehaviorUsers', FILTER_DEFAULT ) );
+		$options['delete_behavior_moderators']      = sanitize_text_field( filter_input( INPUT_POST, 'deleteBehaviorModerators', FILTER_DEFAULT ) );
+		$options['spam_behavior_moderators']        = sanitize_text_field( filter_input( INPUT_POST, 'spamBehaviorModerators', FILTER_DEFAULT ) );
 
 		// Save options.
 		Options::update_options( $options );

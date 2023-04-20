@@ -143,8 +143,7 @@ class Frontend_Editing {
 		if ( ! $comment ) {
 			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
 		}
-		$comment['comment_approved'] = 'spam';
-		wp_update_comment( $comment );
+		wp_spam_comment( $comment_id );
 		wp_send_json_success();
 	}
 
@@ -205,6 +204,16 @@ class Frontend_Editing {
 		$email   = sanitize_text_field( $_POST['email'] ); // phpcs:ignore
 		$status  = sanitize_text_field( $_POST['status'] ); // phpcs:ignore
 
+		// Mark as spam if spam.
+		if ( 'spam' === $status ) {
+			wp_spam_comment( $comment_id );
+			wp_send_json_success(
+				array(
+					'comment' => null,
+				)
+			);
+		}
+
 		$sce_comment                         = get_comment( $comment_id, ARRAY_A );
 		$sce_comment['comment_content']      = $comment;
 		$sce_comment['comment_author']       = $author;
@@ -213,6 +222,8 @@ class Frontend_Editing {
 		$sce_comment['comment_approved']     = $status;
 
 		wp_update_comment( $sce_comment );
+
+		
 
 		// Format the comment for returning.
 		if ( function_exists( 'mb_convert_encoding' ) ) {

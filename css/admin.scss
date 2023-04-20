@@ -1818,3 +1818,11 @@ h2 a.sce-admin-heading-docs {
 .fancybox-container {
 	z-index: 1000000 !important; /* yes, that is super high */
 }
+
+/* Make radio button label not uppercase */
+.components-radio-control {
+	.components-base-control__label {
+		text-transform: capitalize;
+		font-size: 14px;
+	}
+}
