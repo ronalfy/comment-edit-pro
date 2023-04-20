@@ -223,8 +223,6 @@ class Frontend_Editing {
 
 		wp_update_comment( $sce_comment );
 
-		
-
 		// Format the comment for returning.
 		if ( function_exists( 'mb_convert_encoding' ) ) {
 			$comment = mb_convert_encoding( $comment, '' . get_option( 'blog_charset' ) . '', mb_detect_encoding( $comment, 'UTF-8, ISO-8859-1, ISO-8859-15', true ) );
