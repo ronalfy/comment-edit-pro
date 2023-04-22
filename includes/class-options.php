@@ -266,7 +266,10 @@ class Options {
 			'convertkit_signup_label'            => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
 			'convertkit_checkbox_enabled'        => false,
 			'convertkit_api_valid'               => false,
-			'convertkit_selected_form' => 0,
+			'convertkit_selected_form'           => 0,
+			'delete_behavior_users'              => 'trash', // trash|delete.
+			'delete_behavior_moderators'         => 'trash', // trash|delete.
+			'spam_behavior_moderators'           => 'spam', // delete|spam.
 
 		);
 		return $defaults;

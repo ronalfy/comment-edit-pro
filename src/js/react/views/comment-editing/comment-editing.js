@@ -12,6 +12,7 @@ import {
 	Button,
 	ToggleControl,
 	SelectControl,
+	RadioControl,
 } from '@wordpress/components';
 import Spinner from '../../components/icons/Spinner';
 import ClipboardCheck from '../../components/icons/ClipboardCheck';
@@ -99,6 +100,9 @@ const Interface = ( props ) => {
 			commentDeletedError: data.commentDeletedError,
 			commentEmptyError: data.commentEmptyError,
 			frontEndModerationMenuTheme: data.frontEndModerationMenuTheme,
+			deleteBehaviorUsers: data.deleteBehaviorUsers,
+			deleteBehaviorModerators: data.deleteBehaviorModerators,
+			spamBehaviorModerators: data.spamBehaviorModerators,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -550,6 +554,95 @@ const Interface = ( props ) => {
 													} }
 													help={ __(
 														'Enabling this will show a confirmation before the user is allowed to delete their own comments.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										<Controller
+											name="deleteBehaviorModerators"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<RadioControl
+													label={ __(
+														'How should moderator-deleted comments be treated?',
+														'comment-edit-pro'
+													) }
+													selected={ value }
+													options={ [
+														{
+															label: __( 'Send to Trash', 'comment-edit-pro' ),
+															value: 'trash',
+														},
+														{
+															label: __( 'Delete Permanently', 'comment-edit-pro' ),
+															value: 'delete',
+														},
+													] }
+													onChange={ onChange }
+													help={ __(
+														'Choose whether to send moderator-deleted comments to the trash or delete them permanently. This affects comments deleted in the admin as well.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+										<Controller
+											name="deleteBehaviorUsers"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<RadioControl
+													label={ __(
+														'How should user-deleted comments be treated?',
+														'comment-edit-pro'
+													) }
+													selected={ value }
+													options={ [
+														{
+															label: __( 'Send to Trash', 'comment-edit-pro' ),
+															value: 'trash',
+														},
+														{
+															label: __( 'Delete Permanently', 'comment-edit-pro' ),
+															value: 'delete',
+														},
+													] }
+													onChange={ onChange }
+													help={ __(
+														'Choose whether to send user-deleted comments to the trash or delete them permanently.',
+														'comment-edit-pro'
+													) }
+												/>
+											) }
+										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{ __( 'Spammed Comments', 'comment-edit-pro' ) }</th>
+									<td>
+										<Controller
+											name="spamBehaviorModerators"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<RadioControl
+													label={ __(
+														'How should spam comments be treated?',
+														'comment-edit-pro'
+													) }
+													selected={ value }
+													options={ [
+														{
+															label: __( 'Send to Spam', 'comment-edit-pro' ),
+															value: 'spam',
+														},
+														{
+															label: __( 'Spam and Delete', 'comment-edit-pro' ),
+															value: 'delete',
+														},
+													] }
+													onChange={ onChange }
+													help={ __(
+														'When marking a comment as spam, choose whether to send the comment directly to spam, or to mark as spam then delete permanently. This affects comments marked as spam in the admin as well.',
 														'comment-edit-pro'
 													) }
 												/>

@@ -65,13 +65,41 @@ class Output {
 		add_filter( 'sce_comment_deleted', array( $this, 'message_comment_deleted' ) );
 		add_filter( 'sce_comment_deleted_error', array( $this, 'message_comment_deleted_error' ) );
 		add_filter( 'sce_empty_comment', array( $this, 'message_empty_comment' ) );
-		
 		add_filter( 'sce_button_extra_save', array( $this, 'maybe_add_save_icon' ) );
 		add_filter( 'sce_button_extra_cancel', array( $this, 'maybe_add_cancel_icon' ) );
 		add_filter( 'sce_button_extra_delete', array( $this, 'maybe_add_delete_icon' ) );
 		add_filter( 'sce_button_extra_stop_timer', array( $this, 'maybe_add_stop_timer_icon' ) );
 		add_filter( 'sce_unlimited_editing', array( $this, 'maybe_unlimited_editing' ), 10, 2 );
 		add_filter( 'sce_allow_delete_button', array( $this, 'allow_deletion_only' ), 10, 1 );
+		add_filter( 'sce_force_delete', array( $this, 'force_delete' ), 10, 3 );
+		add_filter( 'trashed_comment', array( $this, 'maybe_delete_comment' ), 10, 2 );
+		add_filter( 'spammed_comment', array( $this, 'maybe_spam_and_delete_comment' ), 10, 2 );
+	}
+
+	/**
+	 * Maybe delete a comment permanently if admin setting is on.
+	 *
+	 * @param int        $comment_id The comment ID.
+	 * @param WP_Comment $comment    The comment object.
+	 */
+	public function maybe_delete_comment( $comment_id, $comment ) {
+		$trash_or_delete = $this->options['delete_behavior_moderators'];
+		if ( 'delete' === $trash_or_delete && current_user_can( 'moderate_comments' ) ) {
+			wp_delete_comment( $comment_id, true );
+		}
+	}
+
+	/**
+	 * Maybe delete a comment permanently after spamming it if admin setting is on.
+	 *
+	 * @param int        $comment_id The comment ID.
+	 * @param WP_Comment $comment    The comment object.
+	 */
+	public function maybe_spam_and_delete_comment( $comment_id, $comment ) {
+		$maybe_delete = $this->options['spam_behavior_moderators'];
+		if ( 'delete' === $maybe_delete && current_user_can( 'moderate_comments' ) ) {
+			wp_delete_comment( $comment_id, true );
+		}
 	}
 
 	/**
@@ -88,6 +116,23 @@ class Output {
 		add_action( 'sce_save_after', array( $this, 'maybe_store_comment' ), 10, 4 );
 		add_action( 'sce_comment_is_deleted', array( $this, 'maybe_send_delete_email' ), 10, 2 );
 		add_action( 'add_meta_boxes_comment', array( $this, 'maybe_add_comment_metabox' ), 10, 1 );
+	}
+
+	/**
+	 * Force delete a comment when a user deletes it.
+	 *
+	 * @param bool $force Whether to force delete.
+	 * @param int  $comment_id Comment ID.
+	 * @param int  $post_id Post ID.
+	 *
+	 * @return bool Whether to force delete.
+	 */
+	public function force_delete( $force, $comment_id, $post_id ) {
+		$trash_or_delete = $this->options['delete_behavior_users'];
+		if ( 'delete' === $trash_or_delete ) {
+			return true;
+		}
+		return $force;
 	}
 
 	/**
