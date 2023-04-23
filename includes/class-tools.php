@@ -32,6 +32,9 @@ class Tools {
 		add_action( 'wp_ajax_sce_get_post_type_comment_settings', array( $this, 'ajax_get_post_type_comment_settings' ) );
 	}
 
+	/**
+	 * Retrieve Post Type Settings via Ajax.
+	 */
 	public function ajax_get_post_type_comment_settings() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 		// Security.
@@ -62,6 +65,30 @@ class Tools {
 				'postTypeSettings' => $json_array,
 			)
 		);
+	}
+
+	/**
+	 * Save post type settings via Ajax.
+	 */
+	public function ajax_save_post_type_comment_settings() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-tools-post-type-comment-settings' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Get post type settings and sanitize.
+		$post_type_settings = Functions::sanitize_array_recursive( filter_input( INPUT_POST, 'postTypeSettings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+
+		Options_Tools::update_options( array( 'comment_post_type_settings' => $post_type_settings ) );
+
+		// Send response.
+		wp_send_json_success();
 	}
 
 	/**

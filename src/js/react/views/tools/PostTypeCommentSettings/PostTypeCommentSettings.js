@@ -85,7 +85,7 @@ const Interface = ( props ) => {
 
 	const onSubmit = ( formData ) => {
 		setSaving( true );
-		sendCommand( 'sce_save_comment_activity', {
+		sendCommand( 'sce_save_post_type_comment_settings', {
 			nonce: sceToolsPostTypeCommentSettings.save_nonce,
 			...formData,
 		} )
@@ -93,6 +93,10 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
+					setIsSaved( true );
+					setTimeout( () => {
+						setIsSaved( false );
+					}, 3000 );
 				} else {
 				}
 			} )
@@ -119,7 +123,7 @@ const Interface = ( props ) => {
 		if ( isSaved ) {
 			return __( 'Saved', 'quotes-dlx' );
 		}
-		return __( 'Save Comment Activity Options', 'quotes-dlx' );
+		return __( 'Save Post Type Settings', 'quotes-dlx' );
 	};
 
 	return (

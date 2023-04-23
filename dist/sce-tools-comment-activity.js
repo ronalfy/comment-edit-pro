@@ -25422,7 +25422,12 @@ var Interface = function Interface(props) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
 
-      if (ajaxSuccess) {} else {}
+      if (ajaxSuccess) {
+        setIsSaved(true);
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {}
     })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
       setSaving(false);
     });

@@ -25286,13 +25286,18 @@ var Interface = function Interface(props) {
 
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_comment_activity', _objectSpread({
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_post_type_comment_settings', _objectSpread({
       nonce: sceToolsPostTypeCommentSettings.save_nonce
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
 
-      if (ajaxSuccess) {} else {}
+      if (ajaxSuccess) {
+        setIsSaved(true);
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {}
     })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
       setSaving(false);
     });
@@ -25319,7 +25324,7 @@ var Interface = function Interface(props) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'quotes-dlx');
     }
 
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Comment Activity Options', 'quotes-dlx');
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Post Type Settings', 'quotes-dlx');
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
