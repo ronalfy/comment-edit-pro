@@ -265,7 +265,7 @@ class Admin_Settings {
 			 * @param array $tabs Associative array of tabs.
 			 */
 			$tabs       = apply_filters( 'comment_edit_pro_admin_tabs', $tabs );
-			$tab_html   = '<nav>';
+			$tab_html   = '<nav class="sce-admin-options">';
 			$tabs_count = count( $tabs );
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
 				$active_tab = Functions::get_admin_tab();
@@ -333,6 +333,7 @@ class Admin_Settings {
 				if ( null === $current_tab && null === $current_sub_tab ) {
 					$current_tab = 'home';
 				}
+				ob_start();
 				if ( $sub_tabs && ! empty( $sub_tabs ) && is_array( $sub_tabs ) ) {
 					if ( null === $current_sub_tab ) {
 						$current_sub_tab = '';
@@ -400,9 +401,13 @@ class Admin_Settings {
 						);
 					}
 				}
+				$subtab_content = ob_get_clean();
 
 				if ( $do_action ) {
 					echo '<div class="sce-admin-tab-content">';
+					if ( ! empty( $subtab_content ) ) {
+						echo wp_kses( $subtab_content, Functions::get_kses_allowed_html() );
+					}
 					/**
 					 * Perform a tab action.
 					 *

@@ -13,12 +13,12 @@ import {
 	ToggleControl,
 	CheckboxControl,
 } from '@wordpress/components';
-import Spinner from '../../components/icons/Spinner';
-import ClipboardCheck from '../../components/icons/ClipboardCheck';
-import sendCommand from '../../../SendCommand';
-import CircularExclamationIcon from '../../components/icons/CircularExplanation';
-import Notice from '../../components/Notice';
-import ErrorBoundary from '../../components/ErrorBoundary';
+import Spinner from '../../../components/icons/Spinner';
+import ClipboardCheck from '../../../components/icons/ClipboardCheck';
+import sendCommand from '../../../../SendCommand';
+import CircularExclamationIcon from '../../../components/icons/CircularExplanation';
+import Notice from '../../../components/Notice';
+import ErrorBoundary from '../../../components/ErrorBoundary';
 
 const DiscussionPostTypes = ( props ) => {
 	const [ saving, setSaving ] = useState( false );

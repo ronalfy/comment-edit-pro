@@ -28,25 +28,27 @@ class Tools {
 	 * Load scripts and styles in the admin.
 	 */
 	public function add_admin_scripts_styles() {
-		$current_tab = Functions::get_admin_tab();
+		$current_tab     = Functions::get_admin_tab();
+		$current_sub_tab = Functions::get_admin_sub_tab();
 		if ( null === $current_tab ) {
 			return;
 		}
-		if ( 'tools' === $current_tab ) {
+		if ( 'tools' === $current_tab && 'comment-activity' === $current_sub_tab ) {
 			wp_enqueue_script(
-				'sce-tools',
-				Functions::get_plugin_url( 'dist/sce-tools-admin.js' ),
+				'sce-tools-comment-activity',
+				Functions::get_plugin_url( 'dist/sce-tools-comment-activity.js' ),
 				array(),
 				Functions::get_plugin_version(),
 				true
 			);
 			wp_localize_script(
-				'sce-tools',
-				'sceTools',
+				'sce-tools-comment-activity',
+				'sceToolsCommentActivity',
 				array(
-					'save_nonce' => wp_create_nonce( 'sce-save-tools-options' ),
-					'get_nonce'  => wp_create_nonce( 'sce-retrieve-tools-options' ),
+					'save_nonce' => wp_create_nonce( 'sce-save-tools-expiration' ),
+					'get_nonce'  => wp_create_nonce( 'sce-retrieve-tools-expiration' ),
 					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'post_types' => Functions::get_public_post_types(),
 				)
 			);
 		}

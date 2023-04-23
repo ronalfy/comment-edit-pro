@@ -1,2 +1,1862 @@
-/*! For license information please see ConvertKit0.0.1.chunk.bundle.js.LICENSE.txt */
-(self.webpackChunksimple_comment_editing_options=self.webpackChunksimple_comment_editing_options||[]).push([[239],{16730:(e,t,n)=>{"use strict";n.d(t,{Z:()=>u});var r=n(87462),o=n(67294),a=n(94184),i=n.n(a),c=n(24428),l=n(66819),s=n(65032);const u=function e(t){const{label:n,className:a,selected:u,help:m,onChange:d,hideLabelFromVision:p,options:f=[],...h}=t,v=`inspector-radio-control-${(0,c.Z)(e)}`,g=e=>d(e.target.value);return null!=f&&f.length?(0,o.createElement)(l.ZP,{__nextHasNoMarginBottom:!0,label:n,id:v,hideLabelFromVision:p,help:m,className:i()(a,"components-radio-control")},(0,o.createElement)(s.Z,{spacing:1},f.map(((e,t)=>(0,o.createElement)("div",{key:`${v}-${t}`,className:"components-radio-control__option"},(0,o.createElement)("input",(0,r.Z)({id:`${v}-${t}`,className:"components-radio-control__input",type:"radio",name:v,value:e.value,onChange:g,checked:e.value===u,"aria-describedby":m?`${v}__help`:void 0},h)),(0,o.createElement)("label",{htmlFor:`${v}-${t}`},e.label)))))):null}},66724:(e,t,n)=>{"use strict";function r(e){return null!=e}n.d(t,{Jf:()=>r})},65032:(e,t,n)=>{"use strict";n.d(t,{Z:()=>l});var r=n(87462),o=n(67294),a=n(66243),i=n(4693),c=n(37234);const l=(0,a.Iq)((function(e,t){const n=(0,c.m)(e);return(0,o.createElement)(i.Z,(0,r.Z)({},n,{ref:t}))}),"VStack")},37234:(e,t,n)=>{"use strict";n.d(t,{m:()=>a});var r=n(21726),o=n(61642);function a(e){const{expanded:t=!1,...n}=(0,r.y)(e,"VStack");return(0,o.R)({direction:"column",expanded:t,...n})}},36191:(e,t,n)=>{"use strict";n.d(t,{Z:()=>c});var r=n(9669),o=n.n(r),a=n(80129),i=n.n(a);function c(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"",r={action:e},a={nonce:!1,action:e};for(var c in void 0===t&&(t={}),a)t.hasOwnProperty(c)||(t[c]=a[c]);var l={method:"post",url:"undefined"==typeof ajaxurl?n:ajaxurl,params:r,paramsSerializer:function(e){return i().stringify(e,{arrayFormat:"brackets"})},data:i().stringify(t)};return o()(l)}},13118:(e,t,n)=>{"use strict";function r(e){return r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},r(e)}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function i(e,t){return i=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},i(e,t)}function c(e,t){if(t&&("object"===r(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return l(e)}function l(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function s(e){return s=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},s(e)}function u(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}n.d(t,{Z:()=>m});const m=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&i(e,t)}(f,e);var t,n,r,m,d,p=(m=f,d=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}(),function(){var e,t=s(m);if(d){var n=s(this).constructor;e=Reflect.construct(t,arguments,n)}else e=t.apply(this,arguments);return c(this,e)});function f(){var e;o(this,f);for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];return u(l(e=p.call.apply(p,[this].concat(n))),"state",{hasError:!1,error:null}),e}return t=f,r=[{key:"getDerivedStateFromError",value:function(e){return{hasError:!0,error:e}}}],(n=[{key:"render",value:function(){return this.state.hasError?this.props.fallback:this.props.children}}])&&a(t.prototype,n),r&&a(t,r),Object.defineProperty(t,"prototype",{writable:!1}),f}(n(67294).Component)},27202:(e,t,n)=>{"use strict";n.d(t,{Z:()=>p});var r=n(67294),o=n(45697),a=n.n(o),i=n(74364),c=n(34244),l=n(94184),s=n.n(l);function u(){return u=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},u.apply(this,arguments)}function m(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var d=function(e){var t,n=e.message,o=e.status,a=e.politeness,l=e.icon,d=e.className,p=e.inline,f=e.children;(0,r.useEffect)((function(){(0,i.D)(n,a)}),[n,o,a]);var h,v=function(){return null!==l},g=s()(d,"sce-admin__notice",(m(t={"sce-admin__notice--has-icon":v()},"sce-admin__notice-type--".concat(o),!0),m(t,"sce-admin__notice-appearance--inline",p),m(t,"sce-admin__notice-appearance--block",!p),t));return r.createElement("div",{className:g},r.createElement(c.Z,u({isDismissible:!1,spokenMessage:n,actions:[]},e),v()&&r.createElement("div",{className:"sce-admin__notice-icon"},(h=l,r.createElement(h,{width:16,height:16,fill:"#6c757d"}))),r.createElement("div",{className:"sce-admin__notice-message"},r.createElement(r.Fragment,null,n," ",f," "))))};d.defaultProps={message:"",status:"info",politeness:"polite",icon:null,className:"",inline:!1},d.propTypes={message:a().string.isRequired,status:a().oneOf(["info","warning","success","error"]),politeness:a().oneOf(["assertive","polite"]),icon:a().func,className:a().string,inline:a().bool};const p=d},8194:(e,t,n)=>{"use strict";n.d(t,{Z:()=>c});var r=n(67294),o=n(45697),a=n.n(o),i=function(e){return r.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 512 512",width:e.width,height:e.height},r.createElement("path",{fill:"var( ".concat(e.var,")"),d:"M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"}))};i.defaultProps={width:16,height:16,fill:"#333333"},i.propTypes={width:a().number,height:a().number,fill:a().string};const c=i},80419:(e,t,n)=>{"use strict";n.d(t,{Z:()=>a});var r=n(67294);function o(){return o=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},o.apply(this,arguments)}const a=function(e){return r.createElement("svg",o({"aria-hidden":"true","data-prefix":"fas","data-icon":"clipboard-check",className:"prefix__svg-inline--fa prefix__fa-clipboard-check prefix__fa-w-12",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 384 512",width:"16",height:"16"},e),r.createElement("path",{fill:"currentColor",d:"M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"}))}},36937:(e,t,n)=>{"use strict";n.d(t,{Z:()=>c});var r=n(67294),o=n(45697),a=n.n(o),i=function(e){return r.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 576 512",width:e.width,height:e.height},r.createElement("path",{className:"fa-primary",fill:e.primaryColor,d:"M256 32c0-17.67 14.3-32 32-32 141.4 0 256 114.6 256 256 0 46.6-12.5 90.4-34.3 128-8.8 15.3-28.4 20.6-44.6 11.7-14.4-8.8-19.6-28.4-10.8-44.6 16.3-27.3 25.7-60.1 25.7-96 0-106-86-192-192-192-17.7 0-32-13.43-32-32v.9z"}),r.createElement("path",{d:"M287.1 64c-106 0-192 85.1-192 192 0 106 86 192 192 192 71 0 132.2-37.5 165.8-93.6l.1.1c-6.9 14.9-1.5 32.8 12.1 41.2 16.2 8.9 35.8 3.6 44.6-11.7.2-.3.4-.6.5-.9C466.1 460.1 383.1 512 288 512 146.6 512 32 397.4 32 256S146.6 0 288 0c-17.7 0-32 14.33-32 32s14.3 32 32 32h-.9z",fill:e.secondaryColor,style:{opacity:.4}}))};i.defaultProps={width:24,height:24,primaryColor:"currentColor",secondaryColor:"currentColor"},i.propTypes={width:a().number,height:a().number,primaryColor:a().string.isRequired,secondaryColor:a().string.isRequired};const c=i},61696:(e,t,n)=>{"use strict";n.r(t),n.d(t,{default:()=>H});var r=n(67294),o=n(87536),a=n(94184),i=n.n(a),c=n(15302),l=n(32304),s=n(18498),u=n.n(s),m=n(87462),d=n(23120),p=n(24428),f=n(80369),h=n(11984),v=n(59259);const g=(0,r.createElement)(v.Wj,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24"},(0,r.createElement)(v.y$,{d:"M7 11.5h10V13H7z"})),_=(0,r.createElement)(v.Wj,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24"},(0,r.createElement)(v.y$,{d:"M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"}));var y=n(66819);const b=function e(t){const{__nextHasNoMarginBottom:n,label:o,className:a,heading:c,checked:l,indeterminate:s,help:u,onChange:v,...b}=t;c&&(0,f.Z)("`heading` prop in `CheckboxControl`",{alternative:"a separate element to implement a heading",since:"5.8"});const[E,w]=(0,r.useState)(!1),[x,C]=(0,r.useState)(!1),k=(0,d.Z)((e=>{e&&(e.indeterminate=!!s,w(e.matches(":checked")),C(e.matches(":indeterminate")))}),[l,s]),F=`inspector-checkbox-control-${(0,p.Z)(e)}`;return(0,r.createElement)(y.ZP,{__nextHasNoMarginBottom:n,label:c,id:F,help:u,className:i()("components-checkbox-control",a)},(0,r.createElement)("span",{className:"components-checkbox-control__input-container"},(0,r.createElement)("input",(0,m.Z)({ref:k,id:F,className:"components-checkbox-control__input",type:"checkbox",value:"1",onChange:e=>v(e.target.checked),checked:l,"aria-describedby":u?F+"__help":void 0},b)),x?(0,r.createElement)(h.Z,{icon:g,className:"components-checkbox-control__indeterminate",role:"presentation"}):null,E?(0,r.createElement)(h.Z,{icon:_,className:"components-checkbox-control__checked",role:"presentation"}):null),(0,r.createElement)("label",{className:"components-checkbox-control__label",htmlFor:F},o))};var E=n(9545),w=n(40314),x=n(16730),C=n(62248),k=n(87577),F=n(36937),Z=n(80419),O=n(36191),N=n(8194),S=n(27202),P=n(13118);const T=[{label:(0,l.__)("Select a Field","comment-edit-pro"),value:"none"},{label:(0,l.__)("Commenter Name","comment-edit-pro"),value:"commenter_name"},{label:(0,l.__)("Commenter Email","comment-edit-pro"),value:"commenter_email"},{label:(0,l.__)("Commenter Website","comment-edit-pro"),value:"commenter_website"},{label:(0,l.__)("Comment Content","comment-edit-pro"),value:"comment_content"},{label:(0,l.__)("Comment ID","comment-edit-pro"),value:"comment_id"},{label:(0,l.__)("Comment Parent ID","comment-edit-pro"),value:"comment_parent_id"},{label:(0,l.__)("Comment Post ID","comment-edit-pro"),value:"comment_post_id"},{label:(0,l.__)("Comment Post Title","comment-edit-pro"),value:"comment_post_title"},{label:(0,l.__)("Comment Post URL","comment-edit-pro"),value:"comment_post_url"},{label:(0,l.__)("Comment Author IP","comment-edit-pro"),value:"comment_author_ip"},{label:(0,l.__)("Comment Author User Agent","comment-edit-pro"),value:"comment_author_user_agent"},{label:(0,l.__)("Comment Date","comment-edit-pro"),value:"comment_date"},{label:(0,l.__)("Comment Date GMT","comment-edit-pro"),value:"comment_date_gmt"},{label:(0,l.__)("Comment Approved","comment-edit-pro"),value:"comment_approved"},{label:(0,l.__)("Comment Type","comment-edit-pro"),value:"comment_type"},{label:(0,l.__)("Custom Value","comment-edit-pro"),value:"custom"}];var q=n(45697),j=n.n(q),I=function(e){return r.createElement("svg",{viewBox:"0 0 1600 1500",xmlns:"http://www.w3.org/2000/svg",xmlSpace:"preserve",width:e.width,height:e.height},r.createElement("path",{d:"M772.031 1184.2c277.837 0 492.588-212.07 492.588-473.68 0-245.084-201.745-394.733-335.381-394.733-186.076 0-335.222 131.93-356.472 327.783-3.938 36.27-32.381 66.685-68.477 66.425-60.008-.435-147.245-.95-202.469-.76-23.774.085-43.431-19.41-42.256-43.41 8.334-169.862 64.548-328.686 171.743-450.69C550.42 79.568 723.882-.005 929.238-.005 1274.272-.005 1600 316.741 1600 710.52c0 436.015-357.563 789.475-820.627 789.475-330.241 0-662.845-218.05-778.968-522.89-.431-1.13-.501-2.31-.291-3.535 1.545-9.02 4.616-17.26 7.64-25.375 4.397-11.795 8.696-23.325 8.068-36.62l-2.007-42.46c-.989-20.95 10.725-40.43 29.674-49.34l16.786-7.895c19.141-9.005 32.747-26.735 36.513-47.575 5.627-31.145 32.686-53.785 64.27-53.785 49.318 0 92.209 33.135 108.32 80.25 77.542 226.765 200.814 393.43 502.653 393.43Z",fill:e.fill}))};I.defaultProps={width:32,height:30,fill:"#FB6068"},I.propTypes={width:j().number,height:j().number,fill:j().string};const K=I;function L(e){return L="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},L(e)}function V(){V=function(){return e};var e={},t=Object.prototype,n=t.hasOwnProperty,r="function"==typeof Symbol?Symbol:{},o=r.iterator||"@@iterator",a=r.asyncIterator||"@@asyncIterator",i=r.toStringTag||"@@toStringTag";function c(e,t,n){return Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}),e[t]}try{c({},"")}catch(e){c=function(e,t,n){return e[t]=n}}function l(e,t,n,r){var o=t&&t.prototype instanceof m?t:m,a=Object.create(o.prototype),i=new x(r||[]);return a._invoke=function(e,t,n){var r="suspendedStart";return function(o,a){if("executing"===r)throw new Error("Generator is already running");if("completed"===r){if("throw"===o)throw a;return{value:void 0,done:!0}}for(n.method=o,n.arg=a;;){var i=n.delegate;if(i){var c=b(i,n);if(c){if(c===u)continue;return c}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if("suspendedStart"===r)throw r="completed",n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);r="executing";var l=s(e,t,n);if("normal"===l.type){if(r=n.done?"completed":"suspendedYield",l.arg===u)continue;return{value:l.arg,done:n.done}}"throw"===l.type&&(r="completed",n.method="throw",n.arg=l.arg)}}}(e,n,i),a}function s(e,t,n){try{return{type:"normal",arg:e.call(t,n)}}catch(e){return{type:"throw",arg:e}}}e.wrap=l;var u={};function m(){}function d(){}function p(){}var f={};c(f,o,(function(){return this}));var h=Object.getPrototypeOf,v=h&&h(h(C([])));v&&v!==t&&n.call(v,o)&&(f=v);var g=p.prototype=m.prototype=Object.create(f);function _(e){["next","throw","return"].forEach((function(t){c(e,t,(function(e){return this._invoke(t,e)}))}))}function y(e,t){function r(o,a,i,c){var l=s(e[o],e,a);if("throw"!==l.type){var u=l.arg,m=u.value;return m&&"object"==L(m)&&n.call(m,"__await")?t.resolve(m.__await).then((function(e){r("next",e,i,c)}),(function(e){r("throw",e,i,c)})):t.resolve(m).then((function(e){u.value=e,i(u)}),(function(e){return r("throw",e,i,c)}))}c(l.arg)}var o;this._invoke=function(e,n){function a(){return new t((function(t,o){r(e,n,t,o)}))}return o=o?o.then(a,a):a()}}function b(e,t){var n=e.iterator[t.method];if(void 0===n){if(t.delegate=null,"throw"===t.method){if(e.iterator.return&&(t.method="return",t.arg=void 0,b(e,t),"throw"===t.method))return u;t.method="throw",t.arg=new TypeError("The iterator does not provide a 'throw' method")}return u}var r=s(n,e.iterator,t.arg);if("throw"===r.type)return t.method="throw",t.arg=r.arg,t.delegate=null,u;var o=r.arg;return o?o.done?(t[e.resultName]=o.value,t.next=e.nextLoc,"return"!==t.method&&(t.method="next",t.arg=void 0),t.delegate=null,u):o:(t.method="throw",t.arg=new TypeError("iterator result is not an object"),t.delegate=null,u)}function E(e){var t={tryLoc:e[0]};1 in e&&(t.catchLoc=e[1]),2 in e&&(t.finallyLoc=e[2],t.afterLoc=e[3]),this.tryEntries.push(t)}function w(e){var t=e.completion||{};t.type="normal",delete t.arg,e.completion=t}function x(e){this.tryEntries=[{tryLoc:"root"}],e.forEach(E,this),this.reset(!0)}function C(e){if(e){var t=e[o];if(t)return t.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var r=-1,a=function t(){for(;++r<e.length;)if(n.call(e,r))return t.value=e[r],t.done=!1,t;return t.value=void 0,t.done=!0,t};return a.next=a}}return{next:k}}function k(){return{value:void 0,done:!0}}return d.prototype=p,c(g,"constructor",p),c(p,"constructor",d),d.displayName=c(p,i,"GeneratorFunction"),e.isGeneratorFunction=function(e){var t="function"==typeof e&&e.constructor;return!!t&&(t===d||"GeneratorFunction"===(t.displayName||t.name))},e.mark=function(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,p):(e.__proto__=p,c(e,i,"GeneratorFunction")),e.prototype=Object.create(g),e},e.awrap=function(e){return{__await:e}},_(y.prototype),c(y.prototype,a,(function(){return this})),e.AsyncIterator=y,e.async=function(t,n,r,o,a){void 0===a&&(a=Promise);var i=new y(l(t,n,r,o),a);return e.isGeneratorFunction(n)?i:i.next().then((function(e){return e.done?e.value:i.next()}))},_(g),c(g,i,"Generator"),c(g,o,(function(){return this})),c(g,"toString",(function(){return"[object Generator]"})),e.keys=function(e){var t=[];for(var n in e)t.push(n);return t.reverse(),function n(){for(;t.length;){var r=t.pop();if(r in e)return n.value=r,n.done=!1,n}return n.done=!0,n}},e.values=C,x.prototype={constructor:x,reset:function(e){if(this.prev=0,this.next=0,this.sent=this._sent=void 0,this.done=!1,this.delegate=null,this.method="next",this.arg=void 0,this.tryEntries.forEach(w),!e)for(var t in this)"t"===t.charAt(0)&&n.call(this,t)&&!isNaN(+t.slice(1))&&(this[t]=void 0)},stop:function(){this.done=!0;var e=this.tryEntries[0].completion;if("throw"===e.type)throw e.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var t=this;function r(n,r){return i.type="throw",i.arg=e,t.next=n,r&&(t.method="next",t.arg=void 0),!!r}for(var o=this.tryEntries.length-1;o>=0;--o){var a=this.tryEntries[o],i=a.completion;if("root"===a.tryLoc)return r("end");if(a.tryLoc<=this.prev){var c=n.call(a,"catchLoc"),l=n.call(a,"finallyLoc");if(c&&l){if(this.prev<a.catchLoc)return r(a.catchLoc,!0);if(this.prev<a.finallyLoc)return r(a.finallyLoc)}else if(c){if(this.prev<a.catchLoc)return r(a.catchLoc,!0)}else{if(!l)throw new Error("try statement without catch or finally");if(this.prev<a.finallyLoc)return r(a.finallyLoc)}}}},abrupt:function(e,t){for(var r=this.tryEntries.length-1;r>=0;--r){var o=this.tryEntries[r];if(o.tryLoc<=this.prev&&n.call(o,"finallyLoc")&&this.prev<o.finallyLoc){var a=o;break}}a&&("break"===e||"continue"===e)&&a.tryLoc<=t&&t<=a.finallyLoc&&(a=null);var i=a?a.completion:{};return i.type=e,i.arg=t,a?(this.method="next",this.next=a.finallyLoc,u):this.complete(i)},complete:function(e,t){if("throw"===e.type)throw e.arg;return"break"===e.type||"continue"===e.type?this.next=e.arg:"return"===e.type?(this.rval=this.arg=e.arg,this.method="return",this.next="end"):"normal"===e.type&&t&&(this.next=t),u},finish:function(e){for(var t=this.tryEntries.length-1;t>=0;--t){var n=this.tryEntries[t];if(n.finallyLoc===e)return this.complete(n.completion,n.afterLoc),w(n),u}},catch:function(e){for(var t=this.tryEntries.length-1;t>=0;--t){var n=this.tryEntries[t];if(n.tryLoc===e){var r=n.completion;if("throw"===r.type){var o=r.arg;w(n)}return o}}throw new Error("illegal catch attempt")},delegateYield:function(e,t,n){return this.delegate={iterator:C(e),resultName:t,nextLoc:n},"next"===this.method&&(this.arg=void 0),u}},e}function D(e,t,n,r,o,a,i){try{var c=e[a](i),l=c.value}catch(e){return void n(e)}c.done?t(l):Promise.resolve(l).then(r,o)}function A(e){return function(){var t=this,n=arguments;return new Promise((function(r,o){var a=e.apply(t,n);function i(e){D(a,r,o,i,c,"next",e)}function c(e){D(a,r,o,i,c,"throw",e)}i(void 0)}))}}function R(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,r)}return n}function B(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?R(Object(n),!0).forEach((function(t){M(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):R(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function M(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function z(){return z=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},z.apply(this,arguments)}function Q(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var n=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=n){var r,o,a=[],i=!0,c=!1;try{for(n=n.call(e);!(i=(r=n.next()).done)&&(a.push(r.value),!t||a.length!==t);i=!0);}catch(e){c=!0,o=e}finally{try{i||null==n.return||n.return()}finally{if(c)throw o}}return a}}(e,t)||function(e,t){if(e){if("string"==typeof e)return $(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?$(e,t):void 0}}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function $(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}var U=function(){return(0,O.Z)("sce_get_convertkit_options",{nonce:sceIntegrations.ck_get_nonce})},G=function(e){var t,n,a,c,s,u,m,d,p,f,h,v,g=(0,r.useRef)(null),_=(0,r.useRef)(null),y=(0,e.defaults)().data,P=y.data,q=(y.success,Q((0,r.useState)(!1),2)),j=q[0],I=q[1],L=Q((0,r.useState)(!1),2),D=L[0],R=L[1],M=Q((0,r.useState)(!1),2),$=(M[0],M[1],Q((0,r.useState)(!1),2)),U=($[0],$[1],Q((0,r.useState)(!1),2)),G=U[0],H=(U[1],Q((0,r.useState)(!1),2)),W=H[0],Y=H[1],J=Q((0,r.useState)(!1),2),X=J[0],ee=J[1],te=Q((0,r.useState)(!1),2),ne=te[0],re=te[1],oe=Q((0,r.useState)(!1),2),ae=oe[0],ie=oe[1],ce=Q((0,r.useState)(!1),2),le=(ce[0],ce[1]),se=(0,o.cI)({defaultValues:{enableConvertKit:P.enableConvertKit,apiValid:P.apiValid,apiKey:P.apiKey,secretKey:P.secretKey,signUpLabel:P.signUpLabel,checkboxEnabled:P.checkboxEnabled,formOrTag:P.formOrTag,forms:null!==(t=P.forms)&&void 0!==t?t:[],tags:null!==(n=P.tags)&&void 0!==n?n:[],customFields:null!==(a=P.customFields)&&void 0!==a?a:[],selectedForm:P.selectedForm,tagInput:"",customFieldInput:""}}),ue=(se.register,se.control),me=se.handleSubmit,de=se.setValue,pe=se.getValues,fe=se.reset,he=se.setError,ve=se.clearErrors,ge=se.trigger,_e=(0,o.qo)({control:ue}),ye=(0,o.cl)({control:ue}),be=ye.errors,Ee=ye.isDirty,we=ye.dirtyFields,xe=(ye.touchedFields,function(){return!(!pe("enableConvertKit")||pe("apiValid")&&(!Ee||!we.apiKey&&!we.secretKey))}),Ce=function(){if(!pe("enableConvertKit")&&!Ee)return!1;if(!pe("enableConvertKit"))return!0;var e=pe("forms"),t=pe("tags");if(pe("apiValid")&&0===e.length&&0===t.length)return!1;if(!pe("apiValid")&&Ee)return!1;if(xe())return!1;if("form"===pe("formOrTag")){if(0===e.length)return!1;if("0"===pe("selectedForm"))return!1;if("0"!==pe("selectedForm")){var n=pe("selectedForm"),r=!1;if(e.forEach((function(e){e.value===n&&(r=!0)})),!r)return!1}}if("tag"===pe("formOrTag")){if(0===t.length)return!1;var o=!1;if(t.forEach((function(e){e.selected&&(o=!0)})),!o)return!1}return!0},ke=function(){return Object.keys(be).length>0},Fe=function(e){""!==(e=e.trim())?pe("tags").find((function(t){return t.label===e}))?he("tagInput",{type:"addTagError",message:(0,l.__)("Tag name already in use.","comment-edit-pro")}):(ie(!0),(0,O.Z)("sce_add_convertkit_tag",{nonce:sceIntegrations.ck_add_tag_nonce,label:e}).then((function(e){var t=e.data.data;if(e.data.success){var n=t.tags,r=[];n.forEach((function(e,t){r.push(e)})),de("tagInput",""),de("tags",r)}else he("tagInput",{type:"addTagError",message:t.message})})).catch((function(e){})).then((function(e){ie(!1),g.current.focus()}))):he("tagInput",{type:"addTagError",message:(0,l.__)("Tag name cannot be empty.","comment-edit-pro")})},Ze=function(e){""!==(e=e.trim())?pe("customFields").find((function(t){return t.label===e}))?he("customFieldInput",{type:"addCustomFieldError",message:(0,l.__)("Custom Field name already in use.","comment-edit-pro")}):(le(!0),(0,O.Z)("sce_add_convertkit_custom_field",{nonce:sceIntegrations.ck_add_custom_field_nonce,label:e}).then((function(e){var t=e.data.data;if(e.data.success){var n=t.customFields,r=[];n.forEach((function(e,t){r.push(e)})),de("customFields",r)}else he("customFieldInput",{type:"addCustomFieldError",message:t.message})})).catch((function(e){})).then((function(e){le(!1),_.current.focus()}))):he("customFieldInput",{type:"addCustomFieldError",message:(0,l.__)("The Custom Field name cannot be empty.","comment-edit-pro")})};return r.createElement(r.Fragment,null,r.createElement("div",{className:"sce-admin__tabs--content-heading"},r.createElement("h2",null,r.createElement(K,{width:48,height:45,fill:"#FB6068","aria-hidden":"true"}),r.createElement("span",{className:"sce-admin__heading--text"},(0,l.__)("ConvertKit","comment-edit-pro")),r.createElement("a",{className:"sce-admin-heading-docs",target:"_blank",rel:"noreferrer",href:"https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/convertkit-integration"},"(",(0,l.__)("Docs","comment-edit-pro"),")")),r.createElement("p",{className:"description"},(0,l.__)("When someone leaves a comment, they can be given the option to subscribe to your ConvertKit account.","comment-edit-pro"))),r.createElement("form",{onSubmit:me((function(e,t){var n;t.preventDefault(),xe()?function(e){I(!0),(0,O.Z)("sce_refresh_convertkit_connection",B({nonce:sceIntegrations.ck_refresh_nonce},e)).then((function(e){var t=e.data.data;e.data.success?fe(B(B({},_e),t),{keepErrors:!1,keepDirty:!1}):(fe(B(B({},_e),{apiValid:!1}),{keepErrors:!1,keepDirty:!1}),he("apiKey",{type:"noForms",message:t.message}),he("secretKey",{type:"noForms",message:t.message}))})).catch((function(e){})).then((function(e){I(!1)}))}(e):(n=e,I(!0),(0,O.Z)("sce_save_convertkit_options",B({nonce:sceIntegrations.ck_save_nonce},n)).then((function(e){var t=e.data.data;e.data.success&&(R(!0),fe(B(B({},n),t),{keepErrors:!1,keepDirty:!1}),setTimeout((function(){R(!1)}),3e3))})).catch((function(e){})).then((function(e){I(!1)})))}))},r.createElement("table",{className:"form-table"},r.createElement("tbody",null,r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("ConvertKit","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"enableConvertKit",control:ue,render:function(e){var t=e.field,n=t.onChange,o=t.value;return r.createElement(w.Z,{label:(0,l.__)("Enable ConvertKit","comment-edit-pro"),className:"sce-admin__toggle-control",checked:o,onChange:function(e){ve(),n(e)},help:(0,l.__)("Enable or Disable the ConvertKit Integration.","comment-edit-pro")})}}))),pe("enableConvertKit")&&r.createElement(r.Fragment,null,r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("API Key","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"apiKey",control:ue,rules:{required:!0},render:function(e){var t,n=e.field,o=n.onChange,a=n.value;return r.createElement(E.Z,{label:(0,l.__)("ConvertKit API Key","comment-edit-pro"),type:"text",value:a,onChange:function(e){o(e),ve()},className:i()("sce-admin__text-control",{"has-error":"required"===(null===(t=be.apiKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter your ConvertKit API Key in order to choose a form or tag.","comment-edit-pro"),"aria-required":"true"})}}),"required"===(null===(f=be.apiKey)||void 0===f?void 0:f.type)&&r.createElement(S.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:N.Z}),"noForms"===(null===(h=be.apiKey)||void 0===h?void 0:h.type)&&r.createElement(S.Z,{message:null===(v=be.apiKey)||void 0===v?void 0:v.message,status:"error",politeness:"assertive",inline:!0,icon:N.Z}))),r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("Secret Key","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"secretKey",control:ue,rules:{required:!0},render:function(e){var t,n=e.field,o=n.onChange,a=n.value;return r.createElement(E.Z,{label:(0,l.__)("ConvertKit Secret Key","comment-edit-pro"),type:"text",value:a,onChange:function(e){o(e),ve()},className:i()("sce-admin__text-control",{"has-error":"required"===(null===(t=be.secretKey)||void 0===t?void 0:t.type),"is-required":!0}),help:(0,l.__)("Enter your ConvertKit Secret Key in order to choose a form or tag.","comment-edit-pro"),"aria-required":"true"})}}),"required"===(null===(m=be.secretKey)||void 0===m?void 0:m.type)&&r.createElement(S.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:N.Z}),"noForms"===(null===(d=be.secretKey)||void 0===d?void 0:d.type)&&r.createElement(S.Z,{message:null===(p=be.secretKey)||void 0===p?void 0:p.message,status:"error",politeness:"assertive",inline:!0,icon:N.Z}))),xe()?r.createElement(r.Fragment,null):(pe("forms"),pe("tags"),r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("Forms and Tags","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"formOrTag",control:ue,rules:{required:!0},render:function(e){var t=e.field,n=t.onChange;return t.value,r.createElement(r.Fragment,null,r.createElement(x.Z,{label:(0,l.__)("Add Subscribers to Forms or Tags","comment-edit-pro"),help:(0,l.__)("Select whether to add new subscribers to a an existing ConvertKit form or tag(s).","comment-edit-pro"),selected:pe("formOrTag"),options:[{label:(0,l.__)("Forms and Tags","comment-edit-pro"),value:"form"},{label:(0,l.__)("Tags Only","comment-edit-pro"),value:"tag"}],onChange:function(e){n(e)}}))}})))),(u=pe("forms"),!pe("apiValid")||xe()||"form"!==pe("formOrTag")?r.createElement(r.Fragment,null):r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("ConvertKit Forms (Required)","comment-edit-pro")),r.createElement("td",null,r.createElement(r.Fragment,null,0!==u.length&&r.createElement(o.Qr,{name:"selectedForm",control:ue,rules:{required:!0},render:function(e){var t,n=e.field,o=n.onChange,a=n.value;return r.createElement(x.Z,{label:(0,l.__)("Select a form for your subscribers","comment-edit-pro"),help:(0,l.__)("Select a default form that will be used when signing up your subscribers.","comment-edit-pro"),selected:a,options:pe("forms"),onChange:function(e){o(e)},className:i()({"has-error":"required"===(null===(t=be.apiKey)||void 0===t?void 0:t.type),"is-required":!0})})}}),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(C.ZP,{isBusy:X,disabled:X,onClick:function(){ee(!0),(0,O.Z)("sce_refresh_convertkit_forms",{nonce:sceIntegrations.ck_refresh_forms_nonce}).then((function(e){var t=e.data.data;if(e.data.success){var n=t.forms,r=(t.apiValid,{forms:n});fe(B(B({},_e),r),{keepErrors:!0,keepDirty:!0})}else fe(B(B({},_e),{}),{keepErrors:!0,keepDirty:!0}),he("forms",{type:"noForms",message:t.message})})).catch((function(e){})).then((function(e){ee(!1)}))},className:i()("qdlx__btn qdlx__btn-link qdlx__btn--icon-right",{"has-error":ke()},{"has-icon":X},{"is-saving":X}),text:X?(0,l.__)("Refreshing…","comment-edit-pro"):(0,l.__)("Refresh Forms","comment-edit-pro")})),"required"===(null===(s=be.selectedForm)||void 0===s?void 0:s.type)&&r.createElement(S.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:N.Z})),"form"===pe("formOrTag")&&0===u.length&&r.createElement(S.Z,{message:(0,l.__)("There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.","comment-edit-pro"),status:"error",politeness:"assertive",inline:!1,icon:N.Z})))),function(){var e,t,n,a,c;if(!pe("apiValid")||xe())return r.createElement(r.Fragment,null);var s=pe("tags");return r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("ConvertKit Tags","comment-edit-pro")),r.createElement("td",null,r.createElement(r.Fragment,null,"tag"===pe("formOrTag")&&0===pe("tags").length&&r.createElement(S.Z,{message:(0,l.__)("There are no tags available. Try creating a tag below.","comment-edit-pro"),status:"warning",politeness:"assertive",inline:!1,icon:N.Z}),s.length>0&&pe("apiValid")&&s.map((function(e,t){return r.createElement(o.Qr,{key:t,name:"tags[".concat(t,"].selected"),control:ue,render:function(n){var o,a=n.field,i=a.onChange;return a.value,r.createElement(b,{label:e.label,onChange:function(e){i(e)},checked:null!==(o=pe("tags")[t].selected)&&void 0!==o&&o})}})})),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(C.ZP,{isBusy:W,disabled:W,onClick:function(){Y(!0),(0,O.Z)("sce_refresh_convertkit_tags",{nonce:sceIntegrations.ck_refresh_tags_nonce}).then((function(e){var t=e.data.data;if(e.data.success){var n=t.tags,r=t.apiValid,o=[],a=pe("tags");n.forEach((function(e,t){var n=a.find((function(t){return t.value===e.value}));n&&(e.selected=n.selected),o.push(e)}));var i={tags:o,apiValid:r};fe(B(B({},_e),i),{keepErrors:!0,keepDirty:!0})}else fe(B(B({},_e),{}),{keepErrors:!0,keepDirty:!0}),he("tags",{type:"noTags",message:t.message})})).catch((function(e){})).then((function(e){Y(!1)}))},className:i()("qdlx__btn qdlx__btn-link qdlx__btn--icon-right",{"has-error":ke()},{"has-icon":W},{"is-saving":W}),text:W?(0,l.__)("Refreshing…","comment-edit-pro"):(0,l.__)("Refresh Tags","comment-edit-pro")})),"noTags"===(null===(e=be.tags)||void 0===e?void 0:e.type)&&r.createElement(S.Z,{message:null===(t=be.tags)||void 0===t?void 0:t.message,status:"error",politeness:"assertive",inline:!1,icon:N.Z}),r.createElement("div",{className:"sce-convertkit-add-tag"},r.createElement("div",{className:"sce-convertkit-add-tag-group"},r.createElement(o.Qr,{name:"tagInput",control:ue,rules:{pattern:/[-_ 0-9A-Za-z]/},render:function(e){var t,n=e.field,o=n.onChange,a=n.value;return r.createElement(E.Z,{type:"text",value:a,onChange:function(e){ve("tagInput"),o(e)},label:(0,l.__)("Add New Tag","comment-edit-pro"),className:i()("sce-admin__text-control",{"has-error":"required"===(null===(t=be.tagInput)||void 0===t?void 0:t.type)}),placeholder:(0,l.__)("Tag Name","comment-edit-pro"),"aria-required":"true",ref:g})}}),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(C.ZP,{onClick:function(){var e=A(V().mark((function e(t){return V().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,ge("tagInput");case 2:e.sent&&Fe(pe("tagInput"));case 4:case"end":return e.stop()}}),e)})));return function(t){return e.apply(this,arguments)}}(),className:i()("qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right"),text:ae?(0,l.__)("Adding…","comment-edit-pro"):(0,l.__)("Add New Tag","comment-edit-pro")}))),"pattern"===(null===(n=be.tagInput)||void 0===n?void 0:n.type)&&r.createElement(S.Z,{message:(0,l.__)("Special characters are not allowed in tags.","comment-edit-pro"),status:"error",politeness:"assertive",inline:!1,icon:N.Z}),"addTagError"===(null===(a=be.tagInput)||void 0===a?void 0:a.type)&&r.createElement(S.Z,{message:null===(c=be.tagInput)||void 0===c?void 0:c.message,status:"error",politeness:"assertive",inline:!1,icon:N.Z})))))}(),function(){var e,t,n,a,c;if(!pe("apiValid")||xe())return r.createElement(r.Fragment,null);var s=pe("customFields");return r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("Map Custom Fields","comment-edit-pro")),r.createElement("td",null,r.createElement(r.Fragment,null,0===pe("customFields").length&&r.createElement(S.Z,{message:(0,l.__)("There are no custom fields available. You can create one below.","comment-edit-pro"),status:"warning",politeness:"assertive",inline:!1,icon:N.Z}),s.length>0&&pe("apiValid")&&s.map((function(e,t){return r.createElement("div",{className:"sce-convertkit-custom-field",key:t},"custom"!==pe("customFields")[t].field&&r.createElement(r.Fragment,null,r.createElement(o.Qr,{name:"customFields[".concat(t,"].field"),control:ue,render:function(n){var o,a=n.field,i=a.onChange;return a.value,r.createElement(k.Z,{label:e.label,onChange:function(e){i(e)},value:null!==(o=pe("customFields")[t].field)&&void 0!==o&&o,options:T,className:"sce-admin__select-control"})}})),"custom"===pe("customFields")[t].field&&r.createElement(r.Fragment,null,r.createElement(o.Qr,{name:"customFields[".concat(t,"].field_value"),control:ue,render:function(t){var n=t.field,o=n.onChange,a=n.value;return r.createElement(E.Z,{value:null!=a?a:"",className:i()("sce-admin__text-control",{}),onChange:function(e){o(e)},label:e.label})}}),r.createElement(C.ZP,{className:"sce-admin__text-control-reset button-reset",icon:"no-alt",label:(0,l.__)("Clear Text Input","comment-edit-pro"),onClick:function(){de("customFields[".concat(t,"].field"),"none")},showTooltip:!1})))})),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(C.ZP,{isBusy:ne,disabled:ne,onClick:function(){re(!0),(0,O.Z)("sce_refresh_convertkit_custom_fields",{nonce:sceIntegrations.ck_refresh_custom_fields_nonce}).then((function(e){var t=e.data.data;if(e.data.success){var n=t.customFields,r=t.apiValid,o=[],a=pe("customFields");n.forEach((function(e,t){var n,r=a.find((function(t){return t.value===e.value}));r&&(e.field=r.field,e.field_value=null!==(n=r.field_value)&&void 0!==n?n:""),o.push(e)}));var i={customFields:o,apiValid:r};fe(B(B({},_e),i),{keepErrors:!0,keepDirty:!0})}else fe(B(B({},_e),{}),{keepErrors:!0,keepDirty:!0}),he("customFields",{type:"noFields",message:t.message})})).catch((function(e){})).then((function(e){re(!1)}))},className:i()("qdlx__btn qdlx__btn-link qdlx__btn--icon-right",{"has-error":ke()},{"has-icon":ne},{"is-saving":ne}),text:ne?(0,l.__)("Refreshing…","comment-edit-pro"):(0,l.__)("Refresh Custom Fields","comment-edit-pro")})),"noCustomFields"===(null===(e=be.customFields)||void 0===e?void 0:e.type)&&r.createElement(S.Z,{message:null===(t=be.customFields)||void 0===t?void 0:t.message,status:"error",politeness:"assertive",inline:!1,icon:N.Z}),r.createElement("div",{className:"sce-convertkit-add-tag"},r.createElement("div",{className:"sce-convertkit-add-tag-group"},r.createElement(o.Qr,{name:"customFieldInput",control:ue,rules:{pattern:/[-_ 0-9A-Za-z]/},render:function(e){var t,n=e.field,o=n.onChange,a=n.value;return r.createElement(E.Z,{type:"text",value:a,onChange:function(e){ve("customFieldInput"),o(e)},label:(0,l.__)("Add New Custom Field","comment-edit-pro"),className:i()("sce-admin__text-control",{"has-error":"required"===(null===(t=be.customFieldInput)||void 0===t?void 0:t.type)}),placeholder:(0,l.__)("Custom Field Name","comment-edit-pro"),ref:_})}}),r.createElement("div",{className:"sce-admin-buttons"},r.createElement(C.ZP,{onClick:function(){var e=A(V().mark((function e(t){return V().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,ge("customFieldInput");case 2:e.sent&&Ze(pe("customFieldInput"));case 4:case"end":return e.stop()}}),e)})));return function(t){return e.apply(this,arguments)}}(),className:i()("qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right"),text:ae?(0,l.__)("Adding…","comment-edit-pro"):(0,l.__)("Add Custom Field","comment-edit-pro")}))),"pattern"===(null===(n=be.customFieldInput)||void 0===n?void 0:n.type)&&r.createElement(S.Z,{message:(0,l.__)("Special characters are not allowed in custom fields.","comment-edit-pro"),status:"error",politeness:"assertive",inline:!1,icon:N.Z}),"addCustomFieldError"===(null===(a=be.customFieldInput)||void 0===a?void 0:a.type)&&r.createElement(S.Z,{message:null===(c=be.customFieldInput)||void 0===c?void 0:c.message,status:"error",politeness:"assertive",inline:!1,icon:N.Z})))))}(),!Ce()||xe()?r.createElement(r.Fragment,null):r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("Sign Up Label","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"signUpLabel",control:ue,rules:{required:!0},render:function(e){var t,n=e.field;return r.createElement(E.Z,z({},n,{label:(0,l.__)("Sign-up Label","comment-edit-pro"),className:i()("sce-admin__text-control",{"has-error":"required"===(null===(t=be.signUpLabel)||void 0===t?void 0:t.type),"is-required":!0}),"aria-required":"true",help:(0,l.__)("This text will be shown in the comment section when a user leaves a comment.","comment-edit-pro")}))}}),"required"===(null===(c=be.signUpLabel)||void 0===c?void 0:c.type)&&r.createElement(S.Z,{message:(0,l.__)("This field is a required field."),status:"error",politeness:"assertive",inline:!0,icon:N.Z}))),!Ce()||xe()?r.createElement(r.Fragment,null):r.createElement("tr",null,r.createElement("th",{scope:"row"},(0,l.__)("Sign Up Checkbox","comment-edit-pro")),r.createElement("td",null,r.createElement(o.Qr,{name:"checkboxEnabled",control:ue,render:function(e){var t=e.field,n=t.onChange,o=t.value;return r.createElement(w.Z,{label:(0,l.__)("Sign Up Checkbox Checked","comment-edit-pro"),className:"sce-admin__toggle-control",checked:o,onChange:function(e){n(e)},help:(0,l.__)("Check the sign-up checkbox by default (not recommended).","comment-edit-pro")})}})))))),r.createElement("div",{className:"sce-admin-buttons"},pe("apiValid")&&Ce()&&r.createElement(C.ZP,{className:i()("qdlx__btn qdlx__btn-primary qdlx__btn--icon-right",{"has-error":ke()},{"has-icon":j||D},{"is-saving":j&&!D},{"is-saved":D}),type:"submit",text:j?(0,l.__)("Saving…","comment-edit-pro"):D?(0,l.__)("Saved","comment-edit-pro"):(0,l.__)("Save ConvertKit Options","comment-edit-pro"),icon:j?F.Z:!!D&&Z.Z,iconSize:"18",iconPosition:"right",disabled:j}),xe()&&r.createElement(C.ZP,{className:i()("qdlx__btn qdlx__btn-primary qdlx__btn--icon-right",{"has-error":ke()}),type:"submit",text:j?(0,l.__)("Connecting…","comment-edit-pro"):D?(0,l.__)("Connected","comment-edit-pro"):(0,l.__)("Connect to ConvertKit","comment-edit-pro"),icon:!1,disabled:G})),ke()&&r.createElement(S.Z,{message:(0,l.__)("There are form validation errors. Please correct them above.","comment-edit-pro"),status:"error",politeness:"polite"}),D&&r.createElement(S.Z,{message:(0,l.__)("Your settings have been saved.","comment-edit-pro"),status:"success",politeness:"assertive"})))};const H=function(e){var t=Q((0,c.useAsyncResource)(U,[]),2),n=t[0];return t[1],r.createElement(P.Z,{fallback:r.createElement("p",null,(0,l.__)("Could not load ConvertKit Settings.","comment-edit-pro"),r.createElement("br",null),r.createElement("a",{href:"https://dlxplugins.com/support/",target:"_blank",rel:"noopener noreferrer"},"DLX Plugins Support"))},r.createElement(r.Suspense,{fallback:r.createElement(r.Fragment,null,r.createElement("h2",null,(0,l.__)("ConvertKit","comment-edit-pro")),r.createElement(u(),{color:"#9c68b0",loading:!0,cssOverride:!0,size:25,speedMultiplier:.65}))},r.createElement(G,z({defaults:n},e))))}},24654:()=>{}}]);
+"use strict";
+(self["webpackChunksimple_comment_editing_options"] = self["webpackChunksimple_comment_editing_options"] || []).push([["ConvertKit0.0.1"],{
+
+/***/ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/checkbox-control/index.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CheckboxControl": () => (/* binding */ CheckboxControl),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-ref-effect/index.js");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
+/* harmony import */ var _wordpress_deprecated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/deprecated */ "./node_modules/@wordpress/deprecated/build-module/index.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/icon/index.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/reset.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/check.js");
+/* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Checkboxes allow the user to select one or more items from a set.
+ *
+ * ```jsx
+ * import { CheckboxControl } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * const MyCheckboxControl = () => {
+ *   const [ isChecked, setChecked ] = useState( true );
+ *   return (
+ *     <CheckboxControl
+ *       label="Is author"
+ *       help="Is the user a author or not?"
+ *       checked={ isChecked }
+ *       onChange={ setChecked }
+ *     />
+ *   );
+ * };
+ * ```
+ */
+function CheckboxControl(props) {
+  const {
+    __nextHasNoMarginBottom,
+    label,
+    className,
+    heading,
+    checked,
+    indeterminate,
+    help,
+    onChange,
+    ...additionalProps
+  } = props;
+
+  if (heading) {
+    (0,_wordpress_deprecated__WEBPACK_IMPORTED_MODULE_2__["default"])('`heading` prop in `CheckboxControl`', {
+      alternative: 'a separate element to implement a heading',
+      since: '5.8'
+    });
+  }
+
+  const [showCheckedIcon, setShowCheckedIcon] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [showIndeterminateIcon, setShowIndeterminateIcon] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false); // Run the following callback every time the `ref` (and the additional
+  // dependencies) change.
+
+  const ref = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__["default"])(node => {
+    if (!node) {
+      return;
+    } // It cannot be set using an HTML attribute.
+
+
+    node.indeterminate = !!indeterminate;
+    setShowCheckedIcon(node.matches(':checked'));
+    setShowIndeterminateIcon(node.matches(':indeterminate'));
+  }, [checked, indeterminate]);
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__["default"])(CheckboxControl);
+  const id = `inspector-checkbox-control-${instanceId}`;
+
+  const onChangeValue = event => onChange(event.target.checked);
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_base_control__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    __nextHasNoMarginBottom: __nextHasNoMarginBottom,
+    label: heading,
+    id: id,
+    help: help,
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('components-checkbox-control', className)
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("span", {
+    className: "components-checkbox-control__input-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("input", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    ref: ref,
+    id: id,
+    className: "components-checkbox-control__input",
+    type: "checkbox",
+    value: "1",
+    onChange: onChangeValue,
+    checked: checked,
+    "aria-describedby": !!help ? id + '__help' : undefined
+  }, additionalProps)), showIndeterminateIcon ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__["default"],
+    className: "components-checkbox-control__indeterminate",
+    role: "presentation"
+  }) : null, showCheckedIcon ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__["default"],
+    className: "components-checkbox-control__checked",
+    role: "presentation"
+  }) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("label", {
+    className: "components-checkbox-control__label",
+    htmlFor: id
+  }, label));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CheckboxControl);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/radio-control/index.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/radio-control/index.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "RadioControl": () => (/* binding */ RadioControl),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "./node_modules/@wordpress/compose/build-module/hooks/use-instance-id/index.js");
+/* harmony import */ var _base_control__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../base-control */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
+/* harmony import */ var _v_stack__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../v-stack */ "./node_modules/@wordpress/components/build-module/v-stack/component.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Render a user interface to select the user type using radio inputs.
+ *
+ * ```jsx
+ * import { RadioControl } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * const MyRadioControl = () => {
+ *   const [ option, setOption ] = useState( 'a' );
+ *
+ *   return (
+ *     <RadioControl
+ *       label="User type"
+ *       help="The type of the current user"
+ *       selected={ option }
+ *       options={ [
+ *         { label: 'Author', value: 'a' },
+ *         { label: 'Editor', value: 'e' },
+ *       ] }
+ *       onChange={ ( value ) => setOption( value ) }
+ *     />
+ *   );
+ * };
+ * ```
+ */
+
+function RadioControl(props) {
+  const {
+    label,
+    className,
+    selected,
+    help,
+    onChange,
+    hideLabelFromVision,
+    options = [],
+    ...additionalProps
+  } = props;
+  const instanceId = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__["default"])(RadioControl);
+  const id = `inspector-radio-control-${instanceId}`;
+
+  const onChangeValue = event => onChange(event.target.value);
+
+  if (!(options !== null && options !== void 0 && options.length)) {
+    return null;
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_base_control__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    __nextHasNoMarginBottom: true,
+    label: label,
+    id: id,
+    hideLabelFromVision: hideLabelFromVision,
+    help: help,
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()(className, 'components-radio-control')
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)(_v_stack__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    spacing: 1
+  }, options.map((option, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("div", {
+    key: `${id}-${index}`,
+    className: "components-radio-control__option"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("input", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    id: `${id}-${index}`,
+    className: "components-radio-control__input",
+    type: "radio",
+    name: id,
+    value: option.value,
+    onChange: onChangeValue,
+    checked: option.value === selected,
+    "aria-describedby": !!help ? `${id}__help` : undefined
+  }, additionalProps)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.createElement)("label", {
+    htmlFor: `${id}-${index}`
+  }, option.label)))));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RadioControl);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/v-stack/component.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/v-stack/component.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VStack": () => (/* binding */ VStack),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ui_context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ui/context */ "./node_modules/@wordpress/components/build-module/ui/context/context-connect.js");
+/* harmony import */ var _view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../view */ "./node_modules/@wordpress/components/build-module/view/component.js");
+/* harmony import */ var _hook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hook */ "./node_modules/@wordpress/components/build-module/v-stack/hook.js");
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+function UnconnectedVStack(props, forwardedRef) {
+  const vStackProps = (0,_hook__WEBPACK_IMPORTED_MODULE_1__.useVStack)(props);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_view__WEBPACK_IMPORTED_MODULE_3__["default"], (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, vStackProps, {
+    ref: forwardedRef
+  }));
+}
+/**
+ * `VStack` (or Vertical Stack) is a layout component that arranges child
+ * elements in a vertical line.
+ *
+ * `VStack` can render anything inside.
+ *
+ * ```jsx
+ * import {
+ * 	__experimentalText as Text,
+ * 	__experimentalVStack as VStack,
+ * } from `@wordpress/components`;
+ *
+ * function Example() {
+ * 	return (
+ * 		<VStack>
+ * 			<Text>Code</Text>
+ * 			<Text>is</Text>
+ * 			<Text>Poetry</Text>
+ * 		</VStack>
+ * 	);
+ * }
+ * ```
+ */
+
+
+const VStack = (0,_ui_context__WEBPACK_IMPORTED_MODULE_4__.contextConnect)(UnconnectedVStack, 'VStack');
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VStack);
+//# sourceMappingURL=component.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/components/build-module/v-stack/hook.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@wordpress/components/build-module/v-stack/hook.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useVStack": () => (/* binding */ useVStack)
+/* harmony export */ });
+/* harmony import */ var _ui_context__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/context */ "./node_modules/@wordpress/components/build-module/ui/context/use-context-system.js");
+/* harmony import */ var _h_stack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../h-stack */ "./node_modules/@wordpress/components/build-module/h-stack/hook.js");
+/**
+ * Internal dependencies
+ */
+
+
+function useVStack(props) {
+  const {
+    expanded = false,
+    ...otherProps
+  } = (0,_ui_context__WEBPACK_IMPORTED_MODULE_0__.useContextSystem)(props, 'VStack');
+  const hStackProps = (0,_h_stack__WEBPACK_IMPORTED_MODULE_1__.useHStack)({
+    direction: 'column',
+    expanded,
+    ...otherProps
+  });
+  return hStackProps;
+}
+//# sourceMappingURL=hook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/check.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/check.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/primitives */ "./node_modules/@wordpress/primitives/build-module/svg/index.js");
+
+
+/**
+ * WordPress dependencies
+ */
+
+const check = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+  d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
+}));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (check);
+//# sourceMappingURL=check.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/reset.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/reset.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "./node_modules/react/index.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/primitives */ "./node_modules/@wordpress/primitives/build-module/svg/index.js");
+
+
+/**
+ * WordPress dependencies
+ */
+
+const reset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+  d: "M7 11.5h10V13H7z"
+}));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (reset);
+//# sourceMappingURL=reset.js.map
+
+/***/ }),
+
+/***/ "./src/js/react/components/icons/ConvertKit.js":
+/*!*****************************************************!*\
+  !*** ./src/js/react/components/icons/ConvertKit.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+
+ // ES6
+
+var ConvertKitIcon = function ConvertKitIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 1600 1500",
+    xmlns: "http://www.w3.org/2000/svg",
+    xmlSpace: "preserve",
+    width: props.width,
+    height: props.height
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M772.031 1184.2c277.837 0 492.588-212.07 492.588-473.68 0-245.084-201.745-394.733-335.381-394.733-186.076 0-335.222 131.93-356.472 327.783-3.938 36.27-32.381 66.685-68.477 66.425-60.008-.435-147.245-.95-202.469-.76-23.774.085-43.431-19.41-42.256-43.41 8.334-169.862 64.548-328.686 171.743-450.69C550.42 79.568 723.882-.005 929.238-.005 1274.272-.005 1600 316.741 1600 710.52c0 436.015-357.563 789.475-820.627 789.475-330.241 0-662.845-218.05-778.968-522.89-.431-1.13-.501-2.31-.291-3.535 1.545-9.02 4.616-17.26 7.64-25.375 4.397-11.795 8.696-23.325 8.068-36.62l-2.007-42.46c-.989-20.95 10.725-40.43 29.674-49.34l16.786-7.895c19.141-9.005 32.747-26.735 36.513-47.575 5.627-31.145 32.686-53.785 64.27-53.785 49.318 0 92.209 33.135 108.32 80.25 77.542 226.765 200.814 393.43 502.653 393.43Z",
+    fill: props.fill
+  }));
+};
+
+ConvertKitIcon.defaultProps = {
+  width: 32,
+  height: 30,
+  fill: '#FB6068'
+};
+ConvertKitIcon.propTypes = {
+  width: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  height: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number),
+  fill: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConvertKitIcon);
+
+/***/ }),
+
+/***/ "./src/js/react/views/integrations/ConvertKit.js":
+/*!*******************************************************!*\
+  !*** ./src/js/react/views/integrations/ConvertKit.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! use-async-resource */ "./node_modules/use-async-resource/lib/index.js");
+/* harmony import */ var use_async_resource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(use_async_resource__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-spinners/BeatLoader */ "./node_modules/react-spinners/BeatLoader.js");
+/* harmony import */ var react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/text-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/radio-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/checkbox-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/select-control/index.js");
+/* harmony import */ var _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/icons/Spinner */ "./src/js/react/components/icons/Spinner.js");
+/* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
+/* harmony import */ var _SendCommand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SendCommand */ "./src/js/SendCommand.js");
+/* harmony import */ var _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/icons/CircularExplanation */ "./src/js/react/components/icons/CircularExplanation.js");
+/* harmony import */ var _components_Notice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/Notice */ "./src/js/react/components/Notice/index.js");
+/* harmony import */ var _components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../components/ErrorBoundary */ "./src/js/react/components/ErrorBoundary/index.js");
+/* harmony import */ var _webhooks_RequestHeaderFields__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../webhooks/RequestHeaderFields */ "./src/js/react/views/webhooks/RequestHeaderFields.js");
+/* harmony import */ var _components_icons_ConvertKit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../components/icons/ConvertKit */ "./src/js/react/components/icons/ConvertKit.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/* eslint-disable no-unused-vars */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var retrieveConvertKitOptions = function retrieveConvertKitOptions() {
+  return (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_get_convertkit_options', {
+    nonce: sceIntegrations.ck_get_nonce
+  });
+};
+
+var ConvertKit = function ConvertKit(props) {
+  var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveConvertKitOptions, []),
+      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+      defaults = _useAsyncResource2[0],
+      getDefaults = _useAsyncResource2[1];
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Could not load ConvertKit Settings.', 'comment-edit-pro'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+      href: "https://dlxplugins.com/support/",
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }, "DLX Plugins Support"))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react_spinners_BeatLoader__WEBPACK_IMPORTED_MODULE_12___default()), {
+      color: '#9c68b0',
+      loading: true,
+      cssOverride: true,
+      size: 25,
+      speedMultiplier: 0.65
+    }))
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Interface, _extends({
+    defaults: defaults
+  }, props))));
+};
+
+var Interface = function Interface(props) {
+  var _data$forms, _data$tags, _data$customFields;
+
+  var tagInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var customFieldInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var defaults = props.defaults;
+  var response = defaults();
+  var _response$data = response.data,
+      data = _response$data.data,
+      success = _response$data.success;
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      saving = _useState2[0],
+      setSaving = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isSaved = _useState4[0],
+      setIsSaved = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      resetting = _useState6[0],
+      setResetting = _useState6[1];
+
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isReset = _useState8[0],
+      setIsReset = _useState8[1];
+
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      credentialsRefreshing = _useState10[0],
+      setCredentialsRefreshing = _useState10[1];
+
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      isRefreshingTags = _useState12[0],
+      setIsRefreshingTags = _useState12[1];
+
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      isRefreshingForms = _useState14[0],
+      setIsRefreshingForms = _useState14[1];
+
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState16 = _slicedToArray(_useState15, 2),
+      isRefreshingCustomFields = _useState16[0],
+      setIsRefreshingCustomFields = _useState16[1];
+
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState18 = _slicedToArray(_useState17, 2),
+      isAddingTag = _useState18[0],
+      setIsAddingTag = _useState18[1];
+
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      isAddingCustomField = _useState20[0],
+      setIsAddingCustomField = _useState20[1];
+
+  var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_13__.useForm)({
+    defaultValues: {
+      enableConvertKit: data.enableConvertKit,
+      apiValid: data.apiValid,
+      apiKey: data.apiKey,
+      secretKey: data.secretKey,
+      signUpLabel: data.signUpLabel,
+      checkboxEnabled: data.checkboxEnabled,
+      formOrTag: data.formOrTag,
+      forms: (_data$forms = data.forms) !== null && _data$forms !== void 0 ? _data$forms : [],
+      tags: (_data$tags = data.tags) !== null && _data$tags !== void 0 ? _data$tags : [],
+      customFields: (_data$customFields = data.customFields) !== null && _data$customFields !== void 0 ? _data$customFields : [],
+      selectedForm: data.selectedForm,
+      tagInput: '',
+      customFieldInput: ''
+    }
+  }),
+      register = _useForm.register,
+      control = _useForm.control,
+      handleSubmit = _useForm.handleSubmit,
+      setValue = _useForm.setValue,
+      getValues = _useForm.getValues,
+      reset = _useForm.reset,
+      setError = _useForm.setError,
+      clearErrors = _useForm.clearErrors,
+      trigger = _useForm.trigger;
+
+  var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_13__.useWatch)({
+    control: control
+  });
+
+  var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_13__.useFormState)({
+    control: control
+  }),
+      errors = _useFormState.errors,
+      isDirty = _useFormState.isDirty,
+      dirtyFields = _useFormState.dirtyFields,
+      touchedFields = _useFormState.touchedFields;
+  /**
+   * Check if we need to re-connect or initially connect to the ConvertKit API.
+   *
+   * @return {boolean} true if we need to re-connect, false if not.
+   */
+
+
+  var needsCredentialRefresh = function needsCredentialRefresh() {
+    // If convertkit is disabled, no need to refresh.
+    if (!getValues('enableConvertKit')) {
+      return false;
+    } // If api isn't valid, refresh.
+
+
+    if (!getValues('apiValid')) {
+      return true;
+    }
+
+    if (isDirty && (dirtyFields.apiKey || dirtyFields.secretKey)) {
+      return true;
+    }
+
+    return false;
+  };
+  /**
+   * Check if we can save the form.
+   *
+   * @return {boolean} true to show the save button, false to hide it.
+   */
+
+
+  var canShowSaveButton = function canShowSaveButton() {
+    // If convertkit is disabled and form is not dirty, no save button.
+    if (!getValues('enableConvertKit') && !isDirty) {
+      return false;
+    } // If convertKit is disabled, we can always save.
+
+
+    if (!getValues('enableConvertKit')) {
+      return true;
+    }
+
+    var forms = getValues('forms');
+    var tags = getValues('tags');
+
+    if (getValues('apiValid') && forms.length === 0 && tags.length === 0) {
+      return false;
+    }
+
+    if (!getValues('apiValid') && isDirty) {
+      return false;
+    }
+
+    if (needsCredentialRefresh()) {
+      return false;
+    } // Check to see if any forms are selected.
+
+
+    if (getValues('formOrTag') === 'form') {
+      if (forms.length === 0) {
+        return false;
+      }
+
+      if ('0' === getValues('selectedForm')) {
+        return false;
+      }
+
+      if ('0' !== getValues('selectedForm')) {
+        // Check if selectedForm is not in the forms array.
+        var selectedForm = getValues('selectedForm');
+        var selected = false;
+        forms.forEach(function (form) {
+          if (form.value === selectedForm) {
+            selected = true;
+          }
+        });
+
+        if (!selected) {
+          return false;
+        }
+      }
+    } // Check to see if any tags are selected.
+
+
+    if (getValues('formOrTag') === 'tag') {
+      if (tags.length === 0) {
+        return false;
+      }
+
+      var _selected = false;
+      tags.forEach(function (tag) {
+        if (tag.selected) {
+          _selected = true;
+        }
+      });
+
+      if (!_selected) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var hasErrors = function hasErrors() {
+    return Object.keys(errors).length > 0;
+  };
+
+  var onSubmit = function onSubmit(formData) {
+    setSaving(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_convertkit_options', _objectSpread({
+      nonce: sceIntegrations.ck_save_nonce
+    }, formData)).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        setIsSaved(true); // Reset form.
+
+        reset(_objectSpread(_objectSpread({}, formData), ajaxData), {
+          keepErrors: false,
+          keepDirty: false
+        });
+        setTimeout(function () {
+          setIsSaved(false);
+        }, 3000);
+      } else {// todo - set save error.
+        // setError( 'apiKey', { type: 'noForms', message: ajaxData.message } );
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setSaving(false);
+    });
+  };
+
+  var onRefreshCredentials = function onRefreshCredentials(formData) {
+    setSaving(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_connection', _objectSpread({
+      nonce: sceIntegrations.ck_refresh_nonce
+    }, formData)).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        // Reset form state.
+        reset(_objectSpread(_objectSpread({}, formValues), ajaxData), {
+          keepErrors: false,
+          keepDirty: false
+        });
+      } else {
+        var updatedFormValues = {
+          apiValid: false
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: false,
+          keepDirty: false
+        });
+        setError('apiKey', {
+          type: 'noForms',
+          message: ajaxData.message
+        });
+        setError('secretKey', {
+          type: 'noForms',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setSaving(false);
+    });
+  };
+
+  var onAddTag = function onAddTag(tagLabel) {
+    tagLabel = tagLabel.trim();
+
+    if ('' === tagLabel) {
+      setError('tagInput', {
+        type: 'addTagError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name cannot be empty.', 'comment-edit-pro')
+      });
+      return;
+    } // Check to see if label is in use.
+
+
+    var currentTags = getValues('tags');
+    var tagExists = currentTags.find(function (tag) {
+      return tag.label === tagLabel;
+    });
+
+    if (tagExists) {
+      setError('tagInput', {
+        type: 'addTagError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name already in use.', 'comment-edit-pro')
+      });
+      return;
+    } // Start adding the tag.
+
+
+    setIsAddingTag(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_add_convertkit_tag', {
+      nonce: sceIntegrations.ck_add_tag_nonce,
+      label: tagLabel
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var tags = ajaxData.tags;
+        var newTagValues = [];
+        tags.forEach(function (keys, index) {
+          newTagValues.push(keys);
+        });
+        setValue('tagInput', '');
+        setValue('tags', newTagValues);
+      } else {
+        setError('tagInput', {
+          type: 'addTagError',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsAddingTag(false);
+      tagInput.current.focus();
+    });
+  };
+
+  var onAddCustomField = function onAddCustomField(customFieldLabel) {
+    customFieldLabel = customFieldLabel.trim();
+
+    if ('' === customFieldLabel) {
+      setError('customFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The Custom Field name cannot be empty.', 'comment-edit-pro')
+      });
+      return;
+    } // Check to see if label is in use.
+
+
+    var currentCustomFields = getValues('customFields');
+    var customFieldExists = currentCustomFields.find(function (customField) {
+      return customField.label === customFieldLabel;
+    });
+
+    if (customFieldExists) {
+      setError('customFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field name already in use.', 'comment-edit-pro')
+      });
+      return;
+    } // Start adding the Custom Field.
+
+
+    setIsAddingCustomField(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_add_convertkit_custom_field', {
+      nonce: sceIntegrations.ck_add_custom_field_nonce,
+      label: customFieldLabel
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var customFields = ajaxData.customFields;
+        var newCustomFieldValues = [];
+        customFields.forEach(function (keys, index) {
+          newCustomFieldValues.push(keys);
+        });
+        setValue('customFields', newCustomFieldValues);
+      } else {
+        setError('customFieldInput', {
+          type: 'addCustomFieldError',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsAddingCustomField(false);
+      customFieldInputRef.current.focus();
+    });
+  };
+
+  var onHandleTagsRefresh = function onHandleTagsRefresh(formData) {
+    setIsRefreshingTags(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_tags', {
+      nonce: sceIntegrations.ck_refresh_tags_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var tags = ajaxData.tags,
+            apiValid = ajaxData.apiValid;
+        var newTagValues = [];
+        var oldTagValues = getValues('tags');
+        tags.forEach(function (keys, index) {
+          // Use old selection state for new tags.
+          var oldTag = oldTagValues.find(function (tag) {
+            return tag.value === keys.value;
+          });
+
+          if (oldTag) {
+            keys.selected = oldTag.selected;
+          }
+
+          newTagValues.push(keys);
+        });
+        var updatedFormValues = {
+          tags: newTagValues,
+          apiValid: apiValid
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('tags', {
+          type: 'noTags',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingTags(false);
+    });
+  };
+
+  var onHandleFormsRefresh = function onHandleFormsRefresh(formData) {
+    setIsRefreshingForms(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_forms', {
+      nonce: sceIntegrations.ck_refresh_forms_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var forms = ajaxData.forms,
+            apiValid = ajaxData.apiValid;
+        var updatedFormValues = {
+          forms: forms
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues2 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues2), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('forms', {
+          type: 'noForms',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingForms(false);
+    });
+  };
+
+  var onHandleCustomFieldsRefresh = function onHandleCustomFieldsRefresh(formData) {
+    setIsRefreshingCustomFields(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_refresh_convertkit_custom_fields', {
+      nonce: sceIntegrations.ck_refresh_custom_fields_nonce
+    }).then(function (ajaxResponse) {
+      var ajaxData = ajaxResponse.data.data;
+      var ajaxSuccess = ajaxResponse.data.success;
+
+      if (ajaxSuccess) {
+        var customFields = ajaxData.customFields,
+            apiValid = ajaxData.apiValid;
+        var newCustomFieldValues = [];
+        var oldCustomFieldValues = getValues('customFields');
+        customFields.forEach(function (keys, index) {
+          // Use old selection state for new tags.
+          var oldCustomFields = oldCustomFieldValues.find(function (customField) {
+            return customField.value === keys.value;
+          });
+
+          if (oldCustomFields) {
+            var _oldCustomFields$fiel;
+
+            keys.field = oldCustomFields.field;
+            keys.field_value = (_oldCustomFields$fiel = oldCustomFields.field_value) !== null && _oldCustomFields$fiel !== void 0 ? _oldCustomFields$fiel : '';
+          }
+
+          newCustomFieldValues.push(keys);
+        });
+        var updatedFormValues = {
+          customFields: newCustomFieldValues,
+          apiValid: apiValid
+        };
+        reset(_objectSpread(_objectSpread({}, formValues), updatedFormValues), {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        var _updatedFormValues3 = {};
+        reset(_objectSpread(_objectSpread({}, formValues), _updatedFormValues3), {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('customFields', {
+          type: 'noFields',
+          message: ajaxData.message
+        });
+      }
+    })["catch"](function (ajaxResponse) {}).then(function (ajaxResponse) {
+      setIsRefreshingCustomFields(false);
+    });
+  };
+
+  var getNewsletterLabel = function getNewsletterLabel() {
+    var _errors$signUpLabel2;
+
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Label', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "signUpLabel",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref) {
+        var _errors$signUpLabel;
+
+        var field = _ref.field;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], _extends({}, field, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign-up Label', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$signUpLabel = errors.signUpLabel) === null || _errors$signUpLabel === void 0 ? void 0 : _errors$signUpLabel.type),
+            'is-required': true
+          }),
+          "aria-required": "true",
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This text will be shown in the comment section when a user leaves a comment.', 'comment-edit-pro')
+        }));
+      }
+    }), 'required' === ((_errors$signUpLabel2 = errors.signUpLabel) === null || _errors$signUpLabel2 === void 0 ? void 0 : _errors$signUpLabel2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSignupCheckbox = function getSignupCheckbox() {
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "checkboxEnabled",
+      control: control,
+      render: function render(_ref2) {
+        var _ref2$field = _ref2.field,
+            _onChange = _ref2$field.onChange,
+            value = _ref2$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sign Up Checkbox Checked', 'comment-edit-pro'),
+          className: "sce-admin__toggle-control",
+          checked: value,
+          onChange: function onChange(boolValue) {
+            _onChange(boolValue);
+          },
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Check the sign-up checkbox by default (not recommended).', 'comment-edit-pro')
+        });
+      }
+    })));
+  };
+  /**
+   * Gets the form or tag radio option.
+   *
+   * @return {JSX.Element} Form or tags interface.
+   */
+
+
+  var getFormOrTag = function getFormOrTag() {
+    if (needsCredentialRefresh()) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    var forms = getValues('forms');
+    var tags = getValues('tags');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "formOrTag",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref3) {
+        var _ref3$field = _ref3.field,
+            _onChange2 = _ref3$field.onChange,
+            value = _ref3$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Subscribers to Forms or Tags', 'comment-edit-pro'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select whether to add new subscribers to a an existing ConvertKit form or tag(s).', 'comment-edit-pro'),
+          selected: getValues('formOrTag'),
+          options: [{
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro'),
+            value: 'form'
+          }, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tags Only', 'comment-edit-pro'),
+            value: 'tag'
+          }],
+          onChange: function onChange(formOrTagValue) {
+            _onChange2(formOrTagValue);
+          }
+        }));
+      }
+    })));
+  };
+
+  var getConvertKitForms = function getConvertKitForms() {
+    var _errors$selectedForm;
+
+    // Get forms.
+    // eslint-disable-next-line @wordpress/no-unused-vars-before-return
+    var convertKitForms = getValues('forms');
+
+    if (!getValues('apiValid') || needsCredentialRefresh() || 'form' !== getValues('formOrTag')) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Forms (Required)', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, convertKitForms.length !== 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "selectedForm",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref4) {
+        var _errors$apiKey;
+
+        var _ref4$field = _ref4.field,
+            _onChange3 = _ref4$field.onChange,
+            value = _ref4$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a form for your subscribers', 'comment-edit-pro'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default form that will be used when signing up your subscribers.', 'comment-edit-pro'),
+          selected: value,
+          options: getValues('forms'),
+          onChange: function onChange(formSelectedValue) {
+            _onChange3(formSelectedValue);
+          },
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
+            'has-error': 'required' === ((_errors$apiKey = errors.apiKey) === null || _errors$apiKey === void 0 ? void 0 : _errors$apiKey.type),
+            'is-required': true
+          })
+        });
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      isBusy: isRefreshingForms,
+      disabled: isRefreshingForms,
+      onClick: function onClick() {
+        onHandleFormsRefresh();
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
+        'has-error': hasErrors()
+      }, {
+        'has-icon': isRefreshingForms
+      }, {
+        'is-saving': isRefreshingForms
+      }),
+      text: isRefreshingForms ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Forms', 'comment-edit-pro')
+    })), 'required' === ((_errors$selectedForm = errors.selectedForm) === null || _errors$selectedForm === void 0 ? void 0 : _errors$selectedForm.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })), 'form' === getValues('formOrTag') && convertKitForms.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getConvertKitTags = function getConvertKitTags() {
+    var _errors$tags, _errors$tags2, _errors$tagInput2, _errors$tagInput3, _errors$tagInput4;
+
+    // Don't show tags if api is invalid.
+    if (!getValues('apiValid') || needsCredentialRefresh()) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    var convertKitTags = getValues('tags');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Tags', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, 'tag' === getValues('formOrTag') && getValues('tags').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no tags available. Try creating a tag below.', 'comment-edit-pro'),
+      status: "warning",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), convertKitTags.length > 0 && getValues('apiValid') && convertKitTags.map(function (tag, index) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+        key: index,
+        name: "tags[".concat(index, "].selected"),
+        control: control,
+        render: function render(_ref5) {
+          var _getValues$index$sele;
+
+          var _ref5$field = _ref5.field,
+              _onChange4 = _ref5$field.onChange,
+              value = _ref5$field.value;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
+            label: tag.label,
+            onChange: function onChange(enableValue) {
+              _onChange4(enableValue);
+            },
+            checked: (_getValues$index$sele = getValues('tags')[index].selected) !== null && _getValues$index$sele !== void 0 ? _getValues$index$sele : false
+          });
+        }
+      });
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      isBusy: isRefreshingTags,
+      disabled: isRefreshingTags,
+      onClick: function onClick() {
+        onHandleTagsRefresh();
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
+        'has-error': hasErrors()
+      }, {
+        'has-icon': isRefreshingTags
+      }, {
+        'is-saving': isRefreshingTags
+      }),
+      text: isRefreshingTags ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Tags', 'comment-edit-pro')
+    })), 'noTags' === ((_errors$tags = errors.tags) === null || _errors$tags === void 0 ? void 0 : _errors$tags.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$tags2 = errors.tags) === null || _errors$tags2 === void 0 ? void 0 : _errors$tags2.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-convertkit-add-tag"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-convertkit-add-tag-group"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "tagInput",
+      control: control,
+      rules: {
+        pattern: /[-_ 0-9A-Za-z]/
+      },
+      render: function render(_ref6) {
+        var _errors$tagInput;
+
+        var _ref6$field = _ref6.field,
+            _onChange5 = _ref6$field.onChange,
+            value = _ref6$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          type: "text",
+          value: value,
+          onChange: function onChange(tagInputValue) {
+            clearErrors('tagInput');
+
+            _onChange5(tagInputValue);
+          },
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Tag', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$tagInput = errors.tagInput) === null || _errors$tagInput === void 0 ? void 0 : _errors$tagInput.type)
+          }),
+          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag Name', 'comment-edit-pro'),
+          "aria-required": "true",
+          ref: tagInput
+        });
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      onClick: /*#__PURE__*/function () {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+          var validationResult;
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return trigger('tagInput');
+
+                case 2:
+                  validationResult = _context.sent;
+
+                  if (validationResult) {
+                    onAddTag(getValues('tagInput'));
+                  }
+
+                case 4:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        return function (_x) {
+          return _ref7.apply(this, arguments);
+        };
+      }(),
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
+      text: isAddingTag ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Tag', 'comment-edit-pro')
+    }))), 'pattern' === ((_errors$tagInput2 = errors.tagInput) === null || _errors$tagInput2 === void 0 ? void 0 : _errors$tagInput2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in tags.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), 'addTagError' === ((_errors$tagInput3 = errors.tagInput) === null || _errors$tagInput3 === void 0 ? void 0 : _errors$tagInput3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$tagInput4 = errors.tagInput) === null || _errors$tagInput4 === void 0 ? void 0 : _errors$tagInput4.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })))));
+  };
+
+  var getCustomFields = function getCustomFields() {
+    var _errors$customFields, _errors$customFields2, _errors$customFieldIn2, _errors$customFieldIn3, _errors$customFieldIn4;
+
+    // Don't show custom fields if api is invalid.
+    if (!getValues('apiValid') || needsCredentialRefresh()) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
+    }
+
+    var convertKitCustomFields = getValues('customFields');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map Custom Fields', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getValues('customFields').length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no custom fields available. You can create one below.', 'comment-edit-pro'),
+      status: "warning",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), convertKitCustomFields.length > 0 && getValues('apiValid') && convertKitCustomFields.map(function (tag, index) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+        className: "sce-convertkit-custom-field",
+        key: index
+      }, 'custom' !== getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+        name: "customFields[".concat(index, "].field"),
+        control: control,
+        render: function render(_ref8) {
+          var _getValues$index$fiel;
+
+          var _ref8$field = _ref8.field,
+              _onChange6 = _ref8$field.onChange,
+              value = _ref8$field.value;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_19__["default"], {
+            label: tag.label,
+            onChange: function onChange(customFieldSelectedValue) {
+              _onChange6(customFieldSelectedValue);
+            },
+            value: (_getValues$index$fiel = getValues('customFields')[index].field) !== null && _getValues$index$fiel !== void 0 ? _getValues$index$fiel : false,
+            options: _webhooks_RequestHeaderFields__WEBPACK_IMPORTED_MODULE_10__["default"],
+            className: "sce-admin__select-control"
+          });
+        }
+      })), 'custom' === getValues('customFields')[index].field && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+        name: "customFields[".concat(index, "].field_value"),
+        control: control,
+        render: function render(_ref9) {
+          var _ref9$field = _ref9.field,
+              _onChange7 = _ref9$field.onChange,
+              value = _ref9$field.value;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            value: value !== null && value !== void 0 ? value : '',
+            className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {}),
+            onChange: function onChange(methodValue) {
+              _onChange7(methodValue);
+            },
+            label: tag.label
+          });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+        className: "sce-admin__text-control-reset button-reset",
+        icon: "no-alt",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Clear Text Input', 'comment-edit-pro'),
+        onClick: function onClick() {
+          setValue("customFields[".concat(index, "].field"), 'none');
+        },
+        showTooltip: false
+      })));
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      isBusy: isRefreshingCustomFields,
+      disabled: isRefreshingCustomFields,
+      onClick: function onClick() {
+        onHandleCustomFieldsRefresh();
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
+        'has-error': hasErrors()
+      }, {
+        'has-icon': isRefreshingCustomFields
+      }, {
+        'is-saving': isRefreshingCustomFields
+      }),
+      text: isRefreshingCustomFields ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Custom Fields', 'comment-edit-pro')
+    })), 'noCustomFields' === ((_errors$customFields = errors.customFields) === null || _errors$customFields === void 0 ? void 0 : _errors$customFields.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$customFields2 = errors.customFields) === null || _errors$customFields2 === void 0 ? void 0 : _errors$customFields2.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-convertkit-add-tag"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-convertkit-add-tag-group"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "customFieldInput",
+      control: control,
+      rules: {
+        pattern: /[-_ 0-9A-Za-z]/
+      },
+      render: function render(_ref10) {
+        var _errors$customFieldIn;
+
+        var _ref10$field = _ref10.field,
+            _onChange8 = _ref10$field.onChange,
+            value = _ref10$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          type: "text",
+          value: value,
+          onChange: function onChange(customFieldValue) {
+            clearErrors('customFieldInput');
+
+            _onChange8(customFieldValue);
+          },
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Custom Field', 'comment-edit-pro'),
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$customFieldIn = errors.customFieldInput) === null || _errors$customFieldIn === void 0 ? void 0 : _errors$customFieldIn.type)
+          }),
+          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field Name', 'comment-edit-pro'),
+          ref: customFieldInputRef
+        });
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "sce-admin-buttons"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      onClick: /*#__PURE__*/function () {
+        var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+          var validationResult;
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return trigger('customFieldInput');
+
+                case 2:
+                  validationResult = _context2.sent;
+
+                  if (validationResult) {
+                    onAddCustomField(getValues('customFieldInput'));
+                  }
+
+                case 4:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }));
+
+        return function (_x2) {
+          return _ref11.apply(this, arguments);
+        };
+      }(),
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
+      text: isAddingTag ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Custom Field', 'comment-edit-pro')
+    }))), 'pattern' === ((_errors$customFieldIn2 = errors.customFieldInput) === null || _errors$customFieldIn2 === void 0 ? void 0 : _errors$customFieldIn2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in custom fields.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), 'addCustomFieldError' === ((_errors$customFieldIn3 = errors.customFieldInput) === null || _errors$customFieldIn3 === void 0 ? void 0 : _errors$customFieldIn3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$customFieldIn4 = errors.customFieldInput) === null || _errors$customFieldIn4 === void 0 ? void 0 : _errors$customFieldIn4.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })))));
+  };
+
+  var getAPIKey = function getAPIKey() {
+    var _errors$apiKey3, _errors$apiKey4, _errors$apiKey5;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('API Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "apiKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref12) {
+        var _errors$apiKey2;
+
+        var _ref12$field = _ref12.field,
+            _onChange9 = _ref12$field.onChange,
+            value = _ref12$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit API Key', 'comment-edit-pro'),
+          type: "text",
+          value: value,
+          onChange: function onChange(apiKeyValue) {
+            _onChange9(apiKeyValue);
+
+            clearErrors();
+          },
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$apiKey2 = errors.apiKey) === null || _errors$apiKey2 === void 0 ? void 0 : _errors$apiKey2.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your ConvertKit API Key in order to choose a form or tag.', 'comment-edit-pro'),
+          "aria-required": "true"
+        });
+      }
+    }), 'required' === ((_errors$apiKey3 = errors.apiKey) === null || _errors$apiKey3 === void 0 ? void 0 : _errors$apiKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), 'noForms' === ((_errors$apiKey4 = errors.apiKey) === null || _errors$apiKey4 === void 0 ? void 0 : _errors$apiKey4.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$apiKey5 = errors.apiKey) === null || _errors$apiKey5 === void 0 ? void 0 : _errors$apiKey5.message,
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSecretKey = function getSecretKey() {
+    var _errors$secretKey2, _errors$secretKey3, _errors$secretKey4;
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: "secretKey",
+      control: control,
+      rules: {
+        required: true
+      },
+      render: function render(_ref13) {
+        var _errors$secretKey;
+
+        var _ref13$field = _ref13.field,
+            _onChange10 = _ref13$field.onChange,
+            value = _ref13$field.value;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit Secret Key', 'comment-edit-pro'),
+          type: "text",
+          value: value,
+          onChange: function onChange(secretKey) {
+            _onChange10(secretKey);
+
+            clearErrors();
+          },
+          className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+            'has-error': 'required' === ((_errors$secretKey = errors.secretKey) === null || _errors$secretKey === void 0 ? void 0 : _errors$secretKey.type),
+            'is-required': true
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your ConvertKit Secret Key in order to choose a form or tag.', 'comment-edit-pro'),
+          "aria-required": "true"
+        });
+      }
+    }), 'required' === ((_errors$secretKey2 = errors.secretKey) === null || _errors$secretKey2 === void 0 ? void 0 : _errors$secretKey2.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    }), 'noForms' === ((_errors$secretKey3 = errors.secretKey) === null || _errors$secretKey3 === void 0 ? void 0 : _errors$secretKey3.type) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      message: (_errors$secretKey4 = errors.secretKey) === null || _errors$secretKey4 === void 0 ? void 0 : _errors$secretKey4.message,
+      status: "error",
+      politeness: "assertive",
+      inline: true,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
+    })));
+  };
+
+  var getSaveIcon = function getSaveIcon() {
+    if (saving) {
+      return _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"];
+    }
+
+    if (isSaved) {
+      return _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__["default"];
+    }
+
+    return false;
+  };
+
+  var getSaveText = function getSaveText() {
+    if (saving) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'comment-edit-pro');
+    }
+
+    if (isSaved) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'comment-edit-pro');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save ConvertKit Options', 'comment-edit-pro');
+  };
+
+  var getRefreshCredentialsText = function getRefreshCredentialsText() {
+    if (saving) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Connecting…', 'comment-edit-pro');
+    }
+
+    if (isSaved) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Connected', 'comment-edit-pro');
+    }
+
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Connect to ConvertKit', 'comment-edit-pro');
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin__tabs--content-heading"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_icons_ConvertKit__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    width: 48,
+    height: 45,
+    fill: '#FB6068',
+    "aria-hidden": "true"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "sce-admin__heading--text"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    className: "sce-admin-heading-docs",
+    target: "_blank",
+    rel: "noreferrer",
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/convertkit-integration"
+  }, "(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "description"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('When someone leaves a comment, they can be given the option to subscribe to your ConvertKit account.', 'comment-edit-pro'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+    onSubmit: handleSubmit(function (submitData, e) {
+      e.preventDefault();
+
+      if (!needsCredentialRefresh()) {
+        onSubmit(submitData);
+      } else {
+        onRefreshCredentials(submitData);
+      }
+    })
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
+    className: "form-table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ConvertKit', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    name: "enableConvertKit",
+    control: control,
+    render: function render(_ref14) {
+      var _ref14$field = _ref14.field,
+          _onChange11 = _ref14$field.onChange,
+          value = _ref14$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable ConvertKit', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          clearErrors();
+
+          _onChange11(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the ConvertKit Integration.', 'comment-edit-pro')
+      });
+    }
+  }))), getValues('enableConvertKit') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getAPIKey(), getSecretKey(), getFormOrTag(), getConvertKitForms(), getConvertKitTags(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-admin-buttons"
+  }, getValues('apiValid') && canShowSaveButton() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
+      'has-error': hasErrors()
+    }, {
+      'has-icon': saving || isSaved
+    }, {
+      'is-saving': saving && !isSaved
+    }, {
+      'is-saved': isSaved
+    }),
+    type: "submit",
+    text: getSaveText(),
+    icon: getSaveIcon(),
+    iconSize: "18",
+    iconPosition: "right",
+    disabled: saving
+  }), needsCredentialRefresh() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
+      'has-error': hasErrors()
+    }),
+    type: "submit",
+    text: getRefreshCredentialsText(),
+    icon: false,
+    disabled: credentialsRefreshing
+  })), hasErrors() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are form validation errors. Please correct them above.', 'comment-edit-pro'),
+    status: "error",
+    politeness: "polite"
+  }), isSaved && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Notice__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Your settings have been saved.', 'comment-edit-pro'),
+    status: "success",
+    politeness: "assertive"
+  })));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConvertKit);
+
+/***/ }),
+
+/***/ "./src/js/react/views/webhooks/RequestHeaderFields.js":
+/*!************************************************************!*\
+  !*** ./src/js/react/views/webhooks/RequestHeaderFields.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+
+var RequestHeaderFields = [{
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select a Field', 'comment-edit-pro'),
+  value: 'none'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Commenter Name', 'comment-edit-pro'),
+  value: 'commenter_name'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Commenter Email', 'comment-edit-pro'),
+  value: 'commenter_email'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Commenter Website', 'comment-edit-pro'),
+  value: 'commenter_website'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Content', 'comment-edit-pro'),
+  value: 'comment_content'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment ID', 'comment-edit-pro'),
+  value: 'comment_id'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Parent ID', 'comment-edit-pro'),
+  value: 'comment_parent_id'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Post ID', 'comment-edit-pro'),
+  value: 'comment_post_id'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Post Title', 'comment-edit-pro'),
+  value: 'comment_post_title'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Post URL', 'comment-edit-pro'),
+  value: 'comment_post_url'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Author IP', 'comment-edit-pro'),
+  value: 'comment_author_ip'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Author User Agent', 'comment-edit-pro'),
+  value: 'comment_author_user_agent'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Date', 'comment-edit-pro'),
+  value: 'comment_date'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Date GMT', 'comment-edit-pro'),
+  value: 'comment_date_gmt'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Approved', 'comment-edit-pro'),
+  value: 'comment_approved'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Comment Type', 'comment-edit-pro'),
+  value: 'comment_type'
+}, {
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom Value', 'comment-edit-pro'),
+  value: 'custom'
+}];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RequestHeaderFields);
+
+/***/ })
+
+}]);
+//# sourceMappingURL=ConvertKit0.0.1.chunk.bundle.js.map

@@ -350,6 +350,20 @@ class Functions {
 	}
 
 	/**
+	 * Retrieve a list of post types.
+	 */
+	public static function get_public_post_types() {
+		$post_types = get_post_types( array( 'public' => true ), 'objects' );
+		$excluded   = array( 'attachment', 'revision', 'nav_menu_item' );
+		foreach ( $excluded as $exclude ) {
+			if ( isset( $post_types[ $exclude ] ) ) {
+				unset( $post_types[ $exclude ] );
+			}
+		}
+		return $post_types;
+	}
+
+	/**
 	 * Returns appropriate html for KSES.
 	 *
 	 * @param bool $svg Whether to add SVG data to KSES.
@@ -364,6 +378,11 @@ class Functions {
 
 		// Add div tag.
 		$allowed_tags['div'] = array(
+			'class' => array(),
+			'id'    => array(),
+		);
+
+		$allowed_tags['span'] = array(
 			'class' => array(),
 			'id'    => array(),
 		);
@@ -410,7 +429,12 @@ class Functions {
 			'xmls'        => array(),
 		);
 
-		$allowed_tags['span'] = array();
+		$allowed_tags['ul'] = array(
+			'class' => array(),
+		);
+		$allowed_tags['li'] = array(
+			'class' => array(),
+		);
 
 		return $allowed_tags;
 	}

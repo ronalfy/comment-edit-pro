@@ -55,7 +55,19 @@ class Tools {
 	 * @return array of tabs.
 	 */
 	public function add_main_main_sub_tab( $tabs, $current_tab, $sub_tab ) {
-		if ( ( ! empty( $current_tab ) || ! empty( $sub_tab ) ) && 'tools' !== $current_tab ) {
+		if ( ( ! empty( $current_tab ) || ! empty( $sub_tab ) ) && 'tools' === $current_tab ) {
+			$tabs[] = array(
+				'get'    => 'comment-activity',
+				'action' => 'comment_edit_pro_output_tools_comment_activity',
+				'url'    => Functions::get_settings_url( 'tools', 'comment-activity' ),
+				'label'  => _x( 'Post Comment Activity', 'Tab label as Tools', 'ultimate-auto-updates' ),
+			);
+			$tabs[] = array(
+				'get'    => 'post-types',
+				'action' => 'comment_edit_pro_output_tools_post_types',
+				'url'    => Functions::get_settings_url( 'tools', 'post-types' ),
+				'label'  => _x( 'Post Types', 'Tab label as Tools', 'ultimate-auto-updates' ),
+			);
 			return $tabs;
 		}
 		return $tabs;
@@ -69,9 +81,16 @@ class Tools {
 	 */
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'tools' === $tab ) {
-			if ( empty( $sub_tab ) || 'tools' === $sub_tab ) {
+			if ( empty( $sub_tab ) || 'comment-activity' === $sub_tab ) {
 				?>
-				<div id="sce-tab-tools"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+				<div id="sce-tab-tools-comment-activity"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+				<?php
+			}
+		}
+		if ( 'tools' === $tab ) {
+			if ( empty( $sub_tab ) || 'post-types' === $sub_tab ) {
+				?>
+				<div id="sce-tab-tools-post-types"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 				<?php
 			}
 		}
