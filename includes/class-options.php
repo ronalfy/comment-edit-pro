@@ -86,6 +86,8 @@ class Options {
 				case 'enable_convertkit':
 				case 'convertkit_api_valid':
 				case 'enable_avatars_anonymous_remember':
+				case 'akismet_skip_pingbacks':
+				case 'akismet_skip_has_gravatar':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -233,6 +235,8 @@ class Options {
 			'akismet_logged_in_users_enabled'    => true,
 			'akismet_edit_comments_enabled'      => true,
 			'akismet_api_valid'                  => false,
+			'akismet_skip_pingbacks'             => false,
+			'akismet_skip_has_gravatar'          => false,
 			'recaptcha_enabled'                  => false,
 			'recaptcha_logged_in_users_enabled'  => true,
 			'recaptcha_site_key'                 => '',

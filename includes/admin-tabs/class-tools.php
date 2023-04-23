@@ -60,7 +60,7 @@ class Tools {
 				'get'    => 'comment-activity',
 				'action' => 'comment_edit_pro_output_tools_comment_activity',
 				'url'    => Functions::get_settings_url( 'tools', 'comment-activity' ),
-				'label'  => _x( 'Post Comment Activity', 'Tab label as Tools', 'ultimate-auto-updates' ),
+				'label'  => _x( 'Post Expiration', 'Tab label as Tools', 'ultimate-auto-updates' ),
 			);
 			$tabs[] = array(
 				'get'    => 'post-types',
@@ -83,14 +83,23 @@ class Tools {
 		if ( 'tools' === $tab ) {
 			if ( empty( $sub_tab ) || 'comment-activity' === $sub_tab ) {
 				?>
-				<div id="sce-tab-tools-comment-activity"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<div id="sce-tab-tools-comment-activity"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+					</div>
+				</div>
 				<?php
 			}
 		}
 		if ( 'tools' === $tab ) {
 			if ( empty( $sub_tab ) || 'post-types' === $sub_tab ) {
 				?>
-				<div id="sce-tab-tools-post-types"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<div id="sce-tab-tools-post-type-comment-settings"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+					</div>
+				</div>
+				
 				<?php
 			}
 		}

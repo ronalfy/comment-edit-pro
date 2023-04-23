@@ -510,7 +510,9 @@ var Interface = function Interface(props) {
       akismetEnabled: data.akismetEnabled,
       akismetEditCommentsEnabled: data.akismetEditCommentsEnabled,
       akismetApiValid: data.akismetApiValid,
-      akismetLoggedInUsersEnabled: data.akismetLoggedInUsersEnabled
+      akismetLoggedInUsersEnabled: data.akismetLoggedInUsersEnabled,
+      akismetSkipPingbacks: data.akismetSkipPingbacks,
+      akismetSkipHasGravatar: data.akismetSkipHasGravatar
     }
   }),
       register = _useForm.register,
@@ -570,7 +572,9 @@ var Interface = function Interface(props) {
           akismetActive: getValues('akismetActive'),
           akismetEnabled: true,
           akismetEditCommentsEnabled: true,
-          akismetLoggedInUsersEnabled: true
+          akismetLoggedInUsersEnabled: true,
+          akismetSkipHasGravatar: false,
+          akismetSkipPingbacks: false
         });
         setTimeout(function () {
           setIsReset(false);
@@ -712,7 +716,47 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('By default, Akismet is enabled for edited comments.', 'comment-edit-pro')
       });
     }
-  })))))), getValues('akismetActive') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Skip Akismet', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "akismetSkipPingbacks",
+    control: control,
+    render: function render(_ref4) {
+      var _ref4$field = _ref4.field,
+          _onChange4 = _ref4$field.onChange,
+          value = _ref4$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Skip Pingbacks/Trackbacks', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange4(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Skip pingbacks and trackbacks when checking for spam.', 'comment-edit-pro')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "akismetSkipHasGravatar",
+    control: control,
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          _onChange5 = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Skip Commenters With a Gravatar', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange5(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Skip spam checking for users with a valid Gravatar.', 'comment-edit-pro')
+      });
+    }
+  }))))))), getValues('akismetActive') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {

@@ -104,6 +104,8 @@ class Akismet {
 			'akismetEditCommentsEnabled'  => (bool) $options['akismet_edit_comments_enabled'],
 			'akismetApiValid'             => $akismet_api_key_valid,
 			'akismetLoggedInUsersEnabled' => (bool) $options['akismet_logged_in_users_enabled'],
+			'akismetSkipPingbacks'        => (bool) $options['akismet_skip_pingbacks'],
+			'akismetSkipHasGravatar'      => (bool) $options['akismet_skip_has_gravatar'],
 		);
 
 		// Exit gracefully.
@@ -129,12 +131,16 @@ class Akismet {
 		$akismet_enabled                 = (bool) filter_input( INPUT_POST, 'akismetEnabled', FILTER_VALIDATE_BOOLEAN );
 		$akismet_edit_comments_enabled   = (bool) filter_input( INPUT_POST, 'akismetEditCommentsEnabled', FILTER_VALIDATE_BOOLEAN );
 		$akismet_logged_in_users_enabled = (bool) filter_input( INPUT_POST, 'akismetLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
+		$akismet_skip_pingbacks          = (bool) filter_input( INPUT_POST, 'akismetSkipPingbacks', FILTER_VALIDATE_BOOLEAN );
+		$akismet_skip_has_gravatar       = (bool) filter_input( INPUT_POST, 'akismetSkipHasGravatar', FILTER_VALIDATE_BOOLEAN );
 
 		// Now let's save options.
 		$options_to_save = array(
 			'akismet_enabled'                 => $akismet_enabled,
 			'akismet_edit_comments_enabled'   => $akismet_edit_comments_enabled,
 			'akismet_logged_in_users_enabled' => $akismet_logged_in_users_enabled,
+			'akismet_skip_pingbacks'          => $akismet_skip_pingbacks,
+			'akismet_skip_has_gravatar'       => $akismet_skip_has_gravatar,
 		);
 		Options::update_options( $options_to_save );
 
@@ -166,6 +172,8 @@ class Akismet {
 				'akismet_edit_comments_enabled'   => true,
 				'akismet_api_valid'               => false,
 				'akismet_logged_in_users_enabled' => true,
+				'akismet_skip_pingbacks'          => false,
+				'akismet_skip_has_gravatar'       => false,
 			)
 		);
 
