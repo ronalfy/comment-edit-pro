@@ -30,6 +30,64 @@ class Tools {
 		// Ajax handlers for post type comment settings.
 		add_action( 'wp_ajax_sce_save_post_type_comment_settings', array( $this, 'ajax_save_post_type_comment_settings' ) );
 		add_action( 'wp_ajax_sce_get_post_type_comment_settings', array( $this, 'ajax_get_post_type_comment_settings' ) );
+
+		// Get options for post type.
+		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) );
+	}
+
+	/**
+	 * Adjust comments for post type settings if available.
+	 */
+	public function adjust_post_type_comment_settings() {
+
+		if ( ! is_singular() && ! is_page() ) {
+			return;
+		}
+
+		// Get options.
+		$comment_options    = Options_Tools::get_options();
+		$post_type_settings = $comment_options['comment_post_type_settings'];
+
+		// Get post type.
+		$post_type = get_post_type();
+
+		// If post type is not set, return.
+		if ( ! $post_type ) {
+			return;
+		}
+
+		// If post type is not set in settings, return.
+		if ( ! isset( $post_type_settings[ $post_type ] ) ) {
+			return;
+		}
+
+		// Get post type settings.
+		$post_type_settings = $post_type_settings[ $post_type ];
+
+		// If comments are set, set them.
+		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
+			if ( 'closed' === $post_type_settings['force_comments'] ) {
+				add_filter( 'comments_open', '__return_false', 9999 );
+			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
+				add_filter( 'comments_open', '__return_true', 9999 );
+			}
+		}
+
+		// If pingbacks are set, set them.
+		if ( isset( $post_type_settings['force_pingbacks'] ) && 'default' !== $post_type_settings['force_pingbacks'] ) {
+			if ( 'closed' === $post_type_settings['force_pingbacks'] ) {
+				add_filter( 'pings_open', '__return_false', 9999 );
+			} elseif ( 'open' === $post_type_settings['force_pingbacks'] ) {
+				add_filter( 'pings_open', '__return_true', 9999 );
+			}
+		}
+
+		// If comments are hidden, hide them.
+		if ( isset( $post_type_settings['hide_comment_section'] ) && true === $post_type_settings['hide_comment_section'] ) {
+			if ( ! is_admin() ) {
+				add_filter( 'comments_array', '__return_empty_array', 9999 );
+			}
+		}
 	}
 
 	/**

@@ -75,7 +75,7 @@ class Options_Tools {
 		}
 
 		$defaults      = self::get_defaults();
-		$options       = wp_parse_args( $options, $defaults );
+		$options       = array_replace_recursive( $defaults, $options );
 		self::$options = $options;
 		return $options;
 	}

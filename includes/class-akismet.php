@@ -41,6 +41,88 @@ class Akismet {
 			remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
 			remove_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 1 );
 		}
+
+		// Move priority of Akismet comment check to 2.
+		if ( class_exists( 'Akismet' ) ) {
+			remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
+			remove_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 1 );
+
+			// Re-add filters to later priority.
+			add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 2, 1 );
+			add_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 2, 1 );
+
+			// Add our filters to check for pingback check.
+			add_filter( 'preprocess_comment', array( $this, 'maybe_skip_akismet_pingback_check' ), 1, 1 );
+			add_filter( 'rest_pre_insert_comment', array( $this, 'maybe_skip_akismet_pingback_check' ), 1, 1 );
+
+			// Check if comment can be skipped with avatar check.
+			if ( (bool) $options['akismet_skip_has_gravatar'] ) {
+				add_filter( 'preprocess_comment', array( $this, 'maybe_skip_akismet_gravatar_check' ), 1, 1 );
+				add_filter( 'rest_pre_insert_comment', array( $this, 'maybe_skip_akismet_gravatar_check' ), 1, 1 );
+			}
+		}
+	}
+
+	/**
+	 * Check to see if commenter has a gravatar.
+	 *
+	 * @param string $email Email address.
+	 *
+	 * @return bool true if gravatar exists, false if not.
+	 */
+	private static function has_gravatar( $email ) {
+		$hash     = md5( strtolower( trim( $email ) ) );
+		$uri      = esc_url_raw( 'https://www.gravatar.com/avatar/' . $hash . '?d=404' );
+		$response = wp_remote_get( $uri );
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check to see if Akismet is enabled for pingbacks.
+	 *
+	 * @param array $commentdata The comment data.
+	 *
+	 * @return array $commentdata The comment data.
+	 */
+	public function maybe_skip_akismet_pingback_check( $commentdata ) {
+		$options = Options::get_options();
+		if ( (bool) $options['akismet_skip_pingbacks'] ) {
+			if ( 'pingback' === $commentdata['comment_type'] ) {
+				remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 2, 1 );
+				remove_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 2, 1 );
+				return $commentdata;
+			}
+		}
+		// Re-add in filter for future use.
+		if ( class_exists( 'Akismet' ) ) {
+			add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 2, 1 );
+			add_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 2, 1 );
+		}
+		return $commentdata;
+	}
+
+	/**
+	 * Check to see if Akismet is enabled for gravatar'd comments.
+	 *
+	 * @param array $commentdata The comment data.
+	 *
+	 * @return array $commentdata The comment data.
+	 */
+	public function maybe_skip_akismet_gravatar_check( $commentdata ) {
+		if ( $this->has_gravatar( $commentdata['comment_author_email'] ) ) {
+			remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 2, 1 );
+			remove_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 2, 1 );
+			return $commentdata;
+		}
+		// Re-add in filter for future use.
+		if ( class_exists( 'Akismet' ) ) {
+			add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 2, 1 );
+			add_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 2, 1 );
+		}
+		return $commentdata;
 	}
 
 	/**
