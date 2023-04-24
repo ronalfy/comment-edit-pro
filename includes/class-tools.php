@@ -32,7 +32,115 @@ class Tools {
 		add_action( 'wp_ajax_sce_get_post_type_comment_settings', array( $this, 'ajax_get_post_type_comment_settings' ) );
 
 		// Get options for post type.
-		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) );
+		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the frontend.
+		add_action( 'current_screen', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the admin.
+
+		// Modify existing post type args to support comments if enabled in post type comment settings.
+		add_filter( 'register_post_type_args', array( $this, 'modify_post_type_args' ), 9999, 2 );
+
+		// Force status for new items.
+		add_filter( 'wp_insert_post_data', array( $this, 'force_comment_status' ), 9999, 2 );
+	}
+
+	/**
+	 * Force comment and pingback status to open if post type supports it.
+	 *
+	 * @param array $data    Post data.
+	 * @param array $postarr Post array.
+	 *
+	 * @return array $data Post data.
+	 */
+	public function force_comment_status( $data, $postarr ) {
+
+		// Get options.
+		$comment_options    = Options_Tools::get_options();
+		$post_type_settings = $comment_options['comment_post_type_settings'];
+
+		// If post type is not set in settings, return.
+		if ( ! isset( $post_type_settings[ $data['post_type'] ] ) ) {
+			return $data;
+		}
+
+		// Get post type settings.
+		$post_type_settings = $post_type_settings[ $data['post_type'] ];
+
+		// Check discussion settings and if they're on by default.
+		if ( isset( $post_type_settings['enable_discussions_default'] ) && true === $post_type_settings['enable_discussions_default'] ) {
+			$data['comment_status'] = 'open';
+		}
+
+		// If comments are set, set them.
+		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
+			if ( 'closed' === $post_type_settings['force_comments'] ) {
+				$data['comment_status'] = 'closed';
+			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
+				$data['comment_status'] = 'open';
+			}
+		}
+
+		// if pingbacks are set, set them.
+		if ( isset( $post_type_settings['force_pingbacks'] ) && 'default' !== $post_type_settings['force_pingbacks'] ) {
+			if ( 'closed' === $post_type_settings['force_pingbacks'] ) {
+				$data['ping_status'] = 'closed';
+			} elseif ( 'open' === $post_type_settings['force_pingbacks'] ) {
+				$data['ping_status'] = 'open';
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Add comment support to post types.
+	 *
+	 * @param array  $args      Post type args.
+	 * @param string $post_type Post type.
+	 *
+	 * @return array $args Updated post type args.
+	 */
+	public function modify_post_type_args( $args, $post_type ) {
+
+		// Get options.
+		$comment_options    = Options_Tools::get_options();
+		$post_type_settings = $comment_options['comment_post_type_settings'];
+
+		// If post type is not set in settings, return.
+		if ( ! isset( $post_type_settings[ $post_type ] ) ) {
+			return $args;
+		}
+
+		// Get post type settings.
+		$post_type_settings = $post_type_settings[ $post_type ];
+
+		$supports = array();
+
+		// If comments are set, set them.
+		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
+			if ( 'closed' === $post_type_settings['force_comments'] ) {
+				$supports[] = 'comments';
+			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
+				$supports[] = 'comments';
+			}
+		}
+
+		// if pingbacks are set, set them.
+		if ( isset( $post_type_settings['force_pingbacks'] ) && 'default' !== $post_type_settings['force_pingbacks'] ) {
+			if ( 'closed' === $post_type_settings['force_pingbacks'] ) {
+				$supports[] = 'trackbacks';
+			} elseif ( 'open' === $post_type_settings['force_pingbacks'] ) {
+				$supports[] = 'trackbacks';
+			}
+		}
+
+		// Set the supports argument.
+		if ( ! isset( $args['supports'] ) && ! empty( $supports ) ) {
+			$args['supports'] = array();
+		}
+		if ( ! empty( $supports ) ) {
+			$args['supports'] = array_merge( $args['supports'], $supports );
+		}
+
+		return $args;
 	}
 
 	/**
@@ -40,7 +148,16 @@ class Tools {
 	 */
 	public function adjust_post_type_comment_settings() {
 
-		if ( ! is_singular() && ! is_page() ) {
+		// Determine if we're editing a post in the admin.
+		$screen              = get_current_screen();
+		$is_post_edit_screen = false;
+		$post_id = 0;
+		if ( is_admin() && $screen && 'post' === $screen->base ) {
+			$is_post_edit_screen = true;
+			$post_id = absint( filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT ) );
+		}
+
+		if ( ! is_singular() && ! is_page() && ! $is_post_edit_screen ) {
 			return;
 		}
 
@@ -49,7 +166,7 @@ class Tools {
 		$post_type_settings = $comment_options['comment_post_type_settings'];
 
 		// Get post type.
-		$post_type = get_post_type();
+		$post_type = get_post_type( $post_id );
 
 		// If post type is not set, return.
 		if ( ! $post_type ) {
