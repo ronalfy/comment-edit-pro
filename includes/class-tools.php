@@ -9,6 +9,7 @@ namespace CommentEditPro\Includes;
 
 use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options_Tools as Options_Tools;
+use WP_Comment;
 
 /**
  * Class Tools
@@ -41,11 +42,134 @@ class Tools {
 		// Force status for new items.
 		add_filter( 'wp_insert_post_data', array( $this, 'force_comment_status' ), 9999, 2 );
 
-		// Add comment activity post meta.
-		add_action( 'init', array( $this, 'register_comment_activity_meta_boxes' ) );
+		// Get comment activity options.
+		$options                            = Options_Tools::get_options();
+		$enable_comment_activity_expiration = (bool) $options['enable_comment_activity_expiration'];
+		if ( $enable_comment_activity_expiration ) {
+			// Add comment activity post meta.
+			add_action( 'init', array( $this, 'register_comment_activity_meta_boxes' ) );
 
-		// Enqueue the comment activity sidebar.
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_comment_activity_sidebar' ) );
+			// Enqueue the comment activity sidebar.
+			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_comment_activity_sidebar' ) );
+
+			// Add comment activity post meta.
+			add_action( 'save_post', array( $this, 'save_comment_activity_meta' ), 10 );
+
+			// Add comment activity post meta when a comment is posted.
+			add_action( 'wp_insert_comment', array( $this, 'update_post_activity_new_comment' ), 10, 2 );
+
+			// Add comment activity to post when post is created.
+			add_action( 'wp_insert_post', array( $this, 'update_post_activity_new_post' ), 10, 1 );
+
+			// Close any comments that have expired.
+			add_filter( 'comments_open', array( $this, 'close_expired_comments' ), 10, 2 );
+		}
+	}
+
+	/**
+	 * Close any expired comments.
+	 *
+	 * @param bool $open    Whether comments are open or not.
+	 * @param int  $post_id The post ID.
+	 */
+	public function close_expired_comments( $open, $post_id ) {
+		if ( $this->is_comment_activity_enabled_for_post_type( $post_id ) ) {
+			$expiration_time = get_post_meta( $post_id, '_sce_expiration_timestamp', true );
+			if ( $expiration_time ) {
+				$now = time();
+				if ( $now > $expiration_time ) {
+					return false;
+				}
+			} else {
+				// This means post meta is not set. So let's set it.
+				$this->reset_post_comment_expiration( $post_id );
+			}
+		}
+		return $open;
+	}
+
+	/**
+	 * Update the activity meta when a new post is created.
+	 *
+	 * @param int $post_id The post ID.
+	 */
+	public function update_post_activity_new_post( $post_id ) {
+		$this->reset_post_comment_expiration( $post_id );
+	}
+
+	/**
+	 * Update post activity meta when there's a new comment.
+	 *
+	 * @param int        $comment_id Comment ID.
+	 * @param WP_Comment $comment    Comment.
+	 */
+	public function update_post_activity_new_comment( $comment_id, $comment ) {
+		$post_id = $comment->comment_post_ID;
+		$this->reset_post_comment_expiration( $post_id );
+	}
+
+	/**
+	 * Add custom field for comment activity expiration if enabled.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function save_comment_activity_meta( $post_id ) {
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		// Check to update comment activity.
+		$this->reset_post_comment_expiration( $post_id );
+	}
+
+	/**
+	 * Reset the post comment expiration post meta.
+	 *
+	 * @param int $post_id The post ID to reset.
+	 */
+	private function reset_post_comment_expiration( $post_id ) {
+		// Get the activity expiration meta.
+		$is_expiration_active = (bool) get_post_meta( $post_id, '_sce_expiration_enabled', true );
+		if ( $is_expiration_active && $this->is_comment_activity_enabled_for_post_type( $post_id ) ) {
+			// Get the expiration date.
+			$days_without_activity = absint( get_post_meta( $post_id, '_sce_expiration_days', true ) );
+			$expiration_time       = strtotime( '+' . $days_without_activity . ' days' );
+			update_post_meta( $post_id, '_sce_expiration_timestamp', $expiration_time );
+			return;
+		}
+
+		// Check to see if expiration is enabled globally for post type.
+		if ( $this->is_comment_activity_enabled_for_post_type( $post_id ) ) {
+			$options               = Options_Tools::get_options();
+			$days_without_activity = $options['comment_activity_expiration']; // number in days.
+			$expiration_time       = strtotime( '+' . $days_without_activity . ' days' );
+			update_post_meta( $post_id, '_sce_expiration_timestamp', $expiration_time );
+		}
+	}
+
+	/**
+	 * Determine if comment activity is enabled for a post type.
+	 *
+	 * @param int $post_id The post ID to check.
+	 *
+	 * @return bool true if enabled, false if not.
+	 */
+	private function is_comment_activity_enabled_for_post_type( $post_id ) {
+		// Check to see if expiration is enabled globally for post type.
+		$post_type = get_post_type( $post_id );
+		$options   = Options_Tools::get_options();
+
+		// Check if comment activity is enabled.
+		if ( ! (bool) $options['enable_comment_activity_expiration'] ) {
+			return false;
+		}
+		if ( isset( $options['comment_activity_post_types'][ $post_type ]['checked'] ) ) {
+			$maybe_checked = $options['comment_activity_post_types'][ $post_type ]['checked'];
+			if ( true === $maybe_checked ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -239,7 +363,7 @@ class Tools {
 	public function adjust_post_type_comment_settings() {
 
 		// Determine if we're editing a post in the admin.
-		$screen              = get_current_screen();
+		$screen              = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
 		$is_post_edit_screen = false;
 		$post_id             = 0;
 		if ( is_admin() && $screen && 'post' === $screen->base ) {
