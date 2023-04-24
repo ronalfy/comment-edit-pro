@@ -334,6 +334,8 @@ class Comment_Edit_Pro {
 		$this->wprocket->run();
 		$this->tools = new \CommentEditPro\Includes\Tools();
 		$this->tools->run();
+		$this->advanced = new \CommentEditPro\Includes\Advanced();
+		$this->advanced->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 

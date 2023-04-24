@@ -88,6 +88,9 @@ class Options {
 				case 'enable_avatars_anonymous_remember':
 				case 'akismet_skip_pingbacks':
 				case 'akismet_skip_has_gravatar':
+				case 'disable_all_comments':
+				case 'disable_all_spam_protection':
+				case 'hide_comment_section':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -274,6 +277,15 @@ class Options {
 			'delete_behavior_users'              => 'trash', // trash|delete.
 			'delete_behavior_moderators'         => 'trash', // trash|delete.
 			'spam_behavior_moderators'           => 'spam', // delete|spam.
+			'disable_all_comments'               => false, // Will disable all comments period if true.
+			'disable_all_spam_protection'        => false, // Will disable all spam protection if true.
+			'hide_comment_section'               => false, // Will hide the comment section if true.
+			'comment_list_class'                 => 'comment-list',
+			'comments_wrapper_id'                => 'comments',
+			'comment_form_id'                    => 'commentform',
+			'comment_submit_id'                  => 'submit',
+			'comment_respond_id'                 => 'respond',
+			'comment_textarea_id'                => 'comment',
 
 		);
 		return $defaults;

@@ -16,6 +16,7 @@ class Init_Tabs {
 	 */
 	public function run() {
 		new Main();
+		new Advanced();
 		new Avatars();
 		new Character_Control();
 		new Comment_Editing();

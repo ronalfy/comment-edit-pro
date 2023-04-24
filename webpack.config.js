@@ -40,6 +40,7 @@ module.exports = ( env ) => {
 				'sce-webhooks-admin-css': [ './src/scss/webhooks-admin.scss' ],
 				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
 				'sce-fancybox-css': [ './node_modules/@fancyapps/ui/dist/fancybox/fancybox.css' ],
+				'sce-advanced': [ './src/js/react/views/Advanced/index.js' ],
 				'sce-tools-comment-activity': [ './src/js/react/views/tools/CommentActivity/index.js' ],
 				'sce-tools-post-type-comment-settings': [ './src/js/react/views/tools/PostTypeCommentSettings/index.js' ],
 			},
