@@ -340,11 +340,13 @@ __webpack_require__.r(__webpack_exports__);
 function useVStack(props) {
   const {
     expanded = false,
+    alignment = 'stretch',
     ...otherProps
   } = (0,_ui_context__WEBPACK_IMPORTED_MODULE_0__.useContextSystem)(props, 'VStack');
   const hStackProps = (0,_h_stack__WEBPACK_IMPORTED_MODULE_1__.useHStack)({
     direction: 'column',
     expanded,
+    alignment,
     ...otherProps
   });
   return hStackProps;

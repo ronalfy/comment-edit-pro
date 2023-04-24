@@ -40,6 +40,96 @@ class Tools {
 
 		// Force status for new items.
 		add_filter( 'wp_insert_post_data', array( $this, 'force_comment_status' ), 9999, 2 );
+
+		// Add comment activity post meta.
+		add_action( 'init', array( $this, 'register_comment_activity_meta_boxes' ) );
+
+		// Enqueue the comment activity sidebar.
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_comment_activity_sidebar' ) );
+	}
+
+	/**
+	 * Enqueue comment activity sidebar for approved post types.
+	 */
+	public function enqueue_comment_activity_sidebar() {
+		// Get options.
+		$options = Options_Tools::get_options();
+
+		// Get post types that comment activity is enabled for.
+		$comment_activity_post_types = $options['comment_activity_post_types'];
+		$enabled_post_types          = array();
+		foreach ( $comment_activity_post_types as $post_type  => $maybe_checked ) {
+			if ( isset( $comment_activity_post_types[ $post_type ]['checked'] ) && true === $comment_activity_post_types[ $post_type ]['checked'] ) {
+				$enabled_post_types[] = $post_type;
+			}
+		}
+
+		// Get current post type.
+		$current_post_type = get_post_type();
+
+		// Return if not enabled.
+		if ( ! in_array( $current_post_type, $enabled_post_types, true ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'sce-comment-activity-sidebar',
+			Functions::get_plugin_url( 'dist/sce-comment-activity-sidebar.js' ),
+			array( 'wp-edit-post', 'wp-i18n', 'wp-data' ),
+			SCE_VERSION,
+			true
+		);
+	}
+
+	/**
+	 * Register comment activity meta boxes.
+	 */
+	public function register_comment_activity_meta_boxes() {
+		// Get options.
+		$options = Options_Tools::get_options();
+
+		// Get post types that comment activity is enabled for.
+		$comment_activity_post_types = $options['comment_activity_post_types'];
+		$enabled_post_types          = array();
+		foreach ( $comment_activity_post_types as $post_type  => $maybe_checked ) {
+			if ( isset( $comment_activity_post_types[ $post_type ]['checked'] ) && true === $comment_activity_post_types[ $post_type ]['checked'] ) {
+				$enabled_post_types[] = $post_type;
+			}
+		}
+
+		// Enable meta box for enabled post types.
+		foreach ( $enabled_post_types as $post_type ) {
+			register_post_meta(
+				$post_type,
+				'_sce_expiration_enabled',
+				array(
+					'sanitize_callback' => /* validate bool */ function ( $value ) {
+						return (bool) $value;
+					},
+					'show_in_rest'      => true,
+					'type'              => 'boolean',
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_posts' );
+					},
+					'single'            => true,
+					'default'           => false,
+				)
+			);
+			register_post_meta(
+				$post_type,
+				'_sce_expiration_days',
+				array(
+					'sanitize_callback' => 'absint',
+					'show_in_rest'      => true,
+					'type'              => 'number',
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_posts' );
+					},
+					'single'            => true,
+					'default'           => 28,
+				)
+			);
+		}
 	}
 
 	/**
@@ -151,10 +241,10 @@ class Tools {
 		// Determine if we're editing a post in the admin.
 		$screen              = get_current_screen();
 		$is_post_edit_screen = false;
-		$post_id = 0;
+		$post_id             = 0;
 		if ( is_admin() && $screen && 'post' === $screen->base ) {
 			$is_post_edit_screen = true;
-			$post_id = absint( filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT ) );
+			$post_id             = absint( filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT ) );
 		}
 
 		if ( ! is_singular() && ! is_page() && ! $is_post_edit_screen ) {
