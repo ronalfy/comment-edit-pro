@@ -48,6 +48,7 @@ class Tools {
 		if ( $enable_comment_activity_expiration ) {
 			// Add comment activity post meta.
 			add_action( 'init', array( $this, 'register_comment_activity_meta_boxes' ) );
+			add_action( 'add_meta_boxes', array( $this, 'register_non_block_comment_activity_meta_boxes' ) );
 
 			// Enqueue the comment activity sidebar.
 			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_comment_activity_sidebar' ) );
@@ -116,6 +117,20 @@ class Tools {
 	public function save_comment_activity_meta( $post_id ) {
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
+		}
+
+		if ( isset( $_POST['sce-comment-activity-days'] ) ) {
+			$is_expiration_active = (bool) filter_input( INPUT_POST, 'sce-comment-activity-enabled', FILTER_DEFAULT );
+			$expiration_days      = absint( filter_input( INPUT_POST, 'sce-comment-activity-days', FILTER_DEFAULT ) );
+			$nonce                = filter_input( INPUT_POST, 'sce_comment_activity_nonce', FILTER_DEFAULT );
+
+			if ( ! wp_verify_nonce( $nonce, 'sce_save_comment_activity' ) ) {
+				return;
+			}
+
+			// Save post meta.
+			update_post_meta( $post_id, '_sce_expiration_enabled', $is_expiration_active );
+			update_post_meta( $post_id, '_sce_expiration_days', $expiration_days );
 		}
 
 		// Check to update comment activity.
@@ -223,6 +238,7 @@ class Tools {
 
 		// Enable meta box for enabled post types.
 		foreach ( $enabled_post_types as $post_type ) {
+			// Add new school meta boxes.
 			register_post_meta(
 				$post_type,
 				'_sce_expiration_enabled',
@@ -254,6 +270,65 @@ class Tools {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Register comment activity meta boxes for non-block editor.
+	 */
+	public function register_non_block_comment_activity_meta_boxes() {
+		$options = Options_Tools::get_options();
+
+		// Get post types that comment activity is enabled for.
+		$comment_activity_post_types = $options['comment_activity_post_types'];
+		$enabled_post_types          = array();
+		foreach ( $comment_activity_post_types as $post_type  => $maybe_checked ) {
+			if ( isset( $comment_activity_post_types[ $post_type ]['checked'] ) && true === $comment_activity_post_types[ $post_type ]['checked'] ) {
+				$enabled_post_types[] = $post_type;
+			}
+		}
+
+		// Enable meta box for enabled post types.
+		foreach ( $enabled_post_types as $post_type ) {
+			// Add old school (no gutenberg) meta boxes.
+			$screen = get_current_screen();
+			if ( $screen->is_block_editor() ) {
+				continue;
+			}
+			add_meta_box(
+				'sce-comment-activity',
+				__( 'Comment Activity', 'comment-edit-pro' ),
+				array( $this, 'render_comment_activity_meta_box' ),
+				$post_type,
+				'side',
+				'low'
+			);
+		}
+	}
+
+	/**
+	 * Render comment activity meta box.
+	 *
+	 * @param WP_Post $post The post object.
+	 */
+	public function render_comment_activity_meta_box( $post ) {
+		$is_enabled      = (bool) get_post_meta( $post->ID, '_sce_expiration_enabled', true );
+		$expiration_days = absint( get_post_meta( $post->ID, '_sce_expiration_days', true ) );
+
+		wp_nonce_field( 'sce_save_comment_activity', 'sce_comment_activity_nonce' );
+		?>
+		<p>
+			<label for="sce-comment-activity-enabled">
+				<input type="checkbox" name="sce-comment-activity-enabled" id="sce-comment-activity-enabled" value="1" <?php checked( $is_enabled ); ?> />
+				<?php esc_html_e( 'Enable comment activity expiration', 'comment-edit-pro' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="sce-comment-activity-days">
+				<?php esc_html_e( 'Expire after', 'comment-edit-pro' ); ?>
+				<input type="number" name="sce-comment-activity-days" id="sce-comment-activity-days" value="<?php echo esc_attr( $expiration_days ); ?>" min="1" max="365" />
+				<?php esc_html_e( 'days', 'comment-edit-pro' ); ?>
+			</label>
+		<?php
 	}
 
 	/**
