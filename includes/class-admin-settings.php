@@ -236,6 +236,12 @@ class Admin_Settings {
 			<symbol aria-hidden="true" data-prefix="fas" data-icon="webhook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" id="webhook">
 				<path class="fa-primary" fill="currentColor" d="M288 176a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM176 384a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm320 0a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/><path fill="currentColor" opacity="0.4" d="M210.1 110C220 67 262.9 40.1 306 50.1c41.1 9.5 67.5 49.2 61.1 90.2c-2.1 13.1 6.9 25.4 20 27.4s25.4-6.9 27.4-20C424.8 82 382.6 18.5 316.8 3.3c-68.9-15.9-137.6 27-153.5 95.9c-10.7 46.3 5.2 92.6 37.7 122.7L129.7 336c17.7 .6 32.9 10.7 40.7 25.4l82.8-132.5c3.4-5.4 4.5-11.9 3-18.1s-5.3-11.6-10.7-15c-28.2-17.6-43.4-51.7-35.5-85.9zm120.3 40.5c-7.8 14.7-23.1 24.8-40.7 25.4l82.8 132.5c3.4 5.4 8.8 9.2 15 10.7s12.7 .3 18.1-3c30.9-19.3 72.1-15.5 99 11.3c31.2 31.2 31.2 81.9 0 113.1c-26.8 26.8-68.1 30.6-99 11.3c-11.2-7-26-3.6-33.1 7.6s-3.6 26 7.6 33.1c49.4 31 115.4 25 158.4-18c50-50 50-131 0-181c-37-37-91-46.6-136.8-28.9L330.4 150.5zM110.1 278.8c-5.1-12.2-19.1-18-31.4-12.9C22.1 289.4-11 351 3.3 412.8c15.9 68.9 84.6 111.8 153.5 95.9c51-11.8 87.7-52.5 97-100.7H406.4c-4.1-7.1-6.4-15.3-6.4-24s2.3-16.9 6.4-24H232c-6.4 0-12.5 2.5-17 7s-7 10.6-7 17c0 36.4-25 69.4-62 77.9c-43.1 9.9-86-16.9-95.9-60c-8.9-38.6 11.7-77.1 47.1-91.8c12.2-5.1 18-19.1 12.9-31.4z"/>
 			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="tools" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="tools">
+				<path fill="currentColor" d="M47 7c8.5-8.5 22-9.4 31.6-2.1l104 80c5.9 4.5 9.4 11.6 9.4 19v54.1l109 109c29-14.7 65.4-10 89.6 14.3l112 112c12.5 12.5 12.5 32.8 0 45.3l-64 64c-12.5 12.5-32.8 12.5-45.3 0l-112-112c-24.2-24.2-29-60.6-14.3-89.6l-109-109H104c-7.5 0-14.5-3.5-19-9.4L5 78.6C-2.4 69.1-1.5 55.6 7 47L47 7z"/><path fill="currentColor" opacity="0.4" d="M168.4 247.6L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L233.7 374.3c-7.8-20.9-9-43.6-3.6-65.1l-61.7-61.7zM429 274.5c49-23 83-72.8 83-130.5c0-10.5-1.1-20.7-3.2-30.5c-2.4-11.2-16.1-14.1-24.2-6l-63.9 63.9c-3 3-7.1 4.7-11.3 4.7H352c-8.8 0-16-7.2-16-16V102.6c0-4.2 1.7-8.3 4.7-11.3l63.9-63.9c8.1-8.1 5.2-21.8-6-24.2C388.7 1.1 378.5 0 368 0C288.5 0 224 64.5 224 144c0 .3 0 .5 0 .8l85.3 85.3c36-9.1 75.8 .5 104 28.7L429 274.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+			</symbol>
+			<symbol aria-hidden="true" data-prefix="fas" data-icon="flask" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="flask">
+				<path fill="currentColor" opacity="0.4" d="M309.5 320h-171L64.8 439.8c-.5 .9-.8 1.8-.8 2.8c0 3 2.4 5.4 5.4 5.4H378.6c3 0 5.4-2.4 5.4-5.4c0-1-.3-2-.8-2.8L309.5 320z"/><path fill="currentColor" d="M160 0H288h32c17.7 0 32 14.3 32 32s-14.3 32-32 32V196.8c0 11.8 3.3 23.5 9.5 33.5L437.7 406.2c6.7 10.9 10.3 23.5 10.3 36.4c0 38.3-31.1 69.4-69.4 69.4H69.4C31.1 512 0 480.9 0 442.6c0-12.8 3.6-25.4 10.3-36.4L118.5 230.4c6.2-10.1 9.5-21.7 9.5-33.5V64c-17.7 0-32-14.3-32-32s14.3-32 32-32h32zm32 64V196.8c0 23.7-6.6 46.9-19 67.1L64.8 439.8c-.5 .9-.8 1.8-.8 2.8c0 3 2.4 5.4 5.4 5.4H378.6c3 0 5.4-2.4 5.4-5.4c0-1-.3-2-.8-2.8L275 263.9c-12.4-20.2-19-43.4-19-67.1V64H192z"/>
+			</symbol>
 		</svg>
 		<?php do_action( 'comment_edit_pro_add_admin_header_content' ); ?>
 		<?php
@@ -262,7 +268,7 @@ class Admin_Settings {
 			 * @param array $tabs Associative array of tabs.
 			 */
 			$tabs       = apply_filters( 'comment_edit_pro_admin_tabs', $tabs );
-			$tab_html   = '<nav>';
+			$tab_html   = '<nav class="sce-admin-options">';
 			$tabs_count = count( $tabs );
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
 				$active_tab = Functions::get_admin_tab();
@@ -330,6 +336,7 @@ class Admin_Settings {
 				if ( null === $current_tab && null === $current_sub_tab ) {
 					$current_tab = 'home';
 				}
+				ob_start();
 				if ( $sub_tabs && ! empty( $sub_tabs ) && is_array( $sub_tabs ) ) {
 					if ( null === $current_sub_tab ) {
 						$current_sub_tab = '';
@@ -397,9 +404,13 @@ class Admin_Settings {
 						);
 					}
 				}
+				$subtab_content = ob_get_clean();
 
 				if ( $do_action ) {
 					echo '<div class="sce-admin-tab-content">';
+					if ( ! empty( $subtab_content ) ) {
+						echo wp_kses( $subtab_content, Functions::get_kses_allowed_html() );
+					}
 					/**
 					 * Perform a tab action.
 					 *

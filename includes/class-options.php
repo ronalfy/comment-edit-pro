@@ -86,6 +86,11 @@ class Options {
 				case 'enable_convertkit':
 				case 'convertkit_api_valid':
 				case 'enable_avatars_anonymous_remember':
+				case 'akismet_skip_pingbacks':
+				case 'akismet_skip_has_gravatar':
+				case 'disable_all_comments':
+				case 'disable_all_spam_protection':
+				case 'hide_comment_section':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -233,12 +238,12 @@ class Options {
 			'akismet_logged_in_users_enabled'    => true,
 			'akismet_edit_comments_enabled'      => true,
 			'akismet_api_valid'                  => false,
+			'akismet_skip_pingbacks'             => false,
+			'akismet_skip_has_gravatar'          => false,
 			'recaptcha_enabled'                  => false,
 			'recaptcha_logged_in_users_enabled'  => true,
 			'recaptcha_site_key'                 => '',
 			'recaptcha_secret_key'               => '',
-			'recaptcha_comment_form_id'          => 'commentform',
-			'recaptcha_comment_submit_button_id' => 'submit',
 			'recaptcha_score_threshold'          => 0.5,
 			'mentions_enabled'                   => false,
 			'mentions_emails_enabled'            => true,
@@ -257,7 +262,6 @@ class Options {
 			'turnstile_theme'                    => 'auto',
 			'turnstile_language'                 => 'auto',
 			'turnstile_widget_size'              => 'normal',
-			'turnstile_comment_submit_button_id' => 'submit',
 			'turnstile_logged_in_users_enabled'  => true,
 			'enable_convertkit'                  => false,
 			'convertkit_api_key'                 => '',
@@ -270,6 +274,15 @@ class Options {
 			'delete_behavior_users'              => 'trash', // trash|delete.
 			'delete_behavior_moderators'         => 'trash', // trash|delete.
 			'spam_behavior_moderators'           => 'spam', // delete|spam.
+			'disable_all_comments'               => false, // Will disable all comments period if true.
+			'disable_all_spam_protection'        => false, // Will disable all spam protection if true.
+			'hide_comment_section'               => false, // Will hide the comment section if true.
+			'comment_list_class'                 => 'comment-list',
+			'comments_wrapper_id'                => 'comments',
+			'comment_form_id'                    => 'commentform',
+			'comment_submit_id'                  => 'submit',
+			'comment_respond_id'                 => 'respond',
+			'comment_textarea_id'                => 'comment',
 
 		);
 		return $defaults;

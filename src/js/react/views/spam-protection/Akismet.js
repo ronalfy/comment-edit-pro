@@ -88,6 +88,8 @@ const Interface = ( props ) => {
 			akismetEditCommentsEnabled: data.akismetEditCommentsEnabled,
 			akismetApiValid: data.akismetApiValid,
 			akismetLoggedInUsersEnabled: data.akismetLoggedInUsersEnabled,
+			akismetSkipPingbacks: data.akismetSkipPingbacks,
+			akismetSkipHasGravatar: data.akismetSkipHasGravatar,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -137,6 +139,8 @@ const Interface = ( props ) => {
 						akismetEnabled: true,
 						akismetEditCommentsEnabled: true,
 						akismetLoggedInUsersEnabled: true,
+						akismetSkipHasGravatar: false,
+						akismetSkipPingbacks: false,
 					} );
 					setTimeout( () => {
 						setIsReset( false );
@@ -327,6 +331,59 @@ const Interface = ( props ) => {
 												/>
 											) }
 										/>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										{ __( 'Skip Akismet', 'comment-edit-pro' ) }
+									</th>
+									<td>
+										<div className="sce-panel-row">
+											<Controller
+												name="akismetSkipPingbacks"
+												control={ control }
+												render={ ( { field: { onChange, value } } ) => (
+													<ToggleControl
+														label={ __(
+															'Skip Pingbacks/Trackbacks',
+															'comment-edit-pro'
+														) }
+														className="sce-admin__toggle-control"
+														checked={ value }
+														onChange={ ( boolValue ) => {
+															onChange( boolValue );
+														} }
+														help={ __(
+															'Skip pingbacks and trackbacks when checking for spam.',
+															'comment-edit-pro'
+														) }
+													/>
+												) }
+											/>
+										</div>
+										<div className="sce-panel-row">
+											<Controller
+												name="akismetSkipHasGravatar"
+												control={ control }
+												render={ ( { field: { onChange, value } } ) => (
+													<ToggleControl
+														label={ __(
+															'Skip Commenters With a Gravatar',
+															'comment-edit-pro'
+														) }
+														className="sce-admin__toggle-control"
+														checked={ value }
+														onChange={ ( boolValue ) => {
+															onChange( boolValue );
+														} }
+														help={ __(
+															'Skip spam checking for users with a valid Gravatar.',
+															'comment-edit-pro'
+														) }
+													/>
+												) }
+											/>
+										</div>
 									</td>
 								</tr>
 							</>

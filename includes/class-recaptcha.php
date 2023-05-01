@@ -58,7 +58,6 @@ class Recaptcha {
 		// Enqueue recaptcha assets on the front-end.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_recaptcha_scripts' ) );
 		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
-		add_filter( 'comment_form_submit_button', array( $this, 'modify_comment_submit_button' ), 10, 2 );
 		add_filter( 'comment_form_defaults', array( $this, 'add_recaptcha_css_class' ), 10, 1 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'print_recaptcha_scripts' ) );
 		add_action( 'pre_comment_on_post', array( $this, 'verify_recaptcha' ), 10, 1 );
@@ -115,9 +114,6 @@ class Recaptcha {
 	 */
 	public function add_recaptcha_css_class( $args ) {
 		$args['class_submit'] .= ' g-recaptcha';
-		$args['name_submit']   = 'sce-recaptcha-submit';
-		$args['id_submit']     = 'sce-recaptcha-submit';
-
 		return $args;
 	}
 
@@ -126,58 +122,42 @@ class Recaptcha {
 	 */
 	public function print_recaptcha_scripts() {
 		$options                            = Options::get_options();
-		$comment_form_id                    = $options['recaptcha_comment_form_id'];
-		$recaptcha_comment_submit_button_id = $options['recaptcha_comment_submit_button_id'];
+		$comment_form_id                    = $options['comment_form_id'];
+		$recaptcha_comment_submit_button_id = $options['comment_submit_id'];
 		if ( (bool) $options['recaptcha_enabled'] && $comment_form_id ) {
 			?>
 			<script>
-				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( 'sce-recaptcha-submit' ); ?>' );
+				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
 				if ( null !== sceCommentSubmitButton ) {
 					sceCommentSubmitButton.addEventListener( 'click', function( event ) {
+						// Change ID and name attribute of button. This is needed for comment submission.
+						sceCommentSubmitButton.setAttribute( 'id', 'sce-comment-submit-button' );
+						sceCommentSubmitButton.setAttribute( 'name', 'sce-comment-submit-button' );
 						sceCommentSubmit( event );
 					} );
-			}
-			function sceCommentSubmit( e ) {
-				e.preventDefault();
-				grecaptcha.ready(function() {
-				grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
-					let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
-					if ( null !== recaptchaForm ) {
-						var recaptchaInput = document.createElement('input');
-						recaptchaInput.setAttribute('type', 'hidden');
-						recaptchaInput.setAttribute('name', 'g-recaptcha-response');
-						recaptchaInput.setAttribute('value', token);
-						recaptchaForm.appendChild(recaptchaInput);
-						recaptchaForm.submit();
-					}
-				});
-				});
-			};
+				}
+				function sceCommentSubmit( e ) {
+					e.preventDefault();
+					grecaptcha.ready(function() {
+					grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
+						let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
+						if ( null !== recaptchaForm ) {
+							var recaptchaInput = document.createElement('input');
+							recaptchaInput.setAttribute('type', 'hidden');
+							recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+							recaptchaInput.setAttribute('value', token);
+							recaptchaForm.appendChild(recaptchaInput);
+							recaptchaForm.submit();
+						}
+					});
+					});
+				};
 			</script>
 			<?php
 		}
 	}
 
-	/**
-	 * Modify the comment submit button.
-	 *
-	 * @param string $submit_button The comment submit button.
-	 * @param array  $args          The comment form arguments.
-	 *
-	 * @return string The modified comment submit button.
-	 */
-	public function modify_comment_submit_button( $submit_button, $args ) {
-		$options                    = Options::get_options();
-		$recaptcha_site_key         = $options['recaptcha_site_key'];
-		$recaptcha_submit_button_id = $options['recaptcha_comment_submit_button_id'];
-
-		if ( ! empty( $recaptcha_site_key ) && $options['recaptcha_enabled'] ) {
-			$submit_button = str_replace( 'type="submit"', 'type="button"', $submit_button );
-			$submit_button = str_replace( 'id="' . esc_attr( $recaptcha_submit_button_id ) . '"', 'id="sce-recaptcha-submit"', $submit_button );
-			return $submit_button;
-		}
-		return $submit_button;
-	}
+	
 
 	/**
 	 * Defer the recaptcha scripts.
@@ -232,13 +212,11 @@ class Recaptcha {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'recaptchaEnabled'               => (bool) $options['recaptcha_enabled'],
-			'recaptchaSiteKey'               => $options['recaptcha_site_key'],
-			'recaptchaSecretKey'             => $options['recaptcha_secret_key'],
-			'recaptchaLoggedInUsersEnabled'  => (bool) $options['recaptcha_logged_in_users_enabled'],
-			'recaptchaCommentFormId'         => $options['recaptcha_comment_form_id'],
-			'recaptchaCommentSubmitButtonId' => $options['recaptcha_comment_submit_button_id'],
-			'recaptchaScoreThreshold'        => (float) $options['recaptcha_score_threshold'],
+			'recaptchaEnabled'              => (bool) $options['recaptcha_enabled'],
+			'recaptchaSiteKey'              => $options['recaptcha_site_key'],
+			'recaptchaSecretKey'            => $options['recaptcha_secret_key'],
+			'recaptchaLoggedInUsersEnabled' => (bool) $options['recaptcha_logged_in_users_enabled'],
+			'recaptchaScoreThreshold'       => (float) $options['recaptcha_score_threshold'],
 		);
 
 		// Exit gracefully.
@@ -261,23 +239,19 @@ class Recaptcha {
 		}
 
 		// Nonce passed, let's get post vars.
-		$recaptcha_enabled                  = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
-		$recaptcha_site_key                 = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
-		$recaptcha_secret_key               = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
-		$recaptcha_logged_in_users_enabled  = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
-		$recaptcha_comment_form_id          = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentFormId', FILTER_DEFAULT ) );
-		$recaptcha_comment_submit_button_id = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaCommentSubmitButtonId', FILTER_DEFAULT ) );
-		$recaptcha_score_threshold          = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+		$recaptcha_enabled                 = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_site_key                = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
+		$recaptcha_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
+		$recaptcha_logged_in_users_enabled = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_score_threshold         = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'recaptcha_enabled'                  => $recaptcha_enabled,
-			'recaptcha_site_key'                 => $recaptcha_site_key,
-			'recaptcha_secret_key'               => $recaptcha_secret_key,
-			'recaptcha_logged_in_users_enabled'  => $recaptcha_logged_in_users_enabled,
-			'recaptcha_comment_form_id'          => $recaptcha_comment_form_id,
-			'recaptcha_comment_submit_button_id' => $recaptcha_comment_submit_button_id,
-			'recaptcha_score_threshold'          => $recaptcha_score_threshold,
+			'recaptcha_enabled'                 => $recaptcha_enabled,
+			'recaptcha_site_key'                => $recaptcha_site_key,
+			'recaptcha_secret_key'              => $recaptcha_secret_key,
+			'recaptcha_logged_in_users_enabled' => $recaptcha_logged_in_users_enabled,
+			'recaptcha_score_threshold'         => $recaptcha_score_threshold,
 		);
 
 		Options::update_options( $options_to_save );
@@ -310,7 +284,6 @@ class Recaptcha {
 				'recaptcha_site_key'                 => '',
 				'recaptcha_secret_key'               => '',
 				'recaptcha_logged_in_users_enabled'  => true,
-				'recaptcha_comment_form_id'          => 'commentform',
 				'recaptcha_comment_submit_button_id' => 'submit',
 				'recaptcha_score_threshold'          => 0.5,
 			)

@@ -478,7 +478,7 @@ h3.sce-panel-heading {
 	padding-right: 0;
 	margin: 0 auto;
 
-	nav {
+	nav.sce-admin-options {
 		a {
 			position: relative;
 			display: grid;
@@ -605,7 +605,15 @@ h3.sce-panel-heading {
 		}
 	}
 
-	nav {
+	nav.sce-sub-links {
+		margin-bottom: 1.3em;
+		font-size: 13px;
+		.sce-sub-tab-active {
+			font-weight: 700;
+		}
+	}
+
+	nav.sce-admin-options {
 		order: 1;
 
 		a {

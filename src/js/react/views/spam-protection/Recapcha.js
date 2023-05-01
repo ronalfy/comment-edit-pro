@@ -94,8 +94,6 @@ const Interface = ( props ) => {
 			recaptchaSiteKey: data.recaptchaSiteKey,
 			recaptchaSecretKey: data.recaptchaSecretKey,
 			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
-			recaptchaCommentFormId: data.recaptchaCommentFormId,
-			recaptchaCommentSubmitButtonId: data.recaptchaCommentSubmitButtonId,
 			recaptchaScoreThreshold: data.recaptchaScoreThreshold,
 		},
 	} );
@@ -234,81 +232,6 @@ const Interface = ( props ) => {
 					) }
 				</td>
 			</tr>
-		);
-	};
-
-	const getCommentEntityIds = () => {
-		return (
-			<>
-				<tr>
-					<th scope="row">{ __( 'Comment Form ID', 'comment-edit-pro' ) }</th>
-					<td>
-						<Controller
-							name="recaptchaCommentFormId"
-							control={ control }
-							rules={ { required: true } }
-							render={ ( { field } ) => (
-								<TextControl
-									label={ __( 'Comment Form ID', 'quotes-dlx' ) }
-									{ ...field }
-									className={ classNames( 'sce-admin__text-control', {
-										'has-error': 'required' === errors.recaptchaSiteKey?.type,
-										'is-required': true,
-									} ) }
-									help={ __(
-										'Enter the CSS/HTML ID for the comment form so Recaptcha can target the correct comment form.',
-										'comment-edit-pro'
-									) }
-									aria-required="true"
-								/>
-							) }
-						/>
-						{ 'required' === errors.recaptchaCommentFormId?.type && (
-							<Notice
-								message={ __( 'This field is a required field.' ) }
-								status="error"
-								politeness="assertive"
-								inline={ true }
-								icon={ CircularExclamationIcon }
-							/>
-						) }
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">{ __( 'Comment Submit Button ID', 'comment-edit-pro' ) }</th>
-					<td>
-						<Controller
-							name="recaptchaCommentSubmitButtonId"
-							control={ control }
-							rules={ { required: true } }
-							render={ ( { field } ) => (
-								<TextControl
-									label={ __( 'Submit Comment Button ID', 'quotes-dlx' ) }
-									{ ...field }
-									className={ classNames( 'sce-admin__text-control', {
-										'has-error': 'required' === errors.recaptchaCommentSubmitButtonId?.type,
-										'is-required': true,
-									} ) }
-									help={ __(
-										'Enter the CSS/HTML ID for the comment form button so Recaptcha can target the correct button.',
-										'comment-edit-pro'
-									) }
-									aria-required="true"
-								/>
-							) }
-						/>
-						{ 'required' === errors.recaptchaCommentSubmitButtonId?.type && (
-							<Notice
-								message={ __( 'This field is a required field.' ) }
-								status="error"
-								politeness="assertive"
-								inline={ true }
-								icon={ CircularExclamationIcon }
-							/>
-						) }
-					</td>
-				</tr>
-			</>
 		);
 	};
 
@@ -461,7 +384,6 @@ const Interface = ( props ) => {
 								{ getSiteKey() }
 								{ getSecretKey() }
 								{ getLoggedInToggle() }
-								{ getCommentEntityIds() }
 								{ getRecaptchaThreshold() }
 							</>
 						) }

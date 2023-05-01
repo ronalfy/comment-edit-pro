@@ -57,9 +57,6 @@ class Cloudflare_Turnstile {
 		// If Turnstile is enabled, add the Turnstile actions/filters.
 		if ( true === (bool) $options['turnstile_enabled'] ) {
 
-			// Modify the submit button for targeting.
-			add_filter( 'comment_form_submit_button', array( $this, 'modify_comment_submit_button' ), 10, 2 );
-
 			// Enqueue the turnstile scripts.
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_turnstile_scripts' ) );
 			add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
@@ -122,25 +119,7 @@ class Cloudflare_Turnstile {
 		return $comment_fields;
 	}
 
-	/**
-	 * Modify the comment submit button.
-	 *
-	 * @param string $submit_button The comment submit button.
-	 * @param array  $args          The comment form arguments.
-	 *
-	 * @return string The modified comment submit button.
-	 */
-	public function modify_comment_submit_button( $submit_button, $args ) {
-		$options                    = Options::get_options();
-		$turnstile_sitekey          = $options['turnstile_sitekey'];
-		$turnstile_submit_button_id = $options['turnstile_comment_submit_button_id'];
 
-		if ( ! empty( $turnstile_sitekey ) && (bool) $options['turnstile_enabled'] ) {
-			$submit_button = str_replace( 'id="' . esc_attr( $turnstile_submit_button_id ) . '"', 'id="sce-turnstile-submit"', $submit_button );
-			return $submit_button;
-		}
-		return $submit_button;
-	}
 
 	/**
 	 * Defer the recaptcha scripts.
@@ -215,14 +194,13 @@ class Cloudflare_Turnstile {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'turnstileEnabled'               => (bool) $options['turnstile_enabled'],
-			'turnstileSitekey'               => sanitize_text_field( $options['turnstile_sitekey'] ),
-			'turnstileSecret'                => sanitize_text_field( $options['turnstile_secret'] ),
-			'turnstileTheme'                 => sanitize_text_field( $options['turnstile_theme'] ),
-			'turnstileLanguage'              => sanitize_text_field( $options['turnstile_language'] ),
-			'turnstileWidgetSize'            => sanitize_text_field( $options['turnstile_widget_size'] ),
-			'turnstileCommentSubmitButtonId' => sanitize_text_field( $options['turnstile_comment_submit_button_id'] ),
-			'turnstileLoggedInUsersEnabled'  => (bool) $options['turnstile_logged_in_users_enabled'],
+			'turnstileEnabled'              => (bool) $options['turnstile_enabled'],
+			'turnstileSitekey'              => sanitize_text_field( $options['turnstile_sitekey'] ),
+			'turnstileSecret'               => sanitize_text_field( $options['turnstile_secret'] ),
+			'turnstileTheme'                => sanitize_text_field( $options['turnstile_theme'] ),
+			'turnstileLanguage'             => sanitize_text_field( $options['turnstile_language'] ),
+			'turnstileWidgetSize'           => sanitize_text_field( $options['turnstile_widget_size'] ),
+			'turnstileLoggedInUsersEnabled' => (bool) $options['turnstile_logged_in_users_enabled'],
 		);
 		wp_send_json_success( $json_array );
 	}
@@ -244,14 +222,13 @@ class Cloudflare_Turnstile {
 
 		$options = Options::get_options();
 		$options = array(
-			'turnstile_enabled'                  => (bool) filter_input( INPUT_POST, 'turnstileEnabled', FILTER_VALIDATE_BOOLEAN ),
-			'turnstile_sitekey'                  => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSitekey', FILTER_DEFAULT ) ),
-			'turnstile_secret'                   => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSecret', FILTER_DEFAULT ) ),
-			'turnstile_theme'                    => sanitize_text_field( filter_input( INPUT_POST, 'turnstileTheme', FILTER_DEFAULT ) ),
-			'turnstile_language'                 => sanitize_text_field( filter_input( INPUT_POST, 'turnstileLanguage', FILTER_DEFAULT ) ),
-			'turnstile_widget_size'              => sanitize_text_field( filter_input( INPUT_POST, 'turnstileWidgetSize', FILTER_DEFAULT ) ),
-			'turnstile_comment_submit_button_id' => sanitize_text_field( filter_input( INPUT_POST, 'turnstileCommentSubmitButtonId', FILTER_DEFAULT ) ),
-			'turnstile_logged_in_users_enabled'  => (bool) filter_input( INPUT_POST, 'turnstileLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN ),
+			'turnstile_enabled'                 => (bool) filter_input( INPUT_POST, 'turnstileEnabled', FILTER_VALIDATE_BOOLEAN ),
+			'turnstile_sitekey'                 => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSitekey', FILTER_DEFAULT ) ),
+			'turnstile_secret'                  => sanitize_text_field( filter_input( INPUT_POST, 'turnstileSecret', FILTER_DEFAULT ) ),
+			'turnstile_theme'                   => sanitize_text_field( filter_input( INPUT_POST, 'turnstileTheme', FILTER_DEFAULT ) ),
+			'turnstile_language'                => sanitize_text_field( filter_input( INPUT_POST, 'turnstileLanguage', FILTER_DEFAULT ) ),
+			'turnstile_widget_size'             => sanitize_text_field( filter_input( INPUT_POST, 'turnstileWidgetSize', FILTER_DEFAULT ) ),
+			'turnstile_logged_in_users_enabled' => (bool) filter_input( INPUT_POST, 'turnstileLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN ),
 		);
 
 		Options::update_options( $options );
@@ -280,14 +257,13 @@ class Cloudflare_Turnstile {
 
 		// Populate defaults.
 		$return = array(
-			'turnstileEnabled'               => (bool) $defaults['turnstile_enabled'],
-			'turnstileSitekey'               => sanitize_text_field( $defaults['turnstile_sitekey'] ),
-			'turnstileSecret'                => sanitize_text_field( $defaults['turnstile_secret'] ),
-			'turnstileTheme'                 => sanitize_text_field( $defaults['turnstile_theme'] ),
-			'turnstileLanguage'              => sanitize_text_field( $defaults['turnstile_language'] ),
-			'turnstileWidgetSize'            => sanitize_text_field( $defaults['turnstile_widget_size'] ),
-			'turnstileCommentSubmitButtonId' => sanitize_text_field( $defaults['turnstile_comment_submit_button_id'] ),
-			'turnstileLoggedInUsersEnabled'  => (bool) $defaults['turnstile_logged_in_users_enabled'],
+			'turnstileEnabled'              => (bool) $defaults['turnstile_enabled'],
+			'turnstileSitekey'              => sanitize_text_field( $defaults['turnstile_sitekey'] ),
+			'turnstileSecret'               => sanitize_text_field( $defaults['turnstile_secret'] ),
+			'turnstileTheme'                => sanitize_text_field( $defaults['turnstile_theme'] ),
+			'turnstileLanguage'             => sanitize_text_field( $defaults['turnstile_language'] ),
+			'turnstileWidgetSize'           => sanitize_text_field( $defaults['turnstile_widget_size'] ),
+			'turnstileLoggedInUsersEnabled' => (bool) $defaults['turnstile_logged_in_users_enabled'],
 		);
 
 		// Go through return defaults and format into options.
