@@ -232,7 +232,6 @@ const Interface = ( props ) => {
 											<Controller
 												name="enableCommentActivityPerPost"
 												control={ control }
-												rules={ { required: true } }
 												render={ ( { field: { onChange, value } } ) => (
 													<ToggleControl
 														label={ __(
