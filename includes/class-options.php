@@ -264,7 +264,6 @@ class Options {
 			'turnstile_theme'                    => 'auto',
 			'turnstile_language'                 => 'auto',
 			'turnstile_widget_size'              => 'normal',
-			'turnstile_comment_submit_button_id' => 'submit',
 			'turnstile_logged_in_users_enabled'  => true,
 			'enable_convertkit'                  => false,
 			'convertkit_api_key'                 => '',

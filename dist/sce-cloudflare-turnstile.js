@@ -11,8 +11,10 @@ var __webpack_exports__ = {};
  * This is the main callback for Cloudflare.
  */
 window.sceInitTurnstile = function () {
-  // Get submit button.
-  var submitButton = document.getElementById('sce-turnstile-submit');
+  var _sceFrontend = sceFrontend,
+      comment_submit_id = _sceFrontend.comment_submit_id; // Get submit button.
+
+  var submitButton = document.getElementById(comment_submit_id);
 
   if (null === submitButton) {
     return;

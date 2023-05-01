@@ -15,7 +15,9 @@
 		"sceTurnstileLocal": "readonly",
 		"sceCharacterControl": "readonly",
 		"sceWebhooks": "readonly",
-		"sceTools": "readonly"
+		"sceTools": "readonly",
+		"sce_options": "readonly",
+		"sceFrontend": "readonly"
 	},
 	"env": {
 		"browser": true,

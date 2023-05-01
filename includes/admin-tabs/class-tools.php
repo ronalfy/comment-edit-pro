@@ -57,6 +57,12 @@ class Tools {
 	public function add_main_main_sub_tab( $tabs, $current_tab, $sub_tab ) {
 		if ( ( ! empty( $current_tab ) || ! empty( $sub_tab ) ) && 'tools' === $current_tab ) {
 			$tabs[] = array(
+				'get'    => 'comment-tools',
+				'action' => 'comment_edit_pro_output_tools_subtab',
+				'url'    => Functions::get_settings_url( 'tools' ),
+				'label'  => _x( 'Tools', 'Tab label as Tools', 'ultimate-auto-updates' ),
+			);
+			$tabs[] = array(
 				'get'    => 'comment-activity',
 				'action' => 'comment_edit_pro_output_tools_comment_activity',
 				'url'    => Functions::get_settings_url( 'tools', 'comment-activity' ),
@@ -68,6 +74,12 @@ class Tools {
 				'url'    => Functions::get_settings_url( 'tools', 'post-types' ),
 				'label'  => _x( 'Post Types', 'Tab label as Tools', 'ultimate-auto-updates' ),
 			);
+			// $tabs[] = array(
+			// 	'get'    => 'bulk',
+			// 	'action' => 'comment_edit_pro_output_tools_post_types',
+			// 	'url'    => Functions::get_settings_url( 'tools', 'post-types' ),
+			// 	'label'  => _x( 'Bulk', 'Tab label as Bulk', 'ultimate-auto-updates' ),
+			// );
 			return $tabs;
 		}
 		return $tabs;
@@ -80,6 +92,44 @@ class Tools {
 	 * @param string $sub_tab Sub tab.
 	 */
 	public function output_main_content( $tab, $sub_tab = '' ) {
+		if ( 'tools' === $tab ) {
+			if ( empty( $sub_tab ) || 'comment-tools' === $sub_tab ) {
+				?>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<h2><?php esc_html_e( 'Comment Edit Pro Tools', 'comment-edit-pro' ); ?></h2>
+						<p><?php esc_html_e( 'Tools are where you can find comment helpers, overrides, set post comment expiration, and blanket enable or disable comments..', 'comment-edit-pro' ); ?></p>
+					</div>
+				</div>
+				<div class="sce-admin-panel-cards">
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-activity' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/hour-glass.jpg' ) ); ?>" alt="<?php esc_html_e( 'Photo of a clock and hourglass.', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Post Activity Expiration', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Instead of setting your content to expire after a set amount of days, close comments instead by how long any activity has taken place.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-activity' ) ); ?>"><?php esc_html_e( 'View Expiration Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'post-types' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-bubble.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Speech bubbles', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Post Type Settings', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Blanket enable or disable comments for your various post types.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'post-types' ) ); ?>"><?php esc_html_e( 'View Post Type Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+				</div>
+				<?php
+			}
+		}
 		if ( 'tools' === $tab ) {
 			if ( empty( $sub_tab ) || 'comment-activity' === $sub_tab ) {
 				?>
@@ -99,7 +149,17 @@ class Tools {
 						<div id="sce-tab-tools-post-type-comment-settings"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
-				
+				<?php
+			}
+		}
+		if ( 'tools' === $tab ) {
+			if ( empty( $sub_tab ) || 'bulk' === $sub_tab ) {
+				?>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<div id="sce-tab-tools-bulk"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+					</div>
+				</div>
 				<?php
 			}
 		}

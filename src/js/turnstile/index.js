@@ -6,8 +6,9 @@
  * This is the main callback for Cloudflare.
  */
 window.sceInitTurnstile = () => {
+	const { comment_submit_id } = sceFrontend;
 	// Get submit button.
-	const submitButton = document.getElementById( 'sce-turnstile-submit' );
+	const submitButton = document.getElementById( comment_submit_id );
 	if ( null === submitButton ) {
 		return;
 	}

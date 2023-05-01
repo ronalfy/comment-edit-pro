@@ -35,6 +35,7 @@ define( 'SCE_MIN_VERSION', '2.4.5' );
  */
 class Comment_Edit_Pro {
 
+
 	/**
 	 * Comment_Edit_Pro class instance.
 	 *
@@ -69,7 +70,6 @@ class Comment_Edit_Pro {
 	 * @access private
 	 */
 	private function __construct() {
-
 		$has_errors = false;
 
 		// Check if PHP version is sufficient.
@@ -180,7 +180,7 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function add_scripts() {
-		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing', 'jquery' ), COMMENTEDITPRO_VERSION, true );
+		 wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing', 'jquery' ), COMMENTEDITPRO_VERSION, true );
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', false );
 		} else {
@@ -194,12 +194,49 @@ class Comment_Edit_Pro {
 			'sce-options',
 			'sce_options',
 			array(
-				'show_stop_timer'  => $show_stop_timer,
-				'stop_timer_text'  => $stop_timer_text,
-				'stop_timer_svg'   => apply_filters( 'sce_button_extra_stop_timer', '' ),
-				'timer_appearance' => $timer_appearance,
+				'show_stop_timer'     => $show_stop_timer,
+				'stop_timer_text'     => $stop_timer_text,
+				'stop_timer_svg'      => apply_filters( 'sce_button_extra_stop_timer', '' ),
+				'timer_appearance'    => $timer_appearance,
+				'comments_wrapper_id' => $options['comments_wrapper_id'],
+				'comment_form_id'     => $options['comment_form_id'],
+				'comment_submit_id'   => $options['comment_submit_id'],
+				'comment_respond_id'  => $options['comment_respond_id'],
+				'comment_textarea_id' => $options['comment_textarea_id'],
 			)
 		);
+	}
+
+	/**
+	 * Add scripts to SCE options front-end
+	 *
+	 * Add scriptss to SCE options front-end
+	 *
+	 * @since 1.0.4
+	 * @access public
+	 */
+	public function add_scripts_frontend() {
+		if ( ! is_singular() && ! is_page() ) {
+			return;
+		}
+		if ( Functions::is_multisite() ) {
+			$options = get_site_option( 'sce_options', false );
+		} else {
+			$options = get_option( 'sce_options', false );
+		}
+		// Output JSON.
+		$localized_vars = array(
+			'comments_wrapper_id' => sanitize_text_field( $options['comments_wrapper_id'] ),
+			'comment_form_id'     => sanitize_text_field( $options['comment_form_id'] ),
+			'comment_submit_id'   => sanitize_text_field( $options['comment_submit_id'] ),
+			'comment_respond_id'  => sanitize_text_field( $options['comment_respond_id'] ),
+			'comment_textarea_id' => sanitize_text_field( $options['comment_textarea_id'] ),
+		);
+		?>
+		<script>
+			var sceFrontend = <?php echo wp_json_encode( $localized_vars ); ?>;
+		</script>
+		<?php
 	}
 
 	/**
@@ -294,7 +331,6 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function plugins_loaded() {
-
 		// Prevent double loading admin/classnames.
 		add_filter( 'sce_show_admin', '__return_false' );
 
@@ -338,6 +374,7 @@ class Comment_Edit_Pro {
 		$this->advanced->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
+		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );
 
 		add_action( 'init', array( $this, 'setup_ajax_calls' ) );
 
@@ -401,10 +438,9 @@ class Comment_Edit_Pro {
 	 * @since 1.0.7
 	 * @access public
 	 */
-	public function ajax_restore_comment() {
-		$nonce      = sanitize_text_field( $_POST['nonce'] ); // phpcs:ignore
-		$comment_id = absint( $_POST['comment_id'] ); // phpcs:ignore
-		$record_id  = absint( $_POST['id'] ); // phpcs:ignore
+	public function ajax_restore_comment() { 		$nonce      = sanitize_text_field($_POST['nonce']); // phpcs:ignore
+		$comment_id = absint($_POST['comment_id']); // phpcs:ignore
+		$record_id  = absint($_POST['id']); // phpcs:ignore
 
 		// Do a permissions check.
 		if ( ! current_user_can( 'moderate_comments' ) ) {
@@ -428,8 +464,8 @@ class Comment_Edit_Pro {
 		global $wpdb;
 		$tablename    = $wpdb->base_prefix . 'sce_comments';
 		$query        = "select comment_content from $tablename where id = %d";
-		$query        = $wpdb->prepare( $query, $record_id ); // phpcs:ignore
-		$results      = $wpdb->get_row( $query ); // phpcs:ignore
+		$query        = $wpdb->prepare($query, $record_id); // phpcs:ignore
+		$results      = $wpdb->get_row($query); // phpcs:ignore
 		$comment_text = $results->comment_content;
 
 		// Now update the comment.
@@ -466,7 +502,6 @@ function comment_edit_pro_plugin_activate() {
  * Redirect to Comment Edit Lite settings page upon activation.
  */
 function comment_edit_pro_plugin_activate_redirect() {
-
 	// If on multisite, bail.
 	if ( Functions::is_multisite( true ) ) {
 		return;

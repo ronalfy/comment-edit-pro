@@ -96,7 +96,6 @@ const Interface = ( props ) => {
 			turnstileTheme: data.turnstileTheme,
 			turnstileLanguage: data.turnstileLanguage,
 			turnstileWidgetSize: data.turnstileWidgetSize,
-			turnstileCommentSubmitButtonId: data.turnstileCommentSubmitButtonId,
 			turnstileLoggedInUsersEnabled: data.turnstileLoggedInUsersEnabled,
 		},
 	} );
@@ -421,40 +420,6 @@ const Interface = ( props ) => {
 												/>
 											) }
 										/>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">{ __( 'Comment Submit Button ID', 'comment-edit-pro' ) }</th>
-									<td>
-										<Controller
-											name="turnstileCommentSubmitButtonId"
-											control={ control }
-											rules={ { required: true } }
-											render={ ( { field } ) => (
-												<TextControl
-													label={ __( 'Submit Comment Button ID', 'quotes-dlx' ) }
-													{ ...field }
-													className={ classNames( 'sce-admin__text-control', {
-														'has-error': 'required' === errors.turnstileCommentSubmitButtonId?.type,
-														'is-required': true,
-													} ) }
-													help={ __(
-														'Enter the CSS/HTML ID for the comment form button so Cloudflare Turnstile can target the correct button.',
-														'comment-edit-pro'
-													) }
-													aria-required="true"
-												/>
-											) }
-										/>
-										{ 'required' === errors.turnstileCommentSubmitButtonId?.type && (
-											<Notice
-												message={ __( 'This field is a required field.' ) }
-												status="error"
-												politeness="assertive"
-												inline={ true }
-												icon={ CircularExclamationIcon }
-											/>
-										) }
 									</td>
 								</tr>
 							</>
