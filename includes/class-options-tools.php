@@ -94,6 +94,16 @@ class Options_Tools {
 			'comment_activity_expiration'        => 14, /* days */
 			'comment_activity_post_types'        => array( 'post' => array( 'checked' => true ) ),
 			'enable_comment_activity_per_post'   => false,
+			'enable_shortcut_approved'           => true,
+			'enable_shortcut_unapproved'         => true,
+			'enable_shortcut_spam'               => true,
+			'enable_shortcut_trash'              => true,
+			'enable_core_comment_dropdown'       => true,
+			'enable_comment_dropdown'            => true,
+			'enable_comment_dropdown_approved'   => true,
+			'enable_comment_dropdown_unapproved' => true,
+			'enable_comment_dropdown_spam'       => true,
+			'enable_comment_dropdown_trash'      => true,
 		);
 
 		// Add post type arguments to defaults.

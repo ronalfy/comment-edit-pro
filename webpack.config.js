@@ -44,6 +44,7 @@ module.exports = ( env ) => {
 				'sce-tools-comment-activity': [ './src/js/react/views/tools/CommentActivity/index.js' ],
 				'sce-tools-post-type-comment-settings': [ './src/js/react/views/tools/PostTypeCommentSettings/index.js' ],
 				'sce-comment-activity-sidebar': [ './src/js/block-editor/activity-sidebar/index.js' ],
+				'sce-comment-shortcuts-settings': [ './src/js/react/views/tools/CommentShortcuts/index.js' ],
 			},
 			module: {
 				rules: [

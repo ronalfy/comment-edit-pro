@@ -32,6 +32,10 @@ class Tools {
 		add_action( 'wp_ajax_sce_save_post_type_comment_settings', array( $this, 'ajax_save_post_type_comment_settings' ) );
 		add_action( 'wp_ajax_sce_get_post_type_comment_settings', array( $this, 'ajax_get_post_type_comment_settings' ) );
 
+		// Ajax handlers for the comment shortcut settings.
+		add_action( 'wp_ajax_sce_save_comment_shortcut_settings', array( $this, 'ajax_save_comment_shortcut_settings' ) );
+		add_action( 'wp_ajax_sce_get_comment_shortcut_settings', array( $this, 'ajax_get_comment_shortcut_settings' ) );
+
 		// Get options for post type.
 		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the frontend.
 		add_action( 'current_screen', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the admin.
@@ -497,6 +501,75 @@ class Tools {
 	}
 
 	/**
+	 * Retrieve comment shortcut settings via Ajax.
+	 */
+	public function ajax_get_comment_shortcut_settings() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-retrieve-tools-comment-shortcut-settings' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Retrieve options.
+		$comment_options = Options_Tools::get_options();
+		$return          = array(
+			'enableShortcutApproved'          => (bool) $comment_options['enable_shortcut_approved'],
+			'enableShortcutUnapproved'        => (bool) $comment_options['enable_shortcut_unapproved'],
+			'enableShortcutSpam'              => (bool) $comment_options['enable_shortcut_spam'],
+			'enableShortcutTrash'             => (bool) $comment_options['enable_shortcut_trash'],
+			'enableCoreCommentDropdown'       => (bool) $comment_options['enable_core_comment_dropdown'],
+			'enableCommentDropdown'           => (bool) $comment_options['enable_comment_dropdown'],
+			'enableCommentDropdownApproved'   => (bool) $comment_options['enable_comment_dropdown_approved'],
+			'enableCommentDropdownUnapproved' => (bool) $comment_options['enable_comment_dropdown_unapproved'],
+			'enableCommentDropdownSpam'       => (bool) $comment_options['enable_comment_dropdown_spam'],
+			'enableCommentDropdownTrash'      => (bool) $comment_options['enable_comment_dropdown_trash'],
+		);
+
+		// Send response.
+		wp_send_json_success( $return );
+	}
+
+	/**
+	 * Save the shortcut settings via Ajax.
+	 */
+	public function ajax_save_comment_shortcut_settings() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-tools-comment-shortcut-settings' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Retrieve options.
+		$comment_options = Options_Tools::get_options();
+
+		// Update options. Filter all as bool.
+		$comment_options['enable_shortcut_approved']           = (bool) filter_input( INPUT_POST, 'enableShortcutApproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_unapproved']         = (bool) filter_input( INPUT_POST, 'enableShortcutUnapproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_spam']               = (bool) filter_input( INPUT_POST, 'enableShortcutSpam', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_trash']              = (bool) filter_input( INPUT_POST, 'enableShortcutTrash', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_core_comment_dropdown']       = (bool) filter_input( INPUT_POST, 'enableCoreCommentDropdown', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown']            = (bool) filter_input( INPUT_POST, 'enableCommentDropdown', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_approved']   = (bool) filter_input( INPUT_POST, 'enableCommentDropdownApproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_unapproved'] = (bool) filter_input( INPUT_POST, 'enableCommentDropdownUnapproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_spam']       = (bool) filter_input( INPUT_POST, 'enableCommentDropdownSpam', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_trash']      = (bool) filter_input( INPUT_POST, 'enableCommentDropdownTrash', FILTER_VALIDATE_BOOLEAN );
+
+		// Save options.
+		Options_Tools::update_options( $comment_options );
+
+		// Send response.
+		wp_send_json_success();
+	}
+
+	/**
 	 * Retrieve Post Type Settings via Ajax.
 	 */
 	public function ajax_get_post_type_comment_settings() {
@@ -618,7 +691,7 @@ class Tools {
 		if ( null === $current_tab ) {
 			return;
 		}
-		if ( 'tools' === $current_tab && ( 'comment-activity' === $current_sub_tab || null === $current_sub_tab ) ) {
+		if ( 'tools' === $current_tab && ( 'comment-activity' === $current_sub_tab ) ) {
 			wp_enqueue_script(
 				'sce-tools-comment-activity',
 				Functions::get_plugin_url( 'dist/sce-tools-comment-activity.js' ),
@@ -634,6 +707,24 @@ class Tools {
 					'get_nonce'  => wp_create_nonce( 'sce-retrieve-tools-expiration' ),
 					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 					'post_types' => Functions::get_public_post_types(),
+				)
+			);
+		}
+		if ( 'tools' === $current_tab && ( 'comment-shortcuts' === $current_sub_tab ) ) {
+			wp_enqueue_script(
+				'sce-tools-comment-shortcuts',
+				Functions::get_plugin_url( 'dist/sce-comment-shortcuts-settings.js' ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
+			wp_localize_script(
+				'sce-tools-comment-shortcuts',
+				'sceToolsCommentShortcuts',
+				array(
+					'save_nonce' => wp_create_nonce( 'sce-save-tools-comment-shortcut-settings' ),
+					'get_nonce'  => wp_create_nonce( 'sce-retrieve-tools-comment-shortcut-settings' ),
+					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				)
 			);
 		}

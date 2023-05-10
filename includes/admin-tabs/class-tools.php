@@ -69,6 +69,12 @@ class Tools {
 				'label'  => _x( 'Post Expiration', 'Tab label as Tools', 'ultimate-auto-updates' ),
 			);
 			$tabs[] = array(
+				'get'    => 'comment-shortcuts',
+				'action' => 'comment_edit_pro_output_tools_comment_shortcuts',
+				'url'    => Functions::get_settings_url( 'tools', 'comment-shortcuts' ),
+				'label'  => _x( 'Comment Shortcuts', 'Tab label as Tools', 'ultimate-auto-updates' ),
+			);
+			$tabs[] = array(
 				'get'    => 'post-types',
 				'action' => 'comment_edit_pro_output_tools_post_types',
 				'url'    => Functions::get_settings_url( 'tools', 'post-types' ),
@@ -116,6 +122,18 @@ class Tools {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-shortcuts' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/shortcuts.jpg' ) ); ?>" alt="<?php esc_html_e( 'A man taking a shortcut into a portal.', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Comment Shortcuts', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Please some shortcuts in Comments menu, and add shortcuts to the top admin bar menu too.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-shortcuts' ) ); ?>"><?php esc_html_e( 'View Shortcuts Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
 						<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'post-types' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-bubble.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Speech bubbles', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
@@ -136,6 +154,17 @@ class Tools {
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
 						<div id="sce-tab-tools-comment-activity"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
+					</div>
+				</div>
+				<?php
+			}
+		}
+		if ( 'tools' === $tab ) {
+			if ( empty( $sub_tab ) || 'comment-shortcuts' === $sub_tab ) {
+				?>
+				<div class="sce-admin-panel-area">
+					<div class="sce-panel-row">
+						<div id="sce-tab-tools-comment-shortcuts"><?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?></div>
 					</div>
 				</div>
 				<?php

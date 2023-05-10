@@ -17,7 +17,8 @@
 		"sceWebhooks": "readonly",
 		"sceTools": "readonly",
 		"sce_options": "readonly",
-		"sceFrontend": "readonly"
+		"sceFrontend": "readonly",
+		"sceToolsCommentShortcuts": "readonly"
 	},
 	"env": {
 		"browser": true,

@@ -352,8 +352,6 @@ class Comment_Edit_Pro {
 		$this->avatars->run();
 		$this->integrations = new \CommentEditPro\Includes\Integrations();
 		$this->integrations->run();
-		$this->comment_actions = new \CommentEditPro\Includes\Comment_Actions();
-		$this->comment_actions->run();
 		$this->comment_mentions = new \CommentEditPro\Includes\Mentions();
 		$this->comment_mentions->run();
 		$this->license_ajax = new \CommentEditPro\Includes\Plugin_License_Ajax();
