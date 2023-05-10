@@ -521,6 +521,7 @@ class Tools {
 			'enableShortcutUnapproved'        => (bool) $comment_options['enable_shortcut_unapproved'],
 			'enableShortcutSpam'              => (bool) $comment_options['enable_shortcut_spam'],
 			'enableShortcutTrash'             => (bool) $comment_options['enable_shortcut_trash'],
+			'enableShortcutCountBubble'       => (bool) $comment_options['enable_shortcut_count_bubble'],
 			'enableCoreCommentDropdown'       => (bool) $comment_options['enable_core_comment_dropdown'],
 			'enableCommentDropdown'           => (bool) $comment_options['enable_comment_dropdown'],
 			'enableCommentDropdownApproved'   => (bool) $comment_options['enable_comment_dropdown_approved'],
@@ -555,6 +556,7 @@ class Tools {
 		$comment_options['enable_shortcut_unapproved']         = (bool) filter_input( INPUT_POST, 'enableShortcutUnapproved', FILTER_VALIDATE_BOOLEAN );
 		$comment_options['enable_shortcut_spam']               = (bool) filter_input( INPUT_POST, 'enableShortcutSpam', FILTER_VALIDATE_BOOLEAN );
 		$comment_options['enable_shortcut_trash']              = (bool) filter_input( INPUT_POST, 'enableShortcutTrash', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_count_bubble']       = (bool) filter_input( INPUT_POST, 'enableShortcutCountBubble', FILTER_VALIDATE_BOOLEAN );
 		$comment_options['enable_core_comment_dropdown']       = (bool) filter_input( INPUT_POST, 'enableCoreCommentDropdown', FILTER_VALIDATE_BOOLEAN );
 		$comment_options['enable_comment_dropdown']            = (bool) filter_input( INPUT_POST, 'enableCommentDropdown', FILTER_VALIDATE_BOOLEAN );
 		$comment_options['enable_comment_dropdown_approved']   = (bool) filter_input( INPUT_POST, 'enableCommentDropdownApproved', FILTER_VALIDATE_BOOLEAN );

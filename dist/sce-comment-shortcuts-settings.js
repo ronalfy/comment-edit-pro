@@ -19750,7 +19750,8 @@ var Interface = function Interface(props) {
       enableCommentDropdownApproved: data.enableCommentDropdownApproved,
       enableCommentDropdownUnapproved: data.enableCommentDropdownUnapproved,
       enableCommentDropdownSpam: data.enableCommentDropdownSpam,
-      enableCommentDropdownTrash: data.enableCommentDropdownTrash
+      enableCommentDropdownTrash: data.enableCommentDropdownTrash,
+      enableShortcutCountBubble: data.enableShortcutCountBubble
     }
   }),
       register = _useForm.register,
@@ -19898,6 +19899,23 @@ var Interface = function Interface(props) {
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a Trash item shortcut underneath the Comments menu item.', 'comment-edit-pro')
       });
     }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "enableShortcutCountBubble",
+    control: control,
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+          onChange = _ref5$field.onChange,
+          value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Count Bubble Next to Menu Items.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: onChange,
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a count bubble next to Pending, Spam, and Trash menu items.', 'comment-edit-pro')
+      });
+    }
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Core Comments Admin Bar', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -19905,10 +19923,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCoreCommentDropdown",
     control: control,
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-          onChange = _ref5$field.onChange,
-          value = _ref5$field.value;
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+          onChange = _ref6$field.onChange,
+          value = _ref6$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Core Comment Admin Bar Item.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -19924,10 +19942,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCommentDropdown",
     control: control,
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-          onChange = _ref6$field.onChange,
-          value = _ref6$field.value;
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+          onChange = _ref7$field.onChange,
+          value = _ref7$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Custom Admin Bar Shortcuts.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -19941,10 +19959,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCommentDropdownApproved",
     control: control,
-    render: function render(_ref7) {
-      var _ref7$field = _ref7.field,
-          onChange = _ref7$field.onChange,
-          value = _ref7$field.value;
+    render: function render(_ref8) {
+      var _ref8$field = _ref8.field,
+          onChange = _ref8$field.onChange,
+          value = _ref8$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Approved shortcut.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -19958,10 +19976,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCommentDropdownUnapproved",
     control: control,
-    render: function render(_ref8) {
-      var _ref8$field = _ref8.field,
-          onChange = _ref8$field.onChange,
-          value = _ref8$field.value;
+    render: function render(_ref9) {
+      var _ref9$field = _ref9.field,
+          onChange = _ref9$field.onChange,
+          value = _ref9$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Pending shortcut.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -19975,10 +19993,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCommentDropdownSpam",
     control: control,
-    render: function render(_ref9) {
-      var _ref9$field = _ref9.field,
-          onChange = _ref9$field.onChange,
-          value = _ref9$field.value;
+    render: function render(_ref10) {
+      var _ref10$field = _ref10.field,
+          onChange = _ref10$field.onChange,
+          value = _ref10$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Spam shortcut.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
@@ -19992,10 +20010,10 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
     name: "enableCommentDropdownTrash",
     control: control,
-    render: function render(_ref10) {
-      var _ref10$field = _ref10.field,
-          onChange = _ref10$field.onChange,
-          value = _ref10$field.value;
+    render: function render(_ref11) {
+      var _ref11$field = _ref11.field,
+          onChange = _ref11$field.onChange,
+          value = _ref11$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Trash shortcut.', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",

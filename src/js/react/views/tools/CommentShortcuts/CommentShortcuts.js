@@ -79,6 +79,7 @@ const Interface = ( props ) => {
 			enableCommentDropdownUnapproved: data.enableCommentDropdownUnapproved,
 			enableCommentDropdownSpam: data.enableCommentDropdownSpam,
 			enableCommentDropdownTrash: data.enableCommentDropdownTrash,
+			enableShortcutCountBubble: data.enableShortcutCountBubble,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -217,6 +218,24 @@ const Interface = ( props ) => {
 													checked={ value }
 													onChange={ onChange }
 													help={ __( 'Enabling this will show a Trash item shortcut underneath the Comments menu item.', 'comment-edit-pro' ) }
+												/>
+											) }
+										/>
+									</div>
+									<div className="sce-panel-row">
+										<Controller
+											name="enableShortcutCountBubble"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __(
+														'Enable Count Bubble Next to Menu Items.',
+														'comment-edit-pro'
+													) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ onChange }
+													help={ __( 'Enabling this will show a count bubble next to Pending, Spam, and Trash menu items.', 'comment-edit-pro' ) }
 												/>
 											) }
 										/>

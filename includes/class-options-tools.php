@@ -98,6 +98,7 @@ class Options_Tools {
 			'enable_shortcut_unapproved'         => true,
 			'enable_shortcut_spam'               => true,
 			'enable_shortcut_trash'              => true,
+			'enable_shortcut_count_bubble'       => true,
 			'enable_core_comment_dropdown'       => true,
 			'enable_comment_dropdown'            => true,
 			'enable_comment_dropdown_approved'   => true,
