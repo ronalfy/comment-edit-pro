@@ -80,6 +80,9 @@ const Interface = ( props ) => {
 			enableCommentDropdownSpam: data.enableCommentDropdownSpam,
 			enableCommentDropdownTrash: data.enableCommentDropdownTrash,
 			enableShortcutCountBubble: data.enableShortcutCountBubble,
+			enableCommentDropdownOpenCloseComments: data.enableCommentDropdownOpenCloseComments,
+			enableCommentDropdownDeletePostComments: data.enableCommentDropdownDeletePostComments,
+			enableCommentDropdownShowHideComments: data.enableCommentDropdownShowHideComments,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -359,6 +362,60 @@ const Interface = ( props ) => {
 																		checked={ value }
 																		onChange={ onChange }
 																		help={ __( 'Enabling this will show a Trash item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro' ) }
+																	/>
+																) }
+															/>
+														</div>
+														<div className="sce-panel-row">
+															<Controller
+																name="enableCommentDropdownOpenCloseComments"
+																control={ control }
+																render={ ( { field: { onChange, value } } ) => (
+																	<ToggleControl
+																		label={ __(
+																			'Enable Open/Close Comments shortcut.',
+																			'comment-edit-pro'
+																		) }
+																		className="sce-admin__toggle-control"
+																		checked={ value }
+																		onChange={ onChange }
+																		help={ __( 'Enabling this will show an Open/Close Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro' ) }
+																	/>
+																) }
+															/>
+														</div>
+														<div className="sce-panel-row">
+															<Controller
+																name="enableCommentDropdownDeletePostComments"
+																control={ control }
+																render={ ( { field: { onChange, value } } ) => (
+																	<ToggleControl
+																		label={ __(
+																			'Enable Delete Post Comments shortcut.',
+																			'comment-edit-pro'
+																		) }
+																		className="sce-admin__toggle-control"
+																		checked={ value }
+																		onChange={ onChange }
+																		help={ __( 'Enabling this will show a Delete Post Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro' ) }
+																	/>
+																) }
+															/>
+														</div>
+														<div className="sce-panel-row">
+															<Controller
+																name="enableCommentDropdownShowHideComments"
+																control={ control }
+																render={ ( { field: { onChange, value } } ) => (
+																	<ToggleControl
+																		label={ __(
+																			'Enable Show/Hide Comments shortcut.',
+																			'comment-edit-pro'
+																		) }
+																		className="sce-admin__toggle-control"
+																		checked={ value }
+																		onChange={ onChange }
+																		help={ __( 'Enabling this will show a Show/Hide Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro' ) }
 																	/>
 																) }
 															/>

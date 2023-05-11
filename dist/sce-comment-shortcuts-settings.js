@@ -19751,7 +19751,10 @@ var Interface = function Interface(props) {
       enableCommentDropdownUnapproved: data.enableCommentDropdownUnapproved,
       enableCommentDropdownSpam: data.enableCommentDropdownSpam,
       enableCommentDropdownTrash: data.enableCommentDropdownTrash,
-      enableShortcutCountBubble: data.enableShortcutCountBubble
+      enableShortcutCountBubble: data.enableShortcutCountBubble,
+      enableCommentDropdownOpenCloseComments: data.enableCommentDropdownOpenCloseComments,
+      enableCommentDropdownDeletePostComments: data.enableCommentDropdownDeletePostComments,
+      enableCommentDropdownShowHideComments: data.enableCommentDropdownShowHideComments
     }
   }),
       register = _useForm.register,
@@ -20020,6 +20023,57 @@ var Interface = function Interface(props) {
         checked: value,
         onChange: onChange,
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a Trash item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "enableCommentDropdownOpenCloseComments",
+    control: control,
+    render: function render(_ref12) {
+      var _ref12$field = _ref12.field,
+          onChange = _ref12$field.onChange,
+          value = _ref12$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Open/Close Comments shortcut.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: onChange,
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show an Open/Close Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "enableCommentDropdownDeletePostComments",
+    control: control,
+    render: function render(_ref13) {
+      var _ref13$field = _ref13.field,
+          onChange = _ref13$field.onChange,
+          value = _ref13$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Delete Post Comments shortcut.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: onChange,
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a Delete Post Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "sce-panel-row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_11__.Controller, {
+    name: "enableCommentDropdownShowHideComments",
+    control: control,
+    render: function render(_ref14) {
+      var _ref14$field = _ref14.field,
+          onChange = _ref14$field.onChange,
+          value = _ref14$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Show/Hide Comments shortcut.', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: onChange,
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will show a Show/Hide Comments item shortcut underneath the Comments admin bar menu item.', 'comment-edit-pro')
       });
     }
   })))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {

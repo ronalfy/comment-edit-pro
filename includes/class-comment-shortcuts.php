@@ -38,15 +38,22 @@ class Comment_Shortcuts {
 
 		// Add admin bar menu styling to the admin.
 		add_action( 'admin_head', array( $this, 'add_admin_bar_menu_style' ) );
+		add_action( 'wp_head', array( $this, 'add_admin_bar_menu_style' ) );
 
 		// Add shortcuts to comments admin bar menu item if enabled.
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_comment_shortcuts' ), 100 );
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_comment_shortcuts_backend' ), 100 );
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_comment_shortcuts_frontend' ), 100 );
 	}
 
 	/**
 	 * Add admin bar styling in the admin for comment bubbles.
 	 */
 	public function add_admin_bar_menu_style() {
+		// If not admin, make sure we're on a post or page.
+		if ( ! is_admin() && ! is_singular() && ! is_page() ) {
+			return;
+		}
+
 		// Warning, lots of core style overrides ahead.
 		?>
 		<style>
@@ -70,11 +77,232 @@ class Comment_Shortcuts {
 	}
 
 	/**
+	 * Add admin menu items to the frontend of a site.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar The admin bar object.
+	 */
+	public function add_admin_bar_comment_shortcuts_frontend( $wp_admin_bar ) {
+		if ( is_admin() ) {
+			return;
+		}
+
+		// Only load on singular and page types.
+		if ( ! is_singular() && ! is_page() ) {
+			return;
+		}
+
+		// If user doesn't have capabilities, don't show the menu.
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
+		// Get options.
+		$options = Options_Tools::get_options();
+
+		// Get admin bar comment shortcuts.
+		$maybe_comment_shortcuts_enabled = (bool) $options['enable_comment_dropdown'];
+		if ( ! $maybe_comment_shortcuts_enabled ) {
+			return;
+		}
+		$enable_comment_dropdown_open_close_comments  = (bool) $options['enable_comment_dropdown_open_close_comments'];
+		$enable_comment_dropdown_delete_post_comments = (bool) $options['enable_comment_dropdown_delete_post_comments'];
+		$enable_comment_dropdown_show_hide_comments   = (bool) $options['enable_comment_dropdown_show_hide_comments'];
+
+		// If we're here, the comment admin bar menu item is enabled.
+		// Get the comment node.
+		$comment_node = $wp_admin_bar->get_node( 'comments' );
+
+		// Bail if no comment node.
+		if ( ! $comment_node ) {
+			return;
+		}
+
+		// Get the post object.
+		$post_id            = get_the_ID();
+		$post               = get_post( $post_id );
+		$post_comment_count = $post->comment_count;
+
+		// Get comment shortcuts for the admin bar.
+		$approved_shortcut = (bool) $options['enable_comment_dropdown_approved'];
+		$pending_shortcut  = (bool) $options['enable_comment_dropdown_unapproved'];
+		$spam_shortcut     = (bool) $options['enable_comment_dropdown_spam'];
+		$trash_shortcut    = (bool) $options['enable_comment_dropdown_trash'];
+
+		// Get comment count.
+		$comment_counts = wp_count_comments();
+		$approved_count = $comment_counts->approved;
+		$pending_count  = $comment_counts->moderated;
+		$spam_count     = $comment_counts->spam;
+		$trash_count    = $comment_counts->trash;
+
+		// Add approved shortcut to the admin bar.
+		if ( $approved_shortcut ) {
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'comment-approved-shortcut',
+					'title'  => __( 'View Approved', 'comment-edit-pro' ),
+					'parent' => 'comments',
+					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=approved' ) ),
+					'meta'   => array(
+						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-approved',
+					),
+				)
+			);
+		}
+
+		// Add pending shortcut with count to the admin bar.
+		if ( $pending_shortcut ) {
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'comment-pending-shortcut',
+					'title'  => sprintf(
+						/* translators: %s: comment count */
+						__( 'View Pending <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+						$pending_count
+					),
+					'parent' => 'comments',
+					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ),
+					'meta'   => array(
+						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-pending',
+					),
+				)
+			);
+		}
+
+		// Add spam shortcut with count to the admin bar.
+		if ( $spam_shortcut ) {
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'comment-spam-shortcut',
+					'title'  => sprintf(
+						/* translators: %s: comment count */
+						__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+						$spam_count
+					),
+					'parent' => 'comments',
+					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ),
+					'meta'   => array(
+						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-spam',
+					),
+				)
+			);
+		}
+
+		// Add trash shortcut with count to the admin bar.
+		if ( $trash_shortcut ) {
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'comment-trash-shortcut',
+					'title'  => sprintf(
+						/* translators: %s: comment count */
+						__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+						$trash_count
+					),
+					'parent' => 'comments',
+					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash' ) ),
+					'meta'   => array(
+						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-trash',
+					),
+				)
+			);
+		}
+
+		// Bail if no shortcuts are enabled.
+		if ( ! $enable_comment_dropdown_open_close_comments && ! $enable_comment_dropdown_delete_post_comments && ! $enable_comment_dropdown_show_hide_comments ) {
+			return;
+		}
+
+		// Add group node for advanced shortcuts.
+		$wp_admin_bar->add_group(
+			array(
+				'id'     => 'sce-advanced-comment-shortcuts',
+				'parent' => 'comments',
+			)
+		);
+
+		$wp_admin_bar->add_node(
+			array(
+				'id'     => 'sce-advanced-comment-shortcuts-label',
+				'parent' => 'sce-advanced-comment-shortcuts',
+				'title'  => __( 'Advanced', 'comment-edit-pro' ),
+				'href'   => false,
+			)
+		);
+
+		// Add open/close comments item to the admin bar.
+		if ( $enable_comment_dropdown_open_close_comments ) {
+			// If comments are open, add close. If closed, add open.
+			if ( comments_open() ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'sce-open-close-comments',
+						'parent' => 'sce-advanced-comment-shortcuts',
+						'title'  => __( 'Close Comments', 'comment-edit-pro' ),
+						'href'   => '#',
+					)
+				);
+			} else {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'sce-open-close-comments',
+						'parent' => 'sce-advanced-comment-shortcuts',
+						'title'  => __( 'Open Comments', 'comment-edit-pro' ),
+						'href'   => '#',
+					)
+				);
+			}
+		}
+
+		// Add show/hide comments item to the admin bar.
+		if ( $enable_comment_dropdown_show_hide_comments ) {
+			if ( $post_comment_count > 0 ) {
+				$has_comments_hidden = (bool) get_post_meta( get_the_ID(), '_sce_comments_hidden', true );
+
+				// If comments are hidden, show the show comments item.
+				if ( $has_comments_hidden ) {
+					$wp_admin_bar->add_node(
+						array(
+							'id'     => 'sce-show-hide-comments',
+							'parent' => 'sce-advanced-comment-shortcuts',
+							'title'  => __( 'Show Comments', 'comment-edit-pro' ),
+							'href'   => '#',
+						)
+					);
+				} else {
+					$wp_admin_bar->add_node(
+						array(
+							'id'     => 'sce-show-hide-comments',
+							'parent' => 'sce-advanced-comment-shortcuts',
+							'title'  => __( 'Hide Comments', 'comment-edit-pro' ),
+							'href'   => '#',
+						)
+					);
+				}
+			}
+		}
+
+		// Add delete post comments item to the admin bar.
+		if ( $enable_comment_dropdown_delete_post_comments ) {
+			// If post has comments, show delete comments.
+			if ( $post_comment_count > 0 ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'sce-delete-post-comments',
+						'parent' => 'sce-advanced-comment-shortcuts',
+						'title'  => __( 'Delete Post Comments', 'comment-edit-pro' ),
+						'href'   => '#',
+					)
+				);
+			}
+		}
+	}
+
+	/**
 	 * Add the admin bar shortcuts menu.
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar The admin bar object.
 	 */
-	public function add_admin_bar_comment_shortcuts( $wp_admin_bar ) {
+	public function add_admin_bar_comment_shortcuts_backend( $wp_admin_bar ) {
 		// Bail if not admin.
 		if ( ! is_admin() ) {
 			return;

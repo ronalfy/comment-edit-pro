@@ -517,17 +517,20 @@ class Tools {
 		// Retrieve options.
 		$comment_options = Options_Tools::get_options();
 		$return          = array(
-			'enableShortcutApproved'          => (bool) $comment_options['enable_shortcut_approved'],
-			'enableShortcutUnapproved'        => (bool) $comment_options['enable_shortcut_unapproved'],
-			'enableShortcutSpam'              => (bool) $comment_options['enable_shortcut_spam'],
-			'enableShortcutTrash'             => (bool) $comment_options['enable_shortcut_trash'],
-			'enableShortcutCountBubble'       => (bool) $comment_options['enable_shortcut_count_bubble'],
-			'enableCoreCommentDropdown'       => (bool) $comment_options['enable_core_comment_dropdown'],
-			'enableCommentDropdown'           => (bool) $comment_options['enable_comment_dropdown'],
-			'enableCommentDropdownApproved'   => (bool) $comment_options['enable_comment_dropdown_approved'],
-			'enableCommentDropdownUnapproved' => (bool) $comment_options['enable_comment_dropdown_unapproved'],
-			'enableCommentDropdownSpam'       => (bool) $comment_options['enable_comment_dropdown_spam'],
-			'enableCommentDropdownTrash'      => (bool) $comment_options['enable_comment_dropdown_trash'],
+			'enableShortcutApproved'                  => (bool) $comment_options['enable_shortcut_approved'],
+			'enableShortcutUnapproved'                => (bool) $comment_options['enable_shortcut_unapproved'],
+			'enableShortcutSpam'                      => (bool) $comment_options['enable_shortcut_spam'],
+			'enableShortcutTrash'                     => (bool) $comment_options['enable_shortcut_trash'],
+			'enableShortcutCountBubble'               => (bool) $comment_options['enable_shortcut_count_bubble'],
+			'enableCoreCommentDropdown'               => (bool) $comment_options['enable_core_comment_dropdown'],
+			'enableCommentDropdown'                   => (bool) $comment_options['enable_comment_dropdown'],
+			'enableCommentDropdownApproved'           => (bool) $comment_options['enable_comment_dropdown_approved'],
+			'enableCommentDropdownUnapproved'         => (bool) $comment_options['enable_comment_dropdown_unapproved'],
+			'enableCommentDropdownSpam'               => (bool) $comment_options['enable_comment_dropdown_spam'],
+			'enableCommentDropdownTrash'              => (bool) $comment_options['enable_comment_dropdown_trash'],
+			'enableCommentDropdownOpenCloseComments'  => (bool) $comment_options['enable_comment_dropdown_open_close_comments'],
+			'enableCommentDropdownDeletePostComments' => (bool) $comment_options['enable_comment_dropdown_delete_post_comments'],
+			'enableCommentDropdownShowHideComments'   => (bool) $comment_options['enable_comment_dropdown_show_hide_comments'],
 		);
 
 		// Send response.
@@ -552,17 +555,20 @@ class Tools {
 		$comment_options = Options_Tools::get_options();
 
 		// Update options. Filter all as bool.
-		$comment_options['enable_shortcut_approved']           = (bool) filter_input( INPUT_POST, 'enableShortcutApproved', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_shortcut_unapproved']         = (bool) filter_input( INPUT_POST, 'enableShortcutUnapproved', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_shortcut_spam']               = (bool) filter_input( INPUT_POST, 'enableShortcutSpam', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_shortcut_trash']              = (bool) filter_input( INPUT_POST, 'enableShortcutTrash', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_shortcut_count_bubble']       = (bool) filter_input( INPUT_POST, 'enableShortcutCountBubble', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_core_comment_dropdown']       = (bool) filter_input( INPUT_POST, 'enableCoreCommentDropdown', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_comment_dropdown']            = (bool) filter_input( INPUT_POST, 'enableCommentDropdown', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_comment_dropdown_approved']   = (bool) filter_input( INPUT_POST, 'enableCommentDropdownApproved', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_comment_dropdown_unapproved'] = (bool) filter_input( INPUT_POST, 'enableCommentDropdownUnapproved', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_comment_dropdown_spam']       = (bool) filter_input( INPUT_POST, 'enableCommentDropdownSpam', FILTER_VALIDATE_BOOLEAN );
-		$comment_options['enable_comment_dropdown_trash']      = (bool) filter_input( INPUT_POST, 'enableCommentDropdownTrash', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_approved']                     = (bool) filter_input( INPUT_POST, 'enableShortcutApproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_unapproved']                   = (bool) filter_input( INPUT_POST, 'enableShortcutUnapproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_spam']                         = (bool) filter_input( INPUT_POST, 'enableShortcutSpam', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_trash']                        = (bool) filter_input( INPUT_POST, 'enableShortcutTrash', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_shortcut_count_bubble']                 = (bool) filter_input( INPUT_POST, 'enableShortcutCountBubble', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_core_comment_dropdown']                 = (bool) filter_input( INPUT_POST, 'enableCoreCommentDropdown', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown']                      = (bool) filter_input( INPUT_POST, 'enableCommentDropdown', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_approved']             = (bool) filter_input( INPUT_POST, 'enableCommentDropdownApproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_unapproved']           = (bool) filter_input( INPUT_POST, 'enableCommentDropdownUnapproved', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_spam']                 = (bool) filter_input( INPUT_POST, 'enableCommentDropdownSpam', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_trash']                = (bool) filter_input( INPUT_POST, 'enableCommentDropdownTrash', FILTER_VALIDATE_BOOLEAN );
+		$comment_optoions['enable_comment_dropdown_open_close_comments'] = (bool) filter_input( INPUT_POST, 'enableCommentDropdownOpenCloseComments', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_delete_post_comments'] = (bool) filter_input( INPUT_POST, 'enableCommentDropdownDeletePostComments', FILTER_VALIDATE_BOOLEAN );
+		$comment_options['enable_comment_dropdown_show_hide_comments']   = (bool) filter_input( INPUT_POST, 'enableCommentDropdownShowHideComments', FILTER_VALIDATE_BOOLEAN );
 
 		// Save options.
 		Options_Tools::update_options( $comment_options );
