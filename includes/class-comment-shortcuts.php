@@ -135,13 +135,32 @@ class Comment_Shortcuts {
 		$spam_count     = $comment_counts->spam;
 		$trash_count    = $comment_counts->trash;
 
+		// Add group if shortcuts enabled.
+		if ( $approved_shortcut || $pending_shortcut || $spam_shortcut || $trash_shortcut ) {
+			$wp_admin_bar->add_group(
+				array(
+					'id'     => 'sce-comment-shortcuts',
+					'parent' => 'comments',
+				)
+			);
+
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'sce-comment-shortcuts-label',
+					'parent' => 'sce-comment-shortcuts',
+					'title'  => '<span style="font-weight: 900;">' . __( 'Shortcuts', 'comment-edit-pro' ) . '</span>',
+					'href'   => false,
+				)
+			);
+		}
+
 		// Add approved shortcut to the admin bar.
 		if ( $approved_shortcut ) {
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-approved-shortcut',
 					'title'  => __( 'View Approved', 'comment-edit-pro' ),
-					'parent' => 'comments',
+					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=approved' ) ),
 					'meta'   => array(
 						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-approved',
@@ -160,7 +179,7 @@ class Comment_Shortcuts {
 						__( 'View Pending <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
 						$pending_count
 					),
-					'parent' => 'comments',
+					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ),
 					'meta'   => array(
 						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-pending',
@@ -179,7 +198,7 @@ class Comment_Shortcuts {
 						__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
 						$spam_count
 					),
-					'parent' => 'comments',
+					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ),
 					'meta'   => array(
 						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-spam',
@@ -198,7 +217,7 @@ class Comment_Shortcuts {
 						__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
 						$trash_count
 					),
-					'parent' => 'comments',
+					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash' ) ),
 					'meta'   => array(
 						'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-trash',
@@ -224,7 +243,7 @@ class Comment_Shortcuts {
 			array(
 				'id'     => 'sce-advanced-comment-shortcuts-label',
 				'parent' => 'sce-advanced-comment-shortcuts',
-				'title'  => __( 'Advanced', 'comment-edit-pro' ),
+				'title'  => '<span style="font-weight: 900;">' . __( 'Advanced', 'comment-edit-pro' ) . '</span>',
 				'href'   => false,
 			)
 		);
