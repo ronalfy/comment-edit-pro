@@ -43,6 +43,131 @@ class Comment_Shortcuts {
 		// Add shortcuts to comments admin bar menu item if enabled.
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_comment_shortcuts_backend' ), 100 );
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_comment_shortcuts_frontend' ), 100 );
+
+		// Shortcut actions captured as Ajax request.
+		add_action( 'wp_ajax_sce_shortcut_open_comments', array( $this, 'ajax_shortcut_open_comments' ) );
+		add_action( 'wp_ajax_sce_shortcut_close_comments', array( $this, 'ajax_shortcut_close_comments' ) );
+		add_action( 'wp_ajax_sce_shortcut_hide_comments', array( $this, 'ajax_shortcut_hide_comments' ) );
+		add_action( 'wp_ajax_sce_shortcut_show_comments', array( $this, 'ajax_shortcut_show_comments' ) );
+
+		// Hide or show comments based on post meta.
+		add_filter( 'comments_array', array( $this, 'filter_show_comments' ), 9999 );
+	}
+
+	/**
+	 * Hide/show comments via comments_open filter and post meta value.
+	 *
+	 * @param array $comments array of comments.
+	 * @return array
+	 */
+	public function filter_show_comments( $comments ) {
+		if ( is_admin() || ( ! is_singular() && ! is_page() ) ) {
+			return $comments;
+		}
+		$post_id         = get_the_ID();
+		$comments_hidden = get_post_meta( $post_id, '_sce_comments_hidden', true );
+		if ( 'true' === $comments_hidden ) {
+			return array();
+		}
+		return $comments;
+	}
+
+	/**
+	 * Ajax callback for showing comments by setting post meta on a post.
+	 */
+	public function ajax_shortcut_show_comments() {
+		// Check nonce.
+		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_show_comments' . $post_id ) || ! $post_id ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
+		}
+
+		// Show comments for the post.
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
+		}
+		update_post_meta( $post_id, '_sce_comments_hidden', 'false' ); // _sce_comments_hidden can have false|true|inherit.
+
+		// Redirect back to the post.
+		wp_safe_redirect( get_permalink( $post_id ) );
+		exit;
+	}
+
+	/**
+	 * Ajax callback for hiding comments by setting post meta for post.
+	 */
+	public function ajax_shortcut_hide_comments() {
+		// Check nonce.
+		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_hide_comments' . $post_id ) || ! $post_id ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
+		}
+
+		// Hide comments for the post.
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
+		}
+		update_post_meta( $post_id, '_sce_comments_hidden', 'true' ); // _sce_comments_hidden can have false|true|inherit.
+
+		// Redirect back to the post.
+		wp_safe_redirect( get_permalink( $post_id ) );
+		exit;
+	}
+
+	/**
+	 * Ajax callback for opening comments from the frontend admin bar menu.
+	 *
+	 * Performs wp_safe_redirect back to the post it was on.
+	 */
+	public function ajax_shortcut_open_comments() {
+		// Check nonce.
+		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_open_comments' . $post_id ) || ! $post_id ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
+		}
+
+		// Open comments for the post.
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
+		}
+		$post->comment_status = 'open';
+		wp_update_post( $post );
+
+		// Redirect back to the post.
+		wp_safe_redirect( get_permalink( $post_id ) );
+		exit;
+	}
+
+	/**
+	 * Ajax callback for closing comments from the frontend admin bar menu.
+	 *
+	 * Performs wp_safe_redirect back to the post it was on.
+	 */
+	public function ajax_shortcut_close_comments() {
+		// Check nonce.
+		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_close_comments' . $post_id ) || ! $post_id ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
+		}
+
+		// Close comments for the post.
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
+		}
+		$post->comment_status = 'closed';
+		wp_update_post( $post );
+
+		// Redirect back to the post.
+		wp_safe_redirect( get_permalink( $post_id ) );
+		exit;
 	}
 
 	/**
@@ -252,21 +377,41 @@ class Comment_Shortcuts {
 		if ( $enable_comment_dropdown_open_close_comments ) {
 			// If comments are open, add close. If closed, add open.
 			if ( comments_open() ) {
+
+				// Get URL endpoint for closing comments.
+				$close_comments_url = add_query_arg(
+					array(
+						'action'  => 'sce_shortcut_close_comments',
+						'nonce'   => wp_create_nonce( 'sce_shortcut_close_comments' . $post_id ),
+						'post_id' => $post_id,
+					),
+					admin_url( 'admin-ajax.php' )
+				);
+
 				$wp_admin_bar->add_node(
 					array(
 						'id'     => 'sce-open-close-comments',
 						'parent' => 'sce-advanced-comment-shortcuts',
 						'title'  => __( 'Close Comments', 'comment-edit-pro' ),
-						'href'   => '#',
+						'href'   => esc_url( $close_comments_url ),
 					)
 				);
 			} else {
+				// Get URL endpoint for opening comments.
+				$open_comments_url = add_query_arg(
+					array(
+						'action'  => 'sce_shortcut_open_comments',
+						'nonce'   => wp_create_nonce( 'sce_shortcut_open_comments' . $post_id ),
+						'post_id' => $post_id,
+					),
+					admin_url( 'admin-ajax.php' )
+				);
 				$wp_admin_bar->add_node(
 					array(
 						'id'     => 'sce-open-close-comments',
 						'parent' => 'sce-advanced-comment-shortcuts',
 						'title'  => __( 'Open Comments', 'comment-edit-pro' ),
-						'href'   => '#',
+						'href'   => esc_url( $open_comments_url ),
 					)
 				);
 			}
@@ -275,25 +420,41 @@ class Comment_Shortcuts {
 		// Add show/hide comments item to the admin bar.
 		if ( $enable_comment_dropdown_show_hide_comments ) {
 			if ( $post_comment_count > 0 ) {
-				$has_comments_hidden = (bool) get_post_meta( get_the_ID(), '_sce_comments_hidden', true );
+				$has_comments_hidden = get_post_meta( get_the_ID(), '_sce_comments_hidden', true );
 
 				// If comments are hidden, show the show comments item.
-				if ( $has_comments_hidden ) {
+				if ( 'true' === $has_comments_hidden ) {
+					$show_comments_url = add_query_arg(
+						array(
+							'action'  => 'sce_shortcut_show_comments',
+							'nonce'   => wp_create_nonce( 'sce_shortcut_show_comments' . $post_id ),
+							'post_id' => $post_id,
+						),
+						admin_url( 'admin-ajax.php' )
+					);
 					$wp_admin_bar->add_node(
 						array(
 							'id'     => 'sce-show-hide-comments',
 							'parent' => 'sce-advanced-comment-shortcuts',
 							'title'  => __( 'Show Comments', 'comment-edit-pro' ),
-							'href'   => '#',
+							'href'   => esc_url( $show_comments_url ),
 						)
 					);
 				} else {
+					$hide_comments_url = add_query_arg(
+						array(
+							'action'  => 'sce_shortcut_hide_comments',
+							'nonce'   => wp_create_nonce( 'sce_shortcut_hide_comments' . $post_id ),
+							'post_id' => $post_id,
+						),
+						admin_url( 'admin-ajax.php' )
+					);
 					$wp_admin_bar->add_node(
 						array(
 							'id'     => 'sce-show-hide-comments',
 							'parent' => 'sce-advanced-comment-shortcuts',
 							'title'  => __( 'Hide Comments', 'comment-edit-pro' ),
-							'href'   => '#',
+							'href'   => esc_url( $hide_comments_url ),
 						)
 					);
 				}
