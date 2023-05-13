@@ -18,7 +18,8 @@
 		"sceTools": "readonly",
 		"sce_options": "readonly",
 		"sceFrontend": "readonly",
-		"sceToolsCommentShortcuts": "readonly"
+		"sceToolsCommentShortcuts": "readonly",
+		"sceDeletePostComments": "readonly"
 	},
 	"env": {
 		"browser": true,

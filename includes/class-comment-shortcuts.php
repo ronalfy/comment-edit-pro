@@ -9,6 +9,7 @@ namespace CommentEditPro\Includes;
 
 use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options as Options;
+use WP_Comment;
 
 /**
  * Class Comment_Shortcuts
@@ -52,6 +53,187 @@ class Comment_Shortcuts {
 
 		// Hide or show comments based on post meta.
 		add_filter( 'comments_array', array( $this, 'filter_show_comments' ), 9999 );
+
+		// Add fancybox to frontend if delete comments is enabled.
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+
+		// Add ajax endpoint for showing the delete posts comment modal.
+		add_action( 'wp_ajax_sce_shortcut_delete_comments', array( $this, 'ajax_fancybox_interface' ) );
+
+		// Add ajax endpoint for gathering comments for deletion.
+		add_action( 'wp_ajax_sce_shortcut_delete_comments_get_comments', array( $this, 'ajax_get_comments_for_deletion' ) );
+
+		// Add ajax endpoint for deleting all post comments.
+		add_action( 'wp_ajax_sce_shortcut_delete_comments_delete_comments', array( $this, 'ajax_delete_post_comments' ) );
+	}
+
+	/**
+	 * Delete post comments a little at a time.
+	 */
+	public function ajax_delete_post_comments() {
+		$nonce                  = filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT );
+		$post_id                = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+		$delete_total           = filter_input( INPUT_POST, 'delete_total', FILTER_VALIDATE_INT ); // num of comments to delete.
+		$total_deleted_comments = filter_input( INPUT_POST, 'total_deleted_comments', FILTER_VALIDATE_INT ); // Current total of deleted comments.
+		$total_all_comments     = filter_input( INPUT_POST, 'total_all_comments', FILTER_VALIDATE_INT ); // Total comments for the post.
+		$delete_permanently    = filter_input( INPUT_POST, 'delete_permanently', FILTER_VALIDATE_BOOLEAN ); // Delete permanently or move to trash.
+
+		// Verify nonce and permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => 'The user must be able to edit comments.',
+				)
+			);
+		}
+		if ( ! wp_verify_nonce( $nonce, 'sce-delete-post-comments' . $post_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => 'Could not validate nonce.',
+				)
+			);
+		}
+
+		// Get comments for deletion.
+		$comment_args = array(
+			'post_id' => $post_id,
+			'status'  => 'all',
+			'number'  => $delete_total,
+		);
+		$comments     = new \WP_Comment_Query( $comment_args );
+
+		// Delete comments.
+		$count_deleted = 0;
+		foreach ( $comments->comments as $comment ) {
+			wp_delete_comment( $comment->comment_ID, $delete_permanently );
+			$count_deleted ++;
+		}
+
+		// Determine if total has been reached.
+		$total_deleted_comments = $total_deleted_comments + $count_deleted;
+		if ( $total_deleted_comments >= $total_all_comments ) {
+			$more = false;
+
+			// Clear post comment cache.
+			clean_post_cache( $post_id );
+			if ( function_exists( 'rocket_clean_post' ) ) {
+				\rocket_clean_post( $post_id );
+			}
+		} else {
+			$more = true;
+		}
+
+		// Return success.
+		wp_send_json_success(
+			array(
+				'count_deleted'          => $count_deleted,
+				'total_deleted_comments' => $total_deleted_comments,
+				'message'                => sprintf(
+					/* translators: %s: Comment count. */
+					_n( 'Deleted %s comment total.', 'Deleted %s comments total.', $total_deleted_comments, 'comment-edit-pro' ),
+					number_format_i18n( $total_deleted_comments )
+				),
+				'more'                   => $more,
+			)
+		);
+	}
+
+	/**
+	 * Gather comments for deletion via Ajax.
+	 */
+	public function ajax_get_comments_for_deletion() {
+		$nonce   = filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT );
+		$post_id = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+
+		// Verify nonce and permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => 'The user must be able to edit comments.',
+				)
+			);
+		}
+		if ( ! wp_verify_nonce( $nonce, 'sce-delete-post-comments' . $post_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => 'Could not validate nonce.',
+				)
+			);
+		}
+
+		// Get comments for deletion.
+		$comment_args  = array(
+			'post_id' => $post_id,
+			'status'  => 'all',
+		);
+		$comments      = new \WP_Comment_Query( $comment_args );
+		$comment_count = count( $comments->comments );
+
+		// Return comment count and label.
+		wp_send_json_success(
+			array(
+				'count'   => $comment_count,
+				'message' => sprintf(
+					/* translators: %s: Comment count. */
+					_n( 'There is %s comment ready for deletion.', 'There are %s comments ready for deletion.', $comment_count, 'comment-edit-pro' ),
+					number_format_i18n( $comment_count )
+				),
+			)
+		);
+	}
+
+	/**
+	 * Get the HTML for FancyBox Edit via Ajax
+	 */
+	public function ajax_fancybox_interface() {
+		$nonce = sanitize_text_field( $_GET['nonce'] ); // phpcs:ignore
+		$post_id = absint( $_GET['post_id'] ); // phpcs:ignore
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_die( 'The user must be able to edit comments.' );
+		}
+		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_delete_comments' . $post_id ) ) {
+			wp_die( 'Could not validate nonce.' );
+		}
+		include_once Functions::get_plugin_dir( '/templates/delete-post-comments.php' );
+		die( '' );
+	}
+
+	/**
+	 * Add Fancybox scripts and styles.
+	 */
+	public function enqueue_frontend_scripts() {
+		if ( ! is_singular() && ! is_page() ) {
+			return;
+		}
+
+		// Determine if we should load the scripts. Only when delete comments is enabled in the admin bar menu.
+		$options                                      = Options_Tools::get_options();
+		$enable_comment_dropdown_delete_post_comments = (bool) $options['enable_comment_dropdown_delete_post_comments'];
+		if ( ! $enable_comment_dropdown_delete_post_comments ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'jquery-fancybox',
+			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.js' ),
+			array( 'jquery' ),
+			Functions::get_plugin_version(),
+			true
+		);
+		wp_enqueue_script(
+			'delete-post-comments-init',
+			Functions::get_plugin_url( '/dist/delete-post-comments-init.js' ),
+			array( 'jquery-fancybox' ),
+			Functions::get_plugin_version(),
+			true
+		);
+		wp_enqueue_style(
+			'fancybox',
+			Functions::get_plugin_url( '/fancybox/jquery.fancybox.min.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
+		);
 	}
 
 	/**
@@ -463,6 +645,16 @@ class Comment_Shortcuts {
 
 		// Add delete post comments item to the admin bar.
 		if ( $enable_comment_dropdown_delete_post_comments ) {
+
+			// Get delete ajax URL.
+			$delete_comments_url = add_query_arg(
+				array(
+					'action'  => 'sce_shortcut_delete_comments',
+					'nonce'   => wp_create_nonce( 'sce_shortcut_delete_comments' . $post_id ),
+					'post_id' => $post_id,
+				),
+				admin_url( 'admin-ajax.php' )
+			);
 			// If post has comments, show delete comments.
 			if ( $post_comment_count > 0 ) {
 				$wp_admin_bar->add_node(
@@ -470,7 +662,10 @@ class Comment_Shortcuts {
 						'id'     => 'sce-delete-post-comments',
 						'parent' => 'sce-advanced-comment-shortcuts',
 						'title'  => __( 'Delete Post Comments', 'comment-edit-pro' ),
-						'href'   => '#',
+						'href'   => esc_url( $delete_comments_url ),
+						'meta'   => array(
+							'class' => 'sce-delete-post-comments',
+						),
 					)
 				);
 			}

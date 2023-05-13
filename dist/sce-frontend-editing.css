@@ -268,4 +268,34 @@ h6 {
   vertical-align: middle;
 }
 
+/**
+ * SCE Delete post comments progress bar and styles.
+ */
+.sce-delete-comments-progress-bar {
+  position: relative;
+  height: 20px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #721c24;
+}
+.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+  font-size: 12px;
+}
+
 /*# sourceMappingURL=sce-frontend-editing.css.map*/

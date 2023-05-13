@@ -258,7 +258,7 @@ class Frontend_Editing {
 	 * Add Fancybox scripts and styles.
 	 */
 	public function add_scripts_and_styles() {
-		if ( ! is_singular() ) {
+		if ( ! is_singular() && ! is_page() ) {
 			return;
 		}
 		wp_enqueue_script(
