@@ -76,7 +76,7 @@ class Comment_Shortcuts {
 		$delete_total           = filter_input( INPUT_POST, 'delete_total', FILTER_VALIDATE_INT ); // num of comments to delete.
 		$total_deleted_comments = filter_input( INPUT_POST, 'total_deleted_comments', FILTER_VALIDATE_INT ); // Current total of deleted comments.
 		$total_all_comments     = filter_input( INPUT_POST, 'total_all_comments', FILTER_VALIDATE_INT ); // Total comments for the post.
-		$delete_permanently    = filter_input( INPUT_POST, 'delete_permanently', FILTER_VALIDATE_BOOLEAN ); // Delete permanently or move to trash.
+		$delete_permanently     = filter_input( INPUT_POST, 'delete_permanently', FILTER_VALIDATE_BOOLEAN ); // Delete permanently or move to trash.
 
 		// Verify nonce and permissions.
 		if ( ! current_user_can( 'moderate_comments' ) ) {
