@@ -4514,8 +4514,9 @@ var PostDeleteComments = function PostDeleteComments() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Delete post comments', 'comment-edit-pro'), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
     className: "sce-headling-admin-shortcut"
   }, "(", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
-    href: "",
-    target: "_blank"
+    href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/tools/comment-shortcuts#deleting-all-post-comments",
+    target: "_blank",
+    rel: "noopener noreferrer"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View the Docs', 'comment-edit-pro')), ")")), isDeleting && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "sce-delete-comments-status"
   }, statusMessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {

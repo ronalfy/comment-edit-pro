@@ -63,8 +63,9 @@ const PostDeleteComments = () => {
 				<span className="sce-headling-admin-shortcut">
 					(
 					<a
-						href=""
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/tools/comment-shortcuts#deleting-all-post-comments"
 						target="_blank"
+						rel="noopener noreferrer"
 					>
 						{ __( 'View the Docs', 'comment-edit-pro' ) }
 					</a>

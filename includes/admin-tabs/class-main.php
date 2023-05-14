@@ -159,6 +159,18 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-shortcuts' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/shortcuts.jpg' ) ); ?>" alt="<?php esc_html_e( 'A man taking a shortcut into a portal.', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Comment Shortcuts', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Please some shortcuts in Comments menu, and add shortcuts to the top admin bar menu too.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-shortcuts' ) ); ?>"><?php esc_html_e( 'View Shortcuts Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
 						<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/convertkit.jpg' ) ); ?>" alt="<?php esc_html_e( 'ConvertKit logo', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
@@ -203,6 +215,30 @@ class Main {
 						</div>
 						<div class="sce-admin-panel-card-footer">
 							<a href="<?php echo esc_url( Functions::get_settings_url( 'mentions' ) ); ?>"><?php esc_html_e( 'View Mention Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-activity' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/hour-glass.jpg' ) ); ?>" alt="<?php esc_html_e( 'Photo of a clock and hourglass.', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Post Activity Expiration', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Instead of setting your content to expire after a set amount of days, close comments instead by how long any activity has taken place.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'comment-activity' ) ); ?>"><?php esc_html_e( 'View Expiration Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'post-types' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/comment-bubble.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Speech bubbles', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'Post Type Settings', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'Blanket enable or disable comments for your various post types.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'tools', 'post-types' ) ); ?>"><?php esc_html_e( 'View Post Type Settings', 'comment-edit-pro' ); ?></a>
 						</div>
 					</div>
 					<div class="sce-admin-panel-card">

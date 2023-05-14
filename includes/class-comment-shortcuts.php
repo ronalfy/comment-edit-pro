@@ -455,7 +455,7 @@ class Comment_Shortcuts {
 				array(
 					'id'     => 'sce-comment-shortcuts-label',
 					'parent' => 'sce-comment-shortcuts',
-					'title'  => '<span style="font-weight: 900;">' . __( 'Shortcuts', 'comment-edit-pro' ) . '</span>',
+					'title'  => '<span style="font-weight: 900;">' . __( 'Admin Shortcuts', 'comment-edit-pro' ) . '</span>',
 					'href'   => false,
 				)
 			);
@@ -531,6 +531,108 @@ class Comment_Shortcuts {
 					),
 				)
 			);
+		}
+
+		// Add group if shortcuts enabled.
+		if ( $approved_shortcut || $pending_shortcut || $spam_shortcut || $trash_shortcut ) {
+			$wp_admin_bar->add_group(
+				array(
+					'id'     => 'sce-comment-shortcuts-post',
+					'parent' => 'comments',
+				)
+			);
+
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'sce-comment-shortcuts-post-label',
+					'parent' => 'sce-comment-shortcuts-post',
+					'title'  => '<span style="font-weight: 900;">' . __( 'Post Shortcuts', 'comment-edit-pro' ) . '</span>',
+					'href'   => false,
+				)
+			);
+
+			// Get comment count for current post.
+			$post_comment_counts = wp_count_comments( get_the_ID() );
+			$post_approved_comment_count = $post_comment_counts->approved;
+			$post_pending_comment_count  = $post_comment_counts->moderated;
+			$post_spam_comment_count     = $post_comment_counts->spam;
+			$post_trash_comment_count    = $post_comment_counts->trash;
+
+			// Add approved shortcut to the admin bar.
+			if ( $post_approved_comment_count ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'comment-approved-shortcut-post',
+						'title'  => sprintf(
+							/* translators: %s: comment count */
+							__( 'View Approved <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							$post_approved_comment_count
+						),
+						'parent' => 'sce-comment-shortcuts-post',
+						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=approved&p=' . get_the_ID() ) ),
+						'meta'   => array(
+							'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-approved-post',
+						),
+					)
+				);
+			}
+
+			// Add pending shortcut to the admin bar.
+			if ( $post_pending_comment_count ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'comment-pending-shortcut-post',
+						'title'  => sprintf(
+							/* translators: %s: comment count */
+							__( 'View Pending <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							$post_pending_comment_count
+						),
+						'parent' => 'sce-comment-shortcuts-post',
+						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated&p=' . get_the_ID() ) ),
+						'meta'   => array(
+							'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-pending-post',
+						),
+					)
+				);
+			}
+
+			// Add spam shortcut to the admin bar.
+			if ( $post_spam_comment_count ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'comment-spam-shortcut-post',
+						'title'  => sprintf(
+							/* translators: %s: comment count */
+							__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							$post_spam_comment_count
+						),
+						'parent' => 'sce-comment-shortcuts-post',
+						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam&p=' . get_the_ID() ) ),
+						'meta'   => array(
+							'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-spam-post',
+						),
+					)
+				);
+			}
+
+			// Add trash shortcut to the admin bar.
+			if ( $post_trash_comment_count ) {
+				$wp_admin_bar->add_node(
+					array(
+						'id'     => 'comment-trash-shortcut-post',
+						'title'  => sprintf(
+							/* translators: %s: comment count */
+							__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							$post_trash_comment_count
+						),
+						'parent' => 'sce-comment-shortcuts-post',
+						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash&p=' . get_the_ID() ) ),
+						'meta'   => array(
+							'class' => 'sce-admin-bar-comment-shortcuts sce-admin-bar-comment-shortcut-trash-post',
+						),
+					)
+				);
+			}
 		}
 
 		// Bail if no shortcuts are enabled.
