@@ -180,7 +180,7 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function add_scripts() {
-		 wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing', 'jquery' ), COMMENTEDITPRO_VERSION, true );
+		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing', 'jquery' ), COMMENTEDITPRO_VERSION, true );
 		if ( Functions::is_multisite() ) {
 			$options = get_site_option( 'sce_options', false );
 		} else {
@@ -219,11 +219,7 @@ class Comment_Edit_Pro {
 		if ( ! is_singular() && ! is_page() ) {
 			return;
 		}
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options', false );
-		} else {
-			$options = get_option( 'sce_options', false );
-		}
+		$options = Options::get_options();
 		// Output JSON.
 		$localized_vars = array(
 			'comments_wrapper_id' => sanitize_text_field( $options['comments_wrapper_id'] ),
@@ -395,12 +391,12 @@ class Comment_Edit_Pro {
 	 */
 	public function sce_plugin_updater() {
 		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options' );
+			$options = get_site_option( 'sce_options', array() );
 		} else {
-			$options = get_option( 'sce_options' );
+			$options = get_option( 'sce_options', array() );
 		}
 
-		$license_valid = $options['license_valid'];
+		$license_valid = $options['license_valid'] ?? '';
 		if ( isset( $options['license'] ) && 'valid' === $license_valid ) {
 			// setup the updater.
 			$edd_updater = new Plugin_Updater(
