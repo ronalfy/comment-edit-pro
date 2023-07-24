@@ -45,8 +45,10 @@ class Comment_Editing {
 	 */
 	public function maybe_disable_comment_editing() {
 		$options = Options::get_options();
-		if ( class_exists( 'Simple_Comment_Editing' ) && ! (bool) $options['enable_comment_editing'] ) {
-			$sce = \Simple_Comment_Editing::get_instance();
+		$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
+
+		if ( $comment_edit_pro->is_sce_enabled() && ! (bool) $options['enable_comment_editing'] ) {
+			$sce = \DLXPlugins\CommentEditLite\Simple_Comment_Editing::get_instance();
 			remove_action( 'comment_post', array( $sce, 'comment_posted' ), 100, 1 );
 			remove_filter( 'comment_excerpt', array( $sce, 'add_edit_interface' ), 1000, 2 );
 			remove_filter( 'comment_text', array( $sce, 'add_edit_interface' ), 1000, 2 );
