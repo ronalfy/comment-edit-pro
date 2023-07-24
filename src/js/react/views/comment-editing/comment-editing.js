@@ -233,16 +233,26 @@ const Interface = ( props ) => {
 									) }
 								/>
 								{ ! sceCommentEditing.is_sce_installed && (
-									<Notice
-										message={ __(
-											'Comment Edit Lite is not installed and is needed to enable comment editing.',
-											'comment-edit-pro'
-										) }
-										status="error"
-										politeness="assertive"
-										inline={ false }
-										icon={ CircularExclamationIcon }
-									/>
+									<>
+										<Notice
+											message={ __(
+												'Comment Edit Lite is not installed and is needed to enable comment editing.',
+												'comment-edit-pro'
+											) }
+											status="error"
+											politeness="assertive"
+											inline={ false }
+											icon={ CircularExclamationIcon }
+										/>
+										<Button
+											variant="primary"
+											href={ sceCommentEditing.sce_install_url }
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{ __( 'Install Comment Edit Lite', 'comment-edit-pro' ) }
+										</Button>
+									</>
 								) }
 								{ ( sceCommentEditing.is_sce_installed && ! getValues( 'enableCommentEditing' ) ) && (
 									<Notice

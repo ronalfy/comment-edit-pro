@@ -9,6 +9,7 @@ namespace CommentEditPro\Includes;
 
 use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options as Options;
+use DLXPlugins\CommentEditLite\Functions as LiteFunctions;
 
 /**
  * Class Avatars
@@ -240,9 +241,11 @@ class Avatars {
 		}
 
 		// One last try for editing privs.
-		if ( ! $can_edit && class_exists( 'Simple_Comment_Editing' ) ) {
-			$sce      = \Simple_Comment_Editing::get_instance();
-			$can_edit = $sce->can_edit( $comment_id, $post_id );
+		$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
+		if ( ! $can_edit && $comment_edit_pro->is_sce_enabled() ) {
+			// Get functions static class reference.
+			$can_edit = LiteFunctions::can_edit( $comment_id, $post_id );
+
 		}
 
 		// If person can't edit, exit.

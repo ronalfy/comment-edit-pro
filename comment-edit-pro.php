@@ -301,7 +301,7 @@ class Comment_Edit_Pro {
 			return false;
 		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
 			return true;
-		} elseif ( ! is_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
+		} elseif ( ! is_multisite() && class_exists( 'DLXPlugins\CommentEditLite\Simple_Comment_Editing' ) ) {
 			return true;
 		}
 		return false;
@@ -394,11 +394,7 @@ class Comment_Edit_Pro {
 	 * @access public
 	 */
 	public function sce_plugin_updater() {
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options' );
-		} else {
-			$options = get_option( 'sce_options' );
-		}
+		$options = Options::get_options();
 
 		$license_valid = $options['license_valid'];
 		if ( isset( $options['license'] ) && 'valid' === $license_valid ) {

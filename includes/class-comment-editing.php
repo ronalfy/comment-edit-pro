@@ -246,6 +246,13 @@ class Comment_Editing {
 				true
 			);
 			$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
+
+			// Get SCE comment install URL.
+			$sce_slug = 'simple-comment-editing';
+			$sce_install_nonce = wp_create_nonce( 'install-plugin_' . $sce_slug );
+			$sce_install_url   = admin_url( 'update.php?action=install-plugin&plugin=' . $sce_slug . '&_wpnonce=' . $sce_install_nonce );
+
+			// Localize.
 			wp_localize_script(
 				'sce-comment-editing',
 				'sceCommentEditing',
@@ -261,6 +268,7 @@ class Comment_Editing {
 					'light_menu_theme'   => esc_url( Functions::get_plugin_url( '/images/screenshot-menu-theme-light.png' ) ),
 					'dark_menu_theme'    => esc_url( Functions::get_plugin_url( '/images/screenshot-menu-theme-dark.png' ) ),
 					'is_sce_installed'   => $comment_edit_pro->is_sce_enabled(),
+					'sce_install_url'    => esc_url_raw( $sce_install_url ),
 				)
 			);
 		}
