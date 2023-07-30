@@ -295,7 +295,7 @@ class Comment_Edit_Pro {
 			return true;
 		} elseif ( is_network_admin() && is_plugin_active_for_network( 'comment-edit-pro' ) && ! is_plugin_active_for_network( 'simple-comment-editing' ) ) {
 			return false;
-		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'Simple_Comment_Editing' ) ) {
+		} elseif ( is_multisite() && ! self::is_plugin_activated_multisite() && class_exists( 'DLXPlugins\CommentEditLite\Simple_Comment_Editing' ) ) {
 			return true;
 		} elseif ( ! is_multisite() && class_exists( 'DLXPlugins\CommentEditLite\Simple_Comment_Editing' ) ) {
 			return true;

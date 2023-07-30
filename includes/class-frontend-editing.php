@@ -203,6 +203,14 @@ class Frontend_Editing {
 		$url     = sanitize_text_field( $_POST['url'] ); // phpcs:ignore
 		$email   = sanitize_text_field( $_POST['email'] ); // phpcs:ignore
 		$status  = sanitize_text_field( $_POST['status'] ); // phpcs:ignore
+		$rating =  $_POST['rating'] ?? null; // phpcs:ignore
+
+		// If null or not valid rating, set to 0.
+		if ( ! $rating || ! is_numeric( $rating ) || $rating < 0 || $rating > 5 ) {
+			$rating = 0;
+		} else {
+			$rating = absint( $rating );
+		}
 
 		// Mark as spam if spam.
 		if ( 'spam' === $status ) {
@@ -222,6 +230,11 @@ class Frontend_Editing {
 		$sce_comment['comment_approved']     = $status;
 
 		wp_update_comment( $sce_comment );
+
+		// Update review rating if WooCommerce.
+		if ( class_exists( 'WooCommerce' ) && 'review' === $sce_comment['comment_type'] && $rating > 0 ) {
+			update_comment_meta( $comment_id, 'rating', $rating );
+		}
 
 		// Format the comment for returning.
 		if ( function_exists( 'mb_convert_encoding' ) ) {
@@ -285,7 +298,7 @@ class Frontend_Editing {
 		wp_enqueue_script(
 			'comment-edit-pro',
 			Functions::get_plugin_url( '/js/simple-comment-editing-options.js' ),
-			array( 'jquery', 'jquery-fancybox' ),
+			array( 'jquery', 'jquery-fancybox', 'wp-ajax-response' ),
 			Functions::get_plugin_version(),
 			true
 		);

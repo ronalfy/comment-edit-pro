@@ -276,6 +276,7 @@
   border-bottom: 1px solid var(--meatball-menu-item-border-bottom);
   box-sizing: border-box;
   padding: 0 !important;
+  margin: 0 !important;
 }
 .sce-meatball-content li.sce-meatball-menu-item a.button-reset {
   display: flex;

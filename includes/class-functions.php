@@ -378,13 +378,27 @@ class Functions {
 
 		// Add div tag.
 		$allowed_tags['div'] = array(
-			'class' => array(),
-			'id'    => array(),
+			'class'                => array(),
+			'id'                   => array(),
+			'data-selected-rating' => array(), /* for WooCommerce */
 		);
 
 		$allowed_tags['span'] = array(
 			'class' => array(),
 			'id'    => array(),
+		);
+
+		$allowed_tags['select'] = array(
+			'class'    => array(),
+			'id'       => array(),
+			'required' => array(),
+			'style'    => array(),
+		);
+		$allowed_tags['option'] = array(
+			'class'    => array(),
+			'id'       => array(),
+			'value'    => array(),
+			'selected' => array(),
 		);
 
 		if ( ! $svg ) {

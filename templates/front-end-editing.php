@@ -46,7 +46,21 @@ wp_localize_script(
 		'ajaxurl'  => admin_url( 'admin-ajax.php' ),
 	)
 );
+/**
+ * Enqueue WooCommerce reviews scripts/styles.
+ */
+if ( class_exists( 'WC_Frontend_Scripts' ) ) {
+	\WC_Frontend_Scripts::load_scripts();
+
+	// Get Woo Styles.
+	$wc_styles = \WC_Frontend_Scripts::get_styles();
+
+	// // Get the main product stylesheet.
+	wp_register_style( 'woocommerce-general', $wc_styles['woocommerce-general']['src'], array(), $wc_styles['woocommerce-general']['version'], $wc_styles['woocommerce-general']['media'] );
+}
+
 $sce_comment        = get_comment( $comment_id );
+$sce_comment_type   = $sce_comment->comment_type;
 $comment_author     = $this->format_comment_text( $sce_comment->comment_author );
 $comment_email      = $sce_comment->comment_author_email;
 $comment_content    = $this->format_comment_text( $sce_comment->comment_content );
@@ -59,25 +73,38 @@ $sce_admin_edit_url = add_query_arg(
 	),
 	admin_url( 'comment.php' )
 );
+$css_scripts_to_print = array(
+	'sce-frontend-editing-css',
+);
+
+$js_scripts_to_print = array(
+	'sce-frontend-editing-js',
+);
+if ( 'review' === $sce_comment_type ) {
+	$js_scripts_to_print[]  = 'wc-single-product';
+	$css_scripts_to_print[] = 'woocommerce-general';
+}
 ?>
 <html>
 	<head>
 		<?php
-		wp_print_styles(
-			array(
-				'sce-frontend-editing-css',
-			)
-		);
-		wp_print_scripts(
-			array(
-				'sce-frontend-editing-js',
-			)
-		);
+		wp_print_styles( $css_scripts_to_print );
+		wp_print_scripts( $js_scripts_to_print );
 		?>
 	</head>
 	<body>
 		<div class="sce-wrapper" style="height: auto; overflow: hidden">
-			<h1><?php esc_html_e( 'Comment Editing', 'comment-edit-pro' ); ?> <span class="sce-headling-admin-shortcut">(<a href="<?php echo esc_url( $sce_admin_edit_url ); ?>" target="_blank"><?php esc_html_e( 'View in Admin', 'comment-edit-pro' ); ?></a>)</span></h1>
+			<?php
+			if ( 'review' === $sce_comment_type ) :
+				?>
+				<h1><?php esc_html_e( 'Review Editing', 'comment-edit-pro' ); ?> <span class="sce-headling-admin-shortcut">(<a href="<?php echo esc_url( $sce_admin_edit_url ); ?>" target="_blank"><?php esc_html_e( 'View in Admin', 'comment-edit-pro' ); ?></a>)</span></h1>
+				<?php
+			else :
+				?>
+				<h1><?php esc_html_e( 'Comment Editing', 'comment-edit-pro' ); ?> <span class="sce-headling-admin-shortcut">(<a href="<?php echo esc_url( $sce_admin_edit_url ); ?>" target="_blank"><?php esc_html_e( 'View in Admin', 'comment-edit-pro' ); ?></a>)</span></h1>
+				<?php
+			endif;
+			?>
 			<form>
 				<div class="sce-form-group-grid">
 					<div class="sce-form-group-grid-row">
@@ -93,11 +120,44 @@ $sce_admin_edit_url = add_query_arg(
 						<input type="text" value="<?php echo esc_attr( esc_url_raw( $comment_url ) ); ?>" class="form-control" id="sce-url" placeholder="<?php esc_html_e( 'Enter a URL', 'comment-edit-pro' ); ?>">
 					</div>
 					<div class="sce-form-group-grid-row sce-has-textarea">
-						<label for="sce-content"><?php esc_html_e( 'Comment', 'comment-edit-pro' ); ?></label>
+						<?php
+						if ( 'review' === $sce_comment_type ) :
+							?>
+							<label for="sce-content"><?php esc_html_e( 'Review', 'comment-edit-pro' ); ?></label>
+							<?php
+						else :
+							?>
+							<label for="sce-content"><?php esc_html_e( 'Comment', 'comment-edit-pro' ); ?></label>
+							<?php
+						endif;
+						?>
 						<textarea class="form-control" rows="5" id="sce-content"><?php echo wp_kses_post( $comment_content ); ?></textarea>
 					</div>
+					<?php
+					if ( 'review' === $sce_comment_type && class_exists( '\DLXPlugins\CommentEditLite\WooCommerce' ) ) :
+						?>
+						<div class="sce-form-group-grid-row woocommerce">
+							<label for="sce-rating"><?php esc_html_e( 'Rating', 'comment-edit-pro' ); ?></label>
+							<?php
+							$markup = \DLXPlugins\CommentEditLite\WooCommerce::add_woocommerce_fields( '', $sce_comment->comment_post_ID, $comment_id, $sce_comment  );
+							echo wp_kses( $markup, Functions::get_kses_allowed_html() );
+							?>
+						</div>
+						<?php
+					endif;
+					?>
 					<div class="sce-form-group-grid-row">
-						<label for="sce-comment"><?php esc_html_e( 'Comment Status', 'comment-edit-pro' ); ?></label>
+						<?php
+						if ( 'review' === $sce_comment_type ) :
+							?>
+							<label for="sce-comment"><?php esc_html_e( 'Review Status', 'comment-edit-pro' ); ?></label>
+							<?php
+						else :
+							?>
+							<label for="sce-comment"><?php esc_html_e( 'Comment Status', 'comment-edit-pro' ); ?></label>
+							<?php
+						endif;
+						?>
 						<div class="sce-radio-group-grid">
 							<div class="sce-radio-group-grid-row">
 								<input class="form-check-input" type="radio" name="status" id="status-approved" value="1" <?php checked( 1, $sce_comment_status ); ?>>
@@ -126,10 +186,24 @@ $sce_admin_edit_url = add_query_arg(
 					wp_nonce_field( 'sce-modify-comment-' . $comment_id, 'sce_nonce' );
 					?>
 					<div class="sce-form-button-grid-items">
-						<button type="submit" class="sce-save-comment sce-button sce-button-save"><?php esc_html_e( 'Save Comment', 'comment-edit-pro' ); ?></button>
-						<button class="sce-close sce-button sce-button-info"><?php esc_html_e( 'Close', 'comment-edit-pro' ); ?></button>
-						<div class="empty-div"></div>
-						<button type="submit" class="sce-delete-comment sce-button sce-button-delete"><?php esc_html_e( 'Delete Comment', 'comment-edit-pro' ); ?></button>
+						<?php
+						if ( 'review' === $sce_comment_type ) :
+							?>
+							<button type="submit" class="sce-save-comment sce-button sce-button-save"><?php esc_html_e( 'Save Review', 'comment-edit-pro' ); ?></button>
+							<button class="sce-close sce-button sce-button-info"><?php esc_html_e( 'Close', 'comment-edit-pro' ); ?></button>
+							<div class="empty-div"></div>
+							<button type="submit" class="sce-delete-comment sce-button sce-button-delete"><?php esc_html_e( 'Delete Review', 'comment-edit-pro' ); ?></button>
+							<?php
+						else :
+							?>
+							<button type="submit" class="sce-save-comment sce-button sce-button-save"><?php esc_html_e( 'Save Comment', 'comment-edit-pro' ); ?></button>
+							<button class="sce-close sce-button sce-button-info"><?php esc_html_e( 'Close', 'comment-edit-pro' ); ?></button>
+							<div class="empty-div"></div>
+							<button type="submit" class="sce-delete-comment sce-button sce-button-delete"><?php esc_html_e( 'Delete Comment', 'comment-edit-pro' ); ?></button>
+							<?php
+						endif;
+						?>
+						
 					</div>
 				</div>
 			</form>

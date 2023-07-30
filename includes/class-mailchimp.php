@@ -57,8 +57,8 @@ class Mailchimp {
 	 * Remove SCE's Mailchimp option to prevent duplicate output.
 	 */
 	public function remove_simple_comment_editing_mailchimp_filter() {
-		if ( class_exists( 'Simple_Comment_Editing' ) ) {
-			$sce = \Simple_Comment_Editing::get_instance();
+		if ( class_exists( '\DLXPlugins\CommentEditLite\Simple_Comment_Editing' ) ) {
+			$sce = \DLXPlugins\CommentEditLite\Simple_Comment_Editing::get_instance();
 			remove_filter( 'comment_form_defaults', array( $sce, 'add_mailchimp_checkbox' ), 100 );
 		}
 	}
