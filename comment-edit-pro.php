@@ -4,7 +4,7 @@ Plugin Name: Comment Edit Pro
 Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 3.3.0
+Version: 3.4.0
 Requires at least: 5.0
 Author URI: https://dlxplugins.com
 Contributors: DLX Plugins
@@ -23,7 +23,7 @@ use CommentEditPro\Includes\Plugin_Updater as Plugin_Updater;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '3.3.0' );
+define( 'COMMENTEDITPRO_VERSION', '3.4.0' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
@@ -181,11 +181,7 @@ class Comment_Edit_Pro {
 	 */
 	public function add_scripts() {
 		wp_enqueue_script( 'sce-options', plugins_url( '/js/simple-comment-editing-options.js', __FILE__ ), array( 'wp-hooks', 'simple-comment-editing', 'jquery', 'wp-ajax-response' ), COMMENTEDITPRO_VERSION, true );
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options', false );
-		} else {
-			$options = get_option( 'sce_options', false );
-		}
+		$options = Options::get_options();
 
 		$show_stop_timer  = isset( $options['show_stop_timer'] ) ? $options['show_stop_timer'] : false;
 		$stop_timer_text  = isset( $options['stop_timer_text'] ) ? $options['stop_timer_text'] : __( 'Cancel Timer', 'comment-edit-pro' );
