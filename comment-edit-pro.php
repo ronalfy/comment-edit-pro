@@ -364,6 +364,8 @@ class Comment_Edit_Pro {
 		$this->tools->run();
 		$this->advanced = new \CommentEditPro\Includes\Advanced();
 		$this->advanced->run();
+		$this->featured_comments = new \CommentEditPro\Includes\Featured_Comments();
+		$this->featured_comments->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );

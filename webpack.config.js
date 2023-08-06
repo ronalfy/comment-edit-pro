@@ -36,6 +36,8 @@ module.exports = ( env ) => {
 				'sce-mentions-theme-white': [ './src/scss/sce-mentions-theme-white.scss' ],
 				'sce-license': [ './src/js/react/views/license/index.js' ],
 				'sce-comment-editing': [ './src/js/react/views/comment-editing/index.js' ],
+				'sce-featured-comment-admin': [ './src/js/featured-comments/admin-comments-view.js' ],
+				'sce-comment-form': [ './src/js/react/views/comment-form/index.js' ],
 				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
 				'sce-cloudflare-turnstile': [ './src/js/turnstile/index.js' ],
 				'sce-character-control': [ './src/js/react/views/character-control/index.js' ],
