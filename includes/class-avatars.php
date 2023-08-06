@@ -455,8 +455,13 @@ class Avatars {
 	 * Add avatar scripts/styles.
 	 */
 	public function add_scripts_styles() {
-		if ( comments_open() ) {
-			$this->add_avatar_scripts_frontend_backend();
+		// Maybe post or page.
+		$maybe_post_or_page = get_queried_object();
+		if ( is_a( $maybe_post_or_page, 'WP_Post' ) ) {
+			$comment_count = absint( $maybe_post_or_page->comment_count );
+			if ( 0 < $comment_count || comments_open() ) {
+				$this->add_avatar_scripts_frontend_backend();
+			}
 		}
 	}
 
