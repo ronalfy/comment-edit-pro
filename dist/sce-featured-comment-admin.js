@@ -2478,7 +2478,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
 /* eslint-disable no-undef */
-
 /* eslint-disable camelcase */
 
 
@@ -2491,25 +2490,20 @@ function sendCommand(action, data) {
     nonce: false,
     action: action
   };
-
   if ('undefined' === typeof data) {
     data = {};
   }
-
   for (var opt in default_data) {
     if (!data.hasOwnProperty(opt)) {
       data[opt] = default_data[opt];
     }
   }
-
   var sendAjaxUrl = '';
-
   if (typeof ajaxurl === 'undefined') {
     sendAjaxUrl = ajaxUrl;
   } else {
     sendAjaxUrl = ajaxurl;
   }
-
   var options = {
     method: 'post',
     url: sendAjaxUrl,
@@ -4804,14 +4798,16 @@ __webpack_require__.r(__webpack_exports__);
 /* eslint-disable no-unused-vars */
 
 window.addEventListener('load', function (event) {
-  var featuredCommentButtons = document.querySelectorAll('.sce-featured-comment-quick-action'); // Add click event to each button.
+  var featuredCommentButtons = document.querySelectorAll('.sce-featured-comment-quick-action');
+  // Add click event to each button.
 
   var featuredCommentButtonClick = function featuredCommentButtonClick(event) {
     event.preventDefault();
     var button = event.target;
     var commentId = button.getAttribute('data-comment-id');
-    var nonce = button.getAttribute('data-nonce'); // Get action from url.
+    var nonce = button.getAttribute('data-nonce');
 
+    // Get action from url.
     var url = new URL(button.href);
     var action = url.searchParams.get('action');
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_0__["default"])(action, {
@@ -4822,28 +4818,28 @@ window.addEventListener('load', function (event) {
       if (response.data.success) {
         // Get parent container and duplicate.
         var parentContainer = button.parentNode;
-        var newParentContainer = parentContainer.cloneNode(true); // Replace parent container with duplicate.
+        var newParentContainer = parentContainer.cloneNode(true);
 
-        parentContainer.parentNode.replaceChild(newParentContainer, parentContainer); // Remove old button from new container.
+        // Replace parent container with duplicate.
+        parentContainer.parentNode.replaceChild(newParentContainer, parentContainer);
 
+        // Remove old button from new container.
         var oldButton = newParentContainer.querySelector('.sce-featured-comment-quick-action');
-
         if (null !== oldButton) {
           oldButton.parentNode.removeChild(oldButton);
-        } // Add new button from response html at end.
+        }
 
+        // Add new button from response html at end.
+        newParentContainer.insertAdjacentHTML('beforeend', response.data.data.html);
 
-        newParentContainer.insertAdjacentHTML('beforeend', response.data.data.html); // Set up event for inserted button html.
-
+        // Set up event for inserted button html.
         var newButton = newParentContainer.querySelector('.sce-featured-comment-quick-action');
-
         if (null !== newButton) {
           newButton.addEventListener('click', featuredCommentButtonClick);
         }
       }
     });
   };
-
   featuredCommentButtons.forEach(function (button) {
     button.addEventListener('click', featuredCommentButtonClick);
   });

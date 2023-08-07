@@ -19364,7 +19364,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
 /* eslint-disable no-undef */
-
 /* eslint-disable camelcase */
 
 
@@ -19377,25 +19376,20 @@ function sendCommand(action, data) {
     nonce: false,
     action: action
   };
-
   if ('undefined' === typeof data) {
     data = {};
   }
-
   for (var opt in default_data) {
     if (!data.hasOwnProperty(opt)) {
       data[opt] = default_data[opt];
     }
   }
-
   var sendAjaxUrl = '';
-
   if (typeof ajaxurl === 'undefined') {
     sendAjaxUrl = ajaxUrl;
   } else {
     sendAjaxUrl = ajaxurl;
   }
-
   var options = {
     method: 'post',
     url: sendAjaxUrl,
@@ -19431,36 +19425,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/notice/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 // eslint-disable-next-line no-unused-vars
 
  // ES6
 
 
 
-
-
 var Notice = function Notice(props) {
   var _classNames;
-
   var message = props.message,
-      status = props.status,
-      politeness = props.politeness,
-      icon = props.icon,
-      className = props.className,
-      inline = props.inline,
-      children = props.children;
+    status = props.status,
+    politeness = props.politeness,
+    icon = props.icon,
+    className = props.className,
+    inline = props.inline,
+    children = props.children;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__.speak)(message, politeness);
   }, [message, status, politeness]);
-
   var hasIcon = function hasIcon() {
     return icon !== null;
   };
-
   var getIcon = function getIcon(Icon) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Icon, {
       width: 16,
@@ -19468,7 +19458,6 @@ var Notice = function Notice(props) {
       fill: "#6c757d"
     });
   };
-
   var containerClasses = classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, 'sce-admin__notice', (_classNames = {
     'sce-admin__notice--has-icon': hasIcon()
   }, _defineProperty(_classNames, "sce-admin__notice-type--".concat(status), true), _defineProperty(_classNames, "sce-admin__notice-appearance--inline", inline), _defineProperty(_classNames, "sce-admin__notice-appearance--block", !inline), _classNames));
@@ -19484,7 +19473,6 @@ var Notice = function Notice(props) {
     className: "sce-admin__notice-message"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, message, " ", children, " "))));
 };
-
 Notice.defaultProps = {
   message: '',
   status: 'info',
@@ -19534,7 +19522,6 @@ var CircularExclamationIcon = function CircularExclamationIcon(props) {
     d: "M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-24 152c0-13.2 10.8-24 24-24s24 10.75 24 24v128c0 13.25-10.75 24-24 24s-24-10.7-24-24V152zm24 248c-17.36 0-31.44-14.08-31.44-31.44s14.07-31.44 31.44-31.44 31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"
   }));
 };
-
 CircularExclamationIcon.defaultProps = {
   width: 16,
   height: 16,
@@ -19578,7 +19565,6 @@ var CircularInfo = function CircularInfo(props) {
     d: "M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 128c17.67 0 32 14.33 32 32s-14.33 32-32 32-32-14.3-32-32 14.3-32 32-32zm40 256h-80c-13.2 0-24-10.7-24-24s10.75-24 24-24h16v-64h-8c-13.25 0-24-10.75-24-24s10.8-24 24-24h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24s-10.7 24-24 24z"
   }));
 };
-
 CircularInfo.defaultProps = {
   width: 16,
   height: 16,
@@ -19607,9 +19593,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 /* eslint-disable no-unused-vars */
-
 
 function ClipboardCheck(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", _extends({
@@ -19626,7 +19610,6 @@ function ClipboardCheck(props) {
     d: "M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"
   }));
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClipboardCheck);
 
 /***/ }),
@@ -19648,7 +19631,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-
  // ES6
 
 var CodeBranchIcon = function CodeBranchIcon(props) {
@@ -19661,7 +19643,6 @@ var CodeBranchIcon = function CodeBranchIcon(props) {
     d: "M160 80c0 32.8-19.7 60.1-48 73.3v87.8c18.8-10.9 40.7-17.1 64-17.1h96c35.3 0 64-28.7 64-64v-6.7c-28.3-13.2-48-40.5-48-73.3 0-44.18 35.8-80 80-80s80 35.82 80 80c0 32.8-19.7 60.1-48 73.3v6.7c0 70.7-57.3 128-128 128h-96c-35.3 0-64 28.7-64 64v6.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80-44.18 0-80-35.8-80-80 0-32.8 19.75-61 48-73.3V153.3C19.75 140.1 0 112.8 0 80 0 35.82 35.82 0 80 0c44.2 0 80 35.82 80 80zm-80 24c13.25 0 24-10.75 24-24S93.25 56 80 56 56 66.75 56 80s10.75 24 24 24zm288-48c-13.3 0-24 10.75-24 24s10.7 24 24 24 24-10.75 24-24-10.7-24-24-24zM80 456c13.25 0 24-10.7 24-24s-10.75-24-24-24-24 10.7-24 24 10.75 24 24 24z"
   })));
 };
-
 CodeBranchIcon.defaultProps = {
   width: 16,
   height: 16,
@@ -19693,7 +19674,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-
  // ES6
 
 var EyeIcon = function EyeIcon(props) {
@@ -19707,7 +19687,6 @@ var EyeIcon = function EyeIcon(props) {
     d: "M288 32C129.6 32 30 181.3 0 256c30 74.7 129.6 224 288 224s258-149.3 288-224C546 181.3 446.4 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1-288 0zm48 0c0 53 43 96 96 96s96-43 96-96-43-96-96-96c-6.4 0-12.7.6-18.8 1.8L288 256l-94.2-18.8c-1.2 6.1-1.8 12.4-1.8 18.8z"
   }));
 };
-
 EyeIcon.defaultProps = {
   width: 16,
   height: 16,
@@ -19736,9 +19715,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 // eslint-disable-next-line no-unused-vars
-
 
 function EyeSlashRegular(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", _extends({
@@ -19755,7 +19732,6 @@ function EyeSlashRegular(props) {
     d: "M634 471L36 3.51A16 16 0 0013.51 6l-10 12.49A16 16 0 006 41l598 467.49a16 16 0 0022.49-2.49l10-12.49A16 16 0 00634 471zM296.79 146.47l134.79 105.38C429.36 191.91 380.48 144 320 144a112.26 112.26 0 00-23.21 2.47zm46.42 219.07L208.42 260.16C210.65 320.09 259.53 368 320 368a113 113 0 0023.21-2.46zM320 112c98.65 0 189.09 55 237.93 144a285.53 285.53 0 01-44 60.2l37.74 29.5a333.7 333.7 0 0052.9-75.11 32.35 32.35 0 000-29.19C550.29 135.59 442.93 64 320 64c-36.7 0-71.71 7-104.63 18.81l46.41 36.29c18.94-4.3 38.34-7.1 58.22-7.1zm0 288c-98.65 0-189.08-55-237.93-144a285.47 285.47 0 0144.05-60.19l-37.74-29.5a333.6 333.6 0 00-52.89 75.1 32.35 32.35 0 000 29.19C89.72 376.41 197.08 448 320 448c36.7 0 71.71-7.05 104.63-18.81l-46.41-36.28C359.28 397.2 339.89 400 320 400z"
   }));
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EyeSlashRegular);
 
 /***/ }),
@@ -19789,7 +19765,6 @@ var KeyIcon = function KeyIcon(props) {
     d: "m282.3 343.7-34.2 32.4c-3.6 5.4-9.7 7.9-16.1 7.9h-40v40c0 13.3-10.7 24-24 24h-40v40c0 13.3-10.7 24-24 24H24c-13.25 0-24-10.7-24-24v-80c0-6.4 2.529-12.5 7.029-17L168.3 229.7c-5.4-16.9-8.3-35-8.3-53.7C160 78.8 238.8 0 336 0s176 78.8 176 176-78.8 176-176 176c-18.7 0-36.8-2.9-53.7-8.3zM376 176c22.1 0 40-17.9 40-40s-17.9-40-40-40-40 17.9-40 40 17.9 40 40 40z"
   }));
 };
-
 KeyIcon.defaultProps = {
   width: 16,
   height: 16,
@@ -19840,7 +19815,6 @@ var Spinner = function Spinner(props) {
     }
   }));
 };
-
 Spinner.defaultProps = {
   width: 24,
   height: 24,
@@ -19874,7 +19848,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-
  // ES6
 
 var VialIcon = function VialIcon(props) {
@@ -19889,7 +19862,6 @@ var VialIcon = function VialIcon(props) {
     d: "m502.6 169.4-160-160C336.4 3.125 328.2 0 320 0s-16.38 3.125-22.62 9.375c-12.5 12.5-12.5 32.75 0 45.25l6.975 6.977-271.4 271c-38.75 38.75-45.13 102-9.375 143.5C44.08 500 72.76 512 101.5 512h.447c26.38 0 52.75-9.1 72.88-30.12l275.2-274.6 7.365 7.367C463.6 220.9 471.8 224 480 224s16.38-3.125 22.62-9.375C515.1 202.1 515.1 181.9 502.6 169.4zm-192 86.6H200.2l149.3-149.1 55.18 55.12L310.6 256z"
   }));
 };
-
 VialIcon.defaultProps = {
   width: 16,
   height: 16,
@@ -19939,30 +19911,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_icons_EyeIcon__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../components/icons/EyeIcon */ "./src/js/react/components/icons/EyeIcon.js");
 /* harmony import */ var _components_icons_EyeSlashRegular__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../components/icons/EyeSlashRegular */ "./src/js/react/components/icons/EyeSlashRegular.js");
 /* harmony import */ var _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../components/icons/ClipboardCheck */ "./src/js/react/components/icons/ClipboardCheck.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 /* eslint-disable no-unreachable */
-
 /* eslint-disable no-unused-vars */
-
 
 
 
@@ -19986,13 +19949,11 @@ var retrieveLicenseOptions = function retrieveLicenseOptions() {
     nonce: sceAdminLicense.get_nonce
   });
 };
-
 var License = function License(props) {
   var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveLicenseOptions, []),
-      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
-      defaults = _useAsyncResource2[0],
-      getDefaults = _useAsyncResource2[1];
-
+    _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+    defaults = _useAsyncResource2[0],
+    getDefaults = _useAsyncResource2[1];
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin-panel-area"
@@ -20009,115 +19970,95 @@ var License = function License(props) {
     defaults: defaults
   }, props)));
 };
-
 var Interface = function Interface(props) {
   var _data$license_key, _errors$sceLicense4, _errors$sceLicense5, _errors$sceLicense6;
-
   var defaults = props.defaults;
   var response = defaults();
   var _response$data = response.data,
-      data = _response$data.data,
-      success = _response$data.success;
-
+    data = _response$data.data,
+    success = _response$data.success;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      saving = _useState2[0],
-      setSaving = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    saving = _useState2[0],
+    setSaving = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      isSaved = _useState4[0],
-      setIsSaved = _useState4[1];
-
+    _useState4 = _slicedToArray(_useState3, 2),
+    isSaved = _useState4[0],
+    setIsSaved = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      resetting = _useState6[0],
-      setResetting = _useState6[1];
-
+    _useState6 = _slicedToArray(_useState5, 2),
+    resetting = _useState6[0],
+    setResetting = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState8 = _slicedToArray(_useState7, 2),
-      isReset = _useState8[0],
-      setIsReset = _useState8[1];
-
+    _useState8 = _slicedToArray(_useState7, 2),
+    isReset = _useState8[0],
+    setIsReset = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState10 = _slicedToArray(_useState9, 2),
-      betaSaving = _useState10[0],
-      setBetaSaving = _useState10[1];
-
+    _useState10 = _slicedToArray(_useState9, 2),
+    betaSaving = _useState10[0],
+    setBetaSaving = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.beta),
-      _useState12 = _slicedToArray(_useState11, 2),
-      betaEnabled = _useState12[0],
-      setBetaEnabled = _useState12[1];
-
+    _useState12 = _slicedToArray(_useState11, 2),
+    betaEnabled = _useState12[0],
+    setBetaEnabled = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState14 = _slicedToArray(_useState13, 2),
-      revokingLicense = _useState14[0],
-      setRevokingLicense = _useState14[1];
-
+    _useState14 = _slicedToArray(_useState13, 2),
+    revokingLicense = _useState14[0],
+    setRevokingLicense = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState16 = _slicedToArray(_useState15, 2),
-      isRevoked = _useState16[0],
-      setIsRevoked = _useState16[1];
-
+    _useState16 = _slicedToArray(_useState15, 2),
+    isRevoked = _useState16[0],
+    setIsRevoked = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.license),
-      _useState18 = _slicedToArray(_useState17, 2),
-      validLicense = _useState18[0],
-      setValidLicense = _useState18[1];
-
+    _useState18 = _slicedToArray(_useState17, 2),
+    validLicense = _useState18[0],
+    setValidLicense = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.license_activated),
-      _useState20 = _slicedToArray(_useState19, 2),
-      licenseActivated = _useState20[0],
-      setLicenseActivated = _useState20[1];
-
+    _useState20 = _slicedToArray(_useState19, 2),
+    licenseActivated = _useState20[0],
+    setLicenseActivated = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data),
-      _useState22 = _slicedToArray(_useState21, 2),
-      licenseData = _useState22[0],
-      setLicenseData = _useState22[1];
-
+    _useState22 = _slicedToArray(_useState21, 2),
+    licenseData = _useState22[0],
+    setLicenseData = _useState22[1];
   var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data.license_activated ? false : true),
-      _useState24 = _slicedToArray(_useState23, 2),
-      showSecret = _useState24[0],
-      setShowSecret = _useState24[1];
-
+    _useState24 = _slicedToArray(_useState23, 2),
+    showSecret = _useState24[0],
+    setShowSecret = _useState24[1];
   var license_key = data.license_key,
-      item_name = data.item_name,
-      expires = data.expires,
-      expires_human_time_diff = data.expires_human_time_diff,
-      license_limit = data.license_limit,
-      site_count = data.site_count,
-      activations_left = data.activations_left,
-      license_activated = data.license_activated,
-      price_id = data.price_id;
-
+    item_name = data.item_name,
+    expires = data.expires,
+    expires_human_time_diff = data.expires_human_time_diff,
+    license_limit = data.license_limit,
+    site_count = data.site_count,
+    activations_left = data.activations_left,
+    license_activated = data.license_activated,
+    price_id = data.price_id;
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_16__.useForm)({
-    defaultValues: {
-      sceLicense: (_data$license_key = data.license_key) !== null && _data$license_key !== void 0 ? _data$license_key : ''
-    }
-  }),
-      register = _useForm.register,
-      control = _useForm.control,
-      handleSubmit = _useForm.handleSubmit,
-      setValue = _useForm.setValue,
-      getValues = _useForm.getValues,
-      reset = _useForm.reset,
-      setError = _useForm.setError;
-
+      defaultValues: {
+        sceLicense: (_data$license_key = data.license_key) !== null && _data$license_key !== void 0 ? _data$license_key : ''
+      }
+    }),
+    register = _useForm.register,
+    control = _useForm.control,
+    handleSubmit = _useForm.handleSubmit,
+    setValue = _useForm.setValue,
+    getValues = _useForm.getValues,
+    reset = _useForm.reset,
+    setError = _useForm.setError;
   var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_16__.useWatch)({
     control: control
   });
-
   var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_16__.useFormState)({
-    control: control
-  }),
-      errors = _useFormState.errors,
-      isDirty = _useFormState.isDirty,
-      dirtyFields = _useFormState.dirtyFields,
-      touchedFields = _useFormState.touchedFields;
-
+      control: control
+    }),
+    errors = _useFormState.errors,
+    isDirty = _useFormState.isDirty,
+    dirtyFields = _useFormState.dirtyFields,
+    touchedFields = _useFormState.touchedFields;
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
   };
-
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_4__["default"])('sce_save_admin_license_core', _objectSpread({
@@ -20127,16 +20068,15 @@ var Interface = function Interface(props) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
       setLicenseData(ajaxData);
-
       if (ajaxSuccess) {
         if (ajaxData.license_activated) {
           setLicenseActivated(true);
         } else {
           setLicenseActivated(false);
         }
+        setIsSaved(true);
 
-        setIsSaved(true); // Reset count.
-
+        // Reset count.
         setTimeout(function () {
           setIsSaved(false);
         }, 3000);
@@ -20151,7 +20091,6 @@ var Interface = function Interface(props) {
       setSaving(false);
     });
   };
-
   var revokeLicense = function revokeLicense(e) {
     setRevokingLicense(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_4__["default"])('sce_save_revoke_license_core', {
@@ -20159,7 +20098,6 @@ var Interface = function Interface(props) {
     }).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
-
       if (ajaxSuccess) {
         // // Reset count.
         setLicenseActivated(false);
@@ -20179,7 +20117,6 @@ var Interface = function Interface(props) {
       setRevokingLicense(false);
     });
   };
-
   var onBetaToggle = function onBetaToggle(on_or_off) {
     setBetaSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_4__["default"])('sce_save_beta_option', {
@@ -20188,7 +20125,6 @@ var Interface = function Interface(props) {
     }).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
-
       if (ajaxSuccess) {
         setBetaEnabled(ajaxData.beta);
       }
@@ -20196,47 +20132,37 @@ var Interface = function Interface(props) {
       setBetaSaving(false);
     });
   };
-
   var getLicenseType = function getLicenseType() {
     switch (price_id) {
       case '1':
       case '5':
         return 'Hobbyist';
         break;
-
       case '2':
       case '6':
         return 'Freelancer';
         break;
-
       case '3':
       case '7':
         return 'Agency';
         break;
-
       case '4':
       case '8':
         return 'Unlimited';
         break;
-
       default:
         return 'Subscriber';
         break;
     }
-
     return 'Subscriber';
   };
-
   var getSaveButton = function getSaveButton() {
     var saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save License', 'comment-edit-pro');
-
     var saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'comment-edit-pro');
-
     if (!licenseActivated) {
       saveText = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activate License', 'comment-edit-pro');
       saveTextLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Activating…', 'comment-edit-pro');
     }
-
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_17__["default"], {
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
         'has-error': hasErrors()
@@ -20255,7 +20181,6 @@ var Interface = function Interface(props) {
       disabled: saving || revokingLicense
     }));
   };
-
   var getLicenseHeader = function getLicenseHeader() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "sce-admin__tabs--content-heading"
@@ -20269,7 +20194,6 @@ var Interface = function Interface(props) {
       className: "description"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your license for Comment Edit Pro to enable automatic updates and support.', 'comment-edit-pro')));
   };
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(onSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -20302,10 +20226,9 @@ var Interface = function Interface(props) {
     },
     render: function render(_ref) {
       var _errors$sceLicense, _errors$sceLicense2, _errors$sceLicense3;
-
       var _ref$field = _ref.field,
-          onChange = _ref$field.onChange,
-          value = _ref$field.value;
+        onChange = _ref$field.onChange,
+        value = _ref$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_18__["default"], {
         value: value,
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('License Key', 'comment-edit-pro'),
@@ -20480,7 +20403,6 @@ var Interface = function Interface(props) {
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('If enabled, any betas available for release will show up in Dashboard->Updates.', 'comment-edit-pro')
   })))))))));
 };
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (License);
 
 /***/ }),

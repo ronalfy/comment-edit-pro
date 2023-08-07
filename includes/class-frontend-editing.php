@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use CommentEditPro\Includes\Options as Options;
 use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Featured_Comments as Featured_Comments;
 
 /**
  * Main class for front-end editing.
@@ -414,6 +415,9 @@ class Frontend_Editing {
 		} elseif ( 'spam' === $comment->comment_approved ) {
 			$comment_status = 'spam';
 		}
+
+		// todo: add comment status filter and add featured | unfeatured.
+		// todo: add do_action for adding additional moderation menu items.
 
 		// Get moderation menu theme.
 		$options     = Options::get_options();

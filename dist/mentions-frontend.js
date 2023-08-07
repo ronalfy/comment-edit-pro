@@ -92,14 +92,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tributejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tributejs */ "./node_modules/tributejs/dist/tribute.min.js");
 /* harmony import */ var tributejs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tributejs__WEBPACK_IMPORTED_MODULE_0__);
 
-
 window.onload = function () {
   var tribute = new (tributejs__WEBPACK_IMPORTED_MODULE_0___default())({
     values: sceMentions.values,
     selectTemplate: function selectTemplate(item) {
       var commentTextareaId = sceMentions.commentFormId;
       var commentForm = document.getElementById(commentTextareaId);
-
       if (null !== commentForm) {
         // Create a hidden input to append to the comment form.
         var input = document.createElement('input');
@@ -108,13 +106,12 @@ window.onload = function () {
         input.setAttribute('value', item.original.value);
         commentForm.after(input);
       }
-
       return '@' + item.original.key;
     }
-  }); // Initialize tribute.
+  });
 
+  // Initialize tribute.
   var commentForm = document.getElementById('comment');
-
   if (null !== commentForm) {
     tribute.attach(commentForm);
   }

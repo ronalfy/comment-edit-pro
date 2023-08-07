@@ -32,28 +32,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Notice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/Notice */ "./src/js/react/components/Notice/index.js");
 /* harmony import */ var _components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../components/ErrorBoundary */ "./src/js/react/components/ErrorBoundary/index.js");
 /* harmony import */ var _Context__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Context */ "./src/js/react/views/spam-protection/Context.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 /* eslint-disable no-unused-vars */
-
 
 
 
@@ -73,13 +65,11 @@ var retrieveRecaptchaSettings = function retrieveRecaptchaSettings() {
     nonce: sceSpamProtection.get_nonce
   });
 };
-
 var Recaptcha = function Recaptcha(props) {
   var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveRecaptchaSettings, []),
-      _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
-      defaults = _useAsyncResource2[0],
-      getDefaults = _useAsyncResource2[1];
-
+    _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
+    defaults = _useAsyncResource2[0],
+    getDefaults = _useAsyncResource2[1];
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__["default"], {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Could not load reCAPTCHA 3 Settings.', 'comment-edit-pro'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
       href: "https://dlxplugins.com/support/",
@@ -98,75 +88,63 @@ var Recaptcha = function Recaptcha(props) {
     defaults: defaults
   }, props))));
 };
-
 var Interface = function Interface(props) {
   var defaults = props.defaults;
   var response = defaults();
   var _response$data = response.data,
-      data = _response$data.data,
-      success = _response$data.success;
-
+    data = _response$data.data,
+    success = _response$data.success;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      saving = _useState2[0],
-      setSaving = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    saving = _useState2[0],
+    setSaving = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      isSaved = _useState4[0],
-      setIsSaved = _useState4[1];
-
+    _useState4 = _slicedToArray(_useState3, 2),
+    isSaved = _useState4[0],
+    setIsSaved = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      resetting = _useState6[0],
-      setResetting = _useState6[1];
-
+    _useState6 = _slicedToArray(_useState5, 2),
+    resetting = _useState6[0],
+    setResetting = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState8 = _slicedToArray(_useState7, 2),
-      isReset = _useState8[0],
-      setIsReset = _useState8[1];
-
+    _useState8 = _slicedToArray(_useState7, 2),
+    isReset = _useState8[0],
+    setIsReset = _useState8[1];
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context__WEBPACK_IMPORTED_MODULE_10__["default"]),
-      turnstileEnabled = _useContext.turnstileEnabled,
-      setRecaptchaEnabled = _useContext.setRecaptchaEnabled;
-
+    turnstileEnabled = _useContext.turnstileEnabled,
+    setRecaptchaEnabled = _useContext.setRecaptchaEnabled;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     setRecaptchaEnabled(data.recaptchaEnabled);
   }, [data.recaptchaEnabled]);
-
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_12__.useForm)({
-    defaultValues: {
-      recaptchaEnabled: data.recaptchaEnabled,
-      recaptchaSiteKey: data.recaptchaSiteKey,
-      recaptchaSecretKey: data.recaptchaSecretKey,
-      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
-      recaptchaScoreThreshold: data.recaptchaScoreThreshold
-    }
-  }),
-      register = _useForm.register,
-      control = _useForm.control,
-      handleSubmit = _useForm.handleSubmit,
-      setValue = _useForm.setValue,
-      getValues = _useForm.getValues,
-      reset = _useForm.reset,
-      setError = _useForm.setError;
-
+      defaultValues: {
+        recaptchaEnabled: data.recaptchaEnabled,
+        recaptchaSiteKey: data.recaptchaSiteKey,
+        recaptchaSecretKey: data.recaptchaSecretKey,
+        recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
+        recaptchaScoreThreshold: data.recaptchaScoreThreshold
+      }
+    }),
+    register = _useForm.register,
+    control = _useForm.control,
+    handleSubmit = _useForm.handleSubmit,
+    setValue = _useForm.setValue,
+    getValues = _useForm.getValues,
+    reset = _useForm.reset,
+    setError = _useForm.setError;
   var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_12__.useWatch)({
     control: control
   });
-
   var _useFormState = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_12__.useFormState)({
-    control: control
-  }),
-      errors = _useFormState.errors,
-      isDirty = _useFormState.isDirty,
-      dirtyFields = _useFormState.dirtyFields,
-      touchedFields = _useFormState.touchedFields;
-
+      control: control
+    }),
+    errors = _useFormState.errors,
+    isDirty = _useFormState.isDirty,
+    dirtyFields = _useFormState.dirtyFields,
+    touchedFields = _useFormState.touchedFields;
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
   };
-
   var onSubmit = function onSubmit(formData) {
     setSaving(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_save_recaptcha_options', _objectSpread({
@@ -174,7 +152,6 @@ var Interface = function Interface(props) {
     }, formData)).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
-
       if (ajaxSuccess) {
         setIsSaved(true);
         setTimeout(function () {
@@ -185,7 +162,6 @@ var Interface = function Interface(props) {
       setSaving(false);
     });
   };
-
   var handleReset = function handleReset() {
     setResetting(true);
     (0,_SendCommand__WEBPACK_IMPORTED_MODULE_6__["default"])('sce_reset_recaptcha_options', {
@@ -193,7 +169,6 @@ var Interface = function Interface(props) {
     }).then(function (ajaxResponse) {
       var ajaxData = ajaxResponse.data.data;
       var ajaxSuccess = ajaxResponse.data.success;
-
       if (ajaxSuccess) {
         setIsReset(true);
         reset({
@@ -210,10 +185,8 @@ var Interface = function Interface(props) {
       setResetting(false);
     });
   };
-
   var getSiteKey = function getSiteKey() {
     var _errors$recaptchaSite2;
-
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Site Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
@@ -224,7 +197,6 @@ var Interface = function Interface(props) {
       },
       render: function render(_ref) {
         var _errors$recaptchaSite;
-
         var field = _ref.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Site Key', 'quotes-dlx')
@@ -245,10 +217,8 @@ var Interface = function Interface(props) {
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
-
   var getSecretKey = function getSecretKey() {
     var _errors$recaptchaSecr;
-
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'comment-edit-pro')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
@@ -259,7 +229,6 @@ var Interface = function Interface(props) {
       },
       render: function render(_ref2) {
         var _errors$recaptchaSite3;
-
         var field = _ref2.field;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Secret Key', 'quotes-dlx')
@@ -280,7 +249,6 @@ var Interface = function Interface(props) {
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_7__["default"]
     })));
   };
-
   var getLoggedInToggle = function getLoggedInToggle() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
@@ -289,8 +257,8 @@ var Interface = function Interface(props) {
       control: control,
       render: function render(_ref3) {
         var _ref3$field = _ref3.field,
-            _onChange = _ref3$field.onChange,
-            value = _ref3$field.value;
+          _onChange = _ref3$field.onChange,
+          value = _ref3$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha for Logged-in Users', 'comment-edit-pro'),
           className: "sce-admin__toggle-control",
@@ -303,7 +271,6 @@ var Interface = function Interface(props) {
       }
     })));
   };
-
   var getRecaptchaThreshold = function getRecaptchaThreshold() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
       scope: "row"
@@ -312,8 +279,8 @@ var Interface = function Interface(props) {
       control: control,
       render: function render(_ref4) {
         var _ref4$field = _ref4.field,
-            _onChange2 = _ref4$field.onChange,
-            value = _ref4$field.value;
+          _onChange2 = _ref4$field.onChange,
+          value = _ref4$field.value;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_15__["default"], {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set reCAPTCHA Minimum Threshold', 'comment-edit-pro'),
           step: 0.05,
@@ -334,43 +301,33 @@ var Interface = function Interface(props) {
       }
     })));
   };
-
   var getSaveIcon = function getSaveIcon() {
     if (saving) {
       return _components_icons_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"];
     }
-
     if (isSaved) {
       return _components_icons_ClipboardCheck__WEBPACK_IMPORTED_MODULE_5__["default"];
     }
-
     return false;
   };
-
   var getSaveText = function getSaveText() {
     if (saving) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'quotes-dlx');
     }
-
     if (isSaved) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saved', 'quotes-dlx');
     }
-
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Recaptcha Options', 'quotes-dlx');
   };
-
   var getResetText = function getResetText() {
     if (resetting) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnecting…', 'quotes-dlx');
     }
-
     if (isReset) {
       return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnected', 'quotes-dlx');
     }
-
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Recaptcha', 'quotes-dlx');
   };
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro'), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
     className: "sce-admin-heading-docs",
     target: "_blank",
@@ -389,15 +346,14 @@ var Interface = function Interface(props) {
     control: control,
     render: function render(_ref5) {
       var _ref5$field = _ref5.field,
-          _onChange3 = _ref5$field.onChange,
-          value = _ref5$field.value;
+        _onChange3 = _ref5$field.onChange,
+        value = _ref5$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_14__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha 3', 'comment-edit-pro'),
         className: "sce-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           setRecaptchaEnabled(boolValue);
-
           _onChange3(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha 3 support.', 'comment-edit-pro')
@@ -457,7 +413,6 @@ var Interface = function Interface(props) {
     politeness: "assertive"
   })));
 };
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Recaptcha);
 
 /***/ })
