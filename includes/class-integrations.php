@@ -40,6 +40,10 @@ class Integrations {
 	 * Load scripts and styles in the admin.
 	 */
 	public function add_admin_scripts_styles() {
+		global $current_screen;
+		if ( 'settings_page_comment-edit-pro' !== $current_screen->id ) {
+			return;
+		}
 		$current_tab = Functions::get_admin_tab();
 		if ( null === $current_tab ) {
 			return;

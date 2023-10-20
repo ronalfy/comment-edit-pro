@@ -26,7 +26,7 @@ class Mentions {
 		add_action( 'wp_ajax_sce_reset_mentions_options', array( $this, 'ajax_reset_mentions_options' ) );
 
 		// Add Opt-in @ mention Checkbox.
-		add_filter( 'comment_form_defaults', array( $this, 'add_mentions_checkbox' ), 100 );
+		add_filter( 'comment_form_default_fields', array( $this, 'add_mentions_checkbox' ), 100 );
 
 		// Load mentions scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
@@ -648,6 +648,9 @@ class Mentions {
 				esc_html( $options['mentions_signup_label'] )
 			),
 		);
+		if ( ! isset( $comment_fields['submit_button'] ) ) {
+			$comment_fields['submit_button'] = '';
+		}
 		$comment_fields['submit_button'] = $mentions_html['sce-mentions'] . $comment_fields['submit_button'];
 		return $comment_fields;
 	}
