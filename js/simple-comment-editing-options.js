@@ -1,5 +1,4 @@
-jQuery( document ).ready( function( $ ) {
-
+const initCommentEditPro = ( $ ) => {
 	// Get frontend comments menus.
 	const sceFrontendCommentMenus = document.querySelectorAll( '.sce-meatball-menu' );
 	if ( null !== sceFrontendCommentMenus && undefined !== sceFrontendCommentMenus ) {
@@ -147,6 +146,22 @@ jQuery( document ).ready( function( $ ) {
 			height: '80%',
 		} );
 	}
+}
+
+jQuery( document ).ready( function( $ ) {
+	if ( typeof WPAC !== 'undefined' ) {
+		const lazyLoadEnabled = WPAC._Options?.lazyLoadEnabled ?? false;
+		if ( ! lazyLoadEnabled ) {
+			initCommentEditPro( $ );
+		} else {
+			document.addEventListener( 'wpacAfterUpdateComments', () => {
+				initCommentEditPro( $ );
+			} );
+		}
+	} else {
+		initCommentEditPro( $ );
+	}
+	
 } );
 function sce_get_comment( e ) {
 	e.preventDefault();

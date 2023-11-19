@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import sendCommand from './SendCommand';
 
-// Pre-load all the avatar images.
-window.addEventListener( 'load', function( event ) {
+const initCommentEditProAvatars = () => {
 	let imageHtml = '';
 	// Todo: Offload to new file.
 	const avatars = sceAvatars.avatars;
@@ -123,14 +122,7 @@ window.addEventListener( 'load', function( event ) {
 	window.sce_avatars_stop_propagation = ( anchorEvent ) => {
 		anchorEvent.preventDefault();
 		anchorEvent.stopPropagation();
-
-		const parentAnchor = anchorEvent.target;
-		if ( null !== parentAnchor ) {
-			const childOfAnchor = parentAnchor.querySelector( 'img' );
-			if ( null !== childOfAnchor ) {
-				childOfAnchor.click();
-			}
-		}
+		const parentAnchor = anchorEvent.currentTarget;
 	};
 
 	// This global function is executed when someone clicks on their avatar.
@@ -304,4 +296,20 @@ window.addEventListener( 'load', function( event ) {
 			} );
 		}
 	};
+};
+
+// Pre-load all the avatar images.
+window.addEventListener( 'load', function( event ) {
+	if ( typeof WPAC !== 'undefined' ) {
+		const lazyLoadEnabled = WPAC._Options?.lazyLoadEnabled ?? false;
+		if ( ! lazyLoadEnabled ) {
+			initCommentEditProAvatars();
+		} else {
+			document.addEventListener( 'wpacAfterUpdateComments', () => {
+				initCommentEditProAvatars();
+			} );
+		}
+	} else {
+		initCommentEditProAvatars();
+	}
 } );

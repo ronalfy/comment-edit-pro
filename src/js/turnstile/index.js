@@ -5,8 +5,11 @@
 /**
  * This is the main callback for Cloudflare.
  */
+let turnstileHasBeenCalled = false;
 window.sceInitTurnstile = () => {
+	turnstileHasBeenCalled = true;
 	const { comment_submit_id } = sceFrontend;
+
 	// Get submit button.
 	const submitButton = document.getElementById( comment_submit_id );
 	if ( null === submitButton ) {
@@ -56,3 +59,9 @@ window.sceInitTurnstile = () => {
 	// Set up the textarea event. Only load turnstile if the user has begun filling out the textarea.
 	commentFormTextarea.addEventListener( 'input', turnstileBeginRender );
 };
+
+document.addEventListener( 'wpacAfterUpdateComments', () => {
+	if ( turnstileHasBeenCalled ) {
+		window.sceInitTurnstile();
+	}
+} );
