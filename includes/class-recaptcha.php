@@ -127,31 +127,24 @@ class Recaptcha {
 		if ( (bool) $options['recaptcha_enabled'] && $comment_form_id ) {
 			?>
 			<script>
-				var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
-				if ( null !== sceCommentSubmitButton ) {
-					sceCommentSubmitButton.addEventListener( 'click', function( event ) {
+				document.addEventListener( 'DOMContentLoaded', function() {
+					var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
+					if ( null !== sceCommentSubmitButton ) {
 						// Change ID and name attribute of button. This is needed for comment submission.
-						sceCommentSubmitButton.setAttribute( 'id', 'sce-comment-submit-button' );
-						sceCommentSubmitButton.setAttribute( 'name', 'sce-comment-submit-button' );
-						sceCommentSubmit( event );
-					} );
+						grecaptcha.ready(function() {
+						grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
+							let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
+							if ( null !== recaptchaForm ) {
+								var recaptchaInput = document.createElement('input');
+								recaptchaInput.setAttribute('type', 'hidden');
+								recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+								recaptchaInput.setAttribute('value', token);
+								recaptchaForm.appendChild(recaptchaInput);
+							}
+						});
+					});
 				}
-				function sceCommentSubmit( e ) {
-					e.preventDefault();
-					grecaptcha.ready(function() {
-					grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
-						let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
-						if ( null !== recaptchaForm ) {
-							var recaptchaInput = document.createElement('input');
-							recaptchaInput.setAttribute('type', 'hidden');
-							recaptchaInput.setAttribute('name', 'g-recaptcha-response');
-							recaptchaInput.setAttribute('value', token);
-							recaptchaForm.appendChild(recaptchaInput);
-							recaptchaForm.submit();
-						}
-					});
-					});
-				};
+				});
 			</script>
 			<?php
 		}
