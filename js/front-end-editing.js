@@ -1,4 +1,4 @@
-jQuery( document ).ready( function( $ ) {
+var sceFrontendEditingInit = function( $ ) {
 	$('.sce-save-comment').on('click', function( e ) {
 		e.preventDefault();
 		var nonce = $( '#sce_nonce' ).val();
@@ -84,5 +84,13 @@ jQuery( document ).ready( function( $ ) {
 		$star.addClass( 'active' );
 		$container.addClass( 'selected' );
 		return false;
+	} );
+};
+jQuery( document ).ready( function( $ ) {
+	jQuery( document ).ready( function( $ ) {
+		sceFrontendEditingInit( $ );
+		document.addEventListener( 'wpacAfterUpdateComments', () => {
+			sceFrontendEditingInit( $ );
+		} );
 	} );
 } );
