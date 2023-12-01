@@ -353,7 +353,7 @@ const Interface = ( props ) => {
 												onChange( boolValue );
 											} }
 											help={ __(
-												'Enable or disable Recaptcha 3 support.',
+												'Enable or disable Slack notifications.',
 												'comment-edit-pro'
 											) }
 										/>

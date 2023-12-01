@@ -936,7 +936,7 @@ var Interface = function Interface(props) {
         onChange: function onChange(boolValue) {
           _onChange4(boolValue);
         },
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha 3 support.', 'comment-edit-pro')
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Slack notifications.', 'comment-edit-pro')
       });
     }
   }))), getValues('slackEnabled') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, getWebhookUrl(), getModerationCheckbox(), getEditCommentsCheckbox()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
