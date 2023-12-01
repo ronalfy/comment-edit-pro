@@ -4,7 +4,7 @@ const Mailchimp = lazy( () =>
 	import( /* webpackChunkName: "Mailchimp0.0.2" */ './Mailchimp' )
 );
 const Slack = lazy( () =>
-	import( /* webpackChunkName: "Slack0.0.2" */ './Slack' )
+	import( /* webpackChunkName: "Slack0.0.3" */ './Slack' )
 );
 const ConvertKit = lazy( () =>
 	import( /* webpackChunkName: "ConvertKit0.0.1" */ './ConvertKit' )
