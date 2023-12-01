@@ -1,6 +1,6 @@
 import Tribute from 'tributejs';
 
-window.onload = () => {
+const sceInitTribute = () => {
 	const tribute = new Tribute( {
 		values: sceMentions.values,
 		selectTemplate: ( item ) => {
@@ -24,4 +24,10 @@ window.onload = () => {
 	if ( null !== commentForm ) {
 		tribute.attach( commentForm );
 	}
+};
+window.onload = () => {
+	sceInitTribute();
+	document.addEventListener( 'wpacAfterUpdateComments', () => {
+		sceInitTribute();
+	} );
 };

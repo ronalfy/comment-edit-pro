@@ -73,7 +73,7 @@ class Recaptcha {
 		if ( ! $options['recaptcha_enabled'] ) {
 			return;
 		}
-		$token = sanitize_text_field( filter_input( INPUT_POST, 'g-recaptcha-response', FILTER_DEFAULT ) );
+		$token = sanitize_text_field( filter_input( INPUT_POST, 'g-recaptcha-response-token', FILTER_DEFAULT ) );
 		if ( ! $token ) {
 			wp_die( esc_html__( 'Could not verify reCAPTCHA.', 'comment-edit-pro' ) );
 		}
@@ -127,7 +127,7 @@ class Recaptcha {
 		if ( (bool) $options['recaptcha_enabled'] && $comment_form_id ) {
 			?>
 			<script>
-				document.addEventListener( 'DOMContentLoaded', function() {
+				const sceRecaptchaAppend = function() {
 					var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
 					if ( null !== sceCommentSubmitButton ) {
 						// Change ID and name attribute of button. This is needed for comment submission.
@@ -135,16 +135,23 @@ class Recaptcha {
 						grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
 							let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
 							if ( null !== recaptchaForm ) {
-								var recaptchaInput = document.createElement('input');
+								const recaptchaInput = document.createElement('input');
 								recaptchaInput.setAttribute('type', 'hidden');
-								recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+								recaptchaInput.setAttribute('name', 'g-recaptcha-response-token');
 								recaptchaInput.setAttribute('value', token);
+
 								recaptchaForm.appendChild(recaptchaInput);
 							}
 						});
-					});
-				}
-				});
+						});
+					}
+				};
+				window.addEventListener( 'DOMContentLoaded', function() {
+					sceRecaptchaAppend();
+				} );
+				document.addEventListener( 'wpacAfterUpdateComments', () => {
+					sceRecaptchaAppend();
+				} );
 			</script>
 			<?php
 		}

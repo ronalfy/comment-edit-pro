@@ -93,7 +93,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tributejs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tributejs__WEBPACK_IMPORTED_MODULE_0__);
 
 
-window.onload = function () {
+var sceInitTribute = function sceInitTribute() {
   var tribute = new (tributejs__WEBPACK_IMPORTED_MODULE_0___default())({
     values: sceMentions.values,
     selectTemplate: function selectTemplate(item) {
@@ -118,6 +118,13 @@ window.onload = function () {
   if (null !== commentForm) {
     tribute.attach(commentForm);
   }
+};
+
+window.onload = function () {
+  sceInitTribute();
+  document.addEventListener('wpacAfterUpdateComments', function () {
+    sceInitTribute();
+  });
 };
 })();
 
