@@ -1,6 +1,6 @@
 <?php
 /**
- * Output Comment Character Control tab.
+ * Output the comment form SCE tab.
  *
  * @package CommentEditPro
  */
@@ -15,16 +15,16 @@ use CommentEditPro\Includes\Options as Options;
 use CommentEditPro\Includes\Functions as Functions;
 
 /**
- * Output character control.
+ * Output the comment form tab and content.
  */
-class Character_Control {
+class Comment_Form {
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		add_filter( 'comment_edit_pro_admin_tabs', array( $this, 'add_main_tab' ), 1, 1 );
 		add_filter( 'comment_edit_pro_admin_sub_tabs', array( $this, 'add_main_main_sub_tab' ), 1, 3 );
-		add_filter( 'comment_edit_pro_output_character_control', array( $this, 'output_main_content' ), 1, 3 );
+		add_filter( 'comment_edit_pro_output_comment_form', array( $this, 'output_main_content' ), 1, 3 );
 	}
 
 	/**
@@ -36,11 +36,11 @@ class Character_Control {
 	 */
 	public function add_main_tab( $tabs ) {
 		$tabs[] = array(
-			'get'    => 'character-control',
-			'action' => 'comment_edit_pro_output_character_control',
-			'url'    => Functions::get_settings_url( 'character-control' ),
-			'label'  => _x( 'Character Control', 'Tab label as Character Control', 'comment-edit-pro' ),
-			'icon'   => 'text',
+			'get'    => 'comment-form',
+			'action' => 'comment_edit_pro_output_comment_form',
+			'url'    => Functions::get_settings_url( 'comment-form' ),
+			'label'  => _x( 'Comment Form', 'Tab label as Comment Form', 'ultimate-auto-updates' ),
+			'icon'   => 'message-text',
 		);
 		return $tabs;
 	}
@@ -68,12 +68,12 @@ class Character_Control {
 	 * @param string $sub_tab Sub tab.
 	 */
 	public function output_main_content( $tab, $sub_tab = '' ) {
-		if ( 'character-control' === $tab ) {
-			if ( empty( $sub_tab ) || 'character-control' === $sub_tab ) {
+		if ( 'comment-form' === $tab ) {
+			if ( empty( $sub_tab ) || 'comment-form' === $sub_tab ) {
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
-						<div id="sce-tab-character-control">
+						<div id="sce-tab-comment-form">
 							<?php echo wp_kses( Functions::get_loading_svg(), Functions::get_kses_allowed_html( true ) ); ?>
 						</div>
 					</div>

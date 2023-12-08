@@ -350,6 +350,8 @@ class Comment_Edit_Pro {
 		$this->license_ajax->run();
 		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
 		$this->comment_editing->run();
+		$this->comment_form = new \CommentEditPro\Includes\Comment_Form();
+		$this->comment_form->run();
 		$this->comment_shortcuts = new \CommentEditPro\Includes\Comment_Shortcuts();
 		$this->comment_shortcuts->run();
 		$this->spam_protection = new \CommentEditPro\Includes\Spam_Protection();

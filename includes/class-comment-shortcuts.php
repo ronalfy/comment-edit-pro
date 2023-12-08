@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 use WP_Comment;
 
 /**
@@ -106,7 +106,7 @@ class Comment_Shortcuts {
 		$count_deleted = 0;
 		foreach ( $comments->comments as $comment ) {
 			wp_delete_comment( $comment->comment_ID, $delete_permanently );
-			$count_deleted ++;
+			++$count_deleted;
 		}
 
 		// Determine if total has been reached.
@@ -364,20 +364,25 @@ class Comment_Shortcuts {
 		// Warning, lots of core style overrides ahead.
 		?>
 		<style>
-			.sce-admin-bar-comment-shortcuts .awaiting-mod {
-					display: inline-block;
-					vertical-align: middle;
+			.sce-admin-bar-comment-shortcuts .awaiting-mod,
+			.not-awaiting-mod {
+					display: inline-flex !important;
+					align-items: center !important;
+					justify-content: center !important;
 					box-sizing: border-box;
 					margin: 1px 0 -1px 2px !important; /* override core style */
-					padding: 0 5px !important; /* override core style */
-					min-width: 18px !important; /* override core style */
-					height: 18px !important; /* override core style */
-					border-radius: 9px !important; /* override core style */
+					padding: 0 !important; /* override core style */
+					min-width: 23px !important; /* override core style */
+					height: 23px !important; /* override core style */
+					border-radius: 100% !important; /* override core style */
 					background-color: #d63638;
 					color: #fff;
 					font-size: 11px !important; /* override core style */
 					line-height: 1.6 !important; /* override core style */
 					text-align: center;
+			}
+			.not-awaiting-mod {
+				background-color: #007017;
 			}
 		</style>
 		<?php
@@ -477,14 +482,21 @@ class Comment_Shortcuts {
 		}
 
 		// Add pending shortcut with count to the admin bar.
+		$pending_class = 'not-awaiting-mod';
+		if ( $pending_shortcut && $pending_count > 0 ) {
+			$pending_class = 'awaiting-mod';
+		}
 		if ( $pending_shortcut ) {
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-pending-shortcut',
 					'title'  => sprintf(
-						/* translators: %s: comment count */
-						__( 'View Pending <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-						$pending_count
+						/* translators: %1$s: Class name */
+
+						/* translators: %2$s: comment count */
+						__( 'View Pending <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+						esc_attr( $pending_class ),
+						esc_html( $pending_count )
 					),
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ),
@@ -496,14 +508,21 @@ class Comment_Shortcuts {
 		}
 
 		// Add spam shortcut with count to the admin bar.
+		$spam_class = 'not-awaiting-mod';
+		if ( $spam_shortcut && $spam_count > 0 ) {
+			$spam_class = 'awaiting-mod';
+		}
 		if ( $spam_shortcut ) {
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-spam-shortcut',
 					'title'  => sprintf(
-						/* translators: %s: comment count */
-						__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-						$spam_count
+						/* translators: %1$s: Class name */
+
+						/* translators: %2$s: comment count */
+						__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+						esc_attr( $spam_class ),
+						esc_html( $spam_count )
 					),
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ),
@@ -515,14 +534,21 @@ class Comment_Shortcuts {
 		}
 
 		// Add trash shortcut with count to the admin bar.
+		$trash_class = 'not-awaiting-mod';
+		if ( $trash_shortcut && $trash_count > 0 ) {
+			$trash_class = 'awaiting-mod';
+		}
 		if ( $trash_shortcut ) {
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-trash-shortcut',
 					'title'  => sprintf(
-						/* translators: %s: comment count */
-						__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-						$trash_count
+						/* translators: %1$s: Class name */
+
+						/* translators: %2$s: comment count */
+						__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+						esc_attr( $trash_class ),
+						esc_html( $trash_count )
 					),
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash' ) ),
@@ -552,7 +578,7 @@ class Comment_Shortcuts {
 			);
 
 			// Get comment count for current post.
-			$post_comment_counts = wp_count_comments( get_the_ID() );
+			$post_comment_counts         = wp_count_comments( get_the_ID() );
 			$post_approved_comment_count = $post_comment_counts->approved;
 			$post_pending_comment_count  = $post_comment_counts->moderated;
 			$post_spam_comment_count     = $post_comment_counts->spam;
@@ -565,7 +591,7 @@ class Comment_Shortcuts {
 						'id'     => 'comment-approved-shortcut-post',
 						'title'  => sprintf(
 							/* translators: %s: comment count */
-							__( 'View Approved <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							__( 'View Approved <span class="not-awaiting-mod">%s</span>', 'comment-edit-pro' ),
 							$post_approved_comment_count
 						),
 						'parent' => 'sce-comment-shortcuts-post',
@@ -583,9 +609,12 @@ class Comment_Shortcuts {
 					array(
 						'id'     => 'comment-pending-shortcut-post',
 						'title'  => sprintf(
-							/* translators: %s: comment count */
-							__( 'View Pending <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-							$post_pending_comment_count
+							/* translators: %1$s: Class name */
+
+							/* translators: %2$s: comment count */
+							__( 'View Pending <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+							esc_attr( $pending_class ),
+							esc_html( $post_pending_comment_count )
 						),
 						'parent' => 'sce-comment-shortcuts-post',
 						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated&p=' . get_the_ID() ) ),
@@ -602,9 +631,12 @@ class Comment_Shortcuts {
 					array(
 						'id'     => 'comment-spam-shortcut-post',
 						'title'  => sprintf(
-							/* translators: %s: comment count */
-							__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-							$post_spam_comment_count
+							/* translators: %1$s: Class name */
+
+							/* translators: %2$s: comment count */
+							__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+							esc_attr( $spam_class ),
+							esc_html( $post_spam_comment_count )
 						),
 						'parent' => 'sce-comment-shortcuts-post',
 						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam&p=' . get_the_ID() ) ),
@@ -621,8 +653,10 @@ class Comment_Shortcuts {
 					array(
 						'id'     => 'comment-trash-shortcut-post',
 						'title'  => sprintf(
-							/* translators: %s: comment count */
-							__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
+							/* translators: %1$s: Class name */
+
+							/* translators: %2$s: comment count */
+							__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
 							$post_trash_comment_count
 						),
 						'parent' => 'sce-comment-shortcuts-post',
@@ -896,7 +930,6 @@ class Comment_Shortcuts {
 				)
 			);
 		}
-
 	}
 
 	/**
@@ -972,19 +1005,34 @@ class Comment_Shortcuts {
 
 		// Get menu titles with placeholders.
 		$approved_title = __( '<span class="comment-menu-item-approved">Approved</span>', 'comment-edit-pro' );
-		$pending_title  = sprintf(
+		$pending_class  = 'awaiting-mod';
+		if ( 0 === $pending_count ) {
+			$pending_class = 'not-awaiting-mod';
+		}
+		$pending_title = sprintf(
 			/* Translators: %s is the number of pending comments */
-			_n( '<span class="comment-menu-item-pending">Pending</span> <span class="awaiting-mod">%s</span>', '<span class="comment-menu-item-pending">Pending</span> <span class="awaiting-mod">%s</span>', $pending_count, 'comment-edit-pro' ),
+			_n( '<span class="comment-menu-item-pending">Pending</span> <span class="%1$s">%2$s</span>', '<span class="comment-menu-item-pending">Pending</span> <span class="%1$s">%2$s</span>', $pending_count, 'comment-edit-pro' ),
+			esc_attr( $pending_class ),
 			number_format_i18n( $pending_count )
 		);
+		$spam_class = 'awaiting-mod';
+		if ( 0 === $spam_count ) {
+			$spam_class = 'not-awaiting-mod';
+		}
 		$spam_title = sprintf(
 			/* Translators: %s is the number of spam comments */
-			_n( '<span class="comment-menu-item-spam">Spam</span> <span class="awaiting-mod">%s</span>', '<span class="comment-menu-item-spam">Spam</span> <span class="awaiting-mod">%s</span>', $spam_count, 'comment-edit-pro' ),
+			_n( '<span class="comment-menu-item-spam">Spam</span> <span class="%1$s">%2$s</span>', '<span class="comment-menu-item-spam">Spam</span> <span class="%1$s">%2$s</span>', $spam_count, 'comment-edit-pro' ),
+			esc_attr( $spam_class ),
 			number_format_i18n( $spam_count )
 		);
+		$trash_class = 'awaiting-mod';
+		if ( 0 === $trash_count ) {
+			$trash_class = 'not-awaiting-mod';
+		}
 		$trash_title = sprintf(
 			/* Translators: %s is the number of trashed comments */
-			_n( '<span class="comment-menu-item-trash">Trash</span> <span class="awaiting-mod">%s</span>', '<span class="comment-menu-item-trash">Trash</span> <span class="awaiting-mod">%s</span>', $trash_count, 'comment-edit-pro' ),
+			_n( '<span class="comment-menu-item-trash">Trash</span> <span class="%1$s">%2$s</span>', '<span class="comment-menu-item-trash">Trash</span> <span class="%1$s">%2$s</span>', $trash_count, 'comment-edit-pro' ),
+			esc_attr( $trash_class ),
 			number_format_i18n( $trash_count )
 		);
 

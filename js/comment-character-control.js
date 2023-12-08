@@ -10,37 +10,48 @@ const sce_ccc_init = function( $ ) {
 		sce_progress_bar( this, 'sce-ccc-meter', comment_submit_button );
 	} );
 	$( 'body' ).on( 'sce.edit.show', function( event, sce_textarea, comment_id ) {
-		const sce_submit_button = $( '#sce-edit-comment' + comment_id + ' button' ).prop( 'disabled', 'disabled' );
-		let html = '<div class="sce-ccc-meter sce-ccc-meter-' + comment_id + '">';
-		html += '<span></span>';
-		html += '</div>';
-		if ( $( '#sce-edit-comment' + comment_id + ' .sce-ccc-meter' ).length <= 0 ) {
-			$( sce_textarea ).after( html );
-		}
-		sce_progress_bar( sce_textarea, 'sce-ccc-meter-' + comment_id, sce_submit_button );
-		$( sce_textarea ).keyup( function() {
-			sce_progress_bar( this, 'sce-ccc-meter-' + comment_id, sce_submit_button );
-		} );
+		add_to_sce_ccc( sce_textarea, comment_id );
 	} );
-	function sce_progress_bar( sce_progress_bar_textarea, className, submit_button ) {
-		const max = sce_ccc.max_length;
-		const min = sce_ccc.min_length;
-		const len = $( sce_progress_bar_textarea ).val().length;
-		const width = len / max * 100;
-		$( '.' + className + ' span' ).css( 'width', width + '%' );
-		if ( len > min ) {
-			$( '.' + className ).removeClass( 'sce-ccc-invalid' ).addClass( 'sce-ccc-valid' );
-			$( submit_button ).removeAttr( 'disabled' );
-		}
-		if ( len > max || len < min ) {
-			$( '.' + className ).removeClass( 'sce-ccc-valid' ).addClass( 'sce-ccc-invalid' );
-			$( submit_button ).prop( 'disabled', 'disabled' );
-		}
-	}
 };
+function add_to_sce_ccc( sce_textarea, comment_id ) {
+	const $ = jQuery;
+	const sce_submit_button = $( '#sce-edit-comment' + comment_id + ' button.sce-comment-save' ).prop( 'disabled', 'disabled' );
+	let html = '<div class="sce-ccc-meter sce-ccc-meter-' + comment_id + '">';
+	html += '<span></span>';
+	html += '</div>';
+	if ( $( '#sce-edit-comment' + comment_id + ' .sce-ccc-meter' ).length <= 0 ) {
+		$( sce_textarea ).after( html );
+	}
+	sce_progress_bar( sce_textarea, 'sce-ccc-meter-' + comment_id, sce_submit_button );
+	$( sce_textarea ).keyup( function() {
+		sce_progress_bar( sce_textarea, 'sce-ccc-meter-' + comment_id, sce_submit_button );
+	} );
+}
+function sce_progress_bar( sce_progress_bar_textarea, className, submit_button ) {
+	const $ = jQuery;
+	const max = sce_ccc.max_length;
+	const min = sce_ccc.min_length;
+	const len = $( sce_progress_bar_textarea ).val().length;
+	const width = len / max * 100;
+	$( '.' + className + ' span' ).css( 'width', width + '%' );
+	if ( len > min ) {
+		$( '.' + className ).removeClass( 'sce-ccc-invalid' ).addClass( 'sce-ccc-valid' );
+		$( submit_button ).removeAttr( 'disabled' );
+	}
+	if ( len > max || len < min ) {
+		$( '.' + className ).removeClass( 'sce-ccc-valid' ).addClass( 'sce-ccc-invalid' );
+		$( submit_button ).prop( 'disabled', 'disabled' );
+	}
+}
 jQuery( document ).ready( function( $ ) {
 	sce_ccc_init( $ );
 	document.addEventListener( 'wpacAfterUpdateComments', () => {
 		sce_ccc_init( $ );
+	} );
+	document.addEventListener( 'sceTimerLoaded', ( e ) => {
+		const commentId = e.detail.commentId;
+		const sceButton = e.detail.button;
+		const sceTextarea = sceButton.parentNode.querySelector( '.sce-textarea textarea' );
+		add_to_sce_ccc( $( sceTextarea ), commentId );
 	} );
 } );

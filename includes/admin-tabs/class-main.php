@@ -111,14 +111,14 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
-						<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" /></a>
+						<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-form' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/character-control.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of Comment Character Control', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
 							<h3><?php esc_html_e( 'Character Control', 'comment-edit-pro' ); ?></h3>
 							<p><?php esc_html_e( 'Set a minimum and maximum length for a comment.', 'comment-edit-pro' ); ?></p>
 						</div>
 						<div class="sce-admin-panel-card-footer">
-							<a href="<?php echo esc_url( Functions::get_settings_url( 'character-control' ) ); ?>"><?php esc_html_e( 'View Character Control Settings', 'comment-edit-pro' ); ?></a>
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'comment-form' ) ); ?>"><?php esc_html_e( 'View Character Control Settings', 'comment-edit-pro' ); ?></a>
 						</div>
 					</div>
 					<div class="sce-admin-panel-card">

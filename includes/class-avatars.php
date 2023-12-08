@@ -526,7 +526,7 @@ class Avatars {
 			$user_nickname = __( 'Choose an Avatar', 'comment-edit-pro' );
 		}
 		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="' . ( $current_avatar ? esc_attr( $current_avatar ) : '' ) . '" /></section><div id="sce-avatar-form-modal-wrapper"><div id="sce-avatar-form-modal"></div></div>',
+			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="' . ( $current_avatar ? esc_attr( $current_avatar ) : '' ) . '" /></section><div id="sce-avatar-form-modal-wrapper" tabindex="-1"><div id="sce-avatar-form-modal"></div></div>',
 		);
 		return $avatar_field;
 	}

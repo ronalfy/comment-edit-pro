@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 
 /**
  * Class Recaptcha
@@ -57,7 +57,7 @@ class Recaptcha {
 
 		// Enqueue recaptcha assets on the front-end.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_recaptcha_scripts' ) );
-		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
+		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 2 );
 		add_filter( 'comment_form_defaults', array( $this, 'add_recaptcha_css_class' ), 10, 1 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'print_recaptcha_scripts' ) );
 		add_action( 'pre_comment_on_post', array( $this, 'verify_recaptcha' ), 10, 1 );
@@ -157,18 +157,17 @@ class Recaptcha {
 		}
 	}
 
-	
+
 
 	/**
 	 * Defer the recaptcha scripts.
 	 *
 	 * @param string $tag    The script tag.
 	 * @param string $handle The script handle.
-	 * @param string $src    The script source.
 	 *
 	 * @return string The script tag.
 	 */
-	public function defer_scripts( $tag, $handle, $src ) {
+	public function defer_scripts( $tag, $handle ) {
 		$scripts_to_defer = array(
 			'sce-recaptcha',
 		);
@@ -294,6 +293,5 @@ class Recaptcha {
 				'message' => __( 'Recaptcha options have been reset to defaults.', 'comment-edit-pro' ),
 			)
 		);
-
 	}
 }

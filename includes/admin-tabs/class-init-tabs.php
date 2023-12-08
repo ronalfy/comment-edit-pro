@@ -18,8 +18,8 @@ class Init_Tabs {
 		new Main();
 		new Advanced();
 		new Avatars();
-		new Character_Control();
 		new Comment_Editing();
+		new Comment_Form();
 		new Integrations();
 		new License();
 		new Mentions();
