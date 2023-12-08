@@ -72,7 +72,9 @@
 		cursor: pointer;
 	}
 }
-
+.sce-avatar-closed {
+	display: none;
+}
 .comment-form-sce-avatar {
 	margin-top: 1em;
 	font-family: Arial, Helvetica, sans-serif;
@@ -115,7 +117,7 @@
 }
 #sce-avatar-form-modal-wrapper {
 	position: relative;
-	display: block;
+	display: none;
 	overflow: hidden;
 
 	& > div#sce-avatar-form-modal {
@@ -143,7 +145,7 @@
 		}
 	}
 	&.sce-avatar-closed {
-		display: block;
+		display: none;
 		overflow: hidden;
 
 		.sce-avatar-form-modal-close {
