@@ -657,7 +657,8 @@ class Comment_Shortcuts {
 
 							/* translators: %2$s: comment count */
 							__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-							$post_trash_comment_count
+							$post_trash_comment_count,
+							$trash_class
 						),
 						'parent' => 'sce-comment-shortcuts-post',
 						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash&p=' . get_the_ID() ) ),
