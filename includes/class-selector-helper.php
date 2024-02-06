@@ -35,12 +35,6 @@ class Selector_Helper {
 		// Add ajax action for saving the selectors.
 		add_action( 'wp_ajax_sce_save_selectors', array( $this, 'ajax_save_selectors' ) );
 
-		// Add Ajax action for opening comments.
-		add_action( 'wp_ajax_sce_shortcut_open_comments', array( $this, 'ajax_open_comments' ) );
-
-		// Add Ajax action for closing comments.
-		add_action( 'wp_ajax_sce_shortcut_close_comments', array( $this, 'ajax_close_comments' ) );
-
 		// Bail if not on frontend.
 		if ( is_admin() ) {
 			return;
@@ -49,82 +43,6 @@ class Selector_Helper {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_selector_helper_scripts_styles' ) );
 
 		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 999 );
-	}
-
-	/**
-	 * Open comments for a post ID.
-	 */
-	public function ajax_open_comments() {
-		// Check nonce.
-		$nonce   = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-		$post_id = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
-		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_open_comments_' . $post_id ) || ! $post_id || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'title'   => __( 'Error', 'comment-edit-pro' ),
-					'message' => __( 'Could not verify nonce or permissions.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Open comments for the post.
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			wp_send_json_error(
-				array(
-					'title'   => __( 'Error', 'comment-edit-pro' ),
-					'message' => __( 'Could not find a post to open comments for.', 'comment-edit-pro' ),
-				)
-			);
-		}
-		$post->comment_status = 'open';
-		wp_update_post( $post );
-
-		wp_send_json_success(
-			array(
-				'title'   => __( 'Success!', 'comment-edit-pro' ),
-				'message' => __( 'Comments have been opened. Refreshing post...', 'comment-edit-pro' ),
-			)
-		);
-		exit;
-	}
-
-	/**
-	 * Close comments for a post ID.
-	 */
-	public function ajax_close_comments() {
-		// Check nonce.
-		$nonce   = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-		$post_id = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
-		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_close_comments_' . $post_id ) || ! $post_id || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'title'   => __( 'Error', 'comment-edit-pro' ),
-					'message' => __( 'Could not verify nonce or permissions.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Open comments for the post.
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			wp_send_json_error(
-				array(
-					'title'   => __( 'Error', 'comment-edit-pro' ),
-					'message' => __( 'Could not find a post to close comments for.', 'comment-edit-pro' ),
-				)
-			);
-		}
-		$post->comment_status = 'closed';
-		wp_update_post( $post );
-
-		wp_send_json_success(
-			array(
-				'title'   => __( 'Success!', 'comment-edit-pro' ),
-				'message' => __( 'Comments have been closed. Refreshing post...', 'comment-edit-pro' ),
-			)
-		);
-		exit;
 	}
 
 	/**
@@ -242,7 +160,7 @@ class Selector_Helper {
 		wp_send_json_success(
 			array(
 				'title'   => __( 'Selectors Have Been Saved', 'comment-edit-pro' ),
-				'message' => __( 'You should be all set. Make sure Ajaxify Comments is enabled and leave a few test comments to be sure.', 'comment-edit-pro' ),
+				'message' => __( 'You should be all set. Please visit the Advanced settings to turn Selector Helper off.', 'comment-edit-pro' ),
 			)
 		);
 	}
@@ -312,57 +230,5 @@ class Selector_Helper {
 				),
 			)
 		);
-	}
-
-	/**
-	 * Ajax callback for opening comments from the frontend admin bar menu.
-	 *
-	 * Performs wp_safe_redirect back to the post it was on.
-	 */
-	public function ajax_shortcut_open_comments() {
-		// Check nonce.
-		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
-		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
-		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_open_comments' . $post_id ) || ! $post_id ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
-		}
-
-		// Open comments for the post.
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
-		}
-		$post->comment_status = 'open';
-		wp_update_post( $post );
-
-		// Redirect back to the post.
-		wp_safe_redirect( get_permalink( $post_id ) );
-		exit;
-	}
-
-	/**
-	 * Ajax callback for closing comments from the frontend admin bar menu.
-	 *
-	 * Performs wp_safe_redirect back to the post it was on.
-	 */
-	public function ajax_shortcut_close_comments() {
-		// Check nonce.
-		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
-		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
-		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_close_comments' . $post_id ) || ! $post_id ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
-		}
-
-		// Close comments for the post.
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			wp_die( esc_html__( 'Invalid post.', 'sce-comment-shortcuts' ) );
-		}
-		$post->comment_status = 'closed';
-		wp_update_post( $post );
-
-		// Redirect back to the post.
-		wp_safe_redirect( get_permalink( $post_id ) );
-		exit;
 	}
 }
