@@ -290,7 +290,7 @@ class Options {
 			'comment_strip_urls'                => false,
 			'submit_button_label'               => '',
 			'comment_reply_label'               => '', // This is the comment title heading.
-			'menu_helper_enabled'               => false,
+			'selector_helper_enabled'           => false,
 
 		);
 		return $defaults;

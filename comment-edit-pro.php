@@ -366,8 +366,8 @@ class Comment_Edit_Pro {
 		$this->tools->run();
 		$this->advanced = new \CommentEditPro\Includes\Advanced();
 		$this->advanced->run();
-		$this->menu_helper = new \CommentEditPro\Includes\Menu_Helper();
-		$this->menu_helper->run();
+		$this->selector_helper = new \CommentEditPro\Includes\Selector_Helper();
+		$this->selector_helper->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );

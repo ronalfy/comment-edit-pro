@@ -59,6 +59,8 @@ module.exports = ( env ) => {
 				'sce-webhooks-admin-css': [ './src/scss/webhooks-admin.scss' ],
 				'sce-fancybox-css': [ './node_modules/@fancyapps/ui/dist/fancybox/fancybox.css' ],
 				'sce-comment-activity-sidebar': [ './src/js/block-editor/activity-sidebar/index.js' ],
+				'sce-selector-helper': [ './src/js/selector-helper.js' ],
+				'sce-selector-helper-css': [ './src/scss/selector-helper.scss' ],
 			},
 			module: {
 				rules: [
