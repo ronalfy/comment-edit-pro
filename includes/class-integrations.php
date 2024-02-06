@@ -49,11 +49,12 @@ class Integrations {
 			return;
 		}
 		if ( 'integrations' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/integrations-admin.asset.php' );
 			wp_enqueue_script(
 				'sce-integrations',
-				Functions::get_plugin_url( 'dist/integrations-admin.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/integrations-admin.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			$localized_vars = array(

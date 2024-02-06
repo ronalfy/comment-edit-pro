@@ -164,11 +164,12 @@ class Advanced {
 			return;
 		}
 		if ( 'advanced' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-advanced.asset.php' );
 			wp_enqueue_script(
 				'sce-comment-advanced',
-				Functions::get_plugin_url( 'dist/sce-advanced.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-advanced.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(

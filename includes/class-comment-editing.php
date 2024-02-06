@@ -240,11 +240,12 @@ class Comment_Editing {
 			return;
 		}
 		if ( 'comment-editing' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-comment-editing.asset.php' );
 			wp_enqueue_script(
 				'sce-comment-editing',
-				Functions::get_plugin_url( 'dist/sce-comment-editing.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-comment-editing.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();

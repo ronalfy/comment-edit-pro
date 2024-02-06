@@ -180,11 +180,12 @@ class Avatars {
 		}
 		$options = Options::get_options();
 		if ( 'avatars' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/avatars-admin.asset.php' );
 			wp_enqueue_script(
 				'sce-avatars',
-				Functions::get_plugin_url( 'dist/avatars-admin.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/avatars-admin.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(

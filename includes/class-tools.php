@@ -700,11 +700,12 @@ class Tools {
 			return;
 		}
 		if ( 'tools' === $current_tab && ( 'comment-activity' === $current_sub_tab ) ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-tools-comment-activity.asset.php' );
 			wp_enqueue_script(
 				'sce-tools-comment-activity',
-				Functions::get_plugin_url( 'dist/sce-tools-comment-activity.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-tools-comment-activity.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(
@@ -719,11 +720,12 @@ class Tools {
 			);
 		}
 		if ( 'tools' === $current_tab && ( 'comment-shortcuts' === $current_sub_tab ) ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-comment-shortcuts-settings.asset.php' );
 			wp_enqueue_script(
 				'sce-tools-comment-shortcuts',
-				Functions::get_plugin_url( 'dist/sce-comment-shortcuts-settings.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-comment-shortcuts-settings.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(
@@ -737,11 +739,12 @@ class Tools {
 			);
 		}
 		if ( 'tools' === $current_tab && ( 'post-types' === $current_sub_tab ) ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-tools-post-type-comment-settings.asset.php' );
 			wp_enqueue_script(
 				'sce-tools-post-type-comment-settings',
-				Functions::get_plugin_url( 'dist/sce-tools-post-type-comment-settings.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-tools-post-type-comment-settings.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(

@@ -486,11 +486,12 @@ class Mentions {
 			return;
 		}
 		if ( 'mentions' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/mentions-admin.asset.php' );
 			wp_enqueue_script(
 				'sce-mentions',
-				Functions::get_plugin_url( 'dist/mentions-admin.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/mentions-admin.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(
