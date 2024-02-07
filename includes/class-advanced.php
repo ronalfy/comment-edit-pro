@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 
 /**
  * Class Advanced
@@ -34,9 +34,9 @@ class Advanced {
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 
 		// Get options and determine if comment editing is disabled or enabled.
-		$options = Options::get_options();
-		$are_comments_disabled = (bool) $options['disable_all_comments'];
-		$are_comments_hidden = (bool) $options['hide_comment_section'];
+		$options                     = Options::get_options();
+		$are_comments_disabled       = (bool) $options['disable_all_comments'];
+		$are_comments_hidden         = (bool) $options['hide_comment_section'];
 		$is_spam_protection_disabled = (bool) $options['disable_all_spam_protection'];
 
 		// Disable comments if necessary.
@@ -105,13 +105,14 @@ class Advanced {
 		$json_array = array(
 			'disableAllComments'       => (bool) $options['disable_all_comments'],
 			'disableAllSpamProtection' => (bool) $options['disable_all_spam_protection'],
-			'hideCommentSection'	   => (bool) $options['hide_comment_section'],
+			'hideCommentSection'       => (bool) $options['hide_comment_section'],
 			'commentListClass'         => sanitize_text_field( $options['comment_list_class'] ),
 			'commentsWrapperId'        => sanitize_text_field( $options['comments_wrapper_id'] ),
 			'commentFormId'            => sanitize_text_field( $options['comment_form_id'] ),
 			'commentSubmitId'          => sanitize_text_field( $options['comment_submit_id'] ),
 			'commentRespondId'         => sanitize_text_field( $options['comment_respond_id'] ),
 			'commentTextareaId'        => sanitize_text_field( $options['comment_textarea_id'] ),
+			'selectorHelperEnabled'    => (bool) $options['selector_helper_enabled'],
 		);
 
 		// Exit gracefully.
@@ -133,17 +134,17 @@ class Advanced {
 			);
 		}
 
-		$options                         = array();
-		$options['disable_all_comments'] = (bool) filter_input( INPUT_POST, 'disableAllComments', FILTER_VALIDATE_BOOLEAN );
-		$options['comment_list_class']   = sanitize_text_field( filter_input( INPUT_POST, 'commentListClass', FILTER_DEFAULT ) );
-		$options['comments_wrapper_id']  = sanitize_text_field( filter_input( INPUT_POST, 'commentsWrapperId', FILTER_DEFAULT ) );
-		$options['comment_form_id']      = sanitize_text_field( filter_input( INPUT_POST, 'commentFormId', FILTER_DEFAULT ) );
-		$options['comment_submit_id']    = sanitize_text_field( filter_input( INPUT_POST, 'commentSubmitId', FILTER_DEFAULT ) );
-		$options['comment_respond_id']   = sanitize_text_field( filter_input( INPUT_POST, 'commentRespondId', FILTER_DEFAULT ) );
-		$options['comment_textarea_id']  = sanitize_text_field( filter_input( INPUT_POST, 'commentTextareaId', FILTER_DEFAULT ) );
+		$options                                = array();
+		$options['disable_all_comments']        = (bool) filter_input( INPUT_POST, 'disableAllComments', FILTER_VALIDATE_BOOLEAN );
+		$options['comment_list_class']          = sanitize_text_field( filter_input( INPUT_POST, 'commentListClass', FILTER_DEFAULT ) );
+		$options['comments_wrapper_id']         = sanitize_text_field( filter_input( INPUT_POST, 'commentsWrapperId', FILTER_DEFAULT ) );
+		$options['comment_form_id']             = sanitize_text_field( filter_input( INPUT_POST, 'commentFormId', FILTER_DEFAULT ) );
+		$options['comment_submit_id']           = sanitize_text_field( filter_input( INPUT_POST, 'commentSubmitId', FILTER_DEFAULT ) );
+		$options['comment_respond_id']          = sanitize_text_field( filter_input( INPUT_POST, 'commentRespondId', FILTER_DEFAULT ) );
+		$options['comment_textarea_id']         = sanitize_text_field( filter_input( INPUT_POST, 'commentTextareaId', FILTER_DEFAULT ) );
 		$options['disable_all_spam_protection'] = (bool) filter_input( INPUT_POST, 'disableAllSpamProtection', FILTER_VALIDATE_BOOLEAN );
-		$options['hide_comment_section'] = (bool) filter_input( INPUT_POST, 'hideCommentSection', FILTER_VALIDATE_BOOLEAN );
-
+		$options['hide_comment_section']        = (bool) filter_input( INPUT_POST, 'hideCommentSection', FILTER_VALIDATE_BOOLEAN );
+		$options['selector_helper_enabled']     = (bool) filter_input( INPUT_POST, 'selectorHelperEnabled', FILTER_VALIDATE_BOOLEAN );
 		// Save options.
 		Options::update_options( $options );
 
@@ -164,11 +165,12 @@ class Advanced {
 			return;
 		}
 		if ( 'advanced' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-advanced.asset.php' );
 			wp_enqueue_script(
 				'sce-comment-advanced',
-				Functions::get_plugin_url( 'dist/sce-advanced.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-advanced.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(

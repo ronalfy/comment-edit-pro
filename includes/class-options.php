@@ -93,6 +93,8 @@ class Options {
 				case 'hide_comment_section':
 				case 'comment_url_field_enabled':
 				case 'comment_strip_urls':
+				case 'selector_helper_enabled':
+				case 'require_login_for_editing':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				case 'mentions_enabled':
@@ -212,6 +214,7 @@ class Options {
 			'site_count'                        => '',
 			'activations_left'                  => '',
 			'beta'                              => false,
+			'require_login_for_editing'         => false,
 			'allow_unlimited_editing'           => false,
 			'allow_front_end_character_limit'   => false,
 			'allow_front_end_editing'           => false,
@@ -289,6 +292,7 @@ class Options {
 			'comment_strip_urls'                => false,
 			'submit_button_label'               => '',
 			'comment_reply_label'               => '', // This is the comment title heading.
+			'selector_helper_enabled'           => false,
 
 		);
 		return $defaults;

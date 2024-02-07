@@ -244,11 +244,12 @@ class Comment_Form {
 			return;
 		}
 		if ( 'comment-form' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-comment-form.asset.php' );
 			wp_enqueue_script(
 				'sce-comment-form',
-				Functions::get_plugin_url( 'dist/sce-comment-form.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-comment-form.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();

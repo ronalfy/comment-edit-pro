@@ -103,6 +103,7 @@ const Interface = ( props ) => {
 			deleteBehaviorUsers: data.deleteBehaviorUsers,
 			deleteBehaviorModerators: data.deleteBehaviorModerators,
 			spamBehaviorModerators: data.spamBehaviorModerators,
+			requireLoginForEditing: data.requireLoginForEditing,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -213,25 +214,51 @@ const Interface = ( props ) => {
 						<tr>
 							<th scope="row">{ __( 'Comment Editing', 'comment-edit-pro' ) }</th>
 							<td>
-								<Controller
-									name="enableCommentEditing"
-									control={ control }
-									render={ ( { field: { onChange, value } } ) => (
-										<ToggleControl
-											label={ __( 'Enable Comment Editing.', 'comment-edit-pro' ) }
-											className="sce-admin__toggle-control"
-											checked={ value }
-											onChange={ ( boolValue ) => {
-												//setShowButtonOptions( boolValue );
-												onChange( boolValue );
-											} }
-											help={ __(
-												'Comment editing is enabled by default, but you can disable it here.',
-												'comment-edit-pro'
-											) }
-										/>
-									) }
-								/>
+								<div className="sce-panel-row">
+									<Controller
+										name="enableCommentEditing"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __( 'Enable Comment Editing.', 'comment-edit-pro' ) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													//setShowButtonOptions( boolValue );
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Comment editing is enabled by default, but you can disable it here.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="requireLoginForEditing"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __(
+													'Require Login for Editing',
+													'comment-edit-pro'
+												) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													//setShowButtonOptions( boolValue );
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will require users to be logged in to edit their comments.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
 								{ ! sceCommentEditing.is_sce_installed && (
 									<>
 										<Notice

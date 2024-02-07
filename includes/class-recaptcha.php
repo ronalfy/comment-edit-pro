@@ -128,12 +128,13 @@ class Recaptcha {
 			?>
 			<script>
 				const sceRecaptchaAppend = function() {
-					var sceCommentSubmitButton = document.getElementById( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
+					var sceCommentSubmitButton = document.querySelector( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
+					console.log( sceCommentSubmitButton );
 					if ( null !== sceCommentSubmitButton ) {
 						// Change ID and name attribute of button. This is needed for comment submission.
 						grecaptcha.ready(function() {
 						grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
-							let recaptchaForm = document.getElementById('<?php echo esc_js( $comment_form_id ); ?>');
+							let recaptchaForm = document.querySelector('<?php echo esc_js( $comment_form_id ); ?>');
 							if ( null !== recaptchaForm ) {
 								const recaptchaInput = document.createElement('input');
 								recaptchaInput.setAttribute('type', 'hidden');

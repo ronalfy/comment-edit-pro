@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
-use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options;
+use CommentEditPro\Includes\Functions;
 
 /**
  * Output SCE's interface and hooks.
@@ -74,6 +74,27 @@ class Output {
 		add_filter( 'sce_force_delete', array( $this, 'force_delete' ), 10, 3 );
 		add_filter( 'trashed_comment', array( $this, 'maybe_delete_comment' ), 10, 2 );
 		add_filter( 'spammed_comment', array( $this, 'maybe_spam_and_delete_comment' ), 10, 2 );
+		add_filter( 'sce_can_edit_pre', array( $this, 'maybe_can_edit_pre' ), 10, 3 );
+	}
+
+	/**
+	 * Determine if a user can edit based on their logged-in status.
+	 *
+	 * @param bool   $can_edit Whether the user can edit.
+	 * @param object $comment  The comment object.
+	 * @param object $post     The post object.
+	 *
+	 * @return bool Whether the user can edit.
+	 */
+	public function maybe_can_edit_pre( $can_edit, $comment, $post ) {
+		$options                   = Options::get_options();
+		$require_login_for_editing = (bool) $options['require_login_for_editing'];
+
+		// Exit if the user is not logged in and the option is set.
+		if ( $require_login_for_editing && ! is_user_logged_in() ) {
+			return false;
+		}
+		return $can_edit;
 	}
 
 	/**
@@ -207,9 +228,9 @@ class Output {
 		$query   = $wpdb->prepare( $query, $comment_id, $blog_id ); // phpcs:ignore
 		$results = $wpdb->get_results( $query ); // phpcs:ignore
 		if ( empty( $results ) ) {
-			echo sprintf( '<p>%s</p>', esc_html__( 'No edits have occurred on this comment.', 'comment-edit-pro' ) );
+			printf( '<p>%s</p>', esc_html__( 'No edits have occurred on this comment.', 'comment-edit-pro' ) );
 		}
-		wp_enqueue_script( 'sce-options-restore', plugins_url( '/js/simple-comment-editing-options-restore.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
+		wp_enqueue_script( 'sce-options-restore', plugins_url( '/js/simple-comment-editing-options-restore.js', __DIR__ ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
 
 		// Display Comments.
 		?>
@@ -750,5 +771,4 @@ class Output {
 		$classes[] = $theme;
 		return $classes;
 	}
-
 }

@@ -417,11 +417,12 @@ class Webhooks {
 		}
 		$options = Options::get_options();
 		if ( 'webhooks' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-webhooks-admin.asset.php' );
 			wp_enqueue_script(
 				'sce-webhooks',
-				Functions::get_plugin_url( 'dist/sce-webhooks-admin.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-webhooks-admin.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			wp_localize_script(

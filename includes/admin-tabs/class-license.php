@@ -71,12 +71,12 @@ class License {
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'license' === $tab ) {
 			if ( empty( $sub_tab ) || 'license' === $sub_tab ) {
-
+				$deps = require_once Functions::get_plugin_dir( 'build/sce-license.asset.php' );
 				wp_enqueue_script(
 					'sce-admin-license',
-					Functions::get_plugin_url( '/dist/sce-license.js' ),
-					array(),
-					Functions::get_plugin_version(),
+					Functions::get_plugin_url( '/build/sce-license.js' ),
+					$deps['dependencies'],
+					$deps['version'],
 					true
 				);
 				wp_localize_script(

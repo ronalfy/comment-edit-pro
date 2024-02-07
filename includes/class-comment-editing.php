@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 
 /**
  * Class Comment Editing
@@ -44,7 +44,7 @@ class Comment_Editing {
 	 * Maybe disable comment editing based on settings.
 	 */
 	public function maybe_disable_comment_editing() {
-		$options = Options::get_options();
+		$options          = Options::get_options();
 		$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
 
 		if ( $comment_edit_pro->is_sce_enabled() && ! (bool) $options['enable_comment_editing'] ) {
@@ -107,7 +107,7 @@ class Comment_Editing {
 			'deleteBehaviorUsers'         => sanitize_text_field( $options['delete_behavior_users'] ),
 			'deleteBehaviorModerators'    => sanitize_text_field( $options['delete_behavior_moderators'] ),
 			'spamBehaviorModerators'      => sanitize_text_field( $options['spam_behavior_moderators'] ),
-
+			'requireLoginForEditing'      => (bool) $options['require_login_for_editing'],
 		);
 
 		// Exit gracefully.
@@ -161,6 +161,7 @@ class Comment_Editing {
 		$options['delete_behavior_users']           = sanitize_text_field( filter_input( INPUT_POST, 'deleteBehaviorUsers', FILTER_DEFAULT ) );
 		$options['delete_behavior_moderators']      = sanitize_text_field( filter_input( INPUT_POST, 'deleteBehaviorModerators', FILTER_DEFAULT ) );
 		$options['spam_behavior_moderators']        = sanitize_text_field( filter_input( INPUT_POST, 'spamBehaviorModerators', FILTER_DEFAULT ) );
+		$options['require_login_for_editing']       = (bool) filter_input( INPUT_POST, 'requireLoginForEditing', FILTER_VALIDATE_BOOLEAN );
 
 		// Save options.
 		Options::update_options( $options );
@@ -218,6 +219,7 @@ class Comment_Editing {
 			'commentDeletedError'         => sanitize_text_field( $defaults['comment_deleted_error'] ),
 			'commentEmptyError'           => sanitize_text_field( $defaults['comment_empty_error'] ),
 			'frontEndModerationMenuTheme' => sanitize_text_field( $defaults['front_end_moderation_menu_theme'] ),
+			'requireLoginForEditing'      => sanitize_text_field( $defaults['require_login_for_editing'] ),
 		);
 
 		// Go through return defaults and format into options.
@@ -228,7 +230,6 @@ class Comment_Editing {
 		Options::update_options( $options_to_save );
 
 		wp_send_json_success( $return );
-
 	}
 
 	/**
@@ -240,17 +241,18 @@ class Comment_Editing {
 			return;
 		}
 		if ( 'comment-editing' === $current_tab ) {
+			$deps = require_once Functions::get_plugin_dir( 'build/sce-comment-editing.asset.php' );
 			wp_enqueue_script(
 				'sce-comment-editing',
-				Functions::get_plugin_url( 'dist/sce-comment-editing.js' ),
-				array(),
-				Functions::get_plugin_version(),
+				Functions::get_plugin_url( 'build/sce-comment-editing.js' ),
+				$deps['dependencies'],
+				$deps['version'],
 				true
 			);
 			$comment_edit_pro = \CommentEditPro\Comment_Edit_Pro::get_instance();
 
 			// Get SCE comment install URL.
-			$sce_slug = 'simple-comment-editing';
+			$sce_slug          = 'simple-comment-editing';
 			$sce_install_nonce = wp_create_nonce( 'install-plugin_' . $sce_slug );
 			$sce_install_url   = admin_url( 'update.php?action=install-plugin&plugin=' . $sce_slug . '&_wpnonce=' . $sce_install_nonce );
 

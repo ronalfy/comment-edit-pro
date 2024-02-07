@@ -60,8 +60,6 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
-	console.log( data );
-
 	const {
 		register,
 		control,
@@ -82,6 +80,7 @@ const Interface = ( props ) => {
 			commentTextareaId: data.commentTextareaId,
 			disableAllSpamProtection: data.disableAllSpamProtection,
 			hideCommentSection: data.hideCommentSection,
+			selectorHelperEnabled: data.selectorHelperEnabled,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -260,6 +259,26 @@ const Interface = ( props ) => {
 						<tr>
 							<th scope="row">{ __( 'Comment HTML Settings', 'comment-edit-pro' ) }</th>
 							<td>
+								<div className="sce-panel-row">
+									<Controller
+										name="selectorHelperEnabled"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __( 'Enable Selector Helper', 'comment-edit-pro' ) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will add a Selector Helper option to the admin bar menu so you can easily find the IDs and classes of your comment form elements.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
 								<div className="sce-panel-row">
 									<Controller
 										name="commentsWrapperId"
