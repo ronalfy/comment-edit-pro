@@ -17,7 +17,11 @@ window.sceInitTurnstile = function () {
     comment_submit_id = _sceFrontend.comment_submit_id;
 
   // Get submit button.
+<<<<<<< Updated upstream
   var submitButton = document.querySelector(comment_submit_id);
+=======
+  var submitButton = document.getElementById(comment_submit_id);
+>>>>>>> Stashed changes
   if (null === submitButton) {
     return;
   }
@@ -29,7 +33,11 @@ window.sceInitTurnstile = function () {
   }
 
   // We have the form. Now get the textarea.
+<<<<<<< Updated upstream
   var commentFormTextarea = commentForm.querySelector('textarea');
+=======
+  var commentFormTextarea = commentForm.querySelector('textarea ');
+>>>>>>> Stashed changes
   if (null === commentFormTextarea) {
     return;
   }

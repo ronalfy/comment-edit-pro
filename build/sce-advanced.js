@@ -381,6 +381,10 @@ const Interface = props => {
   const [isSaved, setIsSaved] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [resetting, setResetting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isReset, setIsReset] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+<<<<<<< Updated upstream
+=======
+  console.log(data);
+>>>>>>> Stashed changes
   const {
     register,
     control,
@@ -400,8 +404,12 @@ const Interface = props => {
       commentRespondId: data.commentRespondId,
       commentTextareaId: data.commentTextareaId,
       disableAllSpamProtection: data.disableAllSpamProtection,
+<<<<<<< Updated upstream
       hideCommentSection: data.hideCommentSection,
       selectorHelperEnabled: data.selectorHelperEnabled
+=======
+      hideCommentSection: data.hideCommentSection
+>>>>>>> Stashed changes
     }
   });
   const formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_12__.useWatch)({
@@ -553,6 +561,7 @@ const Interface = props => {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment HTML Settings', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "sce-panel-row"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
+<<<<<<< Updated upstream
     name: "selectorHelperEnabled",
     control: control,
     render: ({
@@ -572,6 +581,8 @@ const Interface = props => {
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "sce-panel-row"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_12__.Controller, {
+=======
+>>>>>>> Stashed changes
     name: "commentsWrapperId",
     control: control,
     render: ({
