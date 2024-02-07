@@ -440,7 +440,8 @@ const Interface = props => {
       frontEndModerationMenuTheme: data.frontEndModerationMenuTheme,
       deleteBehaviorUsers: data.deleteBehaviorUsers,
       deleteBehaviorModerators: data.deleteBehaviorModerators,
-      spamBehaviorModerators: data.spamBehaviorModerators
+      spamBehaviorModerators: data.spamBehaviorModerators,
+      requireLoginForEditing: data.requireLoginForEditing
     }
   });
   const formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_13__.useWatch)({
@@ -530,7 +531,9 @@ const Interface = props => {
     className: "form-table form-table-row-sections"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Editing', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Editing', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "sce-panel-row"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
     name: "enableCommentEditing",
     control: control,
     render: ({
@@ -548,7 +551,27 @@ const Interface = props => {
       },
       help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment editing is enabled by default, but you can disable it here.', 'comment-edit-pro')
     })
-  }), !sceCommentEditing.is_sce_installed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "sce-panel-row"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    name: "requireLoginForEditing",
+    control: control,
+    render: ({
+      field: {
+        onChange,
+        value
+      }
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Require Login for Editing', 'comment-edit-pro'),
+      className: "sce-admin__toggle-control",
+      checked: value,
+      onChange: boolValue => {
+        //setShowButtonOptions( boolValue );
+        onChange(boolValue);
+      },
+      help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will require users to be logged in to edit their comments.', 'comment-edit-pro')
+    })
+  })), !sceCommentEditing.is_sce_installed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_10__["default"], {
     message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Edit Lite is not installed and is needed to enable comment editing.', 'comment-edit-pro'),
     status: "error",
     politeness: "assertive",

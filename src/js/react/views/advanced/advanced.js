@@ -60,8 +60,6 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 
-	console.log( data );
-
 	const {
 		register,
 		control,
