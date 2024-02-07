@@ -97,7 +97,7 @@ var sceInitTribute = function sceInitTribute() {
     values: sceMentions.values,
     selectTemplate: function selectTemplate(item) {
       var commentTextareaId = sceMentions.commentFormId;
-      var commentForm = document.getElementById(commentTextareaId);
+      var commentForm = document.querySelector(commentTextareaId);
       if (null !== commentForm) {
         // Create a hidden input to append to the comment form.
         var input = document.createElement('input');

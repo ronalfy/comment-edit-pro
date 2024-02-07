@@ -5,7 +5,7 @@ const sceInitTribute = () => {
 		values: sceMentions.values,
 		selectTemplate: ( item ) => {
 			const commentTextareaId = sceMentions.commentFormId;
-			const commentForm = document.getElementById( commentTextareaId );
+			const commentForm = document.querySelector( commentTextareaId );
 			if ( null !== commentForm ) {
 				// Create a hidden input to append to the comment form.
 				const input = document.createElement( 'input' );

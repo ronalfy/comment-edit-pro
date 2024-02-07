@@ -354,7 +354,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					selectorListHtml += '<table style="text-align: left;"><tr><th style="color: #FFF;"><strong>' + __( 'Label', 'comment-edit-pro' ) + '</strong></th><th style="color: #FFF;">' + __( 'Selector', 'comment-edit-pro' ) + '</th></tr>';
 					selectorList.forEach( ( selector ) => {
 						// Add the selector.
-						selectorListHtml += '<tr><td style="color: #DDD;">' + selector.selectorLabel + '</td><td style="color: #DDD;">' + selector.selector + '</td></tr>';
+						selectorListHtml += '<tr><td style="color: #333;">' + selector.selectorLabel + '</td><td style="color: #333;">' + selector.selector + '</td></tr>';
 					} );
 					selectorListHtml += '</table>';
 					Swal.fire( {

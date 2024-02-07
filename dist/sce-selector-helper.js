@@ -7441,7 +7441,7 @@ document.addEventListener('DOMContentLoaded', function () {
           selectorListHtml += '<table style="text-align: left;"><tr><th style="color: #FFF;"><strong>' + (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Label', 'comment-edit-pro') + '</strong></th><th style="color: #FFF;">' + (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Selector', 'comment-edit-pro') + '</th></tr>';
           selectorList.forEach(function (selector) {
             // Add the selector.
-            selectorListHtml += '<tr><td style="color: #DDD;">' + selector.selectorLabel + '</td><td style="color: #DDD;">' + selector.selector + '</td></tr>';
+            selectorListHtml += '<tr><td style="color: #333;">' + selector.selectorLabel + '</td><td style="color: #333;">' + selector.selector + '</td></tr>';
           });
           selectorListHtml += '</table>';
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({

@@ -17,7 +17,7 @@ window.sceInitTurnstile = function () {
     comment_submit_id = _sceFrontend.comment_submit_id;
 
   // Get submit button.
-  var submitButton = document.getElementById(comment_submit_id);
+  var submitButton = document.querySelector(comment_submit_id);
   if (null === submitButton) {
     return;
   }
@@ -29,7 +29,7 @@ window.sceInitTurnstile = function () {
   }
 
   // We have the form. Now get the textarea.
-  var commentFormTextarea = commentForm.querySelector('textarea ');
+  var commentFormTextarea = commentForm.querySelector('textarea');
   if (null === commentFormTextarea) {
     return;
   }

@@ -11,7 +11,7 @@ window.sceInitTurnstile = () => {
 	const { comment_submit_id } = sceFrontend;
 
 	// Get submit button.
-	const submitButton = document.getElementById( comment_submit_id );
+	const submitButton = document.querySelector( comment_submit_id );
 	if ( null === submitButton ) {
 		return;
 	}
@@ -23,7 +23,7 @@ window.sceInitTurnstile = () => {
 	}
 
 	// We have the form. Now get the textarea.
-	const commentFormTextarea = commentForm.querySelector( 'textarea ' );
+	const commentFormTextarea = commentForm.querySelector( 'textarea' );
 	if ( null === commentFormTextarea ) {
 		return;
 	}
