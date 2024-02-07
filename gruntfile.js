@@ -9,6 +9,7 @@ module.exports = function( grunt ) {
 					{ src: [ 'comment-edit-pro.php' ], dest: '/', filter: 'isFile' }, // includes files in path
 					{ src: [ 'uninstall.php' ], dest: '/', filter: 'isFile' }, // includes files in path
 					{ src: [ 'autoloader.php' ], dest: '/', filter: 'isFile' }, // includes files in path
+					{ src: [ 'build/**' ], dest: '/' }, // includes files in path and its subdirs
 					{ src: [ 'dist/**' ], dest: '/' }, // includes files in path and its subdirs
 					{ src: [ 'includes/**' ], dest: '/' }, // includes files in path and its subdirs
 					{ src: [ 'images/**' ], dest: '/' }, // includes files in path and its subdirs
