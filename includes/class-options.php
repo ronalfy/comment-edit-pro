@@ -85,6 +85,8 @@ class Options {
 				case 'enable_avatar_gravatar_fallback':
 				case 'enable_convertkit':
 				case 'convertkit_api_valid':
+				case 'enable_flodesk':
+				case 'flodesk_api_valid':
 				case 'enable_avatars_anonymous_remember':
 				case 'akismet_skip_pingbacks':
 				case 'akismet_skip_has_gravatar':
@@ -276,6 +278,12 @@ class Options {
 			'convertkit_checkbox_enabled'       => false,
 			'convertkit_api_valid'              => false,
 			'convertkit_selected_form'          => 0,
+			'enable_flodesk'                    => false,
+			'flodesk_api_key'                   => '',
+			'flodesk_api_valid'                 => false,
+			'flodesk_form_id'                   => '',
+			'flodesk_signup_label'              => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'flodesk_checkbox_enabled'          => false,
 			'delete_behavior_users'             => 'trash', // trash|delete.
 			'delete_behavior_moderators'        => 'trash', // trash|delete.
 			'spam_behavior_moderators'          => 'spam', // delete|spam.

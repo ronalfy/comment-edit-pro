@@ -10,6 +10,10 @@ const ConvertKit = lazy( () =>
 	import( /* webpackChunkName: "ConvertKit0.0.1" */ './ConvertKit' )
 );
 
+const Flodesk = lazy( () =>
+	import( /* webpackChunkName: "FloDesk0.0.1" */ './Flodesk' )
+);
+
 const container = document.getElementById( 'sce-tab-mailchimp' );
 const root = createRoot( container );
 root.render(
@@ -31,5 +35,13 @@ const convertkitIntegration = createRoot( convertkitContainer );
 convertkitIntegration.render(
 	<React.StrictMode>
 		<ConvertKit />
+	</React.StrictMode>
+);
+
+const flodeskContainer = document.getElementById( 'sce-tab-flodesk' );
+const flodeskIntegration = createRoot( flodeskContainer );
+flodeskIntegration.render(
+	<React.StrictMode>
+		<Flodesk />
 	</React.StrictMode>
 );
