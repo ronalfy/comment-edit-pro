@@ -84,6 +84,7 @@ const Interface = ( props ) => {
 	const [ isRefreshingSegments, setIsRefreshingSegments ] = useState( false );
 	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
 	const [ isRefreshingCustomFields, setIsRefreshingCustomFields ] = useState( false );
+	const [ isAddingCustomField, setIsAddingCustomField ] = useState( false );
 
 	const {
 		register,
@@ -105,6 +106,7 @@ const Interface = ( props ) => {
 			checkboxEnabled: data.checkboxEnabled,
 			segments: data.segments,
 			customFields: data.customFields,
+			flodeskDoubleOptinEnabled: data.flodeskDoubleOptinEnabled,
 		},
 	} );
 
@@ -114,12 +116,12 @@ const Interface = ( props ) => {
 	} );
 
 	/**
-	 * Check if we need to re-connect or initially connect to the Flodesk API.
+	 * Check if we need to re-connect or initially connect to the ConvertKit API.
 	 *
 	 * @return {boolean} true if we need to re-connect, false if not.
 	 */
 	const needsCredentialRefresh = () => {
-		// If Flodesk is disabled, no need to refresh.
+		// If convertkit is disabled, no need to refresh.
 		if ( ! getValues( 'enableFlodesk' ) ) {
 			return false;
 		}
@@ -140,12 +142,12 @@ const Interface = ( props ) => {
 	 * @return {boolean} true to show the save button, false to hide it.
 	 */
 	const canShowSaveButton = () => {
-		// If Flodesk is disabled and form is not dirty, no save button.
+		// If convertkit is disabled and form is not dirty, no save button.
 		if ( ! getValues( 'enableFlodesk' ) && ! isDirty ) {
 			return false;
 		}
 
-		// If flodesk is disabled, we can always save.
+		// If convertKit is disabled, we can always save.
 		if ( ! getValues( 'enableFlodesk' ) ) {
 			return true;
 		}
@@ -234,6 +236,48 @@ const Interface = ( props ) => {
 			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
 				setSaving( false );
+			} );
+	};
+
+	const onAddCustomField = ( customFieldLabel ) => {
+		customFieldLabel = customFieldLabel.trim();
+		if ( '' === customFieldLabel ) {
+			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'The Custom Field name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentCustomFields = getValues( 'customFields' );
+		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
+		if ( customFieldExists ) {
+			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'Custom Field name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the Custom Field.
+		setIsAddingCustomField( true );
+		sendCommand( 'sce_add_flodesk_custom_field', {
+			nonce: sceIntegrations.flodesk_add_custom_field_nonce,
+			label: customFieldLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { customFields } = ajaxData;
+					const newCustomFieldValues = [];
+					customFields.forEach( ( keys, index ) => {
+						newCustomFieldValues.push( keys );
+					} );
+					setValue( 'customFields', newCustomFieldValues );
+				} else {
+					setError( 'customFieldInput', { type: 'addCustomFieldError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingCustomField( false );
+				customFieldInputRef.current.focus();
 			} );
 	};
 
@@ -411,6 +455,37 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getDoubleOptIn = () => {
+		if ( ! canShowSaveButton() || needsCredentialRefresh() ) {
+			return <></>;
+		}
+		return (
+			<tr>
+				<th scope="row">{ __( 'Double Opt-in', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="flodeskDoubleOptinEnabled"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<ToggleControl
+								label={ __( 'Enable Double Opt-In', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									onChange( boolValue );
+								} }
+								help={ __(
+									'Require Double Opt-in for all subscribers.',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+				</td>
+			</tr>
+		);
+	};
+
 	const getFlodeskSegments = () => {
 		// Don't show tags if api is invalid.
 		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
@@ -502,7 +577,7 @@ const Interface = ( props ) => {
 			return <></>;
 		}
 
-		const flodeskCustomFields = getValues( 'customFields' );
+		const convertKitCustomFields = getValues( 'customFields' );
 		return (
 			<tr>
 				<th scope="row">
@@ -522,8 +597,8 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						{ flodeskCustomFields.length > 0 && getValues( 'apiValid' ) &&
-						flodeskCustomFields.map( ( tag, index ) => (
+						{ convertKitCustomFields.length > 0 && getValues( 'apiValid' ) &&
+						convertKitCustomFields.map( ( tag, index ) => (
 							<div className="sce-convertkit-custom-field" key={ index }>
 								{ 'custom' !== getValues( 'customFields' )[ index ].field && (
 									<>
@@ -599,6 +674,68 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
+						<div className="sce-convertkit-add-tag">
+							<div className="sce-convertkit-add-tag-group">
+								<Controller
+									name="customFieldInput"
+									control={ control }
+									rules={ {
+										pattern: /[-_ 0-9A-Za-z]/,
+									} }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											type="text"
+											value={ value }
+											onChange={ ( customFieldValue ) => {
+												clearErrors( 'customFieldInput' );
+												onChange( customFieldValue );
+											} }
+											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.customFieldInput?.type,
+											} ) }
+											placeholder={ __( 'Custom Field Name', 'comment-edit-pro' ) }
+											ref={ customFieldInputRef }
+										/>
+									) }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										onClick={ async( e ) => {
+											const validationResult = await trigger( 'customFieldInput' );
+											if ( validationResult ) {
+												onAddCustomField( getValues( 'customFieldInput' ) );
+											}
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
+										) }
+										text={
+											isAddingCustomField
+												? __( 'Adding…', 'comment-edit-pro' )
+												: __( 'Add Custom Field', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</div>
+							{ 'pattern' === errors.customFieldInput?.type && (
+								<Notice
+									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+							{ 'addCustomFieldError' === errors.customFieldInput?.type && (
+								<Notice
+									message={ errors.customFieldInput?.message }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</div>
 					</>
 				</td>
 			</tr>
@@ -765,6 +902,7 @@ const Interface = ( props ) => {
 								{ getCustomFields() }
 								{ getNewsletterLabel() }
 								{ getSignupCheckbox() }
+								{ getDoubleOptIn() }
 							</>
 						) }
 					</tbody>

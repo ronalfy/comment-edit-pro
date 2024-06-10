@@ -46,11 +46,14 @@ class Flodesk {
 		// Refresh custom fields for a ConvertKit account.
 		add_action( 'wp_ajax_sce_refresh_flodesk_custom_fields', array( $this, 'ajax_refresh_flodesk_custom_fields' ) );
 
-		// // Add ConvertKit Checkbox.
-		// add_filter( 'comment_form_defaults', array( $this, 'add_convertkit_checkbox' ), 100 );
+		// Add a custom field to ConvertKit account.
+		add_action( 'wp_ajax_sce_add_flodesk_custom_field', array( $this, 'ajax_add_flodesk_custom_field' ) );
+
+		// Add Flodesk Checkbox.
+		add_filter( 'comment_form_defaults', array( $this, 'add_flodesk_checkbox' ), 100 );
 
 		// When a new comment has been added.
-		// add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
+		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
 
 		// Add frontend scripts and styles.
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_frontend_scripts_styles' ) );
@@ -59,19 +62,19 @@ class Flodesk {
 		add_filter( 'sce_integrations_localized_vars', array( $this, 'add_flodesk_localized_vars' ) );
 
 		// Add Comment Meta Box for convertkit status.
-		// add_action( 'admin_init', array( $this, 'add_comment_meta_box' ) );
+		add_action( 'admin_init', array( $this, 'add_comment_meta_box' ) );
 	}
 
 	/**
-	 * Return if ConvertKit is active and valid.
+	 * Return if Flodesk is active and valid.
 	 *
 	 * @return bool true if active, false if not.
 	 */
-	private function is_convertkit_enabled_and_valid() {
+	private function is_flodesk_enabled_and_valid() {
 		$options = Options::get_options();
 
 		// Make sure convertkit is enabled and valid.
-		if ( ! (bool) $options['enable_convertkit'] || ! (bool) $options['convertkit_api_valid'] ) {
+		if ( ! (bool) $options['enable_flodesk'] || ! (bool) $options['flodesk_api_valid'] ) {
 			return false;
 		}
 
@@ -82,11 +85,11 @@ class Flodesk {
 	 * Add a comment meta box for convertkit status displays.
 	 */
 	public function add_comment_meta_box() {
-		if ( $this->is_convertkit_enabled_and_valid() ) {
+		if ( $this->is_flodesk_enabled_and_valid() ) {
 			add_meta_box(
-				'sce-convertkit',
-				__( 'Comment ConvertKit History', 'comment-edit-pro' ),
-				array( $this, 'output_convertkit_comment_meta' ),
+				'sce-flodesk',
+				__( 'Comment Flodesk History', 'comment-edit-pro' ),
+				array( $this, 'output_flodesk_comment_meta' ),
 				'comment',
 				'normal'
 			);
@@ -94,13 +97,13 @@ class Flodesk {
 	}
 
 	/**
-	 * Send ConvertKit when a comment has been posted.
+	 * Send Flodesk when a comment has been posted.
 	 *
 	 * @param int  $comment_id Comment ID that has been submitted.
 	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
 	 */
 	public function comment_posted( $comment_id, $maybe_comment_approved ) {
-		$signup_enabled = (bool) filter_input( INPUT_POST, 'sce-convertkit-signup', FILTER_VALIDATE_BOOLEAN );
+		$signup_enabled = (bool) filter_input( INPUT_POST, 'sce-flodesk-signup', FILTER_VALIDATE_BOOLEAN );
 
 		if ( $signup_enabled && 'spam' !== $maybe_comment_approved ) {
 			// Get the comment.
@@ -126,50 +129,44 @@ class Flodesk {
 		// Get options.
 		$options = Options::get_options();
 
-		// Make sure convertkit is enabled and valid.
-		if ( ! (bool) $options['enable_convertkit'] || ! (bool) $options['convertkit_api_valid'] ) {
+		// Make sure flodesk is enabled and valid.
+		if ( ! (bool) $options['enable_flodesk'] || ! (bool) $options['flodesk_api_valid'] ) {
 			return false;
 		}
 
 		// Get API and secret.
-		$api_key        = $options['convertkit_api_key'];
-		$api_secret_key = $options['convertkit_secret_key'];
-
-		// Determine if we're using forms or tags.
-		$form_or_tag = $options['convertkit_form_or_tag'];
+		$api_key = $options['flodesk_api_key'];
 
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
+			'Authorization' => 'Basic ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key' => $api_key,
+			'Content-Type'  => 'application/json',
 		);
 
 		// Get any tags.
-		$tags = array();
+		$segments = array();
 		if ( Functions::is_multisite() ) {
-			$tags = get_site_option( 'sce_convertkit_tags', array() );
+			$segments = get_site_option( 'sce_flodesk_segments', array() );
 		} else {
-			$tags = get_option( 'sce_convertkit_tags', array() );
+			$segments = get_option( 'sce_flodesk_segments', array() );
 		}
 
-		// Get selected tags.
-		$selected_tag_ids = array();
-		foreach ( $tags as $tag ) {
-			if ( isset( $tag['selected'] ) && (bool) $tag['selected'] ) {
-				$selected_tag_ids[] = absint( $tag['value'] );
+		// Get selected segments.
+		$selected_segments = array();
+		foreach ( $segments as $segment ) {
+			if ( isset( $segment['selected'] ) && (bool) $segment['selected'] ) {
+				$selected_segments[] = $segment['value'];
 			}
 		}
 
 		// Get any custom fields.
 		$custom_fields = array();
 		if ( Functions::is_multisite() ) {
-			$custom_fields = get_site_option( 'sce_convertkit_custom_fields', array() );
+			$custom_fields = get_site_option( 'sce_flodesk_custom_fields', array() );
 		} else {
-			$custom_fields = get_option( 'sce_convertkit_custom_fields', array() );
+			$custom_fields = get_option( 'sce_flodesk_custom_fields', array() );
 		}
 
 		// Map custom fields to value.
@@ -187,86 +184,149 @@ class Flodesk {
 			}
 		}
 
-		// Get comment meta with convertkit data.
-		$comment_meta = get_comment_meta( $comment_id, 'sce_convertkit_data', true );
+		// Get comment meta with flodesk data.
+		$comment_meta = get_comment_meta( $comment_id, 'sce_flodesk_data', true );
 		if ( ! is_array( $comment_meta ) ) {
 			$comment_meta = array();
 		}
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key' => $api_key,
-		);
 
 		// Get comment.
 		$comment = get_comment( $comment_id );
 
 		// Get API Endpoint.
-		$api_endpoint = $this->convertkit_api;
-		if ( 'form' === $form_or_tag && $options['convertkit_selected_form'] ) {
-			$selected_form = $options['convertkit_selected_form'];
-			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
+		$api_endpoint = $this->flodesk_api . '/subscribers';
 
-			$form_http_args         = $http_args;
-			$form_http_args['body'] = array(
-				'api_key'    => $api_key,
-				'email'      => $comment->comment_author_email,
-				'first_name' => $comment->comment_author,
-				'tags'       => $selected_tag_ids,
-			);
+		// Build body.
+		$http_args['body'] = wp_json_encode(
+			array(
+				'email'         => $email,
+				'first_name'    => $comment->comment_author,
+				'custom_fields' => $selected_custom_fields,
+				'segment_ids'   => $selected_segments,
+				'optin_ip'      => $comment->comment_author_IP,
+				'double_optin'  => (bool) $options['flodesk_double_optin_enabled'],
+			)
+		);
 
-			if ( ! empty( $selected_custom_fields ) ) {
-				$form_http_args['body']['fields'] = $selected_custom_fields;
-			}
-			if ( ! empty( $selected_tag_ids ) ) {
-				$test_array                     = array();
-				$test_array[]                   = 1234;
-				$tag_json                       = wp_json_encode(
-					array_merge(
-						$test_array,
-						$selected_tag_ids
-					)
-				);
-				$form_http_args['body']['tags'] = count( $selected_tag_ids ) > 1 ? $tag_json : $selected_tag_ids[0];
-			}
+		// Make API call.
+		$response = wp_remote_post( $api_endpoint, $http_args );
 
-			$response = wp_remote_post(
-				$api_endpoint,
-				$form_http_args
-			);
-			$this->add_convertkit_comment_meta( $comment_id, $response, 'form' );
+		// Check for errors.
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		} else {
+			// Get response body.
+			$response_body = wp_remote_retrieve_body( $response );
+			$response_body = json_decode( $response_body, true );
+
+			$this->add_flodesk_comment_meta( $comment_id, $response );
 		}
-
-		// Check for tags.
-		if ( ! empty( $selected_tag_ids ) && 'tag' === $form_or_tag ) {
-			foreach ( $selected_tag_ids as $tag_id ) {
-				$api_endpoint          = $this->convertkit_api . '/tags/' . $tag_id . '/subscribe';
-				$tag_http_args         = $http_args;
-				$tag_http_args['body'] = array(
-					'api_key'    => $api_key,
-					'email'      => $comment->comment_author_email,
-					'first_name' => $comment->comment_author,
-				);
-				if ( ! empty( $selected_custom_fields ) ) {
-					$tag_http_args['body']['fields'] = $selected_custom_fields;
-				}
-
-				$response = wp_remote_post(
-					$api_endpoint,
-					$tag_http_args
-				);
-				$this->add_convertkit_comment_meta( $comment_id, $response, 'tag' );
-			}
-		}
-
-		// Add comment meta.
-
 		return true;
+	}
+
+	/**
+	 * Add a new Custom Field to Flodesk.
+	 */
+	public function ajax_add_flodesk_custom_field() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-add-flodesk-custom-field' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get saved vars.
+		$options = Options::get_options();
+		$api_key = sanitize_text_field( $options['flodesk_api_key'] );
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Basic ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+			'Content-Type'  => 'application/json',
+		);
+		$http_args['body']    = wp_json_encode(
+			array(
+				'label' => sanitize_text_field( filter_input( INPUT_POST, 'label', FILTER_DEFAULT ) ),
+			)
+		);
+
+		// Get endpoints.
+		$custom_fields_api_endpoint = esc_url_raw( $this->flodesk_api . '/custom-fields' );
+
+		// Add custom field.
+		$custom_fields_api_response = wp_remote_post( $custom_fields_api_endpoint, $http_args );
+		if ( is_wp_error( $custom_fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not communicate with Flodesk.', 'comment-edit-pro' ) ) );
+		}
+		$custom_fields_api_response_code = wp_remote_retrieve_response_code( $custom_fields_api_response );
+		if ( 200 !== $custom_fields_api_response_code && 201 !== $custom_fields_api_response_code ) {
+			wp_send_json_error( array( 'message' => __( 'Could not add Custom Field to Flodesk.', 'comment-edit-pro' ) ) );
+		}
+
+		// Retrieve all custom fields.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization' => 'Basic ' . $api_key,
+			'Accept'        => 'application/json;ver=1.0',
+		);
+
+		$custom_fields_api_endpoint = esc_url_raw( $this->flodesk_api . '/custom-fields/all' );
+		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
+		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from ConvertKit.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get tags as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_custom_fields = (array) get_site_option( 'sce_flodesk_custom_fields', array() );
+		} else {
+			$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
+		}
+
+		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
+		$custom_fields                 = $custom_fields_raw;
+		$sanitized_custom_field_values = array();
+		foreach ( $custom_fields as $index => $values ) {
+			$sanitized_custom_field_values[ $index ] = array(
+				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
+			);
+
+			// Add in the field map.
+			if ( ! empty( $existing_custom_fields ) ) {
+				foreach ( $existing_custom_fields as $existing_custom_field ) {
+					if ( $existing_custom_field['value'] !== $sanitized_custom_field_values[ $index ]['value'] ) {
+						continue;
+					}
+					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_field['field'] ?? 'none';
+					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_field['field_custom'] ?? '';
+				}
+			}
+		}
+
+		// Save custom fields as an option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
+		} else {
+			update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
+		}
+
+		// Return tags.
+		wp_send_json_success(
+			array(
+				'customFields' => $sanitized_custom_field_values,
+				'apiValid'     => true,
+			)
+		);
 	}
 
 	/**
@@ -274,10 +334,9 @@ class Flodesk {
 	 *
 	 * @param int             $comment_id The Comment ID.
 	 * @param WP_Error|Object $response The response object.
-	 * @param string          $form_or_tag form or tag.
 	 */
-	private function add_convertkit_comment_meta( $comment_id, $response, $form_or_tag ) {
-		$comment_meta = get_comment_meta( $comment_id, 'sce_convertkit_data', true );
+	private function add_flodesk_comment_meta( $comment_id, $response ) {
+		$comment_meta = get_comment_meta( $comment_id, 'sce_flodesk_data', true );
 		if ( ! is_array( $comment_meta ) ) {
 			$comment_meta = array();
 		}
@@ -285,7 +344,6 @@ class Flodesk {
 		if ( is_wp_error( $response ) ) {
 			// Log error.
 			$comment_meta[] = array(
-				'type'        => $form_or_tag,
 				'success'     => false,
 				'error'       => $response->get_error_message(),
 				'status_code' => false,
@@ -293,7 +351,6 @@ class Flodesk {
 		} elseif ( null === $response ) {
 			// Log error.
 			$comment_meta[] = array(
-				'type'        => $form_or_tag,
 				'success'     => false,
 				'error'       => __( 'No response received.', 'comment-edit-pro' ),
 				'status_code' => false,
@@ -303,14 +360,12 @@ class Flodesk {
 			$status_code = wp_remote_retrieve_response_code( $response );
 			if ( 200 === $status_code ) {
 				$comment_meta[] = array(
-					'type'        => $form_or_tag,
 					'success'     => true,
 					'error'       => false,
 					'status_code' => $status_code,
 				);
 			} else {
 				$error_comment_meta = array(
-					'type'        => $form_or_tag,
 					'success'     => false,
 					'status_code' => $status_code,
 				);
@@ -329,7 +384,7 @@ class Flodesk {
 			}
 		}
 
-		update_comment_meta( $comment_id, 'sce_convertkit_data', $comment_meta );
+		update_comment_meta( $comment_id, 'sce_flodesk_data', $comment_meta );
 	}
 
 	/**
@@ -380,26 +435,24 @@ class Flodesk {
 	 *
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
-	public function add_convertkit_checkbox( $comment_fields ) {
-		$options              = Options::get_options();
-		$convertkit_enabled   = (bool) $options['enable_convertkit'];
-		$convertkit_api_valid = (bool) $options['convertkit_api_valid'];
+	public function add_flodesk_checkbox( $comment_fields ) {
+		$options = Options::get_options();
 
 		// Check to see if ConvertKit is enabled. Skip if can moderate.
-		if ( ! $this->is_convertkit_enabled_and_valid() || current_user_can( 'moderate_comments' ) ) {
+		if ( ! $this->is_flodesk_enabled_and_valid() || current_user_can( 'moderate_comments' ) ) {
 			return $comment_fields;
 		}
 
 		// Now get the checkbox details.
-		$checked_by_default              = (bool) $options['convertkit_checkbox_enabled'];
-		$convertkit_html                 = array(
-			'sce-convertkit' => sprintf(
-				'<section class="comment-form-sce-convertkit"><label><input type="checkbox" name="sce-convertkit-signup" %s /> %s</label></section>',
+		$checked_by_default              = (bool) $options['flodesk_checkbox_enabled'];
+		$flodesk_html                    = array(
+			'sce-flodesk' => sprintf(
+				'<section class="comment-form-sce-flodesk"><label><input type="checkbox" name="sce-flodesk-signup" %s /> %s</label></section>',
 				checked( $checked_by_default, true, false ),
-				esc_html( $options['convertkit_signup_label'] )
+				esc_html( $options['flodesk_signup_label'] )
 			),
 		);
-		$comment_fields['submit_button'] = $convertkit_html['sce-convertkit'] . $comment_fields['submit_button'];
+		$comment_fields['submit_button'] = $flodesk_html['sce-flodesk'] . $comment_fields['submit_button'];
 		return $comment_fields;
 	}
 
@@ -458,14 +511,15 @@ class Flodesk {
 		}
 
 		$json_array = array(
-			'enableFlodesk'   => (bool) $options['enable_flodesk'],
-			'apiValid'        => (bool) $options['flodesk_api_valid'],
-			'apiKey'          => $options['flodesk_api_key'],
-			'signUpLabel'     => $options['flodesk_signup_label'],
-			'checkboxEnabled' => (bool) $options['flodesk_checkbox_enabled'],
-			'segments'        => $segments,
-			'customFields'    => $custom_fields,
-			'selectedForm'    => $options['flodesk_selected_form'],
+			'enableFlodesk'             => (bool) $options['enable_flodesk'],
+			'apiValid'                  => (bool) $options['flodesk_api_valid'],
+			'apiKey'                    => $options['flodesk_api_key'],
+			'signUpLabel'               => $options['flodesk_signup_label'],
+			'checkboxEnabled'           => (bool) $options['flodesk_checkbox_enabled'],
+			'segments'                  => $segments,
+			'customFields'              => $custom_fields,
+			'selectedForm'              => $options['flodesk_selected_form'],
+			'flodeskDoubleOptinEnabled' => (bool) $options['flodesk_double_optin_enabled'],
 		);
 		return $json_array;
 	}
@@ -529,19 +583,21 @@ class Flodesk {
 		$this->output_connection_json_errors();
 
 		// Nonce passed, let's get post vars.
-		$api_key                     = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$flodesk_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
-		$signup_label                = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
-		$segments                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'segments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-		$custom_fields               = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$api_key                      = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$flodesk_checkbox_enabled     = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$signup_label                 = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
+		$segments                     = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'segments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$custom_fields                = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$flodesk_double_optin_enabled = (bool) filter_input( INPUT_POST, 'flodeskDoubleOptinEnabled', FILTER_VALIDATE_BOOLEAN );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'enable_flodesk'           => $flodesk_enabled,
-			'flodesk_api_key'          => $api_key,
-			'flodesk_signup_label'     => $signup_label,
-			'flodesk_checkbox_enabled' => $flodesk_checkbox_enabled,
-			'flodesk_api_valid'        => true,
+			'enable_flodesk'               => $flodesk_enabled,
+			'flodesk_api_key'              => $api_key,
+			'flodesk_signup_label'         => $signup_label,
+			'flodesk_checkbox_enabled'     => $flodesk_checkbox_enabled,
+			'flodesk_api_valid'            => true,
+			'flodesk_double_optin_enabled' => $flodesk_double_optin_enabled,
 		);
 		Options::update_options( $options_to_save );
 
@@ -585,8 +641,7 @@ class Flodesk {
 		// Get endpoints.
 		$subscribers_api_url   = esc_url_raw( $this->flodesk_api . '/subscribers' );
 		$segments_api_url      = esc_url_raw( $this->flodesk_api . '/segments' );
-		$custom_fields_api_url = esc_url_raw( $this->flodesk_api . '/custom-fields' );
-		// $account_api_url       = esc_url_raw( $this->flodesk_api . '/account' );
+		$custom_fields_api_url = esc_url_raw( $this->flodesk_api . '/custom-fields/all' );
 
 		// Check Account.
 		$account_http_args = $http_args;
@@ -600,7 +655,6 @@ class Flodesk {
 		}
 
 		// Make API call.
-		// $forms_api_response         = wp_remote_get( $forms_api_url, $http_args );
 		$segments_api_response      = wp_remote_get( $segments_api_url, $http_args );
 		$custom_fields_api_response = wp_remote_get( $custom_fields_api_url, $http_args );
 
@@ -612,12 +666,10 @@ class Flodesk {
 		}
 
 		// Now format response from JSON.
-		// $forms_raw                     = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
-		$segments          = json_decode( wp_remote_retrieve_body( $segments_api_response ), true );
-		$custom_fields_raw = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-		$segments          = $segments['data'] ?? array();
-		$custom_fields     = $custom_fields_raw['data'] ?? array();
-		// $sanitized_form_values         = array();
+		$segments                      = json_decode( wp_remote_retrieve_body( $segments_api_response ), true );
+		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
+		$segments                      = $segments['data'] ?? array();
+		$custom_fields                 = $custom_fields_raw ?? array();
 		$sanitized_segment_values      = array();
 		$sanitized_custom_field_values = array();
 		foreach ( $segments as $index => $values ) {
@@ -804,7 +856,7 @@ class Flodesk {
 		);
 
 		// Get endpoints.
-		$custom_fields_api_endpoint = esc_url_raw( $this->flodesk_api . '/custom-fields' );
+		$custom_fields_api_endpoint = esc_url_raw( $this->flodesk_api . '/custom-fields/all' );
 
 		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
 		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
@@ -819,7 +871,7 @@ class Flodesk {
 		}
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-		$custom_fields                 = $custom_fields_raw['data'];
+		$custom_fields                 = $custom_fields_raw;
 		$sanitized_custom_field_values = array();
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
@@ -895,9 +947,9 @@ class Flodesk {
 	public function add_frontend_scripts_styles() {
 		// Determine if comments are open.
 		if ( comments_open() ) {
-			$options            = Options::get_options();
-			$convertkit_enabled = (bool) $options['enable_flowdesk'];
-			if ( ! $convertkit_enabled ) {
+			$options         = Options::get_options();
+			$flodesk_enabled = (bool) $options['enable_flodesk'];
+			if ( ! $flodesk_enabled ) {
 				return;
 			}
 
@@ -936,11 +988,11 @@ class Flodesk {
 	 *
 	 * @param WP_Comment $comment The comment object.
 	 */
-	public function output_convertkit_comment_meta( $comment ) {
-		$comment_meta = get_comment_meta( $comment->comment_ID, 'sce_convertkit_data', true );
+	public function output_flodesk_comment_meta( $comment ) {
+		$comment_meta = get_comment_meta( $comment->comment_ID, 'sce_flodesk_data', true );
 		if ( ! $comment_meta ) {
 			?>
-			<p><?php esc_html_e( 'No ConvertKit events have been sent for this comment.', 'comment-edit-pro' ); ?></p>
+			<p><?php esc_html_e( 'No Flodesk events have been sent for this comment.', 'comment-edit-pro' ); ?></p>
 			<?php
 			return;
 		}
@@ -949,7 +1001,6 @@ class Flodesk {
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
@@ -957,22 +1008,13 @@ class Flodesk {
 				</thead>
 				<tbody>
 					<?php
-					foreach ( $comment_meta as $index => $convertkit_data ) :
+					foreach ( $comment_meta as $index => $flodesk_data ) :
 						?>
 						<tr>
 							<td>
 								<?php
-								if ( isset( $convertkit_data['type'] ) ) {
-									echo esc_html( strtoupper( $convertkit_data['type'] ) );
-								} else {
-									esc_html_e( 'Unknown', 'comment-edit-pro' );
-								}
-								?>
-							</td>
-							<td>
-								<?php
-								if ( isset( $convertkit_data['success'] ) ) {
-									if ( $convertkit_data['success'] ) {
+								if ( isset( $flodesk_data['success'] ) ) {
+									if ( $flodesk_data['success'] ) {
 										esc_html_e( 'Yes', 'comment-edit-pro' );
 									} else {
 										esc_html_e( 'No', 'comment-edit-pro' );
@@ -984,8 +1026,8 @@ class Flodesk {
 							</td>
 							<td>
 								<?php
-								if ( isset( $convertkit_data['status_code'] ) ) {
-									echo esc_html( $convertkit_data['status_code'] );
+								if ( isset( $flodesk_data['status_code'] ) ) {
+									echo esc_html( $flodesk_data['status_code'] );
 								} else {
 									esc_html_e( 'Unknown', 'comment-edit-pro' );
 								}
@@ -993,9 +1035,9 @@ class Flodesk {
 							</td>
 							<td>
 								<?php
-								if ( isset( $convertkit_data['error'] ) && $convertkit_data['error'] ) {
-									if ( is_string( $convertkit_data['error'] ) ) {
-										echo esc_html( $convertkit_data['error'] );
+								if ( isset( $flodesk_data['error'] ) && $flodesk_data['error'] ) {
+									if ( is_string( $flodesk_data['error'] ) ) {
+										echo esc_html( $flodesk_data['error'] );
 									} else {
 										esc_html_e( 'Unknown error', 'comment-edit-pro' );
 									}
@@ -1011,7 +1053,6 @@ class Flodesk {
 				</tbody>
 				<tfoot>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>

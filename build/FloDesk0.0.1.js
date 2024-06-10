@@ -455,6 +455,7 @@ const Interface = props => {
   const [isRefreshingSegments, setIsRefreshingSegments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingForms, setIsRefreshingForms] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingCustomFields, setIsRefreshingCustomFields] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [isAddingCustomField, setIsAddingCustomField] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const {
     register,
     control,
@@ -474,7 +475,8 @@ const Interface = props => {
       signUpLabel: data.signUpLabel,
       checkboxEnabled: data.checkboxEnabled,
       segments: data.segments,
-      customFields: data.customFields
+      customFields: data.customFields,
+      flodeskDoubleOptinEnabled: data.flodeskDoubleOptinEnabled
     }
   });
   const formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useWatch)({
@@ -490,12 +492,12 @@ const Interface = props => {
   });
 
   /**
-   * Check if we need to re-connect or initially connect to the Flodesk API.
+   * Check if we need to re-connect or initially connect to the ConvertKit API.
    *
    * @return {boolean} true if we need to re-connect, false if not.
    */
   const needsCredentialRefresh = () => {
-    // If Flodesk is disabled, no need to refresh.
+    // If convertkit is disabled, no need to refresh.
     if (!getValues('enableFlodesk')) {
       return false;
     }
@@ -516,12 +518,12 @@ const Interface = props => {
    * @return {boolean} true to show the save button, false to hide it.
    */
   const canShowSaveButton = () => {
-    // If Flodesk is disabled and form is not dirty, no save button.
+    // If convertkit is disabled and form is not dirty, no save button.
     if (!getValues('enableFlodesk') && !isDirty) {
       return false;
     }
 
-    // If flodesk is disabled, we can always save.
+    // If convertKit is disabled, we can always save.
     if (!getValues('enableFlodesk')) {
       return true;
     }
@@ -605,6 +607,55 @@ const Interface = props => {
       }
     }).catch(ajaxResponse => {}).then(ajaxResponse => {
       setSaving(false);
+    });
+  };
+  const onAddCustomField = customFieldLabel => {
+    customFieldLabel = customFieldLabel.trim();
+    if ('' === customFieldLabel) {
+      setError('customFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The Custom Field name cannot be empty.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Check to see if label is in use.
+    const currentCustomFields = getValues('customFields');
+    const customFieldExists = currentCustomFields.find(customField => customField.label === customFieldLabel);
+    if (customFieldExists) {
+      setError('customFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field name already in use.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Start adding the Custom Field.
+    setIsAddingCustomField(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_flodesk_custom_field', {
+      nonce: sceIntegrations.flodesk_add_custom_field_nonce,
+      label: customFieldLabel
+    }).then(ajaxResponse => {
+      const ajaxData = ajaxResponse.data.data;
+      const ajaxSuccess = ajaxResponse.data.success;
+      if (ajaxSuccess) {
+        const {
+          customFields
+        } = ajaxData;
+        const newCustomFieldValues = [];
+        customFields.forEach((keys, index) => {
+          newCustomFieldValues.push(keys);
+        });
+        setValue('customFields', newCustomFieldValues);
+      } else {
+        setError('customFieldInput', {
+          type: 'addCustomFieldError',
+          message: ajaxData.message
+        });
+      }
+    }).catch(ajaxResponse => {}).then(ajaxResponse => {
+      setIsAddingCustomField(false);
+      customFieldInputRef.current.focus();
     });
   };
   const onHandleSegmentsRefresh = formData => {
@@ -768,6 +819,31 @@ const Interface = props => {
       })
     })));
   };
+  const getDoubleOptIn = () => {
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+    }
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+      scope: "row"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Double Opt-in', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "flodeskDoubleOptinEnabled",
+      control: control,
+      render: ({
+        field: {
+          onChange,
+          value
+        }
+      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Double Opt-In', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: boolValue => {
+          onChange(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Require Double Opt-in for all subscribers.', 'comment-edit-pro')
+      })
+    })));
+  };
   const getFlodeskSegments = () => {
     // Don't show tags if api is invalid.
     if (!getValues('apiValid') || needsCredentialRefresh()) {
@@ -838,7 +914,7 @@ const Interface = props => {
     if (!getValues('apiValid') || needsCredentialRefresh()) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
-    const flodeskCustomFields = getValues('customFields');
+    const convertKitCustomFields = getValues('customFields');
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map Custom Fields', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getValues('customFields').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -847,7 +923,7 @@ const Interface = props => {
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), flodeskCustomFields.length > 0 && getValues('apiValid') && flodeskCustomFields.map((tag, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }), convertKitCustomFields.length > 0 && getValues('apiValid') && convertKitCustomFields.map((tag, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-convertkit-custom-field",
       key: index
     }, 'custom' !== getValues('customFields')[index].field && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
@@ -916,7 +992,59 @@ const Interface = props => {
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }))));
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "sce-convertkit-add-tag"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "sce-convertkit-add-tag-group"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "customFieldInput",
+      control: control,
+      rules: {
+        pattern: /[-_ 0-9A-Za-z]/
+      },
+      render: ({
+        field: {
+          onChange,
+          value
+        }
+      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
+        type: "text",
+        value: value,
+        onChange: customFieldValue => {
+          clearErrors('customFieldInput');
+          onChange(customFieldValue);
+        },
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Custom Field', 'comment-edit-pro'),
+        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+          'has-error': 'required' === errors.customFieldInput?.type
+        }),
+        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field Name', 'comment-edit-pro'),
+        ref: customFieldInputRef
+      })
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "sce-admin-buttons"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      onClick: async e => {
+        const validationResult = await trigger('customFieldInput');
+        if (validationResult) {
+          onAddCustomField(getValues('customFieldInput'));
+        }
+      },
+      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
+      text: isAddingCustomField ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Custom Field', 'comment-edit-pro')
+    }))), 'pattern' === errors.customFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in custom fields.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+    }), 'addCustomFieldError' === errors.customFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: errors.customFieldInput?.message,
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+    })))));
   };
   const getAPIKey = () => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
@@ -1046,7 +1174,7 @@ const Interface = props => {
       },
       help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the Flodesk Integration.', 'comment-edit-pro')
     })
-  }))), getValues('enableFlodesk') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getAPIKey(), getFlodeskSegments(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), getValues('enableFlodesk') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getAPIKey(), getFlodeskSegments(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox(), getDoubleOptIn()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "sce-admin-buttons"
   }, getValues('apiValid') && canShowSaveButton() && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
