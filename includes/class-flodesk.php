@@ -40,14 +40,11 @@ class Flodesk {
 		// Refresh or Initialize Flodesk credentials.
 		add_action( 'wp_ajax_sce_refresh_flodesk_connection', array( $this, 'ajax_refresh_flodesk_connection' ) );
 
-		// // Add a custom field to ConvertKit account.
-		// add_action( 'wp_ajax_sce_add_convertkit_custom_field', array( $this, 'ajax_add_convertkit_custom_field' ) );
-
 		// Refresh segments for a Flodesk account.
 		add_action( 'wp_ajax_sce_refresh_flodesk_segments', array( $this, 'ajax_refresh_flodesk_segments' ) );
 
-		// // Refresh custom fields for a ConvertKit account.
-		// add_action( 'wp_ajax_sce_refresh_convertkit_custom_fields', array( $this, 'ajax_refresh_convertkit_custom_fields' ) );
+		// Refresh custom fields for a ConvertKit account.
+		add_action( 'wp_ajax_sce_refresh_flodesk_custom_fields', array( $this, 'ajax_refresh_flodesk_custom_fields' ) );
 
 		// // Add ConvertKit Checkbox.
 		// add_filter( 'comment_form_defaults', array( $this, 'add_convertkit_checkbox' ), 100 );
@@ -485,27 +482,27 @@ class Flodesk {
 			'flodesk_checkbox_enabled' => false,
 			'flodesk_api_valid'        => false,
 		);
-		// if ( Functions::is_multisite() ) {
-		// delete_site_option( 'sce_convertkit_forms' );
-		// delete_site_option( 'sce_convertkit_tags' );
-		// delete_site_option( 'sce_convertkit_custom_fields' );
-		// } else {
-		// delete_option( 'sce_convertkit_forms' );
-		// delete_option( 'sce_convertkit_tags' );
-		// delete_option( 'sce_convertkit_custom_fields' );
-		// }
+		if ( Functions::is_multisite() ) {
+			delete_site_option( 'sce_flodesk_forms' );
+			delete_site_option( 'sce_flodesk_tags' );
+			delete_site_option( 'sce_flodesk_custom_fields' );
+		} else {
+			delete_option( 'sce_flodesk_forms' );
+			delete_option( 'sce_flodesk_tags' );
+			delete_option( 'sce_flodesk_custom_fields' );
+		}
 
 		Options::update_options( $options_to_save );
 	}
 
 	/**
-	 * Save ConvertKit options.
+	 * Save Flodesk options.
 	 */
-	public function ajax_save_convertkit_options() {
+	public function ajax_save_flodesk_options() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-save-convertkit-options' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-save-flodesk-options' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -514,11 +511,11 @@ class Flodesk {
 		}
 
 		// Get enabled status.
-		$convertkit_enabled = (bool) filter_input( INPUT_POST, 'enableConvertKit', FILTER_VALIDATE_BOOLEAN );
+		$flodesk_enabled = (bool) filter_input( INPUT_POST, 'enableFlodesk', FILTER_VALIDATE_BOOLEAN );
 
 		// If convertkit is disabled, let's clear out some keys.
-		if ( ! $convertkit_enabled ) {
-			$this->reset_convertkit_credentials();
+		if ( ! $flodesk_enabled ) {
+			$this->reset_flodesk_credentials();
 
 			// Return new options.
 			$json_array = $this->get_flodesk_values_for_return();
@@ -533,40 +530,28 @@ class Flodesk {
 
 		// Nonce passed, let's get post vars.
 		$api_key                     = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
-		$api_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'secretKey', FILTER_DEFAULT ) );
-		$convertkit_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
+		$flodesk_checkbox_enabled = (bool) filter_input( INPUT_POST, 'checkboxEnabled', FILTER_VALIDATE_BOOLEAN );
 		$signup_label                = sanitize_text_field( filter_input( INPUT_POST, 'signUpLabel', FILTER_DEFAULT ) );
-		$form_or_tag                 = sanitize_text_field( filter_input( INPUT_POST, 'formOrTag', FILTER_DEFAULT ) );
-		$forms                       = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'forms', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-		$tags                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'tags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+		$segments                        = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'segments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
 		$custom_fields               = Functions::sanitize_array_recursive( (array) filter_input( INPUT_POST, 'customFields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-		$selected_form               = sanitize_text_field( filter_input( INPUT_POST, 'selectedForm', FILTER_DEFAULT ) );
-
-		// Check that form or tag is set.
-		if ( empty( $form_or_tag ) ) {
-			$form_or_tag = 'tag';
-		}
 
 		// Now let's save options.
 		$options_to_save = array(
-			'enable_convertkit'           => $convertkit_enabled,
-			'convertkit_api_key'          => $api_key,
-			'convertkit_secret_key'       => $api_secret_key,
-			'convertkit_signup_label'     => $signup_label,
-			'convertkit_checkbox_enabled' => $convertkit_checkbox_enabled,
-			'convertkit_form_or_tag'      => $form_or_tag,
-			'convertkit_api_valid'        => true,
-			'convertkit_selected_form'    => $selected_form,
+			'enable_flodesk'           => $flodesk_enabled,
+			'flodesk_api_key'          => $api_key,
+			'flodesk_signup_label'     => $signup_label,
+			'flodesk_checkbox_enabled' => $flodesk_checkbox_enabled,
+			'flodesk_api_valid'        => true,
 		);
 		Options::update_options( $options_to_save );
 
 		// Save forms, tags, custom fields.
 		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_tags', $tags );
-			update_site_option( 'sce_convertkit_custom_fields', $custom_fields );
+			update_site_option( 'sce_flodesk_segments', $segments );
+			update_site_option( 'sce_flodesk_custom_fields', $custom_fields );
 		} else {
-			update_option( 'sce_convertkit_tags', $tags );
-			update_option( 'sce_convertkit_custom_fields', $custom_fields );
+			update_option( 'sce_flodesk_segments', $segments );
+			update_option( 'sce_flodesk_custom_fields', $custom_fields );
 		}
 
 		// Return saved form fields.
@@ -722,8 +707,8 @@ class Flodesk {
 		$this->output_connection_json_errors();
 
 		// Nonce passed, let's get saved vars.
-		$options        = Options::get_options();
-		$api_key        = sanitize_text_field( $options['flodesk_api_key'] );
+		$options = Options::get_options();
+		$api_key = sanitize_text_field( $options['flodesk_api_key'] );
 		// Get tags as an option.
 		if ( Functions::is_multisite() ) {
 			$existing_segments = (array) get_site_option( 'sce_convertkit_segments', array() );
@@ -746,8 +731,8 @@ class Flodesk {
 			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
 		}
 
-		$segments_raw             = json_decode( wp_remote_retrieve_body( $segments_api_response ), true );
-		$segments                 = $segments_raw['data'];
+		$segments_raw              = json_decode( wp_remote_retrieve_body( $segments_api_response ), true );
+		$segments                  = $segments_raw['data'];
 		$sanitized_segments_values = array();
 		foreach ( $segments as $index => $values ) {
 			$sanitized_segments_values[ $index ] = array(
@@ -788,100 +773,12 @@ class Flodesk {
 	}
 
 	/**
-	 * Refresh ConvertKit Forms.
-	 */
-	public function ajax_refresh_convertkit_forms() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-forms' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Return any errors.
-		$this->output_connection_json_errors();
-
-		// Nonce passed, let's get saved vars.
-		$options        = Options::get_options();
-		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
-		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
-		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_forms = (array) get_site_option( 'sce_convertkit_forms', array() );
-		} else {
-			$existing_forms = (array) get_option( 'sce_convertkit_forms', array() );
-		}
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
-		);
-
-		// Get endpoints.
-		$forms_api_endpoint = esc_url_raw( $this->convertkit_api . '/forms' );
-
-		$forms_api_response = wp_remote_get( $forms_api_endpoint, $http_args );
-		if ( is_wp_error( $forms_api_response ) || 200 !== wp_remote_retrieve_response_code( $forms_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve forms from ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-
-		$forms_raw             = json_decode( wp_remote_retrieve_body( $forms_api_response ), true );
-		$forms                 = $forms_raw['forms'];
-		$sanitized_form_values = array();
-		foreach ( $forms as $index => $values ) {
-			$sanitized_form_values[ $index ] = array(
-				'label' => sanitize_text_field( $forms[ $index ]['name'] ),
-				'value' => sanitize_text_field( $forms[ $index ]['id'] ),
-			);
-
-			// Check if tag is selected (saved).
-			if ( ! empty( $existing_forms ) ) {
-				foreach ( $existing_forms as $existing_form ) {
-					if ( $existing_form['value'] !== $sanitized_form_values[ $index ]['value'] ) {
-						continue;
-					}
-					$selected_value = (bool) $existing_form['selected'] ?? false;
-					if ( true === $selected_value ) {
-						$sanitized_form_values[ $index ]['selected'] = true;
-					} else {
-						$sanitized_form_values[ $index ]['selected'] = false;
-					}
-				}
-			}
-		}
-
-		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_forms', $sanitized_form_values );
-		} else {
-			update_option( 'sce_convertkit_forms', $sanitized_form_values );
-		}
-
-		// Return tags.
-		wp_send_json_success(
-			array(
-				'forms'    => $sanitized_form_values,
-				'apiValid' => true,
-			)
-		);
-	}
-
-	/**
 	 * Refresh ConvertKit Custom Fields.
 	 */
-	public function ajax_refresh_convertkit_custom_fields() {
+	public function ajax_refresh_flodesk_custom_fields() {
 		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
 		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-convertkit-custom-fields' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-flodesk-custom-fields' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
@@ -893,50 +790,47 @@ class Flodesk {
 		$this->output_connection_json_errors();
 
 		// Nonce passed, let's get saved vars.
-		$options        = Options::get_options();
-		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
-		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
+		$options = Options::get_options();
+		$api_key = sanitize_text_field( $options['flodesk_api_key'] );
 
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
+			'Authorization' => 'Basic ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
 		);
 		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
+			'api_key' => $api_key,
 		);
 
 		// Get endpoints.
-		$custom_fields_api_endpoint = esc_url_raw( $this->convertkit_api . '/custom_fields' );
+		$custom_fields_api_endpoint = esc_url_raw( $this->flodesk_api . '/custom-fields' );
 
 		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
 		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from Flodesk.', 'comment-edit-pro' ) ) );
 		}
 
 		// Get custom fields as an option.
 		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_convertkit_custom_fields', array() );
+			$existing_custom_fields = (array) get_site_option( 'sce_flodesk_custom_fields', array() );
 		} else {
-			$existing_custom_fields = (array) get_option( 'sce_convertkit_custom_fields', array() );
+			$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
 		}
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-		$custom_fields                 = $custom_fields_raw['custom_fields'];
+		$custom_fields                 = $custom_fields_raw['data'];
 		$sanitized_custom_field_values = array();
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
 				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
 				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
-				'id'    => sanitize_text_field( $custom_fields[ $index ]['id'] ),
 			);
 
 			// Add in the field map.
 			if ( ! empty( $existing_custom_fields ) ) {
 				foreach ( $existing_custom_fields as $existing_custom_field ) {
-					if ( $existing_custom_field['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
+					if ( $existing_custom_field['value'] !== $sanitized_custom_field_values[ $index ]['value'] ) {
 						continue;
 					}
 					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_field['field'] ?? 'none';
@@ -947,133 +841,9 @@ class Flodesk {
 
 		// Save custom fields as an option.
 		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
+			update_site_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
 		} else {
-			update_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
-		}
-
-		// Return tags.
-		wp_send_json_success(
-			array(
-				'customFields' => $sanitized_custom_field_values,
-				'apiValid'     => true,
-			)
-		);
-	}
-
-	/**
-	 * Add a new Custom Field to ConvertKit.
-	 */
-	public function ajax_add_convertkit_custom_field() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-add-convertkit-custom-field' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Return any errors.
-		$this->output_connection_json_errors();
-
-		// Nonce passed, let's get saved vars.
-		$options        = Options::get_options();
-		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
-		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
-			'label'      => sanitize_text_field( filter_input( INPUT_POST, 'label', FILTER_DEFAULT ) ),
-		);
-
-		// Get endpoints.
-		$custom_fields_api_endpoint = esc_url_raw( $this->convertkit_api . '/custom_fields' );
-
-		// Make Credentials/Account check Call.
-		$custom_fields_api_response = wp_remote_post( $custom_fields_api_endpoint, $http_args );
-		if ( is_wp_error( $custom_fields_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not communicate with ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-		$custom_fields_api_response_code = wp_remote_retrieve_response_code( $custom_fields_api_response );
-
-		// Pretty sure this is a duplication error.
-		if ( 422 === $custom_fields_api_response_code ) {
-			$custom_fields_api_response_body = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-			$custom_field_error              = $custom_fields_api_response_body['error'];
-			if ( 'Unprocessable Entity' === $custom_field_error ) {
-				wp_send_json_error( array( 'message' => __( 'Custom Field already exists.', 'comment-edit-pro' ) ) );
-			}
-		}
-
-		if ( 429 === $custom_fields_api_response_code ) {
-			$custom_fields_api_response_body = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-			wp_send_json_error( array( 'message' => __( 'API Rate limits have been exceeded.', 'comment-edit-pro' ) ) );
-		}
-
-		if ( ( 201 !== $custom_fields_api_response_code && 200 !== $custom_fields_api_response_code ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
-		);
-
-		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
-		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-
-		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_convertkit_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_convertkit_custom_fields', array() );
-		}
-
-		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
-		$custom_fields                 = $custom_fields_raw['custom_fields'];
-		$sanitized_custom_field_values = array();
-		foreach ( $custom_fields as $index => $values ) {
-			$sanitized_custom_field_values[ $index ] = array(
-				'label' => sanitize_text_field( $custom_fields[ $index ]['label'] ),
-				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
-				'id'    => absint( $custom_fields[ $index ]['id'] ),
-			);
-
-			// Add in the field map.
-			if ( ! empty( $existing_custom_fields ) ) {
-				foreach ( $existing_custom_fields as $existing_custom_field ) {
-					if ( $existing_custom_fields['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
-						continue;
-					}
-					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_fields['field'] ?? 'none';
-					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_fields['field_custom'] ?? '';
-				}
-			}
-		}
-
-		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_convertkit_custom_fields', $sanitized_custom_field_values );
+			update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
 		}
 
 		// Return tags.
@@ -1110,7 +880,7 @@ class Flodesk {
 			);
 		}
 
-		if ( ! $api_key  ) {
+		if ( ! $api_key ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Flodesk API credentials are not valid. Please refresh your connection.', 'comment-edit-pro' ),
@@ -1153,9 +923,9 @@ class Flodesk {
 			'flodesk_refresh_nonce'               => wp_create_nonce( 'sce-refresh-flodesk-connection' ),
 			'flodesk_get_nonce'                   => wp_create_nonce( 'sce-retrieve-flodesk-options' ),
 			'flodesk_reset_nonce'                 => wp_create_nonce( 'sce-reset-flodesk-options' ),
-			'flodesk_refresh_segments_nonce'          => wp_create_nonce( 'sce-refresh-flodesk-segments' ),
+			'flodesk_refresh_segments_nonce'      => wp_create_nonce( 'sce-refresh-flodesk-segments' ),
 			'flodesk_refresh_custom_fields_nonce' => wp_create_nonce( 'sce-refresh-flodesk-custom-fields' ),
-			'flodesk_add_segments_nonce'               => wp_create_nonce( 'sce-add-flodesk-segments' ),
+			'flodesk_add_segments_nonce'          => wp_create_nonce( 'sce-add-flodesk-segments' ),
 			'flodesk_add_custom_field_nonce'      => wp_create_nonce( 'sce-add-flodesk-custom-field' ),
 		);
 		return array_merge( $vars, $convertkit_vars );

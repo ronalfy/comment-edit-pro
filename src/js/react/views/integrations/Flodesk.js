@@ -84,7 +84,6 @@ const Interface = ( props ) => {
 	const [ isRefreshingSegments, setIsRefreshingSegments ] = useState( false );
 	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
 	const [ isRefreshingCustomFields, setIsRefreshingCustomFields ] = useState( false );
-	const [ isAddingCustomField, setIsAddingCustomField ] = useState( false );
 
 	const {
 		register,
@@ -115,12 +114,12 @@ const Interface = ( props ) => {
 	} );
 
 	/**
-	 * Check if we need to re-connect or initially connect to the ConvertKit API.
+	 * Check if we need to re-connect or initially connect to the Flodesk API.
 	 *
 	 * @return {boolean} true if we need to re-connect, false if not.
 	 */
 	const needsCredentialRefresh = () => {
-		// If convertkit is disabled, no need to refresh.
+		// If Flodesk is disabled, no need to refresh.
 		if ( ! getValues( 'enableFlodesk' ) ) {
 			return false;
 		}
@@ -141,12 +140,12 @@ const Interface = ( props ) => {
 	 * @return {boolean} true to show the save button, false to hide it.
 	 */
 	const canShowSaveButton = () => {
-		// If convertkit is disabled and form is not dirty, no save button.
+		// If Flodesk is disabled and form is not dirty, no save button.
 		if ( ! getValues( 'enableFlodesk' ) && ! isDirty ) {
 			return false;
 		}
 
-		// If convertKit is disabled, we can always save.
+		// If flodesk is disabled, we can always save.
 		if ( ! getValues( 'enableFlodesk' ) ) {
 			return true;
 		}
@@ -238,48 +237,6 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const onAddCustomField = ( customFieldLabel ) => {
-		customFieldLabel = customFieldLabel.trim();
-		if ( '' === customFieldLabel ) {
-			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'The Custom Field name cannot be empty.', 'comment-edit-pro' ) } );
-			return;
-		}
-
-		// Check to see if label is in use.
-		const currentCustomFields = getValues( 'customFields' );
-		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
-		if ( customFieldExists ) {
-			setError( 'customFieldInput', { type: 'addCustomFieldError', message: __( 'Custom Field name already in use.', 'comment-edit-pro' ) } );
-			return;
-		}
-
-		// Start adding the Custom Field.
-		setIsAddingCustomField( true );
-		sendCommand( 'sce_add_convertkit_custom_field', {
-			nonce: sceIntegrations.ck_add_custom_field_nonce,
-			label: customFieldLabel,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					const { customFields } = ajaxData;
-					const newCustomFieldValues = [];
-					customFields.forEach( ( keys, index ) => {
-						newCustomFieldValues.push( keys );
-					} );
-					setValue( 'customFields', newCustomFieldValues );
-				} else {
-					setError( 'customFieldInput', { type: 'addCustomFieldError', message: ajaxData.message } );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setIsAddingCustomField( false );
-				customFieldInputRef.current.focus();
-			} );
-	};
-
 	const onHandleSegmentsRefresh = ( formData ) => {
 		setIsRefreshingSegments( true );
 		sendCommand( 'sce_refresh_flodesk_segments', {
@@ -330,50 +287,10 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const onHandleFormsRefresh = ( formData ) => {
-		setIsRefreshingForms( true );
-		sendCommand( 'sce_refresh_convertkit_forms', {
-			nonce: sceIntegrations.ck_refresh_forms_nonce,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					const { forms, apiValid } = ajaxData;
-
-					const updatedFormValues = {
-						forms,
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: true,
-							keepDirty: true,
-						}
-					);
-				} else {
-					const updatedFormValues = {
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: true,
-							keepDirty: true,
-						}
-					);
-					setError( 'forms', { type: 'noForms', message: ajaxData.message } );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setIsRefreshingForms( false );
-			} );
-	};
-
 	const onHandleCustomFieldsRefresh = ( formData ) => {
 		setIsRefreshingCustomFields( true );
-		sendCommand( 'sce_refresh_convertkit_custom_fields', {
-			nonce: sceIntegrations.ck_refresh_custom_fields_nonce,
+		sendCommand( 'sce_refresh_flodesk_custom_fields', {
+			nonce: sceIntegrations.flodesk_refresh_custom_fields_nonce,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
@@ -494,143 +411,6 @@ const Interface = ( props ) => {
 		);
 	};
 
-	/**
-	 * Gets the form or tag radio option.
-	 *
-	 * @return {JSX.Element} Form or tags interface.
-	 */
-	const getFormOrTag = () => {
-		if ( needsCredentialRefresh() ) {
-			return <></>;
-		}
-		const forms = getValues( 'forms' );
-		const tags = getValues( 'tags' );
-		return (
-			<tr>
-				<th scope="row">{ __( 'Forms and Tags', 'comment-edit-pro' ) }</th>
-				<td>
-					<Controller
-						name="formOrTag"
-						control={ control }
-						rules={ { required: true } }
-						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<RadioControl
-									label={ __(
-										'Add Subscribers to Forms or Tags',
-										'comment-edit-pro'
-									) }
-									help={ __(
-										'Select whether to add new subscribers to a an existing ConvertKit form or tag(s).',
-										'comment-edit-pro'
-									) }
-									selected={ getValues( 'formOrTag' ) }
-									options={ [
-										{
-											label: __( 'Forms and Tags', 'comment-edit-pro' ),
-											value: 'form',
-										},
-										{
-											label: __( 'Tags Only', 'comment-edit-pro' ),
-											value: 'tag',
-										},
-									] }
-									onChange={ ( formOrTagValue ) => {
-										onChange( formOrTagValue );
-									} }
-								/>
-							</>
-						) }
-					/>
-				</td>
-			</tr>
-		);
-	};
-
-	const getConvertKitForms = () => {
-		// Get forms.
-		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
-		const convertKitForms = getValues( 'forms' );
-		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || 'form' !== getValues( 'formOrTag' ) ) {
-			return <></>;
-		}
-
-		return (
-			<tr>
-				<th scope="row">{ __( 'ConvertKit Forms (Required)', 'comment-edit-pro' ) }</th>
-				<td>
-					<>
-						{ convertKitForms.length !== 0 && (
-							<Controller
-								name="selectedForm"
-								control={ control }
-								rules={ { required: true } }
-								render={ ( { field: { onChange, value } } ) => (
-									<RadioControl
-										label={ __(
-											'Select a form for your subscribers',
-											'comment-edit-pro'
-										) }
-										help={ __(
-											'Select a default form that will be used when signing up your subscribers.',
-											'comment-edit-pro'
-										) }
-										selected={ value }
-										options={ getValues( 'forms' ) }
-										onChange={ ( formSelectedValue ) => {
-											onChange( formSelectedValue );
-										} }
-										className={ classNames( {
-											'has-error': 'required' === errors.apiKey?.type,
-											'is-required': true,
-										} ) }
-									/>
-								) }
-							/>
-						) }
-						<div className="sce-admin-buttons">
-							<Button
-								isBusy={ isRefreshingForms }
-								disabled={ isRefreshingForms }
-								onClick={ () => {
-									onHandleFormsRefresh();
-								} }
-								className={ classNames(
-									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
-									{ 'has-error': hasErrors() },
-									{ 'has-icon': isRefreshingForms },
-									{ 'is-saving': isRefreshingForms },
-								) }
-								text={ isRefreshingForms ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Forms', 'comment-edit-pro' ) }
-							/>
-						</div>
-						{ 'required' === errors.selectedForm?.type && (
-							<Notice
-								message={ __( 'This field is a required field.' ) }
-								status="error"
-								politeness="assertive"
-								inline={ true }
-								icon={ CircularExclamationIcon }
-							/>
-						) }
-					</>
-					{ 'form' === getValues( 'formOrTag' ) && convertKitForms.length === 0 && (
-						<Notice
-							message={ __(
-								'There are no forms associated with this ConvertKit account and setup cannot continue. Please create a form in ConvertKit or try tags instead.',
-								'comment-edit-pro'
-							) }
-							status="error"
-							politeness="assertive"
-							inline={ false }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-				</td>
-			</tr>
-		);
-	};
-
 	const getFlodeskSegments = () => {
 		// Don't show tags if api is invalid.
 		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
@@ -722,7 +502,7 @@ const Interface = ( props ) => {
 			return <></>;
 		}
 
-		const convertKitCustomFields = getValues( 'customFields' );
+		const flodeskCustomFields = getValues( 'customFields' );
 		return (
 			<tr>
 				<th scope="row">
@@ -742,8 +522,8 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						{ convertKitCustomFields.length > 0 && getValues( 'apiValid' ) &&
-						convertKitCustomFields.map( ( tag, index ) => (
+						{ flodeskCustomFields.length > 0 && getValues( 'apiValid' ) &&
+						flodeskCustomFields.map( ( tag, index ) => (
 							<div className="sce-convertkit-custom-field" key={ index }>
 								{ 'custom' !== getValues( 'customFields' )[ index ].field && (
 									<>
@@ -819,68 +599,6 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						<div className="sce-convertkit-add-tag">
-							<div className="sce-convertkit-add-tag-group">
-								<Controller
-									name="customFieldInput"
-									control={ control }
-									rules={ {
-										pattern: /[-_ 0-9A-Za-z]/,
-									} }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											type="text"
-											value={ value }
-											onChange={ ( customFieldValue ) => {
-												clearErrors( 'customFieldInput' );
-												onChange( customFieldValue );
-											} }
-											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.customFieldInput?.type,
-											} ) }
-											placeholder={ __( 'Custom Field Name', 'comment-edit-pro' ) }
-											ref={ customFieldInputRef }
-										/>
-									) }
-								/>
-								<div className="sce-admin-buttons">
-									<Button
-										onClick={ async( e ) => {
-											const validationResult = await trigger( 'customFieldInput' );
-											if ( validationResult ) {
-												onAddCustomField( getValues( 'customFieldInput' ) );
-											}
-										} }
-										className={ classNames(
-											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
-										) }
-										text={
-											isAddingTag
-												? __( 'Adding…', 'comment-edit-pro' )
-												: __( 'Add Custom Field', 'comment-edit-pro' ) }
-									/>
-								</div>
-							</div>
-							{ 'pattern' === errors.customFieldInput?.type && (
-								<Notice
-									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
-									status="error"
-									politeness="assertive"
-									inline={ false }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-							{ 'addCustomFieldError' === errors.customFieldInput?.type && (
-								<Notice
-									message={ errors.customFieldInput?.message }
-									status="error"
-									politeness="assertive"
-									inline={ false }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-						</div>
 					</>
 				</td>
 			</tr>
@@ -940,59 +658,6 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getSecretKey = () => {
-		return (
-			<tr>
-				<th scope="row">{ __( 'Secret Key', 'comment-edit-pro' ) }</th>
-				<td>
-					<Controller
-						name="secretKey"
-						control={ control }
-						rules={ { required: true } }
-						render={ ( { field: { onChange, value } } ) => (
-							<TextControl
-								label={ __( 'ConvertKit Secret Key', 'comment-edit-pro' ) }
-								type="text"
-								value={ value }
-								onChange={ ( secretKey ) => {
-									onChange( secretKey );
-									clearErrors();
-								} }
-								className={ classNames( 'sce-admin__text-control', {
-									'has-error': 'required' === errors.secretKey?.type,
-									'is-required': true,
-								} ) }
-								help={ __(
-									'Enter your ConvertKit Secret Key in order to choose a form or tag.',
-									'comment-edit-pro'
-								) }
-								aria-required="true"
-							/>
-						) }
-					/>
-					{ 'required' === errors.secretKey?.type && (
-						<Notice
-							message={ __( 'This field is a required field.' ) }
-							status="error"
-							politeness="assertive"
-							inline={ true }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-					{ 'noForms' === errors.secretKey?.type && (
-						<Notice
-							message={ errors.secretKey?.message }
-							status="error"
-							politeness="assertive"
-							inline={ true }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-				</td>
-			</tr>
-		);
-	};
-
 	const getSaveIcon = () => {
 		if ( saving ) {
 			return Spinner;
@@ -1010,7 +675,7 @@ const Interface = ( props ) => {
 		if ( isSaved ) {
 			return __( 'Saved', 'comment-edit-pro' );
 		}
-		return __( 'Save ConvertKit Options', 'comment-edit-pro' );
+		return __( 'Save Flodesk Options', 'comment-edit-pro' );
 	};
 
 	const getRefreshCredentialsText = () => {
@@ -1060,12 +725,11 @@ const Interface = ( props ) => {
 						return;
 					}
 
-					// if ( ! needsCredentialRefresh() ) {
-					// 	onSubmit( submitData );
-					// } else {
-					// 	onRefreshCredentials( submitData );
-					// }
-					onRefreshCredentials( submitData );
+					if ( ! needsCredentialRefresh() ) {
+						onSubmit( submitData );
+					} else {
+						onRefreshCredentials( submitData );
+					}
 				} ) }
 			>
 				<table className="form-table">
@@ -1098,7 +762,7 @@ const Interface = ( props ) => {
 							<>
 								{ getAPIKey() }
 								{ getFlodeskSegments() }
-								{/* { getCustomFields() } */}
+								{ getCustomFields() }
 								{ getNewsletterLabel() }
 								{ getSignupCheckbox() }
 							</>
