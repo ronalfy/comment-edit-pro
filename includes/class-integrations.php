@@ -32,6 +32,10 @@ class Integrations {
 		$convertkit = new ConvertKit();
 		$convertkit->run();
 
+		// Init FloDesk.
+		$flodesk = new Flodesk();
+		$flodesk->run();
+
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 	}

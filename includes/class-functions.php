@@ -140,7 +140,9 @@ class Functions {
 	 * @return string camelCased field.
 	 */
 	public static function to_camelcase( string $field ) {
-		return str_replace( '_', '', lcfirst( ucwords( $field, '_' ) ) );
+		$field = str_replace( '_', '', lcfirst( ucwords( $field, '_' ) ) );
+		$field = str_replace( ' ', '', lcfirst( ucwords( $field, ' ' ) ) );
+		return $field;
 	}
 
 	/**
