@@ -28,7 +28,7 @@ class Flodesk {
 	public function run() {
 
 		/**
-		 * ConvertKit admin panel actions.
+		 * Flodesk admin panel actions.
 		 */
 
 		// Save mailchimp settings in the admin.
@@ -37,11 +37,8 @@ class Flodesk {
 		// Retrieve mailchimp settings in the admin.
 		add_action( 'wp_ajax_sce_get_flodesk_options', array( $this, 'ajax_get_flodesk_options' ) );
 
-		// Refresh or Initialize ConvertKit credentials.
+		// Refresh or Initialize Flodesk credentials.
 		add_action( 'wp_ajax_sce_refresh_flodesk_connection', array( $this, 'ajax_refresh_flodesk_connection' ) );
-
-		// // Add a tag to ConvertKit account.
-		// add_action( 'wp_ajax_sce_add_convertkit_tag', array( $this, 'ajax_add_convertkit_tag' ) );
 
 		// // Add a custom field to ConvertKit account.
 		// add_action( 'wp_ajax_sce_add_convertkit_custom_field', array( $this, 'ajax_add_convertkit_custom_field' ) );
@@ -960,146 +957,6 @@ class Flodesk {
 			array(
 				'customFields' => $sanitized_custom_field_values,
 				'apiValid'     => true,
-			)
-		);
-	}
-
-	/**
-	 * Add a new Tag to ConvertKit.
-	 */
-	public function ajax_add_convertkit_tag() {
-		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
-
-		// Security.
-		if ( ! wp_verify_nonce( $nonce, 'sce-add-convertkit-tag' ) || ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
-				)
-			);
-		}
-
-		// Return any errors.
-		$this->output_connection_json_errors();
-
-		// Nonce passed, let's get saved vars.
-		$options        = Options::get_options();
-		$api_key        = sanitize_text_field( $options['convertkit_api_key'] );
-		$api_secret_key = sanitize_text_field( $options['convertkit_secret_key'] );
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
-			'tag'        => array(
-				'name' => sanitize_text_field( filter_input( INPUT_POST, 'label', FILTER_DEFAULT ) ),
-			),
-		);
-
-		// Get endpoints.
-		$tags_api_endpoint = esc_url_raw( $this->convertkit_api . '/tags' );
-
-		// Make Credentials/Account check Call.
-		$tags_api_response = wp_remote_post( $tags_api_endpoint, $http_args );
-		if ( is_wp_error( $tags_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not communicate with ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-		$tags_api_response_code = wp_remote_retrieve_response_code( $tags_api_response );
-
-		// Pretty sure this is a duplication error.
-		if ( 422 === $tags_api_response_code ) {
-			$tags_api_response_body = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
-			$tag_error              = $tags_api_response_body['error'];
-			if ( 'Unprocessable Entity' === $tag_error ) {
-				wp_send_json_error( array( 'message' => __( 'Tag already exists.', 'comment-edit-pro' ) ) );
-			}
-		}
-
-		if ( 429 === $tags_api_response_code ) {
-			$tags_api_response_body = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
-			$tag_error              = $tags_api_response_body['error'];
-			wp_send_json_error( array( 'message' => __( 'API Rate limits have been exceeded.', 'comment-edit-pro' ) ) );
-		}
-
-		if ( ( 201 !== $tags_api_response_code && 200 !== $tags_api_response_code ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-
-		// Tag has been created. Let's get the new tag ID.
-		$tag_body     = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
-		$added_tag_id = $tag_body['id'];
-
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-		$http_args['body']    = array(
-			'api_key'    => $api_key,
-			'api_secret' => $api_secret_key,
-		);
-
-		$tags_api_response = wp_remote_get( $tags_api_endpoint, $http_args );
-		if ( is_wp_error( $tags_api_response ) || 200 !== wp_remote_retrieve_response_code( $tags_api_response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not retrieve tags from ConvertKit.', 'comment-edit-pro' ) ) );
-		}
-
-		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_tags = (array) get_site_option( 'sce_convertkit_tags', array() );
-		} else {
-			$existing_tags = (array) get_option( 'sce_convertkit_tags', array() );
-		}
-
-		$tags_raw             = json_decode( wp_remote_retrieve_body( $tags_api_response ), true );
-		$tags                 = $tags_raw['tags'];
-		$sanitized_tag_values = array();
-		foreach ( $tags as $index => $values ) {
-			$sanitized_tag_values[ $index ] = array(
-				'label' => sanitize_text_field( $tags[ $index ]['name'] ),
-				'value' => sanitize_text_field( $tags[ $index ]['id'] ),
-			);
-
-			// Select the added tag.
-			if ( $added_tag_id === $tags[ $index ]['id'] ) {
-				$sanitized_tag_values[ $index ]['selected'] = true;
-				continue;
-			}
-
-			// Check if tag is selected (saved).
-			if ( ! empty( $existing_tags ) ) {
-				foreach ( $existing_tags as $existing_tag ) {
-					if ( $existing_tag['value'] !== $sanitized_tag_values[ $index ]['value'] ) {
-						continue;
-					}
-					$selected_value = (bool) $existing_tag['selected'] ?? false;
-					if ( true === $selected_value ) {
-						$sanitized_tag_values[ $index ]['selected'] = true;
-					} else {
-						$sanitized_tag_values[ $index ]['selected'] = false;
-					}
-				}
-			}
-		}
-
-		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_tags', $sanitized_tag_values );
-		} else {
-			update_option( 'sce_convertkit_tags', $sanitized_tag_values );
-		}
-
-		// Return tags.
-		wp_send_json_success(
-			array(
-				'tags'     => $sanitized_tag_values,
-				'apiValid' => true,
 			)
 		);
 	}

@@ -455,7 +455,6 @@ const Interface = props => {
   const [isRefreshingSegments, setIsRefreshingSegments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingForms, setIsRefreshingForms] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingCustomFields, setIsRefreshingCustomFields] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isAddingTag, setIsAddingTag] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isAddingCustomField, setIsAddingCustomField] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const {
     register,
@@ -607,56 +606,6 @@ const Interface = props => {
       }
     }).catch(ajaxResponse => {}).then(ajaxResponse => {
       setSaving(false);
-    });
-  };
-  const onAddTag = tagLabel => {
-    tagLabel = tagLabel.trim();
-    if ('' === tagLabel) {
-      setError('segmentsInput', {
-        type: 'addTagError',
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name cannot be empty.', 'comment-edit-pro')
-      });
-      return;
-    }
-
-    // Check to see if label is in use.
-    const currentTags = getValues('tags');
-    const tagExists = currentTags.find(tag => tag.label === tagLabel);
-    if (tagExists) {
-      setError('segmentsInput', {
-        type: 'addTagError',
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name already in use.', 'comment-edit-pro')
-      });
-      return;
-    }
-
-    // Start adding the tag.
-    setIsAddingTag(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_convertkit_tag', {
-      nonce: sceIntegrations.ck_add_tag_nonce,
-      label: tagLabel
-    }).then(ajaxResponse => {
-      const ajaxData = ajaxResponse.data.data;
-      const ajaxSuccess = ajaxResponse.data.success;
-      if (ajaxSuccess) {
-        const {
-          tags
-        } = ajaxData;
-        const newTagValues = [];
-        tags.forEach((keys, index) => {
-          newTagValues.push(keys);
-        });
-        setValue('segmentsInput', '');
-        setValue('tags', newTagValues);
-      } else {
-        setError('segmentsInput', {
-          type: 'addTagError',
-          message: ajaxData.message
-        });
-      }
-    }).catch(ajaxResponse => {}).then(ajaxResponse => {
-      setIsAddingTag(false);
-      segmentsInput.current.focus();
     });
   };
   const onAddCustomField = customFieldLabel => {
@@ -1042,6 +991,8 @@ const Interface = props => {
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CheckboxControl, {
           label: segment.label,
           onChange: enableValue => {
+            // Clear any segment errors.
+            clearErrors('segments');
             onChange(enableValue);
           },
           checked: (_getValues$index$sele = getValues('segments')[index].selected) !== null && _getValues$index$sele !== void 0 ? _getValues$index$sele : false
@@ -1063,66 +1014,19 @@ const Interface = props => {
         'is-saving': isRefreshingSegments
       }),
       text: isRefreshingSegments ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Segments', 'comment-edit-pro')
-    })), 'noSegments' === errors.segments?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    })), 'required' === errors.segments?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select a Segment.', 'comment-edit-pro'),
+      status: "error",
+      politeness: "assertive",
+      inline: false,
+      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+    }), 'noSegments' === errors.segments?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
       message: errors.segments?.message,
       status: "error",
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "sce-convertkit-add-tag"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "sce-convertkit-add-tag-group"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "segmentsInput",
-      control: control,
-      rules: {
-        pattern: /[-_ 0-9A-Za-z]/
-      },
-      render: ({
-        field: {
-          onChange,
-          value
-        }
-      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-        type: "text",
-        value: value,
-        onChange: segmentsInputValue => {
-          clearErrors('segmentsInput');
-          onChange(segmentsInputValue);
-        },
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Segment', 'comment-edit-pro'),
-        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === errors.segmentsInput?.type
-        }),
-        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Segment Name', 'comment-edit-pro'),
-        "aria-required": "true",
-        ref: segmentsInput
-      })
-    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "sce-admin-buttons"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-      onClick: async e => {
-        const validationResult = await trigger('segmentsInput');
-        if (validationResult) {
-          onAddTag(getValues('segmentsInput'));
-        }
-      },
-      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
-      text: isAddingTag ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Segment', 'comment-edit-pro')
-    }))), 'pattern' === errors.segmentsInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in tags.', 'comment-edit-pro'),
-      status: "error",
-      politeness: "assertive",
-      inline: false,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), 'addTagError' === errors.segmentsInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.segmentsInput?.message,
-      status: "error",
-      politeness: "assertive",
-      inline: false,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    })))));
+    }))));
   };
   const getCustomFields = () => {
     // Don't show custom fields if api is invalid.
@@ -1393,6 +1297,18 @@ const Interface = props => {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('When someone leaves a comment, they can be given the option to subscribe to your Flodesk account.', 'comment-edit-pro'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     onSubmit: handleSubmit((submitData, e) => {
       e.preventDefault();
+
+      // Check if no segments have been selected.
+      const segments = getValues('segments');
+      const selectedSegments = segments.filter(segment => segment.selected === true);
+      if (0 === selectedSegments.length) {
+        setError('segments', {
+          type: 'required',
+          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select at least one Segment.', 'comment-edit-pro')
+        });
+        return;
+      }
+
       // if ( ! needsCredentialRefresh() ) {
       // 	onSubmit( submitData );
       // } else {

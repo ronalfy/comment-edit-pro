@@ -84,7 +84,6 @@ const Interface = ( props ) => {
 	const [ isRefreshingSegments, setIsRefreshingSegments ] = useState( false );
 	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
 	const [ isRefreshingCustomFields, setIsRefreshingCustomFields ] = useState( false );
-	const [ isAddingTag, setIsAddingTag ] = useState( false );
 	const [ isAddingCustomField, setIsAddingCustomField ] = useState( false );
 
 	const {
@@ -236,49 +235,6 @@ const Interface = ( props ) => {
 			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
 				setSaving( false );
-			} );
-	};
-
-	const onAddTag = ( tagLabel ) => {
-		tagLabel = tagLabel.trim();
-		if ( '' === tagLabel ) {
-			setError( 'segmentsInput', { type: 'addTagError', message: __( 'Tag name cannot be empty.', 'comment-edit-pro' ) } );
-			return;
-		}
-
-		// Check to see if label is in use.
-		const currentTags = getValues( 'tags' );
-		const tagExists = currentTags.find( ( tag ) => tag.label === tagLabel );
-		if ( tagExists ) {
-			setError( 'segmentsInput', { type: 'addTagError', message: __( 'Tag name already in use.', 'comment-edit-pro' ) } );
-			return;
-		}
-
-		// Start adding the tag.
-		setIsAddingTag( true );
-		sendCommand( 'sce_add_convertkit_tag', {
-			nonce: sceIntegrations.ck_add_tag_nonce,
-			label: tagLabel,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					const { tags } = ajaxData;
-					const newTagValues = [];
-					tags.forEach( ( keys, index ) => {
-						newTagValues.push( keys );
-					} );
-					setValue( 'segmentsInput', '' );
-					setValue( 'tags', newTagValues );
-				} else {
-					setError( 'segmentsInput', { type: 'addTagError', message: ajaxData.message } );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setIsAddingTag( false );
-				segmentsInput.current.focus();
 			} );
 	};
 
@@ -711,6 +667,8 @@ const Interface = ( props ) => {
 									<CheckboxControl
 										label={ segment.label }
 										onChange={ ( enableValue ) => {
+											// Clear any segment errors.
+											clearErrors( 'segments' );
 											onChange( enableValue );
 										} }
 										checked={ getValues( 'segments' )[ index ].selected ?? false }
@@ -734,6 +692,15 @@ const Interface = ( props ) => {
 								text={ isRefreshingSegments ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Segments', 'comment-edit-pro' ) }
 							/>
 						</div>
+						{ 'required' === errors.segments?.type && (
+							<Notice
+								message={ __( 'Please select a Segment.', 'comment-edit-pro' ) }
+								status="error"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
 						{ 'noSegments' === errors.segments?.type && (
 							<Notice
 								message={ errors.segments?.message }
@@ -743,69 +710,6 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						<div className="sce-convertkit-add-tag">
-							<div className="sce-convertkit-add-tag-group">
-								<Controller
-									name="segmentsInput"
-									control={ control }
-									rules={ {
-										pattern: /[-_ 0-9A-Za-z]/,
-									} }
-									render={ ( { field: { onChange, value } } ) => (
-										<TextControl
-											type="text"
-											value={ value }
-											onChange={ ( segmentsInputValue ) => {
-												clearErrors( 'segmentsInput' );
-												onChange( segmentsInputValue );
-											} }
-											label={ __( 'Add New Segment', 'comment-edit-pro' ) }
-											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.segmentsInput?.type,
-											} ) }
-											placeholder={ __( 'Segment Name', 'comment-edit-pro' ) }
-											aria-required="true"
-											ref={ segmentsInput }
-										/>
-									) }
-								/>
-								<div className="sce-admin-buttons">
-									<Button
-										onClick={ async( e ) => {
-											const validationResult = await trigger( 'segmentsInput' );
-											if ( validationResult ) {
-												onAddTag( getValues( 'segmentsInput' ) );
-											}
-										} }
-										className={ classNames(
-											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
-										) }
-										text={
-											isAddingTag
-												? __( 'Adding…', 'comment-edit-pro' )
-												: __( 'Add New Segment', 'comment-edit-pro' ) }
-									/>
-								</div>
-							</div>
-							{ 'pattern' === errors.segmentsInput?.type && (
-								<Notice
-									message={ __( 'Special characters are not allowed in tags.', 'comment-edit-pro' ) }
-									status="error"
-									politeness="assertive"
-									inline={ false }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-							{ 'addTagError' === errors.segmentsInput?.type && (
-								<Notice
-									message={ errors.segmentsInput?.message }
-									status="error"
-									politeness="assertive"
-									inline={ false }
-									icon={ CircularExclamationIcon }
-								/>
-							) }
-						</div>
 					</>
 				</td>
 			</tr>
@@ -1147,6 +1051,15 @@ const Interface = ( props ) => {
 			<form
 				onSubmit={ handleSubmit( ( submitData, e ) => {
 					e.preventDefault();
+
+					// Check if no segments have been selected.
+					const segments = getValues( 'segments' );
+					const selectedSegments = segments.filter( ( segment ) => segment.selected === true );
+					if ( 0 === selectedSegments.length ) {
+						setError( 'segments', { type: 'required', message: __( 'Please select at least one Segment.', 'comment-edit-pro' ) } );
+						return;
+					}
+
 					// if ( ! needsCredentialRefresh() ) {
 					// 	onSubmit( submitData );
 					// } else {
