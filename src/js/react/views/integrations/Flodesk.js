@@ -837,7 +837,7 @@ const Interface = ( props ) => {
 						className="sce-admin-heading-docs"
 						target="_blank"
 						rel="noreferrer"
-						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/convertkit-integration"
+						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/flodesk-integration"
 					>
 						({ __( 'Docs', 'comment-edit-pro' ) })
 					</a>
