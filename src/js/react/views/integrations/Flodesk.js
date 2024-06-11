@@ -857,7 +857,7 @@ const Interface = ( props ) => {
 					// Check if no segments have been selected.
 					const segments = getValues( 'segments' );
 					const selectedSegments = segments.filter( ( segment ) => segment.selected === true );
-					if ( 0 === selectedSegments.length ) {
+					if ( 0 === selectedSegments.length && ! needsCredentialRefresh() && getValues( 'enableFlodesk' ) ) {
 						setError( 'segments', { type: 'required', message: __( 'Please select at least one Segment.', 'comment-edit-pro' ) } );
 						return;
 					}

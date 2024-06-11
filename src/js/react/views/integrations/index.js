@@ -11,7 +11,7 @@ const ConvertKit = lazy( () =>
 );
 
 const Flodesk = lazy( () =>
-	import( /* webpackChunkName: "FloDesk0.0.1" */ './Flodesk' )
+	import( /* webpackChunkName: "FloDesk0.0.2" */ './Flodesk' )
 );
 
 const container = document.getElementById( 'sce-tab-mailchimp' );
