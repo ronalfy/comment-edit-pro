@@ -625,7 +625,7 @@ const Interface = ( props ) => {
 											className={ classNames( 'sce-admin__text-control', {
 												'has-error': 'required' === errors.groupInput?.type,
 											} ) }
-											placeholder={ __( 'Tag Name', 'comment-edit-pro' ) }
+											placeholder={ __( 'Group Name', 'comment-edit-pro' ) }
 											aria-required="true"
 											ref={ groupInput }
 										/>
