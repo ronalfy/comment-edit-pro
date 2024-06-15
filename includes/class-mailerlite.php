@@ -114,7 +114,7 @@ class MailerLite {
 		curl_setopt_array(
 			$curl,
 			array(
-				CURLOPT_URL            => $this->mailerlite_api . '/groups',
+				CURLOPT_URL            => esc_url_raw( $this->mailerlite_api . '/groups' ),
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING       => '',
 				CURLOPT_MAXREDIRS      => 10,
@@ -155,7 +155,7 @@ class MailerLite {
 		curl_setopt_array(
 			$curl,
 			array(
-				CURLOPT_URL            => $this->mailerlite_api . '/groups',
+				CURLOPT_URL            => esc_url_raw( $this->mailerlite_api . '/groups' ),
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING       => '',
 				CURLOPT_MAXREDIRS      => 10,
@@ -222,11 +222,7 @@ class MailerLite {
 		}
 
 		// Get API and secret.
-		$api_key        = $options['mailerlite_api_key'];
-		$api_secret_key = $options['mailerlite_secret_key'];
-
-		// Determine if we're using forms or tags.
-		$form_or_tag = $options['mailerlite_form_or_tag'];
+		$api_key = $options['mailerlite_api_key'];
 
 		// Start building up HTTP args.
 		$http_args            = array();
@@ -234,23 +230,20 @@ class MailerLite {
 			'Authorization' => 'Bearer ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
 		);
-		$http_args['body']    = array(
-			'api_key' => $api_key,
-		);
 
-		// Get any tags.
-		$tags = array();
+		// Get any groups.
+		$groups = array();
 		if ( Functions::is_multisite() ) {
-			$tags = get_site_option( 'sce_mailerlite_tags', array() );
+			$groups = get_site_option( 'sce_mailerlite_groups', array() );
 		} else {
-			$tags = get_option( 'sce_mailerlite_tags', array() );
+			$groups = get_option( 'sce_mailerlite_groups', array() );
 		}
 
-		// Get selected tags.
-		$selected_tag_ids = array();
-		foreach ( $tags as $tag ) {
-			if ( isset( $tag['selected'] ) && (bool) $tag['selected'] ) {
-				$selected_tag_ids[] = absint( $tag['value'] );
+		// Get selected groups.
+		$selected_group_ids = array();
+		foreach ( $groups as $group ) {
+			if ( isset( $group['selected'] ) && (bool) $group['selected'] ) {
+				$selected_group_ids[] = sanitize_text_field( $group['value'] );
 			}
 		}
 
@@ -289,72 +282,35 @@ class MailerLite {
 			'Authorization' => 'Bearer ' . $api_key,
 			'Accept'        => 'application/json;ver=1.0',
 		);
-		$http_args['body']    = array(
-			'api_key' => $api_key,
-		);
 
 		// Get comment.
 		$comment = get_comment( $comment_id );
 
 		// Get API Endpoint.
-		$api_endpoint = $this->mailerlite_api;
-		if ( 'form' === $form_or_tag && $options['mailerlite_selected_form'] ) {
-			$selected_form = $options['mailerlite_selected_form'];
-			$api_endpoint .= '/forms/' . $selected_form . '/subscribe';
+		$api_endpoint = $this->mailerlite_api . '/subscribers';
 
-			$form_http_args         = $http_args;
-			$form_http_args['body'] = array(
-				'api_key'    => $api_key,
-				'email'      => $comment->comment_author_email,
-				'first_name' => $comment->comment_author,
-				'tags'       => $selected_tag_ids,
-			);
+		// Format subscription data.
+		$subscriber_args = array(
+			'email'      => $comment->comment_author_email,
+			'fields'     => $selected_custom_fields,
+			'groups'     => $selected_group_ids,
+			'ip_address' => $comment->comment_author_IP,
+		);
 
-			if ( ! empty( $selected_custom_fields ) ) {
-				$form_http_args['body']['fields'] = $selected_custom_fields;
-			}
-			if ( ! empty( $selected_tag_ids ) ) {
-				$test_array                     = array();
-				$test_array[]                   = 1234;
-				$tag_json                       = wp_json_encode(
-					array_merge(
-						$test_array,
-						$selected_tag_ids
-					)
-				);
-				$form_http_args['body']['tags'] = count( $selected_tag_ids ) > 1 ? $tag_json : $selected_tag_ids[0];
-			}
-
-			$response = wp_remote_post(
-				$api_endpoint,
-				$form_http_args
-			);
-			$this->add_mailerlite_comment_meta( $comment_id, $response, 'form' );
+		if ( ! (bool) $options['mailerlite_double_optin_enabled'] ) {
+			$subscriber_args['status'] = 'active';
+			/* format date into: yyyy-MM-dd HH:mm:ss */
+			$subscriber_args['subscribed_at'] = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) );
+			$subscriber_args['optin_ip']      = $comment->comment_author_IP;
+			$subscriber_args['opted_in_at']   = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) );
 		}
+		$http_args['body'] = $subscriber_args;
 
-		// Check for tags.
-		if ( ! empty( $selected_tag_ids ) && 'tag' === $form_or_tag ) {
-			foreach ( $selected_tag_ids as $tag_id ) {
-				$api_endpoint          = $this->mailerlite_api . '/tags/' . $tag_id . '/subscribe';
-				$tag_http_args         = $http_args;
-				$tag_http_args['body'] = array(
-					'api_key'    => $api_key,
-					'email'      => $comment->comment_author_email,
-					'first_name' => $comment->comment_author,
-				);
-				if ( ! empty( $selected_custom_fields ) ) {
-					$tag_http_args['body']['fields'] = $selected_custom_fields;
-				}
-
-				$response = wp_remote_post(
-					$api_endpoint,
-					$tag_http_args
-				);
-				$this->add_mailerlite_comment_meta( $comment_id, $response, 'tag' );
-			}
-		}
-
-		// Add comment meta.
+		$response = wp_remote_post(
+			$api_endpoint,
+			$http_args
+		);
+		$this->add_mailerlite_comment_meta( $comment_id, $response );
 
 		return true;
 	}
@@ -364,9 +320,8 @@ class MailerLite {
 	 *
 	 * @param int             $comment_id The Comment ID.
 	 * @param WP_Error|Object $response The response object.
-	 * @param string          $form_or_tag form or tag.
 	 */
-	private function add_mailerlite_comment_meta( $comment_id, $response, $form_or_tag ) {
+	private function add_mailerlite_comment_meta( $comment_id, $response ) {
 		$comment_meta = get_comment_meta( $comment_id, 'sce_mailerlite_data', true );
 		if ( ! is_array( $comment_meta ) ) {
 			$comment_meta = array();
@@ -375,7 +330,6 @@ class MailerLite {
 		if ( is_wp_error( $response ) ) {
 			// Log error.
 			$comment_meta[] = array(
-				'type'        => $form_or_tag,
 				'success'     => false,
 				'error'       => $response->get_error_message(),
 				'status_code' => false,
@@ -383,7 +337,6 @@ class MailerLite {
 		} elseif ( null === $response ) {
 			// Log error.
 			$comment_meta[] = array(
-				'type'        => $form_or_tag,
 				'success'     => false,
 				'error'       => __( 'No response received.', 'comment-edit-pro' ),
 				'status_code' => false,
@@ -391,16 +344,14 @@ class MailerLite {
 		} else {
 			// Get status code.
 			$status_code = wp_remote_retrieve_response_code( $response );
-			if ( 200 === $status_code ) {
+			if ( 200 === $status_code || 201 === $status_code ) {
 				$comment_meta[] = array(
-					'type'        => $form_or_tag,
 					'success'     => true,
 					'error'       => false,
 					'status_code' => $status_code,
 				);
 			} else {
 				$error_comment_meta = array(
-					'type'        => $form_or_tag,
 					'success'     => false,
 					'status_code' => $status_code,
 				);
@@ -970,7 +921,7 @@ class MailerLite {
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
 				'label' => sanitize_text_field( $custom_fields[ $index ]['name'] ),
-				'value' => sanitize_text_field( $custom_fields[ $index ]['id'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
 				'id'    => sanitize_text_field( $custom_fields[ $index ]['id'] ),
 			);
 
@@ -1168,7 +1119,7 @@ class MailerLite {
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
 				'label' => sanitize_text_field( $custom_fields[ $index ]['name'] ),
-				'value' => sanitize_text_field( $custom_fields[ $index ]['id'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['key'] ),
 				'id'    => absint( $custom_fields[ $index ]['id'] ),
 			);
 
@@ -1295,7 +1246,6 @@ class MailerLite {
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
@@ -1306,15 +1256,6 @@ class MailerLite {
 					foreach ( $comment_meta as $index => $mailerlite_data ) :
 						?>
 						<tr>
-							<td>
-								<?php
-								if ( isset( $mailerlite_data['type'] ) ) {
-									echo esc_html( strtoupper( $mailerlite_data['type'] ) );
-								} else {
-									esc_html_e( 'Unknown', 'comment-edit-pro' );
-								}
-								?>
-							</td>
 							<td>
 								<?php
 								if ( isset( $mailerlite_data['success'] ) ) {
@@ -1357,7 +1298,6 @@ class MailerLite {
 				</tbody>
 				<tfoot>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Form or Tags', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Success', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Status Code', 'comment-edit-pro' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Error Message', 'comment-edit-pro' ); ?></th>
