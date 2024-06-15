@@ -14,6 +14,10 @@ const Flodesk = lazy( () =>
 	import( /* webpackChunkName: "FloDesk0.0.3" */ './Flodesk' )
 );
 
+const MailerLite = lazy( () =>
+	import( /* webpackChunkName: "MailerLite0.0.1" */ './MailerLite' )
+);
+
 const container = document.getElementById( 'sce-tab-mailchimp' );
 const root = createRoot( container );
 root.render(
@@ -43,5 +47,13 @@ const flodeskIntegration = createRoot( flodeskContainer );
 flodeskIntegration.render(
 	<React.StrictMode>
 		<Flodesk />
+	</React.StrictMode>
+);
+
+const mailerliteContainer = document.getElementById( 'sce-tab-mailerlite' );
+const mailerliteIntegration = createRoot( mailerliteContainer );
+mailerliteIntegration.render(
+	<React.StrictMode>
+		<MailerLite />
 	</React.StrictMode>
 );
