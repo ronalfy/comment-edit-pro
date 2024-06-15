@@ -11,7 +11,7 @@ const ConvertKit = lazy( () =>
 );
 
 const Flodesk = lazy( () =>
-	import( /* webpackChunkName: "FloDesk0.0.3" */ './Flodesk' )
+	import( /* webpackChunkName: "FloDesk0.0.4" */ './Flodesk' )
 );
 
 const MailerLite = lazy( () =>

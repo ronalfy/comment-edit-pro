@@ -142,12 +142,12 @@ const Interface = ( props ) => {
 	 * @return {boolean} true to show the save button, false to hide it.
 	 */
 	const canShowSaveButton = () => {
-		// If convertkit is disabled and form is not dirty, no save button.
+		// If Flodesk is disabled and form is not dirty, no save button.
 		if ( ! getValues( 'enableFlodesk' ) && ! isDirty ) {
 			return false;
 		}
 
-		// If convertKit is disabled, we can always save.
+		// If Flodesk is disabled, we can always save.
 		if ( ! getValues( 'enableFlodesk' ) ) {
 			return true;
 		}
@@ -908,7 +908,7 @@ const Interface = ( props ) => {
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
-					{ getValues( 'apiValid' ) && canShowSaveButton() && (
+					{ canShowSaveButton() && (
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',

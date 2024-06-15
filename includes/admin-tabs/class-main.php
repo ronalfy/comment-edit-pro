@@ -219,6 +219,18 @@ class Main {
 					</div>
 					<div class="sce-admin-panel-card">
 						<div class="sce-admin-panel-card-header">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mailerlite.png' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of MailerLite Logo', 'comment-edit-pro' ); ?>" /></a>
+						</div>
+						<div class="sce-admin-panel-card-body">
+							<h3><?php esc_html_e( 'MailerLite Newsletter Integration', 'comment-edit-pro' ); ?></h3>
+							<p><?php esc_html_e( 'MailerLite is an affordable and fully-featured newsletter solution for serious marketers.', 'comment-edit-pro' ); ?></p>
+						</div>
+						<div class="sce-admin-panel-card-footer">
+							<a href="<?php echo esc_url( Functions::get_settings_url( 'integrations' ) ); ?>"><?php esc_html_e( 'View MailerLite Settings', 'comment-edit-pro' ); ?></a>
+						</div>
+					</div>
+					<div class="sce-admin-panel-card">
+						<div class="sce-admin-panel-card-header">
 						<a href="<?php echo esc_url( Functions::get_settings_url( 'mentions' ) ); ?>"><img src="<?php echo esc_url( Functions::get_plugin_url( 'images/admin/mentions.jpg' ) ); ?>" alt="<?php esc_html_e( 'Screenshot of a Mentions feature', 'comment-edit-pro' ); ?>" /></a>
 						</div>
 						<div class="sce-admin-panel-card-body">
