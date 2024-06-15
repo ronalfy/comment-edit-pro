@@ -36,6 +36,10 @@ class Integrations {
 		$flodesk = new Flodesk();
 		$flodesk->run();
 
+		// Init FloDesk.
+		$mailerlite = new MailerLite();
+		$mailerlite->run();
+
 		// Load integration scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts_styles' ) );
 	}
