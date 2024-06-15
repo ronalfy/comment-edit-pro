@@ -71,7 +71,7 @@ const MailerLite = ( props ) => {
 };
 
 const Interface = ( props ) => {
-	const tagInput = useRef( null );
+	const groupInput = useRef( null );
 	const customFieldInputRef = useRef( null );
 	const { defaults } = props;
 	const response = defaults();
@@ -81,10 +81,10 @@ const Interface = ( props ) => {
 	const [ resetting, setResetting ] = useState( false );
 	const [ isReset, setIsReset ] = useState( false );
 	const [ credentialsRefreshing, setCredentialsRefreshing ] = useState( false );
-	const [ isRefreshingTags, setIsRefreshingTags ] = useState( false );
+	const [ isRefreshingGroups, setIsRefreshingGroups ] = useState( false );
 	const [ isRefreshingForms, setIsRefreshingForms ] = useState( false );
 	const [ isRefreshingCustomFields, setIsRefreshingCustomFields ] = useState( false );
-	const [ isAddingTag, setIsAddingTag ] = useState( false );
+	const [ isAddingGroup, setIsAddingGroup ] = useState( false );
 	const [ isAddingCustomField, setIsAddingCustomField ] = useState( false );
 
 	const {
@@ -104,9 +104,10 @@ const Interface = ( props ) => {
 			apiKey: data.apiKey,
 			signUpLabel: data.signUpLabel,
 			checkboxEnabled: data.checkboxEnabled,
+			doubleOptinEnabled: data.doubleOptinEnabled,
 			groups: data.groups ?? [],
 			customFields: data.customFields ?? [],
-			tagInput: '',
+			groupInput: '',
 			customFieldInput: '',
 		},
 	} );
@@ -153,10 +154,10 @@ const Interface = ( props ) => {
 			return true;
 		}
 
-		const forms = getValues( 'forms' );
-		const tags = getValues( 'tags' );
+		const groups = getValues( 'groups' );
+		const customFields = getValues( 'customFields' );
 
-		if ( getValues( 'apiValid' ) && ( forms.length === 0 && tags.length === 0 ) ) {
+		if ( getValues( 'apiValid' ) && ( groups.length === 0 && customFields.length === 0 ) ) {
 			return false;
 		}
 		if ( ! getValues( 'apiValid' ) && isDirty ) {
@@ -166,44 +167,6 @@ const Interface = ( props ) => {
 			return false;
 		}
 
-		// Check to see if any forms are selected.
-		if ( getValues( 'formOrTag' ) === 'form' ) {
-			if ( forms.length === 0 ) {
-				return false;
-			}
-			if ( '0' === getValues( 'selectedForm' ) ) {
-				return false;
-			}
-			if ( '0' !== getValues( 'selectedForm' ) ) {
-				// Check if selectedForm is not in the forms array.
-				const selectedForm = getValues( 'selectedForm' );
-				let selected = false;
-				forms.forEach( ( form ) => {
-					if ( form.value === selectedForm ) {
-						selected = true;
-					}
-				} );
-				if ( ! selected ) {
-					return false;
-				}
-			}
-		}
-
-		// Check to see if any tags are selected.
-		if ( getValues( 'formOrTag' ) === 'tag' ) {
-			if ( tags.length === 0 ) {
-				return false;
-			}
-			let selected = false;
-			tags.forEach( ( tag ) => {
-				if ( tag.selected ) {
-					selected = true;
-				}
-			} );
-			if ( ! selected ) {
-				return false;
-			}
-		}
 		return true;
 	};
 
@@ -284,46 +247,46 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const onAddTag = ( tagLabel ) => {
-		tagLabel = tagLabel.trim();
-		if ( '' === tagLabel ) {
-			setError( 'tagInput', { type: 'addTagError', message: __( 'Tag name cannot be empty.', 'comment-edit-pro' ) } );
+	const onAddGroup = ( groupLabel ) => {
+		groupLabel = groupLabel.trim();
+		if ( '' === groupLabel ) {
+			setError( 'groupInput', { type: 'addGroupError', message: __( 'Group name cannot be empty.', 'comment-edit-pro' ) } );
 			return;
 		}
 
 		// Check to see if label is in use.
-		const currentTags = getValues( 'tags' );
-		const tagExists = currentTags.find( ( tag ) => tag.label === tagLabel );
-		if ( tagExists ) {
-			setError( 'tagInput', { type: 'addTagError', message: __( 'Tag name already in use.', 'comment-edit-pro' ) } );
+		const currentGroup = getValues( 'groups' );
+		const groupExists = currentGroup.find( ( group ) => group.label === groupLabel );
+		if ( groupExists ) {
+			setError( 'groupInput', { type: 'addGroupError', message: __( 'Group name already in use.', 'comment-edit-pro' ) } );
 			return;
 		}
 
-		// Start adding the tag.
-		setIsAddingTag( true );
-		sendCommand( 'sce_add_mailerlite_tag', {
-			nonce: sceIntegrations.ml_add_tag_nonce,
-			label: tagLabel,
+		// Start adding the group.
+		setIsAddingGroup( true );
+		sendCommand( 'sce_add_mailerlite_group', {
+			nonce: sceIntegrations.ml_add_group_nonce,
+			label: groupLabel,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { tags } = ajaxData;
-					const newTagValues = [];
-					tags.forEach( ( keys, index ) => {
-						newTagValues.push( keys );
+					const { groups } = ajaxData;
+					const newGroupValues = [];
+					groups.forEach( ( keys, index ) => {
+						newGroupValues.push( keys );
 					} );
-					setValue( 'tagInput', '' );
-					setValue( 'tags', newTagValues );
+					setValue( 'groupInput', '' );
+					setValue( 'groups', newGroupValues );
 				} else {
-					setError( 'tagInput', { type: 'addTagError', message: ajaxData.message } );
+					setError( 'groupInput', { type: 'addGroupError', message: ajaxData.message } );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
-				setIsAddingTag( false );
-				tagInput.current.focus();
+				setIsAddingGroup( false );
+				groupInput.current.focus();
 			} );
 	};
 
@@ -369,28 +332,28 @@ const Interface = ( props ) => {
 			} );
 	};
 
-	const onHandleTagsRefresh = ( formData ) => {
-		setIsRefreshingTags( true );
-		sendCommand( 'sce_refresh_mailerlite_tags', {
-			nonce: sceIntegrations.ml_refresh_tags_nonce,
+	const onHandleGroupsRefresh = ( formData ) => {
+		setIsRefreshingGroups( true );
+		sendCommand( 'sce_refresh_mailerlite_groups', {
+			nonce: sceIntegrations.ml_refresh_groups_nonce,
 		} )
 			.then( ( ajaxResponse ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
-					const { tags, apiValid } = ajaxData;
-					const newTagValues = [];
-					const oldTagValues = getValues( 'tags' );
-					tags.forEach( ( keys, index ) => {
-						// Use old selection state for new tags.
-						const oldTag = oldTagValues.find( ( tag ) => tag.value === keys.value );
-						if ( oldTag ) {
-							keys.selected = oldTag.selected;
+					const { groups, apiValid } = ajaxData;
+					const newGroupValues = [];
+					const oldGroupValues = getValues( 'groups' );
+					groups.forEach( ( keys, index ) => {
+						// Use old selection state for new groups.
+						const oldGroup = oldGroupValues.find( ( group ) => group.value === keys.value );
+						if ( oldGroup ) {
+							keys.selected = oldGroup.selected;
 						}
-						newTagValues.push( keys );
+						newGroupValues.push( keys );
 					} );
 					const updatedFormValues = {
-						tags: newTagValues,
+						groups: newGroupValues,
 						apiValid,
 					};
 					reset(
@@ -410,52 +373,12 @@ const Interface = ( props ) => {
 							keepDirty: true,
 						}
 					);
-					setError( 'tags', { type: 'noTags', message: ajaxData.message } );
+					setError( 'groups', { type: 'noGroups', message: ajaxData.message } );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
 			.then( ( ajaxResponse ) => {
-				setIsRefreshingTags( false );
-			} );
-	};
-
-	const onHandleFormsRefresh = ( formData ) => {
-		setIsRefreshingForms( true );
-		sendCommand( 'sce_refresh_mailerlite_forms', {
-			nonce: sceIntegrations.ml_refresh_forms_nonce,
-		} )
-			.then( ( ajaxResponse ) => {
-				const ajaxData = ajaxResponse.data.data;
-				const ajaxSuccess = ajaxResponse.data.success;
-				if ( ajaxSuccess ) {
-					const { forms, apiValid } = ajaxData;
-
-					const updatedFormValues = {
-						forms,
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: true,
-							keepDirty: true,
-						}
-					);
-				} else {
-					const updatedFormValues = {
-					};
-					reset(
-						{ ...formValues, ...updatedFormValues },
-						{
-							keepErrors: true,
-							keepDirty: true,
-						}
-					);
-					setError( 'forms', { type: 'noForms', message: ajaxData.message } );
-				}
-			} )
-			.catch( ( ajaxResponse ) => {} )
-			.then( ( ajaxResponse ) => {
-				setIsRefreshingForms( false );
+				setIsRefreshingGroups( false );
 			} );
 	};
 
@@ -472,7 +395,7 @@ const Interface = ( props ) => {
 					const newCustomFieldValues = [];
 					const oldCustomFieldValues = getValues( 'customFields' );
 					customFields.forEach( ( keys, index ) => {
-						// Use old selection state for new tags.
+						// Use old selection state for new custom fields.
 						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === keys.value );
 						if ( oldCustomFields ) {
 							keys.field = oldCustomFields.field;
@@ -583,52 +506,30 @@ const Interface = ( props ) => {
 		);
 	};
 
-	/**
-	 * Gets the form or tag radio option.
-	 *
-	 * @return {JSX.Element} Form or tags interface.
-	 */
-	const getFormOrTag = () => {
-		if ( needsCredentialRefresh() ) {
+	const getOptinCheckbox = () => {
+		if ( ! canShowSaveButton() || needsCredentialRefresh() ) {
 			return <></>;
 		}
-		const forms = getValues( 'forms' );
-		const tags = getValues( 'tags' );
 		return (
 			<tr>
-				<th scope="row">{ __( 'Forms and Tags', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'Double Optin', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
-						name="formOrTag"
+						name="doubleOptinEnabled"
 						control={ control }
-						rules={ { required: true } }
 						render={ ( { field: { onChange, value } } ) => (
-							<>
-								<RadioControl
-									label={ __(
-										'Add Subscribers to Forms or Tags',
-										'comment-edit-pro'
-									) }
-									help={ __(
-										'Select whether to add new subscribers to a an existing MailerLite form or tag(s).',
-										'comment-edit-pro'
-									) }
-									selected={ getValues( 'formOrTag' ) }
-									options={ [
-										{
-											label: __( 'Forms and Tags', 'comment-edit-pro' ),
-											value: 'form',
-										},
-										{
-											label: __( 'Tags Only', 'comment-edit-pro' ),
-											value: 'tag',
-										},
-									] }
-									onChange={ ( formOrTagValue ) => {
-										onChange( formOrTagValue );
-									} }
-								/>
-							</>
+							<ToggleControl
+								label={ __( 'Enable Double Optin', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									onChange( boolValue );
+								} }
+								help={ __(
+									'Enable double-optin for your email subscribers (recommended).',
+									'comment-edit-pro'
+								) }
+							/>
 						) }
 					/>
 				</td>
@@ -636,108 +537,24 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getMailerLiteForms = () => {
-		// Get forms.
-		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
-		const convertKitForms = getValues( 'forms' );
-		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || 'form' !== getValues( 'formOrTag' ) ) {
-			return <></>;
-		}
-
-		return (
-			<tr>
-				<th scope="row">{ __( 'MailerLite Forms (Required)', 'comment-edit-pro' ) }</th>
-				<td>
-					<>
-						{ convertKitForms.length !== 0 && (
-							<Controller
-								name="selectedForm"
-								control={ control }
-								rules={ { required: true } }
-								render={ ( { field: { onChange, value } } ) => (
-									<RadioControl
-										label={ __(
-											'Select a form for your subscribers',
-											'comment-edit-pro'
-										) }
-										help={ __(
-											'Select a default form that will be used when signing up your subscribers.',
-											'comment-edit-pro'
-										) }
-										selected={ value }
-										options={ getValues( 'forms' ) }
-										onChange={ ( formSelectedValue ) => {
-											onChange( formSelectedValue );
-										} }
-										className={ classNames( {
-											'has-error': 'required' === errors.apiKey?.type,
-											'is-required': true,
-										} ) }
-									/>
-								) }
-							/>
-						) }
-						<div className="sce-admin-buttons">
-							<Button
-								isBusy={ isRefreshingForms }
-								disabled={ isRefreshingForms }
-								onClick={ () => {
-									onHandleFormsRefresh();
-								} }
-								className={ classNames(
-									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
-									{ 'has-error': hasErrors() },
-									{ 'has-icon': isRefreshingForms },
-									{ 'is-saving': isRefreshingForms },
-								) }
-								text={ isRefreshingForms ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Forms', 'comment-edit-pro' ) }
-							/>
-						</div>
-						{ 'required' === errors.selectedForm?.type && (
-							<Notice
-								message={ __( 'This field is a required field.' ) }
-								status="error"
-								politeness="assertive"
-								inline={ true }
-								icon={ CircularExclamationIcon }
-							/>
-						) }
-					</>
-					{ 'form' === getValues( 'formOrTag' ) && convertKitForms.length === 0 && (
-						<Notice
-							message={ __(
-								'There are no forms associated with this MailerLite account and setup cannot continue. Please create a form in MailerLite or try tags instead.',
-								'comment-edit-pro'
-							) }
-							status="error"
-							politeness="assertive"
-							inline={ false }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-				</td>
-			</tr>
-		);
-	};
-
 	const getMailerliteGroups = () => {
-		// Don't show tags if api is invalid.
+		// Don't show groups if api is invalid.
 		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
 			return <></>;
 		}
 
-		const convertKitTags = getValues( 'tags' );
+		const mailerliteGroups = getValues( 'groups' );
 		return (
 			<tr>
 				<th scope="row">
-					{ __( 'MailerLite Tags', 'comment-edit-pro' ) }
+					{ __( 'MailerLite Groups', 'comment-edit-pro' ) }
 				</th>
 				<td>
 					<>
-						{ 'tag' === getValues( 'formOrTag' ) && getValues( 'tags' ).length === 0 && (
+						{ getValues( 'groups' ).length === 0 && (
 							<Notice
 								message={ __(
-									'There are no tags available. Try creating a tag below.',
+									'There are no groups available. Try creating a group below.',
 									'comment-edit-pro'
 								) }
 								status="warning"
@@ -746,42 +563,42 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						{ convertKitTags.length > 0 && getValues( 'apiValid' ) &&
-						convertKitTags.map( ( tag, index ) => (
+						{ mailerliteGroups.length > 0 && getValues( 'apiValid' ) &&
+						mailerliteGroups.map( ( group, index ) => (
 							<Controller
 								key={ index }
-								name={ `tags[${ index }].selected` }
+								name={ `groups[${ index }].selected` }
 								control={ control }
 								render={ ( { field: { onChange, value } } ) => (
 									<CheckboxControl
-										label={ tag.label }
+										label={ group.label }
 										onChange={ ( enableValue ) => {
 											onChange( enableValue );
 										} }
-										checked={ getValues( 'tags' )[ index ].selected ?? false }
+										checked={ getValues( 'groups' )[ index ].selected ?? false }
 									/>
 								) }
 							/>
 						) ) }
 						<div className="sce-admin-buttons">
 							<Button
-								isBusy={ isRefreshingTags }
-								disabled={ isRefreshingTags }
+								isBusy={ isRefreshingGroups }
+								disabled={ isRefreshingGroups }
 								onClick={ () => {
-									onHandleTagsRefresh();
+									onHandleGroupsRefresh();
 								} }
 								className={ classNames(
 									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
 									{ 'has-error': hasErrors() },
-									{ 'has-icon': isRefreshingTags },
-									{ 'is-saving': isRefreshingTags },
+									{ 'has-icon': isRefreshingGroups },
+									{ 'is-saving': isRefreshingGroups },
 								) }
-								text={ isRefreshingTags ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Tags', 'comment-edit-pro' ) }
+								text={ isRefreshingGroups ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Groups', 'comment-edit-pro' ) }
 							/>
 						</div>
-						{ 'noTags' === errors.tags?.type && (
+						{ 'noGroups' === errors.groups?.type && (
 							<Notice
-								message={ errors.tags?.message }
+								message={ errors.groups?.message }
 								status="error"
 								politeness="assertive"
 								inline={ false }
@@ -791,7 +608,7 @@ const Interface = ( props ) => {
 						<div className="sce-convertkit-add-tag">
 							<div className="sce-convertkit-add-tag-group">
 								<Controller
-									name="tagInput"
+									name="groupInput"
 									control={ control }
 									rules={ {
 										pattern: /[-_ 0-9A-Za-z]/,
@@ -800,50 +617,50 @@ const Interface = ( props ) => {
 										<TextControl
 											type="text"
 											value={ value }
-											onChange={ ( tagInputValue ) => {
-												clearErrors( 'tagInput' );
-												onChange( tagInputValue );
+											onChange={ ( groupInputValue ) => {
+												clearErrors( 'groupInput' );
+												onChange( groupInputValue );
 											} }
-											label={ __( 'Add New Tag', 'comment-edit-pro' ) }
+											label={ __( 'Add New Group', 'comment-edit-pro' ) }
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.tagInput?.type,
+												'has-error': 'required' === errors.groupInput?.type,
 											} ) }
 											placeholder={ __( 'Tag Name', 'comment-edit-pro' ) }
 											aria-required="true"
-											ref={ tagInput }
+											ref={ groupInput }
 										/>
 									) }
 								/>
 								<div className="sce-admin-buttons">
 									<Button
 										onClick={ async( e ) => {
-											const validationResult = await trigger( 'tagInput' );
+											const validationResult = await trigger( 'groupInput' );
 											if ( validationResult ) {
-												onAddTag( getValues( 'tagInput' ) );
+												onAddGroup( getValues( 'groupInput' ) );
 											}
 										} }
 										className={ classNames(
 											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
 										) }
 										text={
-											isAddingTag
+											isAddingGroup
 												? __( 'Adding…', 'comment-edit-pro' )
-												: __( 'Add New Tag', 'comment-edit-pro' ) }
+												: __( 'Add New Group', 'comment-edit-pro' ) }
 									/>
 								</div>
 							</div>
-							{ 'pattern' === errors.tagInput?.type && (
+							{ 'pattern' === errors.groupInput?.type && (
 								<Notice
-									message={ __( 'Special characters are not allowed in tags.', 'comment-edit-pro' ) }
+									message={ __( 'Special characters are not allowed in Groups.', 'comment-edit-pro' ) }
 									status="error"
 									politeness="assertive"
 									inline={ false }
 									icon={ CircularExclamationIcon }
 								/>
 							) }
-							{ 'addTagError' === errors.tagInput?.type && (
+							{ 'addGroupError' === errors.groupInput?.type && (
 								<Notice
-									message={ errors.tagInput?.message }
+									message={ errors.groupInput?.message }
 									status="error"
 									politeness="assertive"
 									inline={ false }
@@ -863,7 +680,7 @@ const Interface = ( props ) => {
 			return <></>;
 		}
 
-		const convertKitCustomFields = getValues( 'customFields' );
+		const mailerliteCustomFields = getValues( 'customFields' );
 		return (
 			<tr>
 				<th scope="row">
@@ -883,8 +700,8 @@ const Interface = ( props ) => {
 								icon={ CircularExclamationIcon }
 							/>
 						) }
-						{ convertKitCustomFields.length > 0 && getValues( 'apiValid' ) &&
-						convertKitCustomFields.map( ( tag, index ) => (
+						{ mailerliteCustomFields.length > 0 && getValues( 'apiValid' ) &&
+						mailerliteCustomFields.map( ( customField, index ) => (
 							<div className="sce-convertkit-custom-field" key={ index }>
 								{ 'custom' !== getValues( 'customFields' )[ index ].field && (
 									<>
@@ -893,7 +710,7 @@ const Interface = ( props ) => {
 											control={ control }
 											render={ ( { field: { onChange, value } } ) => (
 												<SelectControl
-													label={ tag.label }
+													label={ customField.label }
 													onChange={ ( customFieldSelectedValue ) => {
 														onChange( customFieldSelectedValue );
 													} }
@@ -918,7 +735,7 @@ const Interface = ( props ) => {
 													onChange={ ( methodValue ) => {
 														onChange( methodValue );
 													} }
-													label={ tag.label }
+													label={ customField.label }
 												/>
 											) }
 										/>
@@ -997,7 +814,7 @@ const Interface = ( props ) => {
 											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
 										) }
 										text={
-											isAddingTag
+											isAddingCustomField
 												? __( 'Adding…', 'comment-edit-pro' )
 												: __( 'Add Custom Field', 'comment-edit-pro' ) }
 									/>
@@ -1051,7 +868,7 @@ const Interface = ( props ) => {
 									'is-required': true,
 								} ) }
 								help={ __(
-									'Enter your MailerLite API Key in order to choose a form or tag.',
+									'Enter your MailerLite API Key in order to select a group and match any custom fields.',
 									'comment-edit-pro'
 								) }
 								aria-required="true"
@@ -1070,59 +887,6 @@ const Interface = ( props ) => {
 					{ 'noForms' === errors.apiKey?.type && (
 						<Notice
 							message={ errors.apiKey?.message }
-							status="error"
-							politeness="assertive"
-							inline={ true }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-				</td>
-			</tr>
-		);
-	};
-
-	const getSecretKey = () => {
-		return (
-			<tr>
-				<th scope="row">{ __( 'Secret Key', 'comment-edit-pro' ) }</th>
-				<td>
-					<Controller
-						name="secretKey"
-						control={ control }
-						rules={ { required: true } }
-						render={ ( { field: { onChange, value } } ) => (
-							<TextControl
-								label={ __( 'MailerLite Secret Key', 'comment-edit-pro' ) }
-								type="text"
-								value={ value }
-								onChange={ ( secretKey ) => {
-									onChange( secretKey );
-									clearErrors();
-								} }
-								className={ classNames( 'sce-admin__text-control', {
-									'has-error': 'required' === errors.secretKey?.type,
-									'is-required': true,
-								} ) }
-								help={ __(
-									'Enter your MailerLite Secret Key in order to choose a form or tag.',
-									'comment-edit-pro'
-								) }
-								aria-required="true"
-							/>
-						) }
-					/>
-					{ 'required' === errors.secretKey?.type && (
-						<Notice
-							message={ __( 'This field is a required field.' ) }
-							status="error"
-							politeness="assertive"
-							inline={ true }
-							icon={ CircularExclamationIcon }
-						/>
-					) }
-					{ 'noForms' === errors.secretKey?.type && (
-						<Notice
-							message={ errors.secretKey?.message }
 							status="error"
 							politeness="assertive"
 							inline={ true }
@@ -1232,6 +996,7 @@ const Interface = ( props ) => {
 								{ getCustomFields() }
 								{ getNewsletterLabel() }
 								{ getSignupCheckbox() }
+								{ getOptinCheckbox() }
 							</>
 						) }
 					</tbody>

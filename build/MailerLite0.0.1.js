@@ -443,7 +443,7 @@ const MailerLite = props => {
 };
 const Interface = props => {
   var _data$groups, _data$customFields;
-  const tagInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const groupInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const customFieldInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const {
     defaults
@@ -458,10 +458,10 @@ const Interface = props => {
   const [resetting, setResetting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isReset, setIsReset] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [credentialsRefreshing, setCredentialsRefreshing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isRefreshingTags, setIsRefreshingTags] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [isRefreshingGroups, setIsRefreshingGroups] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingForms, setIsRefreshingForms] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isRefreshingCustomFields, setIsRefreshingCustomFields] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isAddingTag, setIsAddingTag] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [isAddingGroup, setIsAddingGroup] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isAddingCustomField, setIsAddingCustomField] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const {
     register,
@@ -480,9 +480,10 @@ const Interface = props => {
       apiKey: data.apiKey,
       signUpLabel: data.signUpLabel,
       checkboxEnabled: data.checkboxEnabled,
+      doubleOptinEnabled: data.doubleOptinEnabled,
       groups: (_data$groups = data.groups) !== null && _data$groups !== void 0 ? _data$groups : [],
       customFields: (_data$customFields = data.customFields) !== null && _data$customFields !== void 0 ? _data$customFields : [],
-      tagInput: '',
+      groupInput: '',
       customFieldInput: ''
     }
   });
@@ -534,9 +535,9 @@ const Interface = props => {
     if (!getValues('enableMailerlite')) {
       return true;
     }
-    const forms = getValues('forms');
-    const tags = getValues('tags');
-    if (getValues('apiValid') && forms.length === 0 && tags.length === 0) {
+    const groups = getValues('groups');
+    const customFields = getValues('customFields');
+    if (getValues('apiValid') && groups.length === 0 && customFields.length === 0) {
       return false;
     }
     if (!getValues('apiValid') && isDirty) {
@@ -544,45 +545,6 @@ const Interface = props => {
     }
     if (needsCredentialRefresh()) {
       return false;
-    }
-
-    // Check to see if any forms are selected.
-    if (getValues('formOrTag') === 'form') {
-      if (forms.length === 0) {
-        return false;
-      }
-      if ('0' === getValues('selectedForm')) {
-        return false;
-      }
-      if ('0' !== getValues('selectedForm')) {
-        // Check if selectedForm is not in the forms array.
-        const selectedForm = getValues('selectedForm');
-        let selected = false;
-        forms.forEach(form => {
-          if (form.value === selectedForm) {
-            selected = true;
-          }
-        });
-        if (!selected) {
-          return false;
-        }
-      }
-    }
-
-    // Check to see if any tags are selected.
-    if (getValues('formOrTag') === 'tag') {
-      if (tags.length === 0) {
-        return false;
-      }
-      let selected = false;
-      tags.forEach(tag => {
-        if (tag.selected) {
-          selected = true;
-        }
-      });
-      if (!selected) {
-        return false;
-      }
     }
     return true;
   };
@@ -660,54 +622,54 @@ const Interface = props => {
       setSaving(false);
     });
   };
-  const onAddTag = tagLabel => {
-    tagLabel = tagLabel.trim();
-    if ('' === tagLabel) {
-      setError('tagInput', {
-        type: 'addTagError',
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name cannot be empty.', 'comment-edit-pro')
+  const onAddGroup = groupLabel => {
+    groupLabel = groupLabel.trim();
+    if ('' === groupLabel) {
+      setError('groupInput', {
+        type: 'addGroupError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Group name cannot be empty.', 'comment-edit-pro')
       });
       return;
     }
 
     // Check to see if label is in use.
-    const currentTags = getValues('tags');
-    const tagExists = currentTags.find(tag => tag.label === tagLabel);
-    if (tagExists) {
-      setError('tagInput', {
-        type: 'addTagError',
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag name already in use.', 'comment-edit-pro')
+    const currentGroup = getValues('groups');
+    const groupExists = currentGroup.find(group => group.label === groupLabel);
+    if (groupExists) {
+      setError('groupInput', {
+        type: 'addGroupError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Group name already in use.', 'comment-edit-pro')
       });
       return;
     }
 
-    // Start adding the tag.
-    setIsAddingTag(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_mailerlite_tag', {
-      nonce: sceIntegrations.ml_add_tag_nonce,
-      label: tagLabel
+    // Start adding the group.
+    setIsAddingGroup(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_mailerlite_group', {
+      nonce: sceIntegrations.ml_add_group_nonce,
+      label: groupLabel
     }).then(ajaxResponse => {
       const ajaxData = ajaxResponse.data.data;
       const ajaxSuccess = ajaxResponse.data.success;
       if (ajaxSuccess) {
         const {
-          tags
+          groups
         } = ajaxData;
-        const newTagValues = [];
-        tags.forEach((keys, index) => {
-          newTagValues.push(keys);
+        const newGroupValues = [];
+        groups.forEach((keys, index) => {
+          newGroupValues.push(keys);
         });
-        setValue('tagInput', '');
-        setValue('tags', newTagValues);
+        setValue('groupInput', '');
+        setValue('groups', newGroupValues);
       } else {
-        setError('tagInput', {
-          type: 'addTagError',
+        setError('groupInput', {
+          type: 'addGroupError',
           message: ajaxData.message
         });
       }
     }).catch(ajaxResponse => {}).then(ajaxResponse => {
-      setIsAddingTag(false);
-      tagInput.current.focus();
+      setIsAddingGroup(false);
+      groupInput.current.focus();
     });
   };
   const onAddCustomField = customFieldLabel => {
@@ -759,30 +721,30 @@ const Interface = props => {
       customFieldInputRef.current.focus();
     });
   };
-  const onHandleTagsRefresh = formData => {
-    setIsRefreshingTags(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_refresh_mailerlite_tags', {
-      nonce: sceIntegrations.ml_refresh_tags_nonce
+  const onHandleGroupsRefresh = formData => {
+    setIsRefreshingGroups(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_refresh_mailerlite_groups', {
+      nonce: sceIntegrations.ml_refresh_groups_nonce
     }).then(ajaxResponse => {
       const ajaxData = ajaxResponse.data.data;
       const ajaxSuccess = ajaxResponse.data.success;
       if (ajaxSuccess) {
         const {
-          tags,
+          groups,
           apiValid
         } = ajaxData;
-        const newTagValues = [];
-        const oldTagValues = getValues('tags');
-        tags.forEach((keys, index) => {
-          // Use old selection state for new tags.
-          const oldTag = oldTagValues.find(tag => tag.value === keys.value);
-          if (oldTag) {
-            keys.selected = oldTag.selected;
+        const newGroupValues = [];
+        const oldGroupValues = getValues('groups');
+        groups.forEach((keys, index) => {
+          // Use old selection state for new groups.
+          const oldGroup = oldGroupValues.find(group => group.value === keys.value);
+          if (oldGroup) {
+            keys.selected = oldGroup.selected;
           }
-          newTagValues.push(keys);
+          newGroupValues.push(keys);
         });
         const updatedFormValues = {
-          tags: newTagValues,
+          groups: newGroupValues,
           apiValid
         };
         reset({
@@ -801,53 +763,13 @@ const Interface = props => {
           keepErrors: true,
           keepDirty: true
         });
-        setError('tags', {
-          type: 'noTags',
+        setError('groups', {
+          type: 'noGroups',
           message: ajaxData.message
         });
       }
     }).catch(ajaxResponse => {}).then(ajaxResponse => {
-      setIsRefreshingTags(false);
-    });
-  };
-  const onHandleFormsRefresh = formData => {
-    setIsRefreshingForms(true);
-    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_refresh_mailerlite_forms', {
-      nonce: sceIntegrations.ml_refresh_forms_nonce
-    }).then(ajaxResponse => {
-      const ajaxData = ajaxResponse.data.data;
-      const ajaxSuccess = ajaxResponse.data.success;
-      if (ajaxSuccess) {
-        const {
-          forms,
-          apiValid
-        } = ajaxData;
-        const updatedFormValues = {
-          forms
-        };
-        reset({
-          ...formValues,
-          ...updatedFormValues
-        }, {
-          keepErrors: true,
-          keepDirty: true
-        });
-      } else {
-        const updatedFormValues = {};
-        reset({
-          ...formValues,
-          ...updatedFormValues
-        }, {
-          keepErrors: true,
-          keepDirty: true
-        });
-        setError('forms', {
-          type: 'noForms',
-          message: ajaxData.message
-        });
-      }
-    }).catch(ajaxResponse => {}).then(ajaxResponse => {
-      setIsRefreshingForms(false);
+      setIsRefreshingGroups(false);
     });
   };
   const onHandleCustomFieldsRefresh = formData => {
@@ -865,7 +787,7 @@ const Interface = props => {
         const newCustomFieldValues = [];
         const oldCustomFieldValues = getValues('customFields');
         customFields.forEach((keys, index) => {
-          // Use old selection state for new tags.
+          // Use old selection state for new custom fields.
           const oldCustomFields = oldCustomFieldValues.find(customField => customField.value === keys.value);
           if (oldCustomFields) {
             var _oldCustomFields$fiel;
@@ -960,128 +882,48 @@ const Interface = props => {
       })
     })));
   };
-
-  /**
-   * Gets the form or tag radio option.
-   *
-   * @return {JSX.Element} Form or tags interface.
-   */
-  const getFormOrTag = () => {
-    if (needsCredentialRefresh()) {
+  const getOptinCheckbox = () => {
+    if (!canShowSaveButton() || needsCredentialRefresh()) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
-    const forms = getValues('forms');
-    const tags = getValues('tags');
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "formOrTag",
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Double Optin', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: "doubleOptinEnabled",
       control: control,
-      rules: {
-        required: true
-      },
       render: ({
         field: {
           onChange,
           value
         }
-      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.RadioControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Subscribers to Forms or Tags', 'comment-edit-pro'),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select whether to add new subscribers to a an existing MailerLite form or tag(s).', 'comment-edit-pro'),
-        selected: getValues('formOrTag'),
-        options: [{
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Forms and Tags', 'comment-edit-pro'),
-          value: 'form'
-        }, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tags Only', 'comment-edit-pro'),
-          value: 'tag'
-        }],
-        onChange: formOrTagValue => {
-          onChange(formOrTagValue);
-        }
-      }))
-    })));
-  };
-  const getMailerLiteForms = () => {
-    // Get forms.
-    // eslint-disable-next-line @wordpress/no-unused-vars-before-return
-    const convertKitForms = getValues('forms');
-    if (!getValues('apiValid') || needsCredentialRefresh() || 'form' !== getValues('formOrTag')) {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
-    }
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-      scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Forms (Required)', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, convertKitForms.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "selectedForm",
-      control: control,
-      rules: {
-        required: true
-      },
-      render: ({
-        field: {
-          onChange,
-          value
-        }
-      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.RadioControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a form for your subscribers', 'comment-edit-pro'),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a default form that will be used when signing up your subscribers.', 'comment-edit-pro'),
-        selected: value,
-        options: getValues('forms'),
-        onChange: formSelectedValue => {
-          onChange(formSelectedValue);
+      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Double Optin', 'comment-edit-pro'),
+        className: "sce-admin__toggle-control",
+        checked: value,
+        onChange: boolValue => {
+          onChange(boolValue);
         },
-        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
-          'has-error': 'required' === errors.apiKey?.type,
-          'is-required': true
-        })
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable double-optin for your email subscribers (recommended).', 'comment-edit-pro')
       })
-    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "sce-admin-buttons"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-      isBusy: isRefreshingForms,
-      disabled: isRefreshingForms,
-      onClick: () => {
-        onHandleFormsRefresh();
-      },
-      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
-        'has-error': hasErrors()
-      }, {
-        'has-icon': isRefreshingForms
-      }, {
-        'is-saving': isRefreshingForms
-      }),
-      text: isRefreshingForms ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Forms', 'comment-edit-pro')
-    })), 'required' === errors.selectedForm?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
-      status: "error",
-      politeness: "assertive",
-      inline: true,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    })), 'form' === getValues('formOrTag') && convertKitForms.length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no forms associated with this MailerLite account and setup cannot continue. Please create a form in MailerLite or try tags instead.', 'comment-edit-pro'),
-      status: "error",
-      politeness: "assertive",
-      inline: false,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
     })));
   };
   const getMailerliteGroups = () => {
-    // Don't show tags if api is invalid.
+    // Don't show groups if api is invalid.
     if (!getValues('apiValid') || needsCredentialRefresh()) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
-    const convertKitTags = getValues('tags');
+    const mailerliteGroups = getValues('groups');
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Tags', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, 'tag' === getValues('formOrTag') && getValues('tags').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no tags available. Try creating a tag below.', 'comment-edit-pro'),
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Groups', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getValues('groups').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('There are no groups available. Try creating a group below.', 'comment-edit-pro'),
       status: "warning",
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), convertKitTags.length > 0 && getValues('apiValid') && convertKitTags.map((tag, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+    }), mailerliteGroups.length > 0 && getValues('apiValid') && mailerliteGroups.map((group, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       key: index,
-      name: `tags[${index}].selected`,
+      name: `groups[${index}].selected`,
       control: control,
       render: ({
         field: {
@@ -1091,31 +933,31 @@ const Interface = props => {
       }) => {
         var _getValues$index$sele;
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CheckboxControl, {
-          label: tag.label,
+          label: group.label,
           onChange: enableValue => {
             onChange(enableValue);
           },
-          checked: (_getValues$index$sele = getValues('tags')[index].selected) !== null && _getValues$index$sele !== void 0 ? _getValues$index$sele : false
+          checked: (_getValues$index$sele = getValues('groups')[index].selected) !== null && _getValues$index$sele !== void 0 ? _getValues$index$sele : false
         });
       }
     })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-admin-buttons"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-      isBusy: isRefreshingTags,
-      disabled: isRefreshingTags,
+      isBusy: isRefreshingGroups,
+      disabled: isRefreshingGroups,
       onClick: () => {
-        onHandleTagsRefresh();
+        onHandleGroupsRefresh();
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
         'has-error': hasErrors()
       }, {
-        'has-icon': isRefreshingTags
+        'has-icon': isRefreshingGroups
       }, {
-        'is-saving': isRefreshingTags
+        'is-saving': isRefreshingGroups
       }),
-      text: isRefreshingTags ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Tags', 'comment-edit-pro')
-    })), 'noTags' === errors.tags?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.tags?.message,
+      text: isRefreshingGroups ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refreshing…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Refresh Groups', 'comment-edit-pro')
+    })), 'noGroups' === errors.groups?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: errors.groups?.message,
       status: "error",
       politeness: "assertive",
       inline: false,
@@ -1125,7 +967,7 @@ const Interface = props => {
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-convertkit-add-tag-group"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "tagInput",
+      name: "groupInput",
       control: control,
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
@@ -1138,37 +980,37 @@ const Interface = props => {
       }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
         type: "text",
         value: value,
-        onChange: tagInputValue => {
-          clearErrors('tagInput');
-          onChange(tagInputValue);
+        onChange: groupInputValue => {
+          clearErrors('groupInput');
+          onChange(groupInputValue);
         },
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Tag', 'comment-edit-pro'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Group', 'comment-edit-pro'),
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === errors.tagInput?.type
+          'has-error': 'required' === errors.groupInput?.type
         }),
         placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tag Name', 'comment-edit-pro'),
         "aria-required": "true",
-        ref: tagInput
+        ref: groupInput
       })
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-admin-buttons"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
       onClick: async e => {
-        const validationResult = await trigger('tagInput');
+        const validationResult = await trigger('groupInput');
         if (validationResult) {
-          onAddTag(getValues('tagInput'));
+          onAddGroup(getValues('groupInput'));
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
-      text: isAddingTag ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Tag', 'comment-edit-pro')
-    }))), 'pattern' === errors.tagInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in tags.', 'comment-edit-pro'),
+      text: isAddingGroup ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Group', 'comment-edit-pro')
+    }))), 'pattern' === errors.groupInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in Groups.', 'comment-edit-pro'),
       status: "error",
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), 'addTagError' === errors.tagInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.tagInput?.message,
+    }), 'addGroupError' === errors.groupInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: errors.groupInput?.message,
       status: "error",
       politeness: "assertive",
       inline: false,
@@ -1180,7 +1022,7 @@ const Interface = props => {
     if (!getValues('apiValid') || needsCredentialRefresh()) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
-    const convertKitCustomFields = getValues('customFields');
+    const mailerliteCustomFields = getValues('customFields');
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map Custom Fields', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getValues('customFields').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -1189,7 +1031,7 @@ const Interface = props => {
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), convertKitCustomFields.length > 0 && getValues('apiValid') && convertKitCustomFields.map((tag, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }), mailerliteCustomFields.length > 0 && getValues('apiValid') && mailerliteCustomFields.map((customField, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-convertkit-custom-field",
       key: index
     }, 'custom' !== getValues('customFields')[index].field && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
@@ -1203,7 +1045,7 @@ const Interface = props => {
       }) => {
         var _getValues$index$fiel;
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.SelectControl, {
-          label: tag.label,
+          label: customField.label,
           onChange: customFieldSelectedValue => {
             onChange(customFieldSelectedValue);
           },
@@ -1226,7 +1068,7 @@ const Interface = props => {
         onChange: methodValue => {
           onChange(methodValue);
         },
-        label: tag.label
+        label: customField.label
       })
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
       className: "sce-admin__text-control-reset button-reset",
@@ -1297,7 +1139,7 @@ const Interface = props => {
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
-      text: isAddingTag ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Custom Field', 'comment-edit-pro')
+      text: isAddingCustomField ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Custom Field', 'comment-edit-pro')
     }))), 'pattern' === errors.customFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in custom fields.', 'comment-edit-pro'),
       status: "error",
@@ -1338,7 +1180,7 @@ const Interface = props => {
           'has-error': 'required' === errors.apiKey?.type,
           'is-required': true
         }),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your MailerLite API Key in order to choose a form or tag.', 'comment-edit-pro'),
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your MailerLite API Key in order to select a group and match any custom fields.', 'comment-edit-pro'),
         "aria-required": "true"
       })
     }), 'required' === errors.apiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -1349,49 +1191,6 @@ const Interface = props => {
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
     }), 'noForms' === errors.apiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
       message: errors.apiKey?.message,
-      status: "error",
-      politeness: "assertive",
-      inline: true,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    })));
-  };
-  const getSecretKey = () => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-      scope: "row"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "secretKey",
-      control: control,
-      rules: {
-        required: true
-      },
-      render: ({
-        field: {
-          onChange,
-          value
-        }
-      }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Secret Key', 'comment-edit-pro'),
-        type: "text",
-        value: value,
-        onChange: secretKey => {
-          onChange(secretKey);
-          clearErrors();
-        },
-        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === errors.secretKey?.type,
-          'is-required': true
-        }),
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your MailerLite Secret Key in order to choose a form or tag.', 'comment-edit-pro'),
-        "aria-required": "true"
-      })
-    }), 'required' === errors.secretKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
-      status: "error",
-      politeness: "assertive",
-      inline: true,
-      icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), 'noForms' === errors.secretKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.secretKey?.message,
       status: "error",
       politeness: "assertive",
       inline: true,
@@ -1471,7 +1270,7 @@ const Interface = props => {
       },
       help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or Disable the MailerLite Integration.', 'comment-edit-pro')
     })
-  }))), getValues('enableMailerlite') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getAPIKey(), getMailerliteGroups(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), getValues('enableMailerlite') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getAPIKey(), getMailerliteGroups(), getCustomFields(), getNewsletterLabel(), getSignupCheckbox(), getOptinCheckbox()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "sce-admin-buttons"
   }, getValues('apiValid') && canShowSaveButton() && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-primary qdlx__btn--icon-right', {
