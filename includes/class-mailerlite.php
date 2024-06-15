@@ -471,9 +471,7 @@ class MailerLite {
 	 * @param array $comment_fields Array of defaults for the form field.
 	 */
 	public function add_mailerlite_checkbox( $comment_fields ) {
-		$options              = Options::get_options();
-		$mailerlite_enabled   = (bool) $options['enable_mailerlite'];
-		$mailerlite_api_valid = (bool) $options['mailerlite_api_valid'];
+		$options = Options::get_options();
 
 		// Check to see if MailerLite is enabled. Skip if can moderate.
 		if ( ! $this->is_mailerlite_enabled_and_valid() || current_user_can( 'moderate_comments' ) ) {
@@ -483,13 +481,13 @@ class MailerLite {
 		// Now get the checkbox details.
 		$checked_by_default              = (bool) $options['mailerlite_checkbox_enabled'];
 		$mailerlite_html                 = array(
-			'sce-convertkit' => sprintf(
-				'<section class="comment-form-sce-convertkit"><label><input type="checkbox" name="sce-mailerlite-signup" %s /> %s</label></section>',
+			'sce-mailerlite' => sprintf(
+				'<section class="comment-form-sce-mailerlite"><label><input type="checkbox" name="sce-mailerlite-signup" %s /> %s</label></section>',
 				checked( $checked_by_default, true, false ),
 				esc_html( $options['mailerlite_signup_label'] )
 			),
 		);
-		$comment_fields['submit_button'] = $mailerlite_html['sce-convertkit'] . $comment_fields['submit_button'];
+		$comment_fields['submit_button'] = $mailerlite_html['sce-mailerlite'] . $comment_fields['submit_button'];
 		return $comment_fields;
 	}
 
