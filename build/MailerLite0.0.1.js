@@ -550,9 +550,7 @@ const Interface = props => {
     if (!getValues('enableMailerlite')) {
       return true;
     }
-    const groups = getValues('groups');
     const classicGroups = getValues('classicGroups');
-    const customFields = getValues('customFields');
     const classicCustomFields = getValues('classicCustomFields');
     if (getValues('enableMailerliteClassic')) {
       if (getValues('classicApiValid') && classicGroups.length === 0 && classicCustomFields.length === 0) {
@@ -562,6 +560,8 @@ const Interface = props => {
         return false;
       }
     } else {
+      const groups = getValues('groups');
+      const customFields = getValues('customFields');
       if (getValues('apiValid') && groups.length === 0 && customFields.length === 0) {
         return false;
       }
@@ -795,6 +795,54 @@ const Interface = props => {
     }).catch(ajaxResponse => {}).then(ajaxResponse => {
       setIsAddingCustomField(false);
       customFieldInputRef.current.focus();
+    });
+  };
+  const onAddClassicCustomField = customFieldLabel => {
+    customFieldLabel = customFieldLabel.trim();
+    if ('' === customFieldLabel) {
+      setError('classicCustomFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('The Custom Field name cannot be empty.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Check to see if label is in use.
+    const currentCustomFields = getValues('classicCustomFields');
+    const customFieldExists = currentCustomFields.find(customField => customField.label === customFieldLabel);
+    if (customFieldExists) {
+      setError('classicCustomFieldInput', {
+        type: 'addCustomFieldError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field name already in use.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Start adding the Custom Field.
+    setIsAddingCustomField(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_mailerlite_classic_custom_field', {
+      nonce: sceIntegrations.ml_add_custom_field_nonce,
+      label: customFieldLabel
+    }).then(ajaxResponse => {
+      const ajaxData = ajaxResponse.data.data;
+      const ajaxSuccess = ajaxResponse.data.success;
+      if (ajaxSuccess) {
+        const {
+          classicCustomFields
+        } = ajaxData;
+        const newCustomFieldValues = [];
+        classicCustomFields.forEach((keys, index) => {
+          newCustomFieldValues.push(keys);
+        });
+        setValue('classicCustomFields', newCustomFieldValues);
+      } else {
+        setError('classicCustomFieldInput', {
+          type: 'addCustomFieldError',
+          message: ajaxData.message
+        });
+      }
+    }).catch(ajaxResponse => {}).then(ajaxResponse => {
+      setIsAddingCustomField(false);
     });
   };
   const onHandleGroupsRefresh = formData => {
@@ -1116,7 +1164,6 @@ const Interface = props => {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
     const mailerliteGroups = getValues('groups');
-    console.log(mailerliteGroups);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Groups', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getValues('groups').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -1449,7 +1496,7 @@ const Interface = props => {
       onClick: async e => {
         const validationResult = await trigger('classicCustomFieldInput');
         if (validationResult) {
-          onAddClassiCustomField(getValues('classicCustomFieldInput'));
+          onAddCustomField(getValues('classicCustomFieldInput'));
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
@@ -1586,7 +1633,7 @@ const Interface = props => {
       onClick: async e => {
         const validationResult = await trigger('classicCustomFieldInput');
         if (validationResult) {
-          onAddCustomField(getValues('classicCustomFieldInput'));
+          onAddClassicCustomField(getValues('classicCustomFieldInput'));
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),

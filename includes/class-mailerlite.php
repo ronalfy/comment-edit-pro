@@ -56,6 +56,9 @@ class MailerLite {
 		// Add a custom field to MailerLite account.
 		add_action( 'wp_ajax_sce_add_mailerlite_custom_field', array( $this, 'ajax_add_mailerlite_custom_field' ) );
 
+		// Add a custom field to MailerLite account.
+		add_action( 'wp_ajax_sce_add_mailerlite_classic_custom_field', array( $this, 'ajax_add_mailerlite_classic_custom_field' ) );
+
 		// Refresh tags for a MailerLite account.
 		add_action( 'wp_ajax_sce_refresh_mailerlite_groups', array( $this, 'ajax_refresh_mailerlite_groups' ) );
 
@@ -1232,14 +1235,15 @@ class MailerLite {
 		foreach ( $custom_fields as $index => $values ) {
 			$sanitized_custom_field_values[ $index ] = array(
 				'label' => sanitize_text_field( $custom_fields[ $index ]['title'] ),
-				'value' => sanitize_text_field( $custom_fields[ $index ]['id'] ),
+				'value' => absint( $custom_fields[ $index ]['id'] ),
 				'id'    => sanitize_text_field( $custom_fields[ $index ]['key'] ),
 			);
 
 			// Add in the field map.
 			if ( ! empty( $existing_custom_fields ) ) {
 				foreach ( $existing_custom_fields as $existing_custom_field ) {
-					if ( $existing_custom_field['id'] !== $sanitized_custom_field_values[ $index ]['id'] ) {
+					$existing_custom_field_id = absint( $existing_custom_field['id'] );
+					if ( $existing_custom_field_id !== $sanitized_custom_field_values[ $index ]['id'] ) {
 						continue;
 					}
 					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_field['field'] ?? 'none';
@@ -1573,6 +1577,110 @@ class MailerLite {
 			array(
 				'customFields' => $sanitized_custom_field_values,
 				'apiValid'     => true,
+			)
+		);
+	}
+
+	/**
+	 * Add a new Classic Custom Field to MailerLite.
+	 */
+	public function ajax_add_mailerlite_classic_custom_field() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-add-mailerlite-custom-field' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get saved vars.
+		$options = Options::get_options();
+		$api_key = sanitize_text_field( $options['mailerlite_classic_api_key'] );
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization'       => 'Bearer ' . $api_key,
+			'X-MailerLite-ApiKey' => $api_key,
+			'Content-Type'        => 'application/json',
+			'Accept'              => 'application/json',
+		);
+		$http_args['body']    = wp_json_encode(
+			array(
+				'title' => sanitize_text_field( filter_input( INPUT_POST, 'label', FILTER_DEFAULT ) ),
+				'type'  => 'TEXT',
+			)
+		);
+
+		// Get endpoints.
+		$custom_fields_api_endpoint = esc_url_raw( $this->mailerlite_classic_api . '/fields' );
+
+		// Make Credentials/Account check Call.
+		$custom_fields_api_response = wp_remote_post( $custom_fields_api_endpoint, $http_args );
+		if ( is_wp_error( $custom_fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not communicate with MailerLite.', 'comment-edit-pro' ) ) );
+		}
+		$custom_fields_api_response_code = wp_remote_retrieve_response_code( $custom_fields_api_response );
+
+		if ( ( 201 !== $custom_fields_api_response_code && 200 !== $custom_fields_api_response_code ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from MailerLite.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get new custom fields.
+		unset( $http_args['body'] ); // Reset body.
+		$custom_fields_api_response = wp_remote_get( $custom_fields_api_endpoint, $http_args );
+		if ( is_wp_error( $custom_fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $custom_fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve Custom Fields from MailerLite.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get tags as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_custom_fields = (array) get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
+		} else {
+			$existing_custom_fields = (array) get_option( 'sce_mailerlite_classic_custom_fields', array() );
+		}
+
+		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
+		$custom_fields                 = $custom_fields_raw;
+		$sanitized_custom_field_values = array();
+		foreach ( $custom_fields as $index => $values ) {
+			$sanitized_custom_field_values[ $index ] = array(
+				'label' => sanitize_text_field( $custom_fields[ $index ]['title'] ),
+				'value' => absint( $custom_fields[ $index ]['id'] ),
+				'id'    => absint( $custom_fields[ $index ]['key'] ),
+			);
+
+			// Add in the field map.
+			if ( ! empty( $existing_custom_fields ) ) {
+				foreach ( $existing_custom_fields as $existing_custom_field ) {
+					$existing_custom_field_id = absint( $existing_custom_field['value'] );
+					if ( $existing_custom_field_id !== $sanitized_custom_field_values[ $index ]['value'] ) {
+						continue;
+					}
+					$sanitized_custom_field_values[ $index ]['field']        = $existing_custom_field['field'] ?? 'none';
+					$sanitized_custom_field_values[ $index ]['field_custom'] = $existing_custom_field['field_custom'] ?? '';
+				}
+			}
+		}
+
+		// Save custom fields as an option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
+		} else {
+			update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
+		}
+
+		// Return tags.
+		wp_send_json_success(
+			array(
+				'classicCustomFields' => $sanitized_custom_field_values,
+				'classicApiValid'     => true,
 			)
 		);
 	}

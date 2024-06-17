@@ -169,12 +169,8 @@ const Interface = ( props ) => {
 			return true;
 		}
 
-		const groups = getValues( 'groups' );
 		const classicGroups = getValues( 'classicGroups' );
-		const customFields = getValues( 'customFields' );
 		const classicCustomFields = getValues( 'classicCustomFields' );
-
-
 		if ( getValues( 'enableMailerliteClassic' ) ) {
 			if ( getValues( 'classicApiValid' ) && ( classicGroups.length === 0 && classicCustomFields.length === 0 ) ) {
 				return false;
@@ -183,6 +179,9 @@ const Interface = ( props ) => {
 				return false;
 			}
 		} else {
+			const groups = getValues( 'groups' );
+			const customFields = getValues( 'customFields' );
+
 			if ( getValues( 'apiValid' ) && ( groups.length === 0 && customFields.length === 0 ) ) {
 				return false;
 			}
@@ -400,6 +399,47 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				setIsAddingCustomField( false );
 				customFieldInputRef.current.focus();
+			} );
+	};
+
+	const onAddClassicCustomField = ( customFieldLabel ) => {
+		customFieldLabel = customFieldLabel.trim();
+		if ( '' === customFieldLabel ) {
+			setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: __( 'The Custom Field name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentCustomFields = getValues( 'classicCustomFields' );
+		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
+		if ( customFieldExists ) {
+			setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: __( 'Custom Field name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the Custom Field.
+		setIsAddingCustomField( true );
+		sendCommand( 'sce_add_mailerlite_classic_custom_field', {
+			nonce: sceIntegrations.ml_add_custom_field_nonce,
+			label: customFieldLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicCustomFields } = ajaxData;
+					const newCustomFieldValues = [];
+					classicCustomFields.forEach( ( keys, index ) => {
+						newCustomFieldValues.push( keys );
+					} );
+					setValue( 'classicCustomFields', newCustomFieldValues );
+				} else {
+					setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingCustomField( false );
 			} );
 	};
 
@@ -745,7 +785,6 @@ const Interface = ( props ) => {
 		}
 
 		const mailerliteGroups = getValues( 'groups' );
-		console.log( mailerliteGroups );
 		return (
 			<tr>
 				<th scope="row">
@@ -1146,7 +1185,7 @@ const Interface = ( props ) => {
 										onClick={ async( e ) => {
 											const validationResult = await trigger( 'classicCustomFieldInput' );
 											if ( validationResult ) {
-												onAddClassiCustomField( getValues( 'classicCustomFieldInput' ) );
+												onAddCustomField( getValues( 'classicCustomFieldInput' ) );
 											}
 										} }
 										className={ classNames(
@@ -1317,7 +1356,7 @@ const Interface = ( props ) => {
 										onClick={ async( e ) => {
 											const validationResult = await trigger( 'classicCustomFieldInput' );
 											if ( validationResult ) {
-												onAddCustomField( getValues( 'classicCustomFieldInput' ) );
+												onAddClassicCustomField( getValues( 'classicCustomFieldInput' ) );
 											}
 										} }
 										className={ classNames(
