@@ -115,7 +115,7 @@ const Interface = ( props ) => {
 			classicApiValid: data.classicApiValid,
 			classicApiKey: data.classicApiKey,
 			classicGroups: data.classicGroups ?? [],
-			classicCustomFields: data.classicFields ?? [],
+			classicCustomFields: data.classicCustomFields ?? [],
 			classicGroupInput: '',
 			classicCustomFieldInput: '',
 		},
@@ -219,7 +219,7 @@ const Interface = ( props ) => {
 						{ ...formData, ...ajaxData },
 						{
 							keepErrors: false,
-							keepDirty: false,
+							keepDirty: true,
 						}
 					);
 					setTimeout( () => {
@@ -745,6 +745,7 @@ const Interface = ( props ) => {
 		}
 
 		const mailerliteGroups = getValues( 'groups' );
+		console.log( mailerliteGroups );
 		return (
 			<tr>
 				<th scope="row">
@@ -905,7 +906,7 @@ const Interface = ( props ) => {
 						mailerliteGroups.map( ( group, index ) => (
 							<Controller
 								key={ index }
-								name={ `groups[${ index }].selected` }
+								name={ `classicGroups[${ index }].selected` }
 								control={ control }
 								render={ ( { field: { onChange, value } } ) => (
 									<CheckboxControl
@@ -1426,7 +1427,7 @@ const Interface = ( props ) => {
 									clearErrors();
 								} }
 								className={ classNames( 'sce-admin__text-control', {
-									'has-error': 'required' === errors.apiKey?.type,
+									'has-error': 'required' === errors.classicApiKey?.type,
 									'is-required': true,
 								} ) }
 								help={ __(
@@ -1437,7 +1438,7 @@ const Interface = ( props ) => {
 							/>
 						) }
 					/>
-					{ 'required' === errors.apiKey?.type && (
+					{ 'required' === errors.classicApiKey?.type && (
 						<Notice
 							message={ __( 'This field is a required field.' ) }
 							status="error"
@@ -1446,9 +1447,9 @@ const Interface = ( props ) => {
 							icon={ CircularExclamationIcon }
 						/>
 					) }
-					{ 'noForms' === errors.apiKey?.type && (
+					{ 'noForms' === errors.classicApiKey?.type && (
 						<Notice
-							message={ errors.apiKey?.message }
+							message={ errors.classicApiKey?.message }
 							status="error"
 							politeness="assertive"
 							inline={ true }

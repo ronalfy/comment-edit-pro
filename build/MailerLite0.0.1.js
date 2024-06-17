@@ -442,7 +442,7 @@ const MailerLite = props => {
   })));
 };
 const Interface = props => {
-  var _data$groups, _data$customFields, _data$classicGroups, _data$classicFields;
+  var _data$groups, _data$customFields, _data$classicGroups, _data$classicCustomFi;
   const groupInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const customFieldInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const classicGroupInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -491,7 +491,7 @@ const Interface = props => {
       classicApiValid: data.classicApiValid,
       classicApiKey: data.classicApiKey,
       classicGroups: (_data$classicGroups = data.classicGroups) !== null && _data$classicGroups !== void 0 ? _data$classicGroups : [],
-      classicCustomFields: (_data$classicFields = data.classicFields) !== null && _data$classicFields !== void 0 ? _data$classicFields : [],
+      classicCustomFields: (_data$classicCustomFi = data.classicCustomFields) !== null && _data$classicCustomFi !== void 0 ? _data$classicCustomFi : [],
       classicGroupInput: '',
       classicCustomFieldInput: ''
     }
@@ -594,7 +594,7 @@ const Interface = props => {
           ...ajaxData
         }, {
           keepErrors: false,
-          keepDirty: false
+          keepDirty: true
         });
         setTimeout(() => {
           setIsSaved(false);
@@ -1116,6 +1116,7 @@ const Interface = props => {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
     }
     const mailerliteGroups = getValues('groups');
+    console.log(mailerliteGroups);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
       scope: "row"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('MailerLite Groups', 'comment-edit-pro')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, getValues('groups').length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -1236,7 +1237,7 @@ const Interface = props => {
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
     }), mailerliteGroups.length > 0 && getValues('classicApiValid') && mailerliteGroups.map((group, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       key: index,
-      name: `groups[${index}].selected`,
+      name: `classicGroups[${index}].selected`,
       control: control,
       render: ({
         field: {
@@ -1670,20 +1671,20 @@ const Interface = props => {
           clearErrors();
         },
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === errors.apiKey?.type,
+          'has-error': 'required' === errors.classicApiKey?.type,
           'is-required': true
         }),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your MailerLite API Key in order to select a group and match any custom fields.', 'comment-edit-pro'),
         "aria-required": "true"
       })
-    }), 'required' === errors.apiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    }), 'required' === errors.classicApiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
       status: "error",
       politeness: "assertive",
       inline: true,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), 'noForms' === errors.apiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.apiKey?.message,
+    }), 'noForms' === errors.classicApiKey?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: errors.classicApiKey?.message,
       status: "error",
       politeness: "assertive",
       inline: true,

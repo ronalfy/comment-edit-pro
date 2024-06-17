@@ -538,7 +538,7 @@ class MailerLite {
 			'groups'                  => $groups,
 			'customFields'            => $fields,
 			'classicGroups'           => $classic_groups,
-			'classicFields'           => $classic_fields,
+			'classicCustomFields'     => $classic_fields,
 			'doubleOptinEnabled'      => (bool) $options['mailerlite_double_optin_enabled'],
 		);
 		return $json_array;
@@ -799,6 +799,7 @@ class MailerLite {
 
 		// Save options.
 		$options_to_save['mailerlite_classic_api_valid'] = true;
+		$options_to_save['enable_mailerlite_classic']    = true;
 		Options::update_options( $options_to_save );
 
 		// Save transient for refresh.
