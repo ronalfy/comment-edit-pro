@@ -445,6 +445,8 @@ const Interface = props => {
   var _data$groups, _data$customFields, _data$classicGroups, _data$classicFields;
   const groupInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const customFieldInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const classicGroupInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const classicCustomFieldInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const {
     defaults
   } = props;
@@ -696,6 +698,56 @@ const Interface = props => {
       groupInput.current.focus();
     });
   };
+  const onAddClassicGroup = groupLabel => {
+    groupLabel = groupLabel.trim();
+    if ('' === groupLabel) {
+      setError('classicGroupInput', {
+        type: 'addGroupError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Group name cannot be empty.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Check to see if label is in use.
+    const currentGroup = getValues('groups');
+    const groupExists = currentGroup.find(group => group.label === groupLabel);
+    if (groupExists) {
+      setError('classicGroupInput', {
+        type: 'addGroupError',
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Group name already in use.', 'comment-edit-pro')
+      });
+      return;
+    }
+
+    // Start adding the group.
+    setIsAddingGroup(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_add_mailerlite_classic_group', {
+      nonce: sceIntegrations.ml_add_group_nonce,
+      label: groupLabel
+    }).then(ajaxResponse => {
+      const ajaxData = ajaxResponse.data.data;
+      const ajaxSuccess = ajaxResponse.data.success;
+      if (ajaxSuccess) {
+        const {
+          classicGroups
+        } = ajaxData;
+        const newGroupValues = [];
+        classicGroups.forEach((keys, index) => {
+          newGroupValues.push(keys);
+        });
+        setValue('classicGroupInput', '');
+        setValue('classicGroups', newGroupValues);
+      } else {
+        setError('classicGroupInput', {
+          type: 'addGroupError',
+          message: ajaxData.message
+        });
+      }
+    }).catch(ajaxResponse => {}).then(ajaxResponse => {
+      setIsAddingGroup(false);
+      classicGroupInput.current.focus();
+    });
+  };
   const onAddCustomField = customFieldLabel => {
     customFieldLabel = customFieldLabel.trim();
     if ('' === customFieldLabel) {
@@ -874,6 +926,59 @@ const Interface = props => {
         const updatedFormValues = {
           customFields: newCustomFieldValues,
           apiValid
+        };
+        reset({
+          ...formValues,
+          ...updatedFormValues
+        }, {
+          keepErrors: true,
+          keepDirty: true
+        });
+      } else {
+        const updatedFormValues = {};
+        reset({
+          ...formValues,
+          ...updatedFormValues
+        }, {
+          keepErrors: true,
+          keepDirty: true
+        });
+        setError('customFields', {
+          type: 'noFields',
+          message: ajaxData.message
+        });
+      }
+    }).catch(ajaxResponse => {}).then(ajaxResponse => {
+      setIsRefreshingCustomFields(false);
+    });
+  };
+  const onHandleClassicCustomFieldsRefresh = formData => {
+    setIsRefreshingCustomFields(true);
+    (0,_SendCommand__WEBPACK_IMPORTED_MODULE_7__["default"])('sce_refresh_mailerlite_classic_custom_fields', {
+      nonce: sceIntegrations.ml_refresh_custom_fields_nonce
+    }).then(ajaxResponse => {
+      const ajaxData = ajaxResponse.data.data;
+      const ajaxSuccess = ajaxResponse.data.success;
+      if (ajaxSuccess) {
+        const {
+          classicCustomFields,
+          classicApiValid
+        } = ajaxData;
+        const newCustomFieldValues = [];
+        const oldCustomFieldValues = getValues('classicCustomFields');
+        classicCustomFields.forEach((keys, index) => {
+          // Use old selection state for new custom fields.
+          const oldCustomFields = oldCustomFieldValues.find(customField => customField.value === keys.value);
+          if (oldCustomFields) {
+            var _oldCustomFields$fiel2;
+            keys.field = oldCustomFields.field;
+            keys.field_value = (_oldCustomFields$fiel2 = oldCustomFields.field_value) !== null && _oldCustomFields$fiel2 !== void 0 ? _oldCustomFields$fiel2 : '';
+          }
+          newCustomFieldValues.push(keys);
+        });
+        const updatedFormValues = {
+          classicCustomFields: newCustomFieldValues,
+          classicApiValid
         };
         reset({
           ...formValues,
@@ -1175,7 +1280,7 @@ const Interface = props => {
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-convertkit-add-tag-group"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "groupInput",
+      name: "classicGroupInput",
       control: control,
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
@@ -1198,15 +1303,15 @@ const Interface = props => {
         }),
         placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Group Name', 'comment-edit-pro'),
         "aria-required": "true",
-        ref: groupInput
+        ref: classicGroupInput
       })
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-admin-buttons"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
       onClick: async e => {
-        const validationResult = await trigger('groupInput');
+        const validationResult = await trigger('classicGroupInput');
         if (validationResult) {
-          onAddGroup(getValues('groupInput'));
+          onAddClassicGroup(getValues('classicGroupInput'));
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
@@ -1313,7 +1418,7 @@ const Interface = props => {
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-convertkit-add-tag-group"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-      name: "customFieldInput",
+      name: "classicCustomFieldInput",
       control: control,
       rules: {
         pattern: /[-_ 0-9A-Za-z]/
@@ -1327,35 +1432,35 @@ const Interface = props => {
         type: "text",
         value: value,
         onChange: customFieldValue => {
-          clearErrors('customFieldInput');
+          clearErrors('classicCustomFieldInput');
           onChange(customFieldValue);
         },
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add New Custom Field', 'comment-edit-pro'),
         className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-          'has-error': 'required' === errors.customFieldInput?.type
+          'has-error': 'required' === errors.classicCustomFieldInput?.type
         }),
         placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom Field Name', 'comment-edit-pro'),
-        ref: customFieldInputRef
+        ref: classicCustomFieldInputRef
       })
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "sce-admin-buttons"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
       onClick: async e => {
-        const validationResult = await trigger('customFieldInput');
+        const validationResult = await trigger('classicCustomFieldInput');
         if (validationResult) {
-          onAddCustomField(getValues('customFieldInput'));
+          onAddClassiCustomField(getValues('classicCustomFieldInput'));
         }
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right'),
       text: isAddingCustomField ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Adding…', 'comment-edit-pro') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Custom Field', 'comment-edit-pro')
-    }))), 'pattern' === errors.customFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    }))), 'pattern' === errors.classicCustomFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
       message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Special characters are not allowed in custom fields.', 'comment-edit-pro'),
       status: "error",
       politeness: "assertive",
       inline: false,
       icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), 'addCustomFieldError' === errors.customFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      message: errors.customFieldInput?.message,
+    }), 'addCustomFieldError' === errors.classicCustomFieldInput?.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      message: errors.classicCustomFieldInput?.message,
       status: "error",
       politeness: "assertive",
       inline: false,
@@ -1429,7 +1534,7 @@ const Interface = props => {
       isBusy: isRefreshingCustomFields,
       disabled: isRefreshingCustomFields,
       onClick: () => {
-        onHandleCustomFieldsRefresh();
+        onHandleClassicCustomFieldsRefresh();
       },
       className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('qdlx__btn qdlx__btn-link qdlx__btn--icon-right', {
         'has-error': hasErrors()

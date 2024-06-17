@@ -73,6 +73,8 @@ const MailerLite = ( props ) => {
 const Interface = ( props ) => {
 	const groupInput = useRef( null );
 	const customFieldInputRef = useRef( null );
+	const classicGroupInput = useRef( null );
+	const classicCustomFieldInputRef = useRef( null );
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
@@ -316,6 +318,49 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const onAddClassicGroup = ( groupLabel ) => {
+		groupLabel = groupLabel.trim();
+		if ( '' === groupLabel ) {
+			setError( 'classicGroupInput', { type: 'addGroupError', message: __( 'Group name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentGroup = getValues( 'groups' );
+		const groupExists = currentGroup.find( ( group ) => group.label === groupLabel );
+		if ( groupExists ) {
+			setError( 'classicGroupInput', { type: 'addGroupError', message: __( 'Group name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the group.
+		setIsAddingGroup( true );
+		sendCommand( 'sce_add_mailerlite_classic_group', {
+			nonce: sceIntegrations.ml_add_group_nonce,
+			label: groupLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicGroups } = ajaxData;
+					const newGroupValues = [];
+					classicGroups.forEach( ( keys, index ) => {
+						newGroupValues.push( keys );
+					} );
+					setValue( 'classicGroupInput', '' );
+					setValue( 'classicGroups', newGroupValues );
+				} else {
+					setError( 'classicGroupInput', { type: 'addGroupError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingGroup( false );
+				classicGroupInput.current.focus();
+			} );
+	};
+
 	const onAddCustomField = ( customFieldLabel ) => {
 		customFieldLabel = customFieldLabel.trim();
 		if ( '' === customFieldLabel ) {
@@ -482,6 +527,57 @@ const Interface = ( props ) => {
 					const updatedFormValues = {
 						customFields: newCustomFieldValues,
 						apiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'customFields', { type: 'noFields', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingCustomFields( false );
+			} );
+	};
+
+	const onHandleClassicCustomFieldsRefresh = ( formData ) => {
+		setIsRefreshingCustomFields( true );
+		sendCommand( 'sce_refresh_mailerlite_classic_custom_fields', {
+			nonce: sceIntegrations.ml_refresh_custom_fields_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicCustomFields, classicApiValid } = ajaxData;
+					const newCustomFieldValues = [];
+					const oldCustomFieldValues = getValues( 'classicCustomFields' );
+					classicCustomFields.forEach( ( keys, index ) => {
+						// Use old selection state for new custom fields.
+						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === keys.value );
+						if ( oldCustomFields ) {
+							keys.field = oldCustomFields.field;
+							keys.field_value = oldCustomFields.field_value ?? '';
+						}
+						newCustomFieldValues.push( keys );
+					} );
+					const updatedFormValues = {
+						classicCustomFields: newCustomFieldValues,
+						classicApiValid,
 					};
 					reset(
 						{ ...formValues, ...updatedFormValues },
@@ -850,7 +946,7 @@ const Interface = ( props ) => {
 						<div className="sce-convertkit-add-tag">
 							<div className="sce-convertkit-add-tag-group">
 								<Controller
-									name="groupInput"
+									name="classicGroupInput"
 									control={ control }
 									rules={ {
 										pattern: /[-_ 0-9A-Za-z]/,
@@ -869,16 +965,16 @@ const Interface = ( props ) => {
 											} ) }
 											placeholder={ __( 'Group Name', 'comment-edit-pro' ) }
 											aria-required="true"
-											ref={ groupInput }
+											ref={ classicGroupInput }
 										/>
 									) }
 								/>
 								<div className="sce-admin-buttons">
 									<Button
 										onClick={ async( e ) => {
-											const validationResult = await trigger( 'groupInput' );
+											const validationResult = await trigger( 'classicGroupInput' );
 											if ( validationResult ) {
-												onAddGroup( getValues( 'groupInput' ) );
+												onAddClassicGroup( getValues( 'classicGroupInput' ) );
 											}
 										} }
 										className={ classNames(
@@ -1022,7 +1118,7 @@ const Interface = ( props ) => {
 						<div className="sce-convertkit-add-tag">
 							<div className="sce-convertkit-add-tag-group">
 								<Controller
-									name="customFieldInput"
+									name="classicCustomFieldInput"
 									control={ control }
 									rules={ {
 										pattern: /[-_ 0-9A-Za-z]/,
@@ -1032,24 +1128,24 @@ const Interface = ( props ) => {
 											type="text"
 											value={ value }
 											onChange={ ( customFieldValue ) => {
-												clearErrors( 'customFieldInput' );
+												clearErrors( 'classicCustomFieldInput' );
 												onChange( customFieldValue );
 											} }
 											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
 											className={ classNames( 'sce-admin__text-control', {
-												'has-error': 'required' === errors.customFieldInput?.type,
+												'has-error': 'required' === errors.classicCustomFieldInput?.type,
 											} ) }
 											placeholder={ __( 'Custom Field Name', 'comment-edit-pro' ) }
-											ref={ customFieldInputRef }
+											ref={ classicCustomFieldInputRef }
 										/>
 									) }
 								/>
 								<div className="sce-admin-buttons">
 									<Button
 										onClick={ async( e ) => {
-											const validationResult = await trigger( 'customFieldInput' );
+											const validationResult = await trigger( 'classicCustomFieldInput' );
 											if ( validationResult ) {
-												onAddCustomField( getValues( 'customFieldInput' ) );
+												onAddClassiCustomField( getValues( 'classicCustomFieldInput' ) );
 											}
 										} }
 										className={ classNames(
@@ -1062,7 +1158,7 @@ const Interface = ( props ) => {
 									/>
 								</div>
 							</div>
-							{ 'pattern' === errors.customFieldInput?.type && (
+							{ 'pattern' === errors.classicCustomFieldInput?.type && (
 								<Notice
 									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
 									status="error"
@@ -1071,9 +1167,9 @@ const Interface = ( props ) => {
 									icon={ CircularExclamationIcon }
 								/>
 							) }
-							{ 'addCustomFieldError' === errors.customFieldInput?.type && (
+							{ 'addCustomFieldError' === errors.classicCustomFieldInput?.type && (
 								<Notice
-									message={ errors.customFieldInput?.message }
+									message={ errors.classicCustomFieldInput?.message }
 									status="error"
 									politeness="assertive"
 									inline={ false }
@@ -1170,7 +1266,7 @@ const Interface = ( props ) => {
 								isBusy={ isRefreshingCustomFields }
 								disabled={ isRefreshingCustomFields }
 								onClick={ () => {
-									onHandleCustomFieldsRefresh();
+									onHandleClassicCustomFieldsRefresh();
 								} }
 								className={ classNames(
 									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
