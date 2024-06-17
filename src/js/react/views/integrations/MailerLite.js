@@ -780,7 +780,7 @@ const Interface = ( props ) => {
 
 	const getMailerliteGroups = () => {
 		// Don't show groups if api is invalid.
-		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
+		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || ! getValues( 'apiKey' ) ) {
 			return <></>;
 		}
 

@@ -95,8 +95,12 @@ class MailerLite {
 	private function is_mailerlite_enabled_and_valid() {
 		$options = Options::get_options();
 
-		// Make sure convertkit is enabled and valid.
-		if ( ! (bool) $options['enable_mailerlite'] || ! (bool) $options['mailerlite_api_valid'] ) {
+		$mailerlite_enabled       = (bool) $options['enable_mailerlite'];
+		$mailerlite_valid         = (bool) $options['mailerlite_api_valid'];
+		$mailerlite_classic_valid = (bool) $options['mailerlite_classic_api_valid'];
+
+		// Exit if MailerLite is not enabled or not valid.
+		if ( ! $mailerlite_enabled || ( ! $mailerlite_valid && ! $mailerlite_classic_valid ) ) {
 			return false;
 		}
 
@@ -235,25 +239,44 @@ class MailerLite {
 		// Get options.
 		$options = Options::get_options();
 
-		// Make sure convertkit is enabled and valid.
-		if ( ! (bool) $options['enable_mailerlite'] || ! (bool) $options['mailerlite_api_valid'] ) {
+		// Make sure MailerLite is enabled and valid before proceeding.
+		if ( ! $this->is_mailerlite_enabled_and_valid() ) {
 			return false;
 		}
 
 		// Get API and secret.
-		$api_key = $options['mailerlite_api_key'];
+		$is_classic            = false;
+		$api_key_or_token      = false;
+		$api_key               = $options['mailerlite_api_key'];
+		$api_key_valid         = (bool) $options['mailerlite_api_valid'] && '' !== $api_key;
+		$classic_api_enabled   = (bool) $options['enable_mailerlite_classic'];
+		$classic_api_key_valid = (bool) $options['mailerlite_classic_api_valid'];
+		if ( $classic_api_enabled && $classic_api_key_valid ) {
+			$api_key_or_token = $options['mailerlite_classic_api_key'];
+			$is_classic       = true;
+		} elseif ( $api_key_valid ) {
+			$api_key_or_token = $api_key;
+		}
 
 		// Start building up HTTP args.
 		$http_args            = array();
 		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
+			'Authorization'       => 'Bearer ' . $api_key_or_token,
+			'X-MailerLite-ApiKey' => $api_key_or_token,
+			'Content-Type'        => 'application/json',
+			'Accept'              => 'application/json',
 		);
 
 		// Get any groups.
 		$groups = array();
-		if ( Functions::is_multisite() ) {
-			$groups = get_site_option( 'sce_mailerlite_groups', array() );
+		if ( $is_classic ) {
+			if ( Functions::is_multisite() ) {
+				$groups = get_site_option( 'sce_mailerlite_classic_groups', array() );
+			} else {
+				$groups = get_option( 'sce_mailerlite_classic_groups', array() );
+			}
+		} elseif ( Functions::is_multisite() ) {
+				$groups = get_site_option( 'sce_mailerlite_groups', array() );
 		} else {
 			$groups = get_option( 'sce_mailerlite_groups', array() );
 		}
@@ -268,8 +291,14 @@ class MailerLite {
 
 		// Get any custom fields.
 		$custom_fields = array();
-		if ( Functions::is_multisite() ) {
-			$custom_fields = get_site_option( 'sce_mailerlite_custom_fields', array() );
+		if ( $is_classic ) {
+			if ( Functions::is_multisite() ) {
+				$custom_fields = get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
+			} else {
+				$custom_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
+			}
+		} elseif ( Functions::is_multisite() ) {
+				$custom_fields = get_site_option( 'sce_mailerlite_custom_fields', array() );
 		} else {
 			$custom_fields = get_option( 'sce_mailerlite_custom_fields', array() );
 		}
@@ -277,59 +306,86 @@ class MailerLite {
 		// Map custom fields to value.
 		$selected_custom_fields = array();
 		foreach ( $custom_fields as $index => $custom_field ) {
-			if ( 'none' !== $custom_field['field'] ) {
+			$custom_field_raw_value = $custom_field['field'] ?? $custom_field['id'] ?? 'none';
+			if ( 'none' !== $custom_field_raw_value ) {
 				$custom_field_value     = '';
-				$custom_field_raw_value = $custom_field['field'];
+				
 				if ( 'custom' === $custom_field_raw_value ) {
 					$custom_field_value = $custom_field['field_value'];
 				} else {
 					$custom_field_value = $this->map_request_header( $custom_field_raw_value, $comment );
 				}
-				$selected_custom_fields[ $custom_field['value'] ] = $custom_field_value;
+				if ( $is_classic ) {
+					$selected_custom_fields[ $custom_field['id'] ] = $custom_field_value;
+				} else {
+					$selected_custom_fields[ $custom_field['value'] ] = $custom_field_value;
+				}
 			}
 		}
 
-		// Get comment meta with convertkit data.
+		// Get comment meta with mailerlite data.
 		$comment_meta = get_comment_meta( $comment_id, 'sce_mailerlite_data', true );
 		if ( ! is_array( $comment_meta ) ) {
 			$comment_meta = array();
 		}
 
-		// Start building up HTTP args.
-		$http_args            = array();
-		$http_args['headers'] = array(
-			'Authorization' => 'Bearer ' . $api_key,
-			'Accept'        => 'application/json;ver=1.0',
-		);
-
 		// Get comment.
 		$comment = get_comment( $comment_id );
 
 		// Get API Endpoint.
-		$api_endpoint = $this->mailerlite_api . '/subscribers';
+		$api_endpoint = ( $is_classic ? $this->mailerlite_classic_api : $this->mailerlite_api ) . '/subscribers';
 
 		// Format subscription data.
 		$subscriber_args = array(
 			'email'      => $comment->comment_author_email,
 			'fields'     => $selected_custom_fields,
 			'groups'     => $selected_group_ids,
-			'ip_address' => $comment->comment_author_IP,
+			'ip_address' => $comment->comment_author_IP, // new.
+
 		);
 
 		if ( ! (bool) $options['mailerlite_double_optin_enabled'] ) {
-			$subscriber_args['status'] = 'active';
+			$subscriber_args['type']   = 'active'; // classic.
+			$subscriber_args['status'] = 'active'; // new.
 			/* format date into: yyyy-MM-dd HH:mm:ss */
-			$subscriber_args['subscribed_at'] = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) );
-			$subscriber_args['optin_ip']      = $comment->comment_author_IP;
-			$subscriber_args['opted_in_at']   = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) );
+			$subscriber_args['subscribed_at']    = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) ); // new.
+			$subscriber_args['signup_timestamp'] = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) ); // classic.
+			$subscriber_args['signup_ip']        = $comment->comment_author_IP; // classic.
+			$subscriber_args['optin_ip']         = $comment->comment_author_IP;
+			$subscriber_args['opted_in_at']      = gmdate( 'Y-m-d H:i:s', strtotime( $comment->comment_date ) );
 		}
-		$http_args['body'] = $subscriber_args;
+		$http_args['body'] = wp_json_encode( $subscriber_args );
 
 		$response = wp_remote_post(
 			$api_endpoint,
 			$http_args
 		);
+
+		// reset.
+		unset( $http_args['body'] );
+
+		// If response succeeded, and we're in classic, we need to add the subscriber to the groups.
+		if ( ! is_wp_error( $response ) && $is_classic ) {
+			$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( isset( $response_body['id'] ) ) {
+				$subscriber_id = $response_body['id'];
+				foreach ( $selected_group_ids as $group_id ) {
+					$group_endpoint = esc_url_raw( $this->mailerlite_classic_api . '/groups/' . $group_id . '/subscribers/' . $subscriber_id . '/assign' );
+					$group_response = wp_remote_post(
+						$group_endpoint,
+						$http_args
+					);
+					
+					// Check for valid response.
+					if ( is_wp_error( $group_response ) ) {
+						$this->add_mailerlite_comment_meta( $comment_id, $group_response );
+					}
+				}
+			}
+		}
 		$this->add_mailerlite_comment_meta( $comment_id, $response );
+
+		// todo - Add subscriber to groups for classic.
 
 		return true;
 	}
@@ -630,7 +686,6 @@ class MailerLite {
 			'mailerlite_classic_api_key'      => $classic_api_key,
 			'mailerlite_signup_label'         => $signup_label,
 			'mailerlite_checkbox_enabled'     => $mailerlite_checkbox_enabled,
-			'mailerlite_api_valid'            => true,
 			'mailerlite_double_optin_enabled' => $double_optin_enabled,
 		);
 		Options::update_options( $options_to_save );
