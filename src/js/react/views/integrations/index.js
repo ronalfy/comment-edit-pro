@@ -15,7 +15,7 @@ const Flodesk = lazy( () =>
 );
 
 const MailerLite = lazy( () =>
-	import( /* webpackChunkName: "MailerLite0.0.1" */ './MailerLite' )
+	import( /* webpackChunkName: "MailerLite0.0.2" */ './MailerLite' )
 );
 
 const container = document.getElementById( 'sce-tab-mailchimp' );

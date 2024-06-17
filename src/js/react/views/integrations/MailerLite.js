@@ -73,6 +73,8 @@ const MailerLite = ( props ) => {
 const Interface = ( props ) => {
 	const groupInput = useRef( null );
 	const customFieldInputRef = useRef( null );
+	const classicGroupInput = useRef( null );
+	const classicCustomFieldInputRef = useRef( null );
 	const { defaults } = props;
 	const response = defaults();
 	const { data, success } = response.data;
@@ -100,6 +102,7 @@ const Interface = ( props ) => {
 	} = useForm( {
 		defaultValues: {
 			enableMailerlite: data.enableMailerlite,
+			enableMailerliteClassic: data.enableMailerliteClassic,
 			apiValid: data.apiValid,
 			apiKey: data.apiKey,
 			signUpLabel: data.signUpLabel,
@@ -109,6 +112,12 @@ const Interface = ( props ) => {
 			customFields: data.customFields ?? [],
 			groupInput: '',
 			customFieldInput: '',
+			classicApiValid: data.classicApiValid,
+			classicApiKey: data.classicApiKey,
+			classicGroups: data.classicGroups ?? [],
+			classicCustomFields: data.classicCustomFields ?? [],
+			classicGroupInput: '',
+			classicCustomFieldInput: '',
 		},
 	} );
 
@@ -129,10 +138,16 @@ const Interface = ( props ) => {
 		}
 
 		// If api isn't valid, refresh.
-		if ( ! getValues( 'apiValid' ) ) {
+		if ( ! getValues( 'apiValid' ) && ! getValues( 'enableMailerliteClassic' ) ) {
 			return true;
 		}
-		if ( isDirty && ( dirtyFields.apiKey ) ) {
+		if ( ! getValues( 'classicApiValid' ) && getValues( 'enableMailerliteClassic' ) ) {
+			return true;
+		}
+		if ( isDirty && ( dirtyFields.apiKey ) && ! getValues( 'enableMailerliteClassic' ) ) {
+			return true;
+		}
+		if ( isDirty && ( dirtyFields.classicApiKey ) && getValues( 'enableMailerliteClassic' ) ) {
 			return true;
 		}
 		return false;
@@ -144,25 +159,37 @@ const Interface = ( props ) => {
 	 * @return {boolean} true to show the save button, false to hide it.
 	 */
 	const canShowSaveButton = () => {
-		// If convertkit is disabled and form is not dirty, no save button.
+		// If mailerlite is disabled and form is not dirty, no save button.
 		if ( ! getValues( 'enableMailerlite' ) && ! isDirty ) {
 			return false;
 		}
 
-		// If convertKit is disabled, we can always save.
+		// If mailerlite is disabled, we can always save.
 		if ( ! getValues( 'enableMailerlite' ) ) {
 			return true;
 		}
 
-		const groups = getValues( 'groups' );
-		const customFields = getValues( 'customFields' );
+		const classicGroups = getValues( 'classicGroups' );
+		const classicCustomFields = getValues( 'classicCustomFields' );
+		if ( getValues( 'enableMailerliteClassic' ) ) {
+			if ( getValues( 'classicApiValid' ) && ( classicGroups.length === 0 && classicCustomFields.length === 0 ) ) {
+				return false;
+			}
+			if ( ! getValues( 'classicApiValid' ) && isDirty ) {
+				return false;
+			}
+		} else {
+			const groups = getValues( 'groups' );
+			const customFields = getValues( 'customFields' );
 
-		if ( getValues( 'apiValid' ) && ( groups.length === 0 && customFields.length === 0 ) ) {
-			return false;
+			if ( getValues( 'apiValid' ) && ( groups.length === 0 && customFields.length === 0 ) ) {
+				return false;
+			}
+			if ( ! getValues( 'apiValid' ) && isDirty ) {
+				return false;
+			}
 		}
-		if ( ! getValues( 'apiValid' ) && isDirty ) {
-			return false;
-		}
+
 		if ( needsCredentialRefresh() ) {
 			return false;
 		}
@@ -191,7 +218,7 @@ const Interface = ( props ) => {
 						{ ...formData, ...ajaxData },
 						{
 							keepErrors: false,
-							keepDirty: false,
+							keepDirty: true,
 						}
 					);
 					setTimeout( () => {
@@ -290,6 +317,49 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const onAddClassicGroup = ( groupLabel ) => {
+		groupLabel = groupLabel.trim();
+		if ( '' === groupLabel ) {
+			setError( 'classicGroupInput', { type: 'addGroupError', message: __( 'Group name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentGroup = getValues( 'groups' );
+		const groupExists = currentGroup.find( ( group ) => group.label === groupLabel );
+		if ( groupExists ) {
+			setError( 'classicGroupInput', { type: 'addGroupError', message: __( 'Group name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the group.
+		setIsAddingGroup( true );
+		sendCommand( 'sce_add_mailerlite_classic_group', {
+			nonce: sceIntegrations.ml_add_group_nonce,
+			label: groupLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicGroups } = ajaxData;
+					const newGroupValues = [];
+					classicGroups.forEach( ( keys, index ) => {
+						newGroupValues.push( keys );
+					} );
+					setValue( 'classicGroupInput', '' );
+					setValue( 'classicGroups', newGroupValues );
+				} else {
+					setError( 'classicGroupInput', { type: 'addGroupError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingGroup( false );
+				classicGroupInput.current.focus();
+			} );
+	};
+
 	const onAddCustomField = ( customFieldLabel ) => {
 		customFieldLabel = customFieldLabel.trim();
 		if ( '' === customFieldLabel ) {
@@ -329,6 +399,47 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				setIsAddingCustomField( false );
 				customFieldInputRef.current.focus();
+			} );
+	};
+
+	const onAddClassicCustomField = ( customFieldLabel ) => {
+		customFieldLabel = customFieldLabel.trim();
+		if ( '' === customFieldLabel ) {
+			setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: __( 'The Custom Field name cannot be empty.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Check to see if label is in use.
+		const currentCustomFields = getValues( 'classicCustomFields' );
+		const customFieldExists = currentCustomFields.find( ( customField ) => customField.label === customFieldLabel );
+		if ( customFieldExists ) {
+			setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: __( 'Custom Field name already in use.', 'comment-edit-pro' ) } );
+			return;
+		}
+
+		// Start adding the Custom Field.
+		setIsAddingCustomField( true );
+		sendCommand( 'sce_add_mailerlite_classic_custom_field', {
+			nonce: sceIntegrations.ml_add_custom_field_nonce,
+			label: customFieldLabel,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicCustomFields } = ajaxData;
+					const newCustomFieldValues = [];
+					classicCustomFields.forEach( ( keys, index ) => {
+						newCustomFieldValues.push( keys );
+					} );
+					setValue( 'classicCustomFields', newCustomFieldValues );
+				} else {
+					setError( 'classicCustomFieldInput', { type: 'addCustomFieldError', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsAddingCustomField( false );
 			} );
 	};
 
@@ -374,6 +485,56 @@ const Interface = ( props ) => {
 						}
 					);
 					setError( 'groups', { type: 'noGroups', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingGroups( false );
+			} );
+	};
+
+	const onHandleClassicGroupsRefresh = ( formData ) => {
+		setIsRefreshingGroups( true );
+		sendCommand( 'sce_refresh_mailerlite_classic_groups', {
+			nonce: sceIntegrations.ml_refresh_groups_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { groups, apiValid } = ajaxData;
+					const newGroupValues = [];
+					const oldGroupValues = getValues( 'classicGroups' );
+					groups.forEach( ( keys, index ) => {
+						// Use old selection state for new groups.
+						const oldGroup = oldGroupValues.find( ( group ) => group.value === keys.value );
+						if ( oldGroup ) {
+							keys.selected = oldGroup.selected;
+						}
+						newGroupValues.push( keys );
+					} );
+					const updatedFormValues = {
+						groups: newGroupValues,
+						apiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'classicGroups', { type: 'noGroups', message: ajaxData.message } );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
@@ -431,6 +592,86 @@ const Interface = ( props ) => {
 			.then( ( ajaxResponse ) => {
 				setIsRefreshingCustomFields( false );
 			} );
+	};
+
+	const onHandleClassicCustomFieldsRefresh = ( formData ) => {
+		setIsRefreshingCustomFields( true );
+		sendCommand( 'sce_refresh_mailerlite_classic_custom_fields', {
+			nonce: sceIntegrations.ml_refresh_custom_fields_nonce,
+		} )
+			.then( ( ajaxResponse ) => {
+				const ajaxData = ajaxResponse.data.data;
+				const ajaxSuccess = ajaxResponse.data.success;
+				if ( ajaxSuccess ) {
+					const { classicCustomFields, classicApiValid } = ajaxData;
+					const newCustomFieldValues = [];
+					const oldCustomFieldValues = getValues( 'classicCustomFields' );
+					classicCustomFields.forEach( ( keys, index ) => {
+						// Use old selection state for new custom fields.
+						const oldCustomFields = oldCustomFieldValues.find( ( customField ) => customField.value === keys.value );
+						if ( oldCustomFields ) {
+							keys.field = oldCustomFields.field;
+							keys.field_value = oldCustomFields.field_value ?? '';
+						}
+						newCustomFieldValues.push( keys );
+					} );
+					const updatedFormValues = {
+						classicCustomFields: newCustomFieldValues,
+						classicApiValid,
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+				} else {
+					const updatedFormValues = {
+					};
+					reset(
+						{ ...formValues, ...updatedFormValues },
+						{
+							keepErrors: true,
+							keepDirty: true,
+						}
+					);
+					setError( 'customFields', { type: 'noFields', message: ajaxData.message } );
+				}
+			} )
+			.catch( ( ajaxResponse ) => {} )
+			.then( ( ajaxResponse ) => {
+				setIsRefreshingCustomFields( false );
+			} );
+	};
+
+	const getMailerLiteClassicSwitch = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'MailerLite Classic', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="enableMailerliteClassic"
+						control={ control }
+						render={ ( { field: { onChange, value } } ) => (
+							<ToggleControl
+								label={ __( 'Enable MailerLite Classic', 'comment-edit-pro' ) }
+								className="sce-admin__toggle-control"
+								checked={ value }
+								onChange={ ( boolValue ) => {
+									clearErrors();
+									onChange( boolValue );
+								} }
+								help={ __(
+									'Enable the MailerLite Classic integration. If you have not switched to the New version of MailerLite, you will need to enable this option.',
+									'comment-edit-pro'
+								) }
+							/>
+						) }
+					/>
+				</td>
+			</tr>
+		);
 	};
 
 	const getNewsletterLabel = () => {
@@ -539,7 +780,7 @@ const Interface = ( props ) => {
 
 	const getMailerliteGroups = () => {
 		// Don't show groups if api is invalid.
-		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() ) {
+		if ( ! getValues( 'apiValid' ) || needsCredentialRefresh() || ! getValues( 'apiKey' ) ) {
 			return <></>;
 		}
 
@@ -637,6 +878,143 @@ const Interface = ( props ) => {
 											const validationResult = await trigger( 'groupInput' );
 											if ( validationResult ) {
 												onAddGroup( getValues( 'groupInput' ) );
+											}
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
+										) }
+										text={
+											isAddingGroup
+												? __( 'Adding…', 'comment-edit-pro' )
+												: __( 'Add New Group', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</div>
+							{ 'pattern' === errors.groupInput?.type && (
+								<Notice
+									message={ __( 'Special characters are not allowed in Groups.', 'comment-edit-pro' ) }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+							{ 'addGroupError' === errors.groupInput?.type && (
+								<Notice
+									message={ errors.groupInput?.message }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</div>
+					</>
+				</td>
+			</tr>
+		);
+	};
+
+	const getMailerliteClassicGroups = () => {
+		// Don't show groups if api is invalid.
+		if ( ! getValues( 'classicApiValid' ) || needsCredentialRefresh() ) {
+			return <></>;
+		}
+
+		const mailerliteGroups = getValues( 'classicGroups' );
+		return (
+			<tr>
+				<th scope="row">
+					{ __( 'MailerLite Groups', 'comment-edit-pro' ) }
+				</th>
+				<td>
+					<>
+						{ getValues( 'classicGroups' ).length === 0 && (
+							<Notice
+								message={ __(
+									'There are no groups available. Try creating a group below.',
+									'comment-edit-pro'
+								) }
+								status="warning"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						{ mailerliteGroups.length > 0 && getValues( 'classicApiValid' ) &&
+						mailerliteGroups.map( ( group, index ) => (
+							<Controller
+								key={ index }
+								name={ `classicGroups[${ index }].selected` }
+								control={ control }
+								render={ ( { field: { onChange, value } } ) => (
+									<CheckboxControl
+										label={ group.label }
+										onChange={ ( enableValue ) => {
+											onChange( enableValue );
+										} }
+										checked={ getValues( 'classicGroups' )[ index ].selected ?? false }
+									/>
+								) }
+							/>
+						) ) }
+						<div className="sce-admin-buttons">
+							<Button
+								isBusy={ isRefreshingGroups }
+								disabled={ isRefreshingGroups }
+								onClick={ () => {
+									onHandleClassicGroupsRefresh();
+								} }
+								className={ classNames(
+									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+									{ 'has-error': hasErrors() },
+									{ 'has-icon': isRefreshingGroups },
+									{ 'is-saving': isRefreshingGroups },
+								) }
+								text={ isRefreshingGroups ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Groups', 'comment-edit-pro' ) }
+							/>
+						</div>
+						{ 'noGroups' === errors.classicGroups?.type && (
+							<Notice
+								message={ errors.classicGroups?.message }
+								status="error"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						<div className="sce-convertkit-add-tag">
+							<div className="sce-convertkit-add-tag-group">
+								<Controller
+									name="classicGroupInput"
+									control={ control }
+									rules={ {
+										pattern: /[-_ 0-9A-Za-z]/,
+									} }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											type="text"
+											value={ value }
+											onChange={ ( groupInputValue ) => {
+												clearErrors( 'groupInput' );
+												onChange( groupInputValue );
+											} }
+											label={ __( 'Add New Group', 'comment-edit-pro' ) }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.groupInput?.type,
+											} ) }
+											placeholder={ __( 'Group Name', 'comment-edit-pro' ) }
+											aria-required="true"
+											ref={ classicGroupInput }
+										/>
+									) }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										onClick={ async( e ) => {
+											const validationResult = await trigger( 'classicGroupInput' );
+											if ( validationResult ) {
+												onAddClassicGroup( getValues( 'classicGroupInput' ) );
 											}
 										} }
 										className={ classNames(
@@ -780,7 +1158,7 @@ const Interface = ( props ) => {
 						<div className="sce-convertkit-add-tag">
 							<div className="sce-convertkit-add-tag-group">
 								<Controller
-									name="customFieldInput"
+									name="classicCustomFieldInput"
 									control={ control }
 									rules={ {
 										pattern: /[-_ 0-9A-Za-z]/,
@@ -790,7 +1168,178 @@ const Interface = ( props ) => {
 											type="text"
 											value={ value }
 											onChange={ ( customFieldValue ) => {
-												clearErrors( 'customFieldInput' );
+												clearErrors( 'classicCustomFieldInput' );
+												onChange( customFieldValue );
+											} }
+											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
+											className={ classNames( 'sce-admin__text-control', {
+												'has-error': 'required' === errors.classicCustomFieldInput?.type,
+											} ) }
+											placeholder={ __( 'Custom Field Name', 'comment-edit-pro' ) }
+											ref={ classicCustomFieldInputRef }
+										/>
+									) }
+								/>
+								<div className="sce-admin-buttons">
+									<Button
+										onClick={ async( e ) => {
+											const validationResult = await trigger( 'classicCustomFieldInput' );
+											if ( validationResult ) {
+												onAddCustomField( getValues( 'classicCustomFieldInput' ) );
+											}
+										} }
+										className={ classNames(
+											'qdlx__btn qdlx__btn-secondary qdlx__btn--icon-right',
+										) }
+										text={
+											isAddingCustomField
+												? __( 'Adding…', 'comment-edit-pro' )
+												: __( 'Add Custom Field', 'comment-edit-pro' ) }
+									/>
+								</div>
+							</div>
+							{ 'pattern' === errors.classicCustomFieldInput?.type && (
+								<Notice
+									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+							{ 'addCustomFieldError' === errors.classicCustomFieldInput?.type && (
+								<Notice
+									message={ errors.classicCustomFieldInput?.message }
+									status="error"
+									politeness="assertive"
+									inline={ false }
+									icon={ CircularExclamationIcon }
+								/>
+							) }
+						</div>
+					</>
+				</td>
+			</tr>
+		);
+	};
+
+	const getClassicFields = () => {
+		// Don't show custom fields if api is invalid.
+		if ( ! getValues( 'classicApiValid' ) || needsCredentialRefresh() ) {
+			return <></>;
+		}
+
+		const mailerliteCustomFields = getValues( 'classicCustomFields' );
+		return (
+			<tr>
+				<th scope="row">
+					{ __( 'Map Custom Fields', 'comment-edit-pro' ) }
+				</th>
+				<td>
+					<>
+						{ getValues( 'classicCustomFields' ).length === 0 && (
+							<Notice
+								message={ __(
+									'There are no custom fields available. You can create one below.',
+									'comment-edit-pro'
+								) }
+								status="warning"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						{ ( mailerliteCustomFields.length > 0 && getValues( 'classicApiValid' ) ) &&
+						( mailerliteCustomFields.map( ( customField, index ) => (
+							<div className="sce-convertkit-custom-field" key={ index }>
+								{ 'custom' !== getValues( 'classicCustomFields' )[ index ].field && (
+									<>
+										<Controller
+											name={ `classicCustomFields[${ index }].field` }
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ customField.label }
+													onChange={ ( customFieldSelectedValue ) => {
+														onChange( customFieldSelectedValue );
+													} }
+													value={ getValues( 'classicCustomFields' )[ index ].field ?? false }
+													options={ RequestHeaderFields }
+													className="sce-admin__select-control"
+												/>
+											) }
+										/>
+									</>
+								) }
+								{ 'custom' === getValues( 'classicCustomFields' )[ index ].field && (
+									<>
+										<Controller
+											name={ `classicCustomFields[${ index }].field_value` }
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<TextControl
+													value={ value ?? '' }
+													className={ classNames( 'sce-admin__text-control', {
+													} ) }
+													onChange={ ( methodValue ) => {
+														onChange( methodValue );
+													} }
+													label={ customField.label }
+												/>
+											) }
+										/>
+										<Button
+											className="sce-admin__text-control-reset button-reset"
+											icon="no-alt"
+											label={ __( 'Clear Text Input', 'comment-edit-pro' ) }
+											onClick={ () => {
+												setValue( `classicCustomFields[${ index }].field`, 'none' );
+											} }
+											showTooltip={ false }
+										/>
+									</>
+								) }
+							</div>
+						) ) ) }
+						<div className="sce-admin-buttons">
+							<Button
+								isBusy={ isRefreshingCustomFields }
+								disabled={ isRefreshingCustomFields }
+								onClick={ () => {
+									onHandleClassicCustomFieldsRefresh();
+								} }
+								className={ classNames(
+									'qdlx__btn qdlx__btn-link qdlx__btn--icon-right',
+									{ 'has-error': hasErrors() },
+									{ 'has-icon': isRefreshingCustomFields },
+									{ 'is-saving': isRefreshingCustomFields },
+								) }
+								text={ isRefreshingCustomFields ? __( 'Refreshing…', 'comment-edit-pro' ) : __( 'Refresh Custom Fields', 'comment-edit-pro' ) }
+							/>
+						</div>
+						{ 'noCustomFields' === errors.classicCustomFields?.type && (
+							<Notice
+								message={ errors.classicCustomFields?.message }
+								status="error"
+								politeness="assertive"
+								inline={ false }
+								icon={ CircularExclamationIcon }
+							/>
+						) }
+						<div className="sce-convertkit-add-tag">
+							<div className="sce-convertkit-add-tag-group">
+								<Controller
+									name="classicCustomFieldInput"
+									control={ control }
+									rules={ {
+										pattern: /[-_ 0-9A-Za-z]/,
+									} }
+									render={ ( { field: { onChange, value } } ) => (
+										<TextControl
+											type="text"
+											value={ value }
+											onChange={ ( customFieldValue ) => {
+												clearErrors( 'classicCustomFieldInput' );
 												onChange( customFieldValue );
 											} }
 											label={ __( 'Add New Custom Field', 'comment-edit-pro' ) }
@@ -805,9 +1354,9 @@ const Interface = ( props ) => {
 								<div className="sce-admin-buttons">
 									<Button
 										onClick={ async( e ) => {
-											const validationResult = await trigger( 'customFieldInput' );
+											const validationResult = await trigger( 'classicCustomFieldInput' );
 											if ( validationResult ) {
-												onAddCustomField( getValues( 'customFieldInput' ) );
+												onAddClassicCustomField( getValues( 'classicCustomFieldInput' ) );
 											}
 										} }
 										className={ classNames(
@@ -820,7 +1369,7 @@ const Interface = ( props ) => {
 									/>
 								</div>
 							</div>
-							{ 'pattern' === errors.customFieldInput?.type && (
+							{ 'pattern' === errors.classicCustomFieldInput?.type && (
 								<Notice
 									message={ __( 'Special characters are not allowed in custom fields.', 'comment-edit-pro' ) }
 									status="error"
@@ -829,9 +1378,9 @@ const Interface = ( props ) => {
 									icon={ CircularExclamationIcon }
 								/>
 							) }
-							{ 'addCustomFieldError' === errors.customFieldInput?.type && (
+							{ 'addCustomFieldError' === errors.classicCustomFieldInput?.type && (
 								<Notice
-									message={ errors.customFieldInput?.message }
+									message={ errors.classicCustomFieldInput?.message }
 									status="error"
 									politeness="assertive"
 									inline={ false }
@@ -848,7 +1397,7 @@ const Interface = ( props ) => {
 	const getAPIKey = () => {
 		return (
 			<tr>
-				<th scope="row">{ __( 'API Key', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'API Token', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="apiKey"
@@ -856,7 +1405,7 @@ const Interface = ( props ) => {
 						rules={ { required: true } }
 						render={ ( { field: { onChange, value } } ) => (
 							<TextControl
-								label={ __( 'MailerLite API Key', 'comment-edit-pro' ) }
+								label={ __( 'MailerLite API Token', 'comment-edit-pro' ) }
 								type="text"
 								value={ value }
 								onChange={ ( apiKeyValue ) => {
@@ -868,7 +1417,7 @@ const Interface = ( props ) => {
 									'is-required': true,
 								} ) }
 								help={ __(
-									'Enter your MailerLite API Key in order to select a group and match any custom fields.',
+									'Enter your MailerLite API Token in order to select a group and match any custom fields.',
 									'comment-edit-pro'
 								) }
 								aria-required="true"
@@ -887,6 +1436,59 @@ const Interface = ( props ) => {
 					{ 'noForms' === errors.apiKey?.type && (
 						<Notice
 							message={ errors.apiKey?.message }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+				</td>
+			</tr>
+		);
+	};
+
+	const getClassicAPIKey = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'Classic API Key', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="classicApiKey"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field: { onChange, value } } ) => (
+							<TextControl
+								label={ __( 'MailerLite Classic API Key', 'comment-edit-pro' ) }
+								type="text"
+								value={ value }
+								onChange={ ( apiKeyValue ) => {
+									onChange( apiKeyValue );
+									clearErrors();
+								} }
+								className={ classNames( 'sce-admin__text-control', {
+									'has-error': 'required' === errors.classicApiKey?.type,
+									'is-required': true,
+								} ) }
+								help={ __(
+									'Enter your MailerLite API Key in order to select a group and match any custom fields.',
+									'comment-edit-pro'
+								) }
+								aria-required="true"
+							/>
+						) }
+					/>
+					{ 'required' === errors.classicApiKey?.type && (
+						<Notice
+							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+					{ 'noForms' === errors.classicApiKey?.type && (
+						<Notice
+							message={ errors.classicApiKey?.message }
 							status="error"
 							politeness="assertive"
 							inline={ true }
@@ -991,9 +1593,21 @@ const Interface = ( props ) => {
 						</tr>
 						{ getValues( 'enableMailerlite' ) && (
 							<>
-								{ getAPIKey() }
-								{ getMailerliteGroups() }
-								{ getCustomFields() }
+								{ getMailerLiteClassicSwitch() }
+								{ ! getValues( 'enableMailerliteClassic' ) && (
+									<>
+										{ getAPIKey() }
+										{ getMailerliteGroups() }
+										{ getCustomFields() }
+									</>
+								) }
+								{ getValues( 'enableMailerliteClassic' ) && (
+									<>
+										{ getClassicAPIKey() }
+										{ getMailerliteClassicGroups() }
+										{ getClassicFields() }
+									</>
+								) }
 								{ getNewsletterLabel() }
 								{ getSignupCheckbox() }
 								{ getOptinCheckbox() }
@@ -1002,7 +1616,7 @@ const Interface = ( props ) => {
 					</tbody>
 				</table>
 				<div className="sce-admin-buttons">
-					{ getValues( 'apiValid' ) && canShowSaveButton() && (
+					{ ( getValues( 'apiValid' ) || getValues( 'classicApiValid' ) ) && canShowSaveButton() && (
 						<Button
 							className={ classNames(
 								'qdlx__btn qdlx__btn-primary qdlx__btn--icon-right',
