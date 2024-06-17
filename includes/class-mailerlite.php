@@ -23,6 +23,13 @@ class MailerLite {
 	private $mailerlite_api = 'https://connect.mailerlite.com/api';
 
 	/**
+	 * MailerLite Classic API variable endpoint.
+	 *
+	 * @var string MailerLite Classic API variable.
+	 */
+	private $mailerlite_classic_api = 'https://api.mailerlite.com/api/v2';
+
+	/**
 	 * Class runner.
 	 */
 	public function run() {
@@ -48,6 +55,9 @@ class MailerLite {
 
 		// Refresh tags for a MailerLite account.
 		add_action( 'wp_ajax_sce_refresh_mailerlite_groups', array( $this, 'ajax_refresh_mailerlite_groups' ) );
+
+		// Refresh tags for a MailerLite account.
+		add_action( 'wp_ajax_sce_refresh_mailerlite_classic_groups', array( $this, 'ajax_refresh_mailerlite_classic_groups' ) );
 
 		// Refresh custom fields for a MailerLite account.
 		add_action( 'wp_ajax_sce_refresh_mailerlite_custom_fields', array( $this, 'ajax_refresh_mailerlite_custom_fields' ) );
@@ -463,13 +473,20 @@ class MailerLite {
 			$options = Options::get_options();
 
 			// Get the API key credentials.
+			$classic_enabled    = (bool) $options['enable_mailerlite_classic'];
+			$classic_api_valid  = (bool) $options['mailerlite_classic_api_valid'];
 			$api_valid          = (bool) $options['mailerlite_api_valid'];
 			$mailerlite_enabled = (bool) $options['enable_mailerlite'];
 
-			// If API key is valid, get the keys.
-			if ( $api_valid && $mailerlite_enabled ) {
+			// If modern API key is valid, get the keys.
+			if ( $api_valid && $mailerlite_enabled && ! $classic_enabled ) {
 				$api_key = $options['mailerlite_api_key'];
 				$this->connect_to_api_return_fresh_data( $api_key );
+				exit;
+			}
+			if ( $classic_api_valid && $mailerlite_enabled && $classic_enabled ) {
+				$classic_api_key = $options['mailerlite_classic_api_key'];
+				$this->connect_to_classic_api_return_fresh_data( $classic_api_key );
 				exit;
 			}
 		}
@@ -494,16 +511,27 @@ class MailerLite {
 			$groups = get_option( 'sce_mailerlite_groups', array() );
 			$fields = get_option( 'sce_mailerlite_custom_fields', array() );
 		}
+		// Get classic groups and fields.
+		if ( Functions::is_multisite() ) {
+			$classic_groups = get_site_option( 'sce_mailerlite_classic_groups', array() );
+			$classic_fields = get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
+		} else {
+			$classic_groups = get_option( 'sce_mailerlite_classic_groups', array() );
+			$classic_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
+		}
 
 		$json_array = array(
 			'enableMailerlite'   => (bool) $options['enable_mailerlite'],
 			'apiValid'           => (bool) $options['mailerlite_api_valid'],
+			'classicApiValid'    => (bool) $options['mailerlite_classic_api_valid'],
 			'apiKey'             => $options['mailerlite_api_key'],
-			'secretKey'          => $options['mailerlite_secret_key'],
+			'classicApiKey'      => $options['mailerlite_classic_api_key'],
 			'signUpLabel'        => $options['mailerlite_signup_label'],
 			'checkboxEnabled'    => (bool) $options['mailerlite_checkbox_enabled'],
 			'groups'             => $groups,
 			'customFields'       => $fields,
+			'classicGroups'      => $classic_groups,
+			'classicFields'      => $classic_fields,
 			'doubleOptinEnabled' => (bool) $options['mailerlite_double_optin_enabled'],
 		);
 		return $json_array;
@@ -520,13 +548,20 @@ class MailerLite {
 			'mailerlite_checkbox_enabled'     => false,
 			'mailerlite_api_valid'            => false,
 			'mailerlite_double_optin_enabled' => true,
+			'enable_mailerlite_classic'       => false,
+			'mailerlite_classic_api_key'      => '',
+			'mailerlite_classic_api_valid'    => false,
 		);
 		if ( Functions::is_multisite() ) {
 			delete_site_option( 'sce_mailerlite_groups' );
 			delete_site_option( 'sce_mailerlite_custom_fields' );
+			delete_site_option( 'sce_mailerlite_classic_groups' );
+			delete_site_option( 'sce_mailerlite_classic_custom_fields' );
 		} else {
 			delete_option( 'sce_mailerlite_groups' );
 			delete_option( 'sce_mailerlite_custom_fields' );
+			delete_option( 'sce_mailerlite_classic_groups' );
+			delete_option( 'sce_mailerlite_classic_custom_fields' );
 		}
 
 		Options::update_options( $options_to_save );
@@ -677,6 +712,87 @@ class MailerLite {
 	}
 
 	/**
+	 * Update MailerLite API data periodically.
+	 *
+	 * @param string $api_key    API key.
+	 *
+	 * @return void JSON errors|success if any.
+	 */
+	private function connect_to_classic_api_return_fresh_data( $api_key ) {
+		$options = Options::get_options( true );
+		// Now let's set aside some options to save.
+		$options_to_save = array(
+			'enable_mailerlite'          => (bool) $options['enable_mailerlite'],
+			'mailerlite_classic_api_key' => $api_key,
+		);
+
+		// Start building up HTTP args.
+		$http_args            = array();
+		$http_args['headers'] = array(
+			'Authorization'       => 'Bearer ' . $api_key,
+			'X-MailerLite-ApiKey' => $api_key,
+			'Content-Type'        => 'application/json',
+			'Accept'              => 'application/json',
+		);
+
+		// Get endpoints.
+		$groups_api_url = esc_url_raw( $this->mailerlite_classic_api . '/groups' );
+		$fields_api_url = esc_url_raw( $this->mailerlite_classic_api . '/fields' );
+
+		// Make API call.
+		$group_api_response  = wp_remote_get( $groups_api_url, $http_args );
+		$fields_api_response = wp_remote_get( $fields_api_url, $http_args );
+
+		if ( is_wp_error( $group_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve MailerLite groups.', 'comment-edit-pro' ) ) );
+		}
+		if ( is_wp_error( $fields_api_response ) || 200 !== wp_remote_retrieve_response_code( $fields_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve MailerLite fields.', 'comment-edit-pro' ) ) );
+		}
+
+		// Now format response from JSON.
+		$groups_raw             = json_decode( wp_remote_retrieve_body( $group_api_response ), true );
+		$fields_raw             = json_decode( wp_remote_retrieve_body( $fields_api_response ), true );
+		$group_fields           = $groups_raw ?? array();
+		$custom_fields          = $fields_raw ?? array();
+		$sanitized_group_values = array();
+		$sanitized_field_values = array();
+		foreach ( $group_fields as $index => $values ) {
+			$sanitized_group_values[ $index ] = array(
+				'label' => sanitize_text_field( $group_fields[ $index ]['name'] ),
+				'value' => sanitize_text_field( $group_fields[ $index ]['id'] ),
+			);
+		}
+		foreach ( $custom_fields as $index => $values ) {
+			$sanitized_field_values[ $index ] = array(
+				'label' => sanitize_text_field( $custom_fields[ $index ]['title'] ),
+				'value' => sanitize_text_field( $custom_fields[ $index ]['id'] ),
+				'key'   => sanitize_text_field( $custom_fields[ $index ]['key'] ),
+			);
+		}
+
+		// Save list in option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
+			update_site_option( 'sce_mailerlite_classic_custom_fields', $sanitized_field_values );
+		} else {
+			update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
+			update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_field_values );
+		}
+
+		// Save options.
+		$options_to_save['mailerlite_classic_api_valid'] = true;
+		Options::update_options( $options_to_save );
+
+		// Save transient for refresh.
+		set_transient( 'sce_mailerlite_refresh', true, DAY_IN_SECONDS );
+
+		// Return saved form fields.
+		$json_array = $this->get_mailerlite_options_for_return();
+		wp_send_json_success( $json_array );
+	}
+
+	/**
 	 * Refresh or initialize MailerLite connection.
 	 */
 	public function ajax_refresh_mailerlite_connection() {
@@ -695,17 +811,24 @@ class MailerLite {
 		$this->reset_mailerlite_credentials();
 
 		// Nonce passed, let's get post vars.
-		$mailerlite_enabled = (bool) filter_input( INPUT_POST, 'enableMailerlite', FILTER_VALIDATE_BOOLEAN );
-		$api_key            = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$mailerlite_enabled        = (bool) filter_input( INPUT_POST, 'enableMailerlite', FILTER_VALIDATE_BOOLEAN );
+		$api_key                   = sanitize_text_field( filter_input( INPUT_POST, 'apiKey', FILTER_DEFAULT ) );
+		$classic_api_key           = sanitize_text_field( filter_input( INPUT_POST, 'classicApiKey', FILTER_DEFAULT ) );
+		$enable_mailerlite_classic = (bool) filter_input( INPUT_POST, 'enableMailerliteClassic', FILTER_VALIDATE_BOOLEAN );
 
-		// If convertkit enabled, update options with MailerLite enabled.
+		// If mailerlite enabled, update options with MailerLite enabled.
 		if ( $mailerlite_enabled ) {
 			$options_to_save['enable_mailerlite'] = true;
 			Options::update_options( $options_to_save );
 		}
 
-		// Get API data. Expect a json return exit if credentials are bad.
-		$this->connect_to_api_return_fresh_data( $api_key );
+		if ( ! $enable_mailerlite_classic ) {
+			// Get API data. Expect a json return exit if credentials are bad.
+			$this->connect_to_api_return_fresh_data( $api_key );
+		} else {
+			// Get API data. Expect a json return exit if credentials are bad.
+			$this->connect_to_classic_api_return_fresh_data( $classic_api_key );
+		}
 
 		// We shouldn't make it this far, but exit just in case.
 		exit;
@@ -780,6 +903,93 @@ class MailerLite {
 			array(
 				'groups'   => $sanitized_group_values,
 				'apiValid' => true,
+			)
+		);
+	}
+
+	/**
+	 * Refresh MailerLite Groups.
+	 */
+	public function ajax_refresh_mailerlite_classic_groups() {
+		$nonce = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		// Security.
+		if ( ! wp_verify_nonce( $nonce, 'sce-refresh-mailerlite-groups' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+				)
+			);
+		}
+
+		// Return any errors.
+		$this->output_connection_json_errors();
+
+		// Nonce passed, let's get saved vars.
+		$options = Options::get_options();
+		$api_key = sanitize_text_field( $options['mailerlite_classic_api_key'] );
+
+		$http_args['headers'] = array(
+			'Authorization'       => 'Bearer ' . $api_key,
+			'X-MailerLite-ApiKey' => $api_key,
+			'Content-Type'        => 'application/json',
+			'Accept'              => 'application/json',
+		);
+
+		// Get endpoints.
+		$groups_api_url = esc_url_raw( $this->mailerlite_classic_api . '/groups' );
+
+		// Make API call.
+		$group_api_response = wp_remote_get( $groups_api_url, $http_args );
+
+		if ( is_wp_error( $group_api_response ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not retrieve MailerLite groups.', 'comment-edit-pro' ) ) );
+		}
+
+		// Now format response from JSON.
+		$groups_raw = json_decode( wp_remote_retrieve_body( $group_api_response ), true );
+		// Get Groups as an option.
+		if ( Functions::is_multisite() ) {
+			$existing_groups = (array) get_site_option( 'sce_mailerlite_classic_groups', array() );
+		} else {
+			$existing_groups = (array) get_option( 'sce_mailerlite_classic_groups', array() );
+		}
+
+		$groups                 = $groups_raw;
+		$sanitized_group_values = array();
+		foreach ( $groups as $index => $values ) {
+			$sanitized_group_values[ $index ] = array(
+				'label' => sanitize_text_field( $groups[ $index ]['name'] ),
+				'value' => sanitize_text_field( $groups[ $index ]['id'] ),
+			);
+
+			// Check if group is selected (saved).
+			if ( ! empty( $existing_groups ) ) {
+				foreach ( $existing_groups as $existing_group ) {
+					if ( $existing_group['value'] !== $sanitized_group_values[ $index ]['value'] ) {
+						continue;
+					}
+					$selected_value = (bool) $existing_group['selected'] ?? false;
+					if ( true === $selected_value ) {
+						$sanitized_group_values[ $index ]['selected'] = true;
+					} else {
+						$sanitized_group_values[ $index ]['selected'] = false;
+					}
+				}
+			}
+		}
+
+		// Save tags as an option.
+		if ( Functions::is_multisite() ) {
+			update_site_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
+		} else {
+			update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
+		}
+
+		// Return groups.
+		wp_send_json_success(
+			array(
+				'classicGroups'   => $sanitized_group_values,
+				'classicApiValid' => true,
 			)
 		);
 	}
@@ -1159,7 +1369,9 @@ class MailerLite {
 		$options            = Options::get_options();
 		$mailerlite_enabled = (bool) $options['enable_mailerlite'];
 		$api_key            = sanitize_text_field( $options['mailerlite_api_key'] );
+		$classic_api_key = sanitize_text_field( $options['mailerlite_classic_api_key'] );
 		$api_valid          = (bool) $options['mailerlite_api_valid'];
+		$classic_api_valid = (bool) $options['mailerlite_classic_api_valid'];
 
 		if ( ! $mailerlite_enabled ) {
 			wp_send_json_error(
@@ -1169,7 +1381,7 @@ class MailerLite {
 			);
 		}
 
-		if ( ! $api_valid ) {
+		if ( ! $api_valid && ! $classic_api_valid ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'MailerLite API is not valid. Please refresh your connection.', 'comment-edit-pro' ),
@@ -1177,7 +1389,7 @@ class MailerLite {
 			);
 		}
 
-		if ( ! $api_key ) {
+		if ( ! $api_key && ! $classic_api_key) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'MailerLite API credentials are not valid. Please refresh your connection.', 'comment-edit-pro' ),
