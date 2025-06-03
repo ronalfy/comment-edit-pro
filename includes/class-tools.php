@@ -39,6 +39,7 @@ class Tools {
 		// Get options for post type.
 		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the frontend.
 		add_action( 'current_screen', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the admin.
+		add_filter( 'comments_open', array( $this, 'maybe_open_comments' ), 100, 2 );
 
 		// Modify existing post type args to support comments if enabled in post type comment settings.
 		add_filter( 'register_post_type_args', array( $this, 'modify_post_type_args' ), 9999, 2 );
@@ -434,6 +435,47 @@ class Tools {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Maybe open comments if post type settings are set to force comments to open.
+	 *
+	 * @param bool $open Whether comments are open.
+	 * @param int  $post_id The post ID.
+	 *
+	 * @return bool $open Whether comments are open.
+	 */
+	public function maybe_open_comments( $open, $post_id ) {
+		// Get options.
+		$comment_options    = Options_Tools::get_options();
+		$post_type_settings = $comment_options['comment_post_type_settings'];
+
+		// Get post type.
+		$post_type = get_post_type( $post_id );
+
+		// If post type is not set, return.
+		if ( ! $post_type ) {
+			return $open;
+		}
+
+		// If post type is not set in settings, return.
+		if ( ! isset( $post_type_settings[ $post_type ] ) ) {
+			return $open;
+		}
+
+		// Get post type settings.
+		$post_type_settings = $post_type_settings[ $post_type ];
+
+		// If comments are set, set them.
+		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
+			if ( 'closed' === $post_type_settings['force_comments'] ) {
+				return false;
+			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
+				return true;
+			}
+		}
+
+		return $open;
 	}
 
 	/**
