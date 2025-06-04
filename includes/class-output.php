@@ -137,6 +137,22 @@ class Output {
 		add_action( 'sce_save_after', array( $this, 'maybe_store_comment' ), 10, 4 );
 		add_action( 'sce_comment_is_deleted', array( $this, 'maybe_send_delete_email' ), 10, 2 );
 		add_action( 'add_meta_boxes_comment', array( $this, 'maybe_add_comment_metabox' ), 10, 1 );
+
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	/**
+	 * Initialize the class.
+	 */
+	public function init() {
+		if ( is_admin() ) {
+			return;
+		}
+
+		// Allow moderators to see pending comments on the frontend.
+		if ( current_user_can( 'moderate_comments' ) ) {
+			add_filter( 'pre_get_comments', array( $this, 'show_pending_comments_to_moderators' ) );
+		}
 	}
 
 	/**
@@ -770,5 +786,34 @@ class Output {
 		}
 		$classes[] = $theme;
 		return $classes;
+	}
+
+	/**
+	 * Show pending comments to moderators.
+	 *
+	 * @param WP_Comment_Query $query The comment query object.
+	 * @return WP_Comment_Query Modified query object.
+	 */
+	public function show_pending_comments_to_moderators( $query ) {
+		// Only modify the query if we're on the frontend and user is a moderator.
+		if ( ! is_admin() && current_user_can( 'moderate_comments' ) ) {
+			// Get current comment status.
+			$status = $query->query_vars['status'];
+
+			/**
+			 * Filter to allow moderators to view pending comments.
+			 *
+			 * @param bool $can_view_pending_comments Whether to allow moderators to view pending comments.
+			 * @param WP_Comment_Query $query The comment query object.
+			 */
+			$can_view_pending_comments = apply_filters( 'sce_can_view_pending_comments', true, $query );
+
+			// If status is 'approve', include pending comments.
+			if ( 'approve' === $status && $can_view_pending_comments ) {
+				$query->query_vars['status'] = array( 'approve', 'hold' );
+			}
+		}
+
+		return $query;
 	}
 }
