@@ -42,7 +42,7 @@ class Selector_Helper {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_selector_helper_scripts_styles' ) );
 
-		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 100 );
+		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 200 );
 	}
 
 	/**
@@ -214,10 +214,24 @@ class Selector_Helper {
 		$post_id   = get_the_ID();
 		$permalink = get_permalink( $post_id );
 
+		$admin_bar->add_group(
+			array(
+				'id'     => 'sce-comment-selector-helper',
+				'parent' => 'comments',
+			)
+		);
+		$admin_bar->add_node(
+			array(
+				'id'     => 'sce-comment-selector-helper-label',
+				'parent' => 'sce-comment-selector-helper',
+				'title'  => '<span style="font-weight: 900;">' . __( 'Selector Helper', 'comment-edit-pro' ) . '</span>',
+				'href'   => false,
+			)
+		);
 		$admin_bar->add_node(
 			array(
 				'id'     => 'sce-open-selector-helper',
-				'parent' => 'comments',
+				'parent' => 'sce-comment-selector-helper',
 				'title'  => __( 'Launch Selector Helper', 'comment-edit-pro' ),
 				'href'   => esc_url(
 					add_query_arg(

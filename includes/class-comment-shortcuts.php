@@ -307,8 +307,8 @@ class Comment_Shortcuts {
 	 */
 	public function ajax_shortcut_open_comments() {
 		// Check nonce.
-		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
-		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		$nonce   = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$post_id = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
 		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_open_comments' . $post_id ) || ! $post_id ) {
 			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
 		}
@@ -321,8 +321,18 @@ class Comment_Shortcuts {
 		$post->comment_status = 'open';
 		wp_update_post( $post );
 
+		/**
+		 * Update Post meta to explicitly set that this comment section should be open.
+		 */
+		update_post_meta( $post_id, '_sce_force_comments_state', 'open' );
+
 		// Redirect back to the post.
-		wp_safe_redirect( get_permalink( $post_id ) );
+		wp_send_json_success(
+			array(
+				'message'        => __( 'Comments opened.', 'comment-edit-pro' ),
+				'post_permalink' => get_permalink( $post_id ),
+			)
+		);
 		exit;
 	}
 
@@ -333,8 +343,8 @@ class Comment_Shortcuts {
 	 */
 	public function ajax_shortcut_close_comments() {
 		// Check nonce.
-		$nonce   = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
-		$post_id = filter_input( INPUT_GET, 'post_id', FILTER_VALIDATE_INT );
+		$nonce   = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$post_id = absint( filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT ) );
 		if ( ! wp_verify_nonce( $nonce, 'sce_shortcut_close_comments' . $post_id ) || ! $post_id ) {
 			wp_die( esc_html__( 'Invalid nonce.', 'sce-comment-shortcuts' ) );
 		}
@@ -347,8 +357,18 @@ class Comment_Shortcuts {
 		$post->comment_status = 'closed';
 		wp_update_post( $post );
 
+		/**
+		 * Update Post meta to explicitly set that this comment section should be hidden.
+		 */
+		update_post_meta( $post_id, '_sce_force_comments_state', 'closed' );
+
 		// Redirect back to the post.
-		wp_safe_redirect( get_permalink( $post_id ) );
+		wp_send_json_success(
+			array(
+				'message'        => __( 'Comments closed.', 'comment-edit-pro' ),
+				'post_permalink' => get_permalink( $post_id ),
+			)
+		);
 		exit;
 	}
 
@@ -759,7 +779,7 @@ class Comment_Shortcuts {
 
 				$wp_admin_bar->add_node(
 					array(
-						'id'     => 'sce-open-close-comments',
+						'id'     => 'sce-close-comments',
 						'parent' => 'sce-advanced-comment-shortcuts',
 						'title'  => __( 'Close Comments', 'comment-edit-pro' ),
 						'href'   => esc_url( $close_comments_url ),
@@ -777,7 +797,7 @@ class Comment_Shortcuts {
 				);
 				$wp_admin_bar->add_node(
 					array(
-						'id'     => 'sce-open-close-comments',
+						'id'     => 'sce-open-comments',
 						'parent' => 'sce-advanced-comment-shortcuts',
 						'title'  => __( 'Open Comments', 'comment-edit-pro' ),
 						'href'   => esc_url( $open_comments_url ),

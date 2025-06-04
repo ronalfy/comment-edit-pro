@@ -466,6 +466,14 @@ class Tools {
 		// Get post type settings.
 		$post_type_settings = $post_type_settings[ $post_type ];
 
+		// If post meta is set, use it. This is set by the menu helper shortcuts and overrides the post type settings.
+		$force_comments_state = get_post_meta( $post_id, '_sce_force_comments_state', true );
+		if ( 'open' === $force_comments_state ) {
+			return true;
+		} elseif ( 'closed' === $force_comments_state ) {
+			return false;
+		}
+
 		// If comments are set, set them.
 		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
 			if ( 'closed' === $post_type_settings['force_comments'] ) {
@@ -490,6 +498,8 @@ class Tools {
 		if ( is_admin() && $screen && 'post' === $screen->base ) {
 			$is_post_edit_screen = true;
 			$post_id             = absint( filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT ) );
+		} elseif ( is_singular() || is_page() ) {
+			$post_id = get_the_ID();
 		}
 
 		if ( ! is_singular() && ! is_page() && ! $is_post_edit_screen ) {
@@ -522,6 +532,14 @@ class Tools {
 				add_filter( 'comments_open', '__return_false', 9999 );
 			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
 				add_filter( 'comments_open', '__return_true', 9999 );
+			}
+
+			// If post meta is set, use it. This is set by the menu helper shortcuts and overrides the post type settings.
+			$force_comments_state = get_post_meta( $post_id, '_sce_force_comments_state', true );
+			if ( 'open' === $force_comments_state ) {
+				add_filter( 'comments_open', '__return_true', 9999 );
+			} elseif ( 'closed' === $force_comments_state ) {
+				add_filter( 'comments_open', '__return_false', 9999 );
 			}
 		}
 
