@@ -102,12 +102,12 @@ class Mailchimp {
 		// Format API url for a server prefix..
 		$mailchimp_api_url = str_replace(
 			'<sp>',
-			$options['mailchimp_api_key_server_prefix'],
+			sanitize_key( $options['mailchimp_api_key_server_prefix'] ),
 			$this->mailchimp_api
 		);
 
 		$commenter_name    = $comment->comment_author;
-		$mailchimp_api_key = $options['mailchimp_api_key'];
+		$mailchimp_api_key = sanitize_text_field( $options['mailchimp_api_key'] );
 
 		$endpoint = $mailchimp_api_url . 'lists/' . $list . '/members/';
 
@@ -253,7 +253,7 @@ class Mailchimp {
 		$options_to_save = array(
 			'enable_mailchimp'                => $mailchimp_enabled,
 			'mailchimp_api_key'               => $api_token,
-			'mailchimp_api_key_server_prefix' => $api_server_prefix,
+			'mailchimp_api_key_server_prefix' => sanitize_key( $api_server_prefix ),
 			'mailchimp_selected_list'         => $selected_list,
 			'mailchimp_signup_label'          => $signup_label,
 			'mailchimp_checkbox_enabled'      => $mailchimp_checkbox_enabled,
@@ -283,7 +283,7 @@ class Mailchimp {
 		// Format API url for a server prefix..
 		$mailchimp_api_url = str_replace(
 			'<sp>',
-			$api_server_prefix,
+			sanitize_key( $api_server_prefix ),
 			$this->mailchimp_api
 		);
 
