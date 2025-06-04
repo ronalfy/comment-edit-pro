@@ -42,7 +42,7 @@ class Selector_Helper {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_selector_helper_scripts_styles' ) );
 
-		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 999 );
+		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 100 );
 	}
 
 	/**

@@ -423,6 +423,36 @@ class Comment_Shortcuts {
 		// If we're here, the comment admin bar menu item is enabled.
 		// Get the comment node.
 		$comment_node = $wp_admin_bar->get_node( 'comments' );
+		// Get total pending count.
+		$comment_counts = wp_count_comments();
+		$pending_count  = absint( $comment_counts->moderated );
+		if ( 0 === $pending_count ) {
+			$comment_node->title = "<span class='ab-icon' aria-hidden='true'></span>Comments";
+		} else {
+			$comment_node->title = "<span class='ab-icon' aria-hidden='true'></span>Comments <span class='ab-label awaiting-mod pending-count count-{$pending_count}' aria-hidden='true'>({$pending_count})</span><span class='screen-reader-text comments-in-moderation-text'>{$pending_count} Comments in moderation</span>";
+		}
+		$wp_admin_bar->remove_node( 'comments' );
+		$wp_admin_bar->add_node( $comment_node );
+
+		// If single post and comments open, link to the comment section.
+		if ( is_singular() && comments_open() ) {
+			// Get comments selector.
+			$selector_options  = Options::get_options();
+			$comments_selector = $selector_options['comments_wrapper_id'];
+			if ( $comments_selector ) {
+				$comments_selector = '#' . sanitize_key( $comments_selector );
+			} else {
+				$comments_selector = '#comments';
+			}
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'comment-link',
+					'title'  => __( 'View Comments', 'comment-edit-pro' ),
+					'parent' => 'comments',
+					'href'   => get_permalink() . $comments_selector,
+				)
+			);
+		}
 
 		// Bail if no comment node.
 		if ( ! $comment_node ) {
@@ -859,7 +889,6 @@ class Comment_Shortcuts {
 			return;
 		}
 
-		// If we're here, the comment admin bar menu item is enabled.
 		// Get the comment node.
 		$comment_node = $wp_admin_bar->get_node( 'comments' );
 
