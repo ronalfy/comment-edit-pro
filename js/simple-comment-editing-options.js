@@ -5,19 +5,9 @@ const initCommentEditPro = ( $ ) => {
 		// Loop through comment menus and try to attach to comment LI.
 		sceFrontendCommentMenus.forEach( function( sceFrontendCommentMenu ) {
 			// Find closest LI.
-			const sceFrontendCommentMenuLI = sceFrontendCommentMenu.closest( 'li' );
 
 			// If no LI found, go ahead and show the menu.
-			if ( null === sceFrontendCommentMenuLI || undefined === sceFrontendCommentMenuLI ) {
-				sceFrontendCommentMenu.style.display = 'block';
-			} else {
-				// If LI found, move the menu into the LI at the top.
-				sceFrontendCommentMenuLI.insertBefore( sceFrontendCommentMenu, sceFrontendCommentMenuLI.firstChild );
-
-				// Set LI to position relative.
-				sceFrontendCommentMenuLI.style.position = 'relative';
-				sceFrontendCommentMenu.style.display = 'block';
-			}
+			sceFrontendCommentMenu.style.display = 'block';
 		} );
 	}
 

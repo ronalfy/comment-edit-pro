@@ -341,9 +341,10 @@ class Frontend_Editing {
 
 		// Return.
 		$comment_wrapper = sprintf(
-			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d"><div class="sce-front-end-comment-meta">%s%s</div><div class="sce-front-end-comment-content">%s</div></div>',
+			'<div id="sce-front-end-comment-%d" class="sce-front-end-comment" data-cid="%d"><div class="sce-front-end-comment-meta %s">%s%s</div><div class="sce-front-end-comment-content">%s</div></div>',
 			$comment_id,
 			$comment_id,
+			$allow_frontend_moderation_menu ? 'sce-front-end-comment-meta-has-moderation-menu' : '',
 			$allow_frontend_moderation_menu ? $this->get_moderation_menu_html( $comment ) : '',
 			! did_filter( 'edit_comment_link' ) ? $this->get_edit_link_html( $comment_id ) : '',
 			$comment_content

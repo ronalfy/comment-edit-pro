@@ -78,8 +78,8 @@
 }
 .sce-meatball-menu {
 	position: absolute;
-	top: 15px;
-	right: 3.75rem;
+	top: 5px;
+	right: 15px;
 }
 
 /* Color vars for the meatball menu */
@@ -556,4 +556,8 @@ li.sce-meatball-menu-item {
 			}
 		}
 	}
+}
+
+.sce-front-end-comment-meta-has-moderation-menu {
+	padding-top: 60px;
 }
