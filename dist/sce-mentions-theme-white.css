@@ -1,1 +1,116 @@
-body{margin:0;padding:0}section#sce-mentions-subscribe-wrapper,section#sce-mentions-unsubscribe-wrapper{height:100vh;width:100%;display:flex;align-items:center;justify-content:center}#sce-status-error,#sce-status-success{padding:20px 20px;font-family:Verdana,Geneva,Tahoma,sans-serif;font-size:1.3em;line-height:1.1;font-weight:700;color:#bd3f32;margin:0;margin-top:15px;text-align:center;border-top:2px solid #953227;border-bottom:2px solid #953227}#sce-status-success{border:0}#sce-status-normal{padding:5px;font-family:Verdana,Geneva,Tahoma,sans-serif;font-size:4.2em;margin:0;line-height:1.1;font-weight:700;color:#bd3f32;text-align:center}section#sce-mentions-subscribe-wrapper,section#sce-mentions-unsubscribe-wrapper{background:#fff;color:#333}section#sce-mentions-subscribe-wrapper main,section#sce-mentions-unsubscribe-wrapper main{display:block;position:relative;background:#333;border:2px solid #444;color:#ddd;border-radius:5px;box-shadow:5px 5px 10px rgba(0,0,0,.2);padding:45px 30px;max-width:650px;width:100%}section#sce-mentions-subscribe-wrapper h2,section#sce-mentions-unsubscribe-wrapper h2{margin:0;padding:0;font-size:1.3em;font-family:Verdana,Geneva,Tahoma,sans-serif;text-transform:uppercase;color:#fff;text-align:center}section#sce-mentions-subscribe-wrapper p,section#sce-mentions-unsubscribe-wrapper p{font-family:Verdana,Geneva,Tahoma,sans-serif;text-align:center}section#sce-mentions-subscribe-wrapper p.sce-button-return,section#sce-mentions-unsubscribe-wrapper p.sce-button-return{margin-top:1em;margin-bottom:0}section#sce-mentions-subscribe-wrapper p.sce-button-return a,section#sce-mentions-unsubscribe-wrapper p.sce-button-return a{display:inline-block;background:#fff;color:#222;padding:15px 25px;border:1px solid #333;border-radius:5px;text-decoration:none;font-size:1.1em}section#sce-mentions-subscribe-wrapper p.sce-button-return a:hover,section#sce-mentions-unsubscribe-wrapper p.sce-button-return a:hover{background:#ddd}section#sce-mentions-subscribe-wrapper p.unsubscribe,section#sce-mentions-unsubscribe-wrapper p.unsubscribe{margin-top:1em;font-size:13px}section#sce-mentions-subscribe-wrapper p.unsubscribe a,section#sce-mentions-unsubscribe-wrapper p.unsubscribe a{color:#fff;text-decoration:underline}section#sce-mentions-subscribe-wrapper p.unsubscribe a:hover,section#sce-mentions-unsubscribe-wrapper p.unsubscribe a:hover{color:#ddd}
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/resolve-url-loader/index.js!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[3]!./src/scss/sce-mentions-theme-white.scss ***!
+  \************************************************************************************************************************************************************************************************************************************/
+body {
+  margin: 0;
+  padding: 0;
+}
+
+section#sce-mentions-subscribe-wrapper,
+section#sce-mentions-unsubscribe-wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#sce-status-error,
+#sce-status-success {
+  padding: 20px 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.3em;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #BD3F32;
+  margin: 0;
+  margin-top: 15px;
+  text-align: center;
+  border-top: 2px solid rgb(148.6694560669, 49.5564853556, 39.3305439331);
+  border-bottom: 2px solid rgb(148.6694560669, 49.5564853556, 39.3305439331);
+}
+
+#sce-status-success {
+  border: 0;
+}
+
+#sce-status-normal {
+  padding: 5px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 4.2em;
+  margin: 0;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #BD3F32;
+  text-align: center;
+}
+
+section#sce-mentions-subscribe-wrapper,
+section#sce-mentions-unsubscribe-wrapper {
+  background: #FFF;
+  color: #333;
+}
+section#sce-mentions-subscribe-wrapper main,
+section#sce-mentions-unsubscribe-wrapper main {
+  display: block;
+  position: relative;
+  background: #333;
+  border: 2px solid #444;
+  color: #ddd;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  padding: 45px 30px;
+  max-width: 650px;
+  width: 100%;
+}
+section#sce-mentions-subscribe-wrapper h2,
+section#sce-mentions-unsubscribe-wrapper h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.3em;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  color: #FFF;
+  text-align: center;
+}
+section#sce-mentions-subscribe-wrapper p,
+section#sce-mentions-unsubscribe-wrapper p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+}
+section#sce-mentions-subscribe-wrapper p.sce-button-return,
+section#sce-mentions-unsubscribe-wrapper p.sce-button-return {
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+section#sce-mentions-subscribe-wrapper p.sce-button-return a,
+section#sce-mentions-unsubscribe-wrapper p.sce-button-return a {
+  display: inline-block;
+  background: #FFF;
+  color: #222;
+  padding: 15px 25px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.1em;
+}
+section#sce-mentions-subscribe-wrapper p.sce-button-return a:hover,
+section#sce-mentions-unsubscribe-wrapper p.sce-button-return a:hover {
+  background: #DDD;
+}
+section#sce-mentions-subscribe-wrapper p.unsubscribe,
+section#sce-mentions-unsubscribe-wrapper p.unsubscribe {
+  margin-top: 1em;
+  font-size: 13px;
+}
+section#sce-mentions-subscribe-wrapper p.unsubscribe a,
+section#sce-mentions-unsubscribe-wrapper p.unsubscribe a {
+  color: #FFF;
+  text-decoration: underline;
+}
+section#sce-mentions-subscribe-wrapper p.unsubscribe a:hover,
+section#sce-mentions-unsubscribe-wrapper p.unsubscribe a:hover {
+  color: #DDD;
+}
+
+/*# sourceMappingURL=sce-mentions-theme-white.css.map*/
