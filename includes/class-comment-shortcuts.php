@@ -487,17 +487,21 @@ class Comment_Shortcuts {
 			$pending_class = 'awaiting-mod';
 		}
 		if ( $pending_shortcut ) {
+			$title = sprintf(
+				/* translators: %1$s: Class name */
+
+				/* translators: %2$s: comment count */
+				__( 'View Pending <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+				esc_attr( $pending_class ),
+				esc_html( $pending_count )
+			);
+			if ( $pending_count === 0 ) {
+				$title = __( 'View Pending', 'comment-edit-pro' );
+			}
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-pending-shortcut',
-					'title'  => sprintf(
-						/* translators: %1$s: Class name */
-
-						/* translators: %2$s: comment count */
-						__( 'View Pending <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-						esc_attr( $pending_class ),
-						esc_html( $pending_count )
-					),
+					'title'  => $title,
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ),
 					'meta'   => array(
@@ -513,17 +517,21 @@ class Comment_Shortcuts {
 			$spam_class = 'awaiting-mod';
 		}
 		if ( $spam_shortcut ) {
+			$title = sprintf(
+				/* translators: %1$s: Class name */
+
+				/* translators: %2$s: comment count */
+				__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+				esc_attr( $spam_class ),
+				esc_html( $spam_count )
+			);
+			if ( $spam_count === 0 ) {
+				$title = __( 'View Spam', 'comment-edit-pro' );
+			}
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-spam-shortcut',
-					'title'  => sprintf(
-						/* translators: %1$s: Class name */
-
-						/* translators: %2$s: comment count */
-						__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-						esc_attr( $spam_class ),
-						esc_html( $spam_count )
-					),
+					'title'  => $title,
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ),
 					'meta'   => array(
@@ -539,17 +547,21 @@ class Comment_Shortcuts {
 			$trash_class = 'awaiting-mod';
 		}
 		if ( $trash_shortcut ) {
+			$title = sprintf(
+				/* translators: %1$s: Class name */
+
+				/* translators: %2$s: comment count */
+				__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+				esc_attr( $trash_class ),
+				esc_html( $trash_count )
+			);
+			if ( $trash_count === 0 ) {
+				$title = __( 'View Trash', 'comment-edit-pro' );
+			}
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-trash-shortcut',
-					'title'  => sprintf(
-						/* translators: %1$s: Class name */
-
-						/* translators: %2$s: comment count */
-						__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-						esc_attr( $trash_class ),
-						esc_html( $trash_count )
-					),
+					'title'  => $title,
 					'parent' => 'sce-comment-shortcuts',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash' ) ),
 					'meta'   => array(
@@ -627,17 +639,21 @@ class Comment_Shortcuts {
 
 			// Add spam shortcut to the admin bar.
 			if ( $post_spam_comment_count ) {
+				$title = sprintf(
+					/* translators: %1$s: Class name */
+
+					/* translators: %2$s: comment count */
+					__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+					esc_attr( $spam_class ),
+					esc_html( $post_spam_comment_count )
+				);
+				if ( 0 === $post_spam_comment_count ) {
+					$title = __( 'View Spam', 'comment-edit-pro' );
+				}
 				$wp_admin_bar->add_node(
 					array(
 						'id'     => 'comment-spam-shortcut-post',
-						'title'  => sprintf(
-							/* translators: %1$s: Class name */
-
-							/* translators: %2$s: comment count */
-							__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-							esc_attr( $spam_class ),
-							esc_html( $post_spam_comment_count )
-						),
+						'title'  => $title,
 						'parent' => 'sce-comment-shortcuts-post',
 						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam&p=' . get_the_ID() ) ),
 						'meta'   => array(
@@ -649,17 +665,21 @@ class Comment_Shortcuts {
 
 			// Add trash shortcut to the admin bar.
 			if ( $post_trash_comment_count ) {
+				$title = sprintf(
+					/* translators: %1$s: Class name */
+
+					/* translators: %2$s: comment count */
+					__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+					esc_attr( $trash_class ),
+					esc_html( $post_trash_comment_count )
+				);
+				if ( 0 === $post_trash_comment_count ) {
+					$title = __( 'View Trash', 'comment-edit-pro' );
+				}
 				$wp_admin_bar->add_node(
 					array(
 						'id'     => 'comment-trash-shortcut-post',
-						'title'  => sprintf(
-							/* translators: %1$s: Class name */
-
-							/* translators: %2$s: comment count */
-							__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
-							$post_trash_comment_count,
-							$trash_class
-						),
+						'title'  => $title,
 						'parent' => 'sce-comment-shortcuts-post',
 						'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash&p=' . get_the_ID() ) ),
 						'meta'   => array(
@@ -896,14 +916,21 @@ class Comment_Shortcuts {
 
 		// Add spam shortcut with count to the admin bar.
 		if ( $spam_shortcut ) {
+			$title = sprintf(
+				/* translators: %1$s: Class name */
+
+				/* translators: %2$s: comment count */
+				__( 'View Spam <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+				esc_attr( 'awaiting-mod' ),
+				esc_html( $spam_count )
+			);
+			if ( $spam_count === 0 ) {
+				$title = __( 'View Spam', 'comment-edit-pro' );
+			}
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-spam-shortcut',
-					'title'  => sprintf(
-						/* translators: %s: comment count */
-						__( 'View Spam <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-						$spam_count
-					),
+					'title'  => $title,
 					'parent' => 'comments',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ),
 					'meta'   => array(
@@ -915,14 +942,21 @@ class Comment_Shortcuts {
 
 		// Add trash shortcut with count to the admin bar.
 		if ( $trash_shortcut ) {
+			$title = sprintf(
+				/* translators: %1$s: Class name */
+
+				/* translators: %2$s: comment count */
+				__( 'View Trash <span class="%1$s">%2$s</span>', 'comment-edit-pro' ),
+				esc_attr( 'awaiting-mod' ),
+				esc_html( $trash_count )
+			);
+			if ( $trash_count === 0 ) {
+				$title = __( 'View Trash', 'comment-edit-pro' );
+			}
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'comment-trash-shortcut',
-					'title'  => sprintf(
-						/* translators: %s: comment count */
-						__( 'View Trash <span class="awaiting-mod">%s</span>', 'comment-edit-pro' ),
-						$trash_count
-					),
+					'title'  => $title,
 					'parent' => 'comments',
 					'href'   => esc_url( admin_url( 'edit-comments.php?comment_status=trash' ) ),
 					'meta'   => array(
@@ -1016,6 +1050,9 @@ class Comment_Shortcuts {
 			esc_attr( $pending_class ),
 			number_format_i18n( $pending_count )
 		);
+		if ( 0 === $pending_count ) {
+			$pending_title = __( '<span class="comment-menu-item-pending">Pending</span>', 'comment-edit-pro' );
+		}
 		$spam_class = 'awaiting-mod';
 		if ( 0 === $spam_count ) {
 			$spam_class = 'not-awaiting-mod';
@@ -1026,6 +1063,9 @@ class Comment_Shortcuts {
 			esc_attr( $spam_class ),
 			number_format_i18n( $spam_count )
 		);
+		if ( 0 === $spam_count ) {
+			$spam_title = __( '<span class="comment-menu-item-spam">Spam</span>', 'comment-edit-pro' );
+		}
 		$trash_class = 'awaiting-mod';
 		if ( 0 === $trash_count ) {
 			$trash_class = 'not-awaiting-mod';
@@ -1036,6 +1076,9 @@ class Comment_Shortcuts {
 			esc_attr( $trash_class ),
 			number_format_i18n( $trash_count )
 		);
+		if ( 0 === $trash_count ) {
+			$trash_title = __( '<span class="comment-menu-item-trash">Trash</span>', 'comment-edit-pro' );
+		}
 
 		// Get tools options.
 		$options               = Options_Tools::get_options();
