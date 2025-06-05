@@ -802,6 +802,7 @@ h3.sce-panel-heading {
   vertical-align: middle;
 }
 .sce-panel-row label.components-base-control__label {
+  display: inline-flex;
   position: relative;
 }
 .sce-panel-row .is-required label:after {
