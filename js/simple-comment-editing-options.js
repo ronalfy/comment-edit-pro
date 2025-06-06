@@ -135,6 +135,16 @@ const initCommentEditPro = ( $ ) => {
 			width: '80%',
 			height: '80%',
 		} );
+		jQuery( '[data-sce-fancybox-block-comments]' ).fancybox( {
+			type: 'iframe',
+			toolbar: true,
+			smallBtn: true,
+			iframe: {
+				preload: true,
+			},
+			width: '450px',
+			height: 'auto',
+		} );
 	}
 }
 

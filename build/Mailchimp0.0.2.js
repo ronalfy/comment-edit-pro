@@ -960,4 +960,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Mailchimp0.0.2.js.map?ver=1fb99e51b2bbe03c7442
+//# sourceMappingURL=Mailchimp0.0.2.js.map?ver=b1bb8d2cdcfef811b4fe

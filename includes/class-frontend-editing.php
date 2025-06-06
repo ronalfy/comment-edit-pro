@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
-use CommentEditPro\Includes\Functions as Functions;
+use CommentEditPro\Includes\Options;
+use CommentEditPro\Includes\Functions;
 
 /**
  * Main class for front-end editing.
@@ -56,6 +56,7 @@ class Frontend_Editing {
 					add_action( 'wp_ajax_sce_moderation_moderate_comment', array( $this, 'ajax_moderate_comment' ) );
 					add_action( 'wp_ajax_sce_moderation_spam_comment', array( $this, 'ajax_spam_comment' ) );
 					add_action( 'wp_ajax_sce_moderation_delete_comment', array( $this, 'ajax_delete_comment' ) );
+					add_action( 'wp_ajax_sce_block_comment', array( $this, 'ajax_block_comment' ) );
 				}
 
 				// Common actions/Ajax.
@@ -167,6 +168,62 @@ class Frontend_Editing {
 		// Let's delete the comment.
 		wp_delete_comment( $comment_id );
 		wp_send_json_success();
+	}
+
+	/**
+	 * Block a Comment.
+	 */
+	public function ajax_block_comment() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_POST, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_POST, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-block-comment-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get the comment.
+		$comment = get_comment( $comment_id, ARRAY_A );
+		if ( ! $comment ) {
+			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get the block options.
+		$add_url   = filter_input( INPUT_POST, 'url', FILTER_VALIDATE_BOOLEAN );
+		$add_email = filter_input( INPUT_POST, 'email', FILTER_VALIDATE_BOOLEAN );
+		$add_ip    = filter_input( INPUT_POST, 'ip', FILTER_VALIDATE_BOOLEAN );
+		$add_name  = filter_input( INPUT_POST, 'name', FILTER_VALIDATE_BOOLEAN );
+
+		// Get the current block options.
+		$disallowed_keys = get_option( 'disallowed_keys', '' );
+		$disallowed_keys = explode( "\n", $disallowed_keys );
+		$disallowed_keys = array_filter( $disallowed_keys, 'strlen' );
+		if ( $add_url ) {
+			$disallowed_keys[] = esc_url_raw( $comment['comment_author_url'] );
+		}
+		if ( $add_email ) {
+			$disallowed_keys[] = sanitize_email( $comment['comment_author_email'] );
+		}
+		if ( $add_ip ) {
+			$disallowed_keys[] = sanitize_text_field( $comment['comment_author_IP'] );
+		}
+		if ( $add_name && ! is_numeric( $comment['comment_author'] ) ) {
+			$disallowed_keys[] = sanitize_text_field( $comment['comment_author'] );
+		}
+		if ( ! empty( $disallowed_keys ) ) {
+			$disallowed_keys = array_unique( $disallowed_keys );
+			update_option( 'disallowed_keys', implode( "\n", $disallowed_keys ) );
+		}
+
+		// Let's spam and delete the comment.
+		wp_spam_comment( $comment_id );
+		wp_delete_comment( $comment_id, true );
+		wp_send_json_success( array( 'message' => __( 'Comment blocked.', 'comment-edit-pro' ) ) );
 	}
 
 	/**
@@ -408,6 +465,24 @@ class Frontend_Editing {
 			admin_url( 'admin-ajax.php' )
 		);
 
+		$block_comment_link = add_query_arg(
+			array(
+				'action' => 'sce_moderation_block_comments',
+				'cid'    => $comment->comment_ID,
+				'nonce'  => wp_create_nonce( 'sce-moderation-block-comment-' . $comment->comment_ID ),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+
+		$copy_email_link = add_query_arg(
+			array(
+				'action' => 'sce_copy_email',
+				'cid'    => $comment->comment_ID,
+				'nonce'  => wp_create_nonce( 'sce-moderation-copy-email-' . $comment->comment_ID ),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+
 		// Get comment status.
 		$comment_status = 'approve';
 		if ( '0' === $comment->comment_approved ) {
@@ -435,6 +510,16 @@ class Frontend_Editing {
 							</span>
 							<span class="sce-meatball-menu-label">
 								<?php esc_html_e( 'Edit Comment', 'comment-edit-pro' ); ?>
+							</span>
+						</a>
+					</li>
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-copy-email" data-comment-action="copy-email">
+						<a class="button-reset" href="<?php echo esc_url( $copy_email_link ); ?>">
+							<span class="sce-meatball-menu-icon">
+								<svg width="24" height="24"><use xlink:href="#sce-email-icon"></use></svg>
+							</span>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Copy Email', 'comment-edit-pro' ); ?>
 							</span>
 						</a>
 					</li>
@@ -475,6 +560,16 @@ class Frontend_Editing {
 							</span>
 							<span class="sce-meatball-menu-label">
 								<?php esc_html_e( 'Delete Comment', 'comment-edit-pro' ); ?>
+							</span>
+						</a>
+					</li>
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-block-comment" data-comment-action="block">
+						<a class="button-reset" data-sce-fancybox-block-comments data-type="iframe" data-preload="false" data-src="<?php echo esc_url( $block_comment_link ); ?>" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" href="<?php echo esc_url( $block_comment_link ); ?>">
+							<span class="sce-meatball-menu-icon">
+								<svg width="24" height="24"><use xlink:href="#sce-block-icon"></use></svg>
+							</span>
+							<span class="sce-meatball-menu-label">
+								<?php esc_html_e( 'Block Comment', 'comment-edit-pro' ); ?>
 							</span>
 						</a>
 					</li>
@@ -617,6 +712,21 @@ class Frontend_Editing {
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1867 1867" id="sce-edit-icon">
 				<g><path d="M933.333,0c-515.332,0 -933.333,417.997 -933.333,933.333c0,515.332 418.001,933.334 933.333,933.334c515.332,-0 933.334,-418.002 933.334,-933.334c-0,-515.336 -418.002,-933.333 -933.334,-933.333Zm-409.334,1404.67c-17.334,5.998 -37.333,1.998 -50.667,-11.336c-13.33,-13.33 -17.33,-33.333 -11.332,-50.663l99.333,-275.333l238,237.996l-275.334,99.336Zm356.669,-155.334l-263.334,-263.334l419.332,-419.332l263.334,263.334l-419.332,419.332Zm542.664,-543.335l-54.663,55.335l-263.334,-263.334l55.33,-54.668c49.337,-50 130.668,-50 180.001,0l82.666,82.67c50,49.332 50,130.664 0,179.997Z" style="fill-rule:nonzero;"/></g>
+			</symbol>
+			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="sce-block-icon">
+				<path fill="currentColor" d="m256 2c-140.3 0-254 113.7-254 254s113.7 254 254 254 254-113.7 254-254-113.7-254-254-254zm0 76.2c35.3 0 68.1 10.4 95.8 28.2l-245.4 245.4c-17.7-27.7-28.2-60.5-28.2-95.8 0-98.2 79.6-177.8 177.8-177.8zm0 355.6c-35.3 0-68.1-10.4-95.8-28.2l245.4-245.4c17.7 27.7 28.2 60.5 28.2 95.8 0 98.2-79.6 177.8-177.8 177.8z"></path>
+			</symbol>
+			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490.2 490.2" id="sce-email-icon">
+				<path fill="currentColor" d="M420.95,61.8C376.25,20.6,320.65,0,254.25,0c-69.8,0-129.3,23.4-178.4,70.3s-73.7,105.2-73.7,175
+		c0,66.9,23.4,124.4,70.1,172.6c46.9,48.2,109.9,72.3,189.2,72.3c47.8,0,94.7-9.8,140.7-29.5c15-6.4,22.3-23.6,16.2-38.7l0,0
+		c-6.3-15.6-24.1-22.8-39.6-16.2c-40,17.2-79.2,25.8-117.4,25.8c-60.8,0-107.9-18.5-141.3-55.6c-33.3-37-50-80.5-50-130.4
+		c0-54.2,17.9-99.4,53.6-135.7c35.6-36.2,79.5-54.4,131.5-54.4c47.9,0,88.4,14.9,121.4,44.7s49.5,67.3,49.5,112.5
+		c0,30.9-7.6,56.7-22.7,77.2c-15.1,20.6-30.8,30.8-47.1,30.8c-8.8,0-13.2-4.7-13.2-14.2c0-7.7,0.6-16.7,1.7-27.1l18.6-152.1h-64
+		l-4.1,14.9c-16.3-13.3-34.2-20-53.6-20c-30.8,0-57.2,12.3-79.1,36.8c-22,24.5-32.9,56.1-32.9,94.7c0,37.7,9.7,68.2,29.2,91.3
+		c19.5,23.2,42.9,34.7,70.3,34.7c24.5,0,45.4-10.3,62.8-30.8c13.1,19.7,32.4,29.5,57.9,29.5c37.5,0,69.9-16.3,97.2-49
+		c27.3-32.6,41-72,41-118.1C488.05,152.9,465.75,103,420.95,61.8z M273.55,291.9c-11.3,15.2-24.8,22.9-40.5,22.9
+		c-10.7,0-19.3-5.6-25.8-16.8c-6.6-11.2-9.9-25.1-9.9-41.8c0-20.6,4.6-37.2,13.8-49.8s20.6-19,34.2-19c11.8,0,22.3,4.7,31.5,14.2
+		s13.8,22.1,13.8,37.9C290.55,259.2,284.85,276.6,273.55,291.9z"></path>
 			</symbol>
 			<symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"  id="sce-loading-icon" x="0px" y="0px">
 			<g class="cir">

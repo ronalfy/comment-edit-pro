@@ -2064,4 +2064,4 @@ const RequestHeaderFields = [{
 /***/ })
 
 }]);
-//# sourceMappingURL=MailerLite0.0.2.js.map?ver=b9add20722d3c2b67c0a
+//# sourceMappingURL=MailerLite0.0.2.js.map?ver=b20019abdbfc07e8b415

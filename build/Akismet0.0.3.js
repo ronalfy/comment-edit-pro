@@ -772,4 +772,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Akismet0.0.3.js.map?ver=43d230dd8d245d98e461
+//# sourceMappingURL=Akismet0.0.3.js.map?ver=573097d4b392aff15959

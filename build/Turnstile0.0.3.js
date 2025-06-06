@@ -884,4 +884,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Turnstile0.0.3.js.map?ver=28f1153a8956d8c8480f
+//# sourceMappingURL=Turnstile0.0.3.js.map?ver=de33775d0cee0b87150b

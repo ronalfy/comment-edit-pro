@@ -48,6 +48,7 @@ module.exports = ( env ) => {
 				'sce-ccc-progress-bar': [ './css/sce-ccc-progress-bar.scss' ],
 				admin: [ './css/admin.scss' ],
 				avatars: [ './src/js/avatars.js' ],
+				'block-comments-view': [ './src/js/react/views/block-comments/index.js' ],
 				'delete-post-comments-init': [ './src/js/delete-post-comments-init.js' ],
 				'delete-post-comments-view': [ './src/js/react/views/post-delete-comments/index.js' ],
 				'avatars-frontend': [ './src/scss/avatars-frontend.scss' ],

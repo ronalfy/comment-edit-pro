@@ -67,6 +67,11 @@
   max-height: 400px !important;
 }
 
+.sce-fancybox-block-comments .fancybox-content {
+  max-width: 450px !important;
+  max-height: 400px !important;
+}
+
 .fancybox-is-open .fancybox-bg {
   background: #1e1e1e !important;
   opacity: 0.74 !important;

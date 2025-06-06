@@ -60,6 +60,9 @@ class Comment_Shortcuts {
 		// Add ajax endpoint for showing the delete posts comment modal.
 		add_action( 'wp_ajax_sce_shortcut_delete_comments', array( $this, 'ajax_fancybox_interface' ) );
 
+		// Add ajax endpoint for showing the block comments modal.
+		add_action( 'wp_ajax_sce_moderation_block_comments', array( $this, 'ajax_block_comments_fancybox_interface' ) );
+
 		// Add ajax endpoint for gathering comments for deletion.
 		add_action( 'wp_ajax_sce_shortcut_delete_comments_get_comments', array( $this, 'ajax_get_comments_for_deletion' ) );
 
@@ -195,6 +198,22 @@ class Comment_Shortcuts {
 			wp_die( 'Could not validate nonce.' );
 		}
 		include_once Functions::get_plugin_dir( '/templates/delete-post-comments.php' );
+		die( '' );
+	}
+
+	/**
+	 * Get the HTML for FancyBox Block Comments via Ajax
+	 */
+	public function ajax_block_comments_fancybox_interface() {
+		$nonce = sanitize_text_field( $_GET['nonce'] ); // phpcs:ignore
+		$comment_id = absint( $_GET['cid'] ); // phpcs:ignore
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_die( 'The user must be able to edit comments.' );
+		}
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-block-comment-' . $comment_id ) ) {
+			wp_die( 'Could not validate nonce.' );
+		}
+		include_once Functions::get_plugin_dir( '/templates/block-comments.php' );
 		die( '' );
 	}
 

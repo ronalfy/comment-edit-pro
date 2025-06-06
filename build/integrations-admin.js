@@ -187,7 +187,7 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".js?ver=" + {"vendors-node_modules_react-hook-form_dist_index_esm_mjs":"66187ec518982a818d1d","vendors-node_modules_classnames_index_js-node_modules_prop-types_index_js-node_modules_qs_lib-697968":"7f2aa6ad4cb3c6709966","Mailchimp0.0.2":"1fb99e51b2bbe03c7442","Slack0.0.3":"e87da4b3493b396e0e3e","ConvertKit0.0.1":"9af289b1b78918e08107","FloDesk0.0.4":"5a3e61fb603567e5f86e","MailerLite0.0.2":"b9add20722d3c2b67c0a"}[chunkId] + "";
+/******/ 			return "" + chunkId + ".js?ver=" + {"vendors-node_modules_react-hook-form_dist_index_esm_mjs":"cd99513f7c823477d150","vendors-node_modules_classnames_index_js-node_modules_prop-types_index_js-node_modules_qs_lib-697968":"7f2aa6ad4cb3c6709966","Mailchimp0.0.2":"b1bb8d2cdcfef811b4fe","Slack0.0.3":"55f82707f93910cba4fa","ConvertKit0.0.1":"90b8f94ac58da9861b2e","FloDesk0.0.4":"bb34fbbbc7fa3d43de63","MailerLite0.0.2":"b20019abdbfc07e8b415"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	
