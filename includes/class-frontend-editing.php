@@ -57,6 +57,7 @@ class Frontend_Editing {
 					add_action( 'wp_ajax_sce_moderation_spam_comment', array( $this, 'ajax_spam_comment' ) );
 					add_action( 'wp_ajax_sce_moderation_delete_comment', array( $this, 'ajax_delete_comment' ) );
 					add_action( 'wp_ajax_sce_block_comment', array( $this, 'ajax_block_comment' ) );
+					add_action( 'wp_ajax_sce_copy_email', array( $this, 'ajax_copy_email' ) );
 				}
 
 				// Common actions/Ajax.
@@ -224,6 +225,33 @@ class Frontend_Editing {
 		wp_spam_comment( $comment_id );
 		wp_delete_comment( $comment_id, true );
 		wp_send_json_success( array( 'message' => __( 'Comment blocked.', 'comment-edit-pro' ) ) );
+	}
+
+	/**
+	 * Copy a comment's email to the clipboard.
+	 */
+	public function ajax_copy_email() {
+		$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
+		$comment_id = absint( filter_input( INPUT_GET, 'cid', FILTER_DEFAULT ) );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'sce-moderation-copy-email-' . $comment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate nonce.', 'comment-edit-pro' ) ) );
+		}
+
+		// Very permissions.
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not validate permissions.', 'comment-edit-pro' ) ) );
+		}
+
+		// Get the comment.
+		$comment = get_comment( $comment_id, ARRAY_A );
+		if ( ! $comment ) {
+			wp_send_json_error( array( 'message' => __( 'Could not find comment.', 'comment-edit-pro' ) ) );
+		}
+
+		// Return the email via Ajax.
+		wp_send_json_success( array( 'email' => sanitize_email( $comment['comment_author_email'] ) ) );
 	}
 
 	/**
@@ -513,12 +541,12 @@ class Frontend_Editing {
 							</span>
 						</a>
 					</li>
-					<li class="sce-meatball-menu-item sce-meatball-menu-item-copy-email" data-comment-action="copy-email">
-						<a class="button-reset" href="<?php echo esc_url( $copy_email_link ); ?>">
+					<li class="sce-meatball-menu-item sce-meatball-menu-item-copy-email" data-comment-action="copy-email" style="display: none;">
+						<a class="button-reset" href="<?php echo esc_url( $copy_email_link ); ?>" data-cid="<?php echo esc_attr( $comment->comment_ID ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'sce-moderation-copy-email-' . $comment->comment_ID ) ); ?>">
 							<span class="sce-meatball-menu-icon">
 								<svg width="24" height="24"><use xlink:href="#sce-email-icon"></use></svg>
 							</span>
-							<span class="sce-meatball-menu-label">
+							<span class="sce-meatball-menu-label" data-copy-text="<?php echo esc_attr__( 'Copy Email', 'comment-edit-pro' ); ?>" data-loading-text="<?php echo esc_attr__( 'Copying email...', 'comment-edit-pro' ); ?>" data-loading-done="<?php echo esc_attr__( 'Email Copied', 'comment-edit-pro' ); ?>">
 								<?php esc_html_e( 'Copy Email', 'comment-edit-pro' ); ?>
 							</span>
 						</a>
