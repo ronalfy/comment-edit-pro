@@ -722,7 +722,7 @@ const Interface = ( props ) => {
 													rules={ { required: true } }
 													render={ ( { field: { onChange, value } } ) => (
 														<TextControl
-															label={ __( 'To Email Address', 'highlight-and-share' ) }
+															label={ __( 'To Email Address', 'comment-edit-pro' ) }
 															value={ value }
 															onChange={ ( newValue ) => {
 																if ( ! ValidateEmail( newValue ) ) {
@@ -766,7 +766,7 @@ const Interface = ( props ) => {
 														<TextControl
 															label={ __(
 																'From Email Address',
-																'highlight-and-share'
+																'comment-edit-pro'
 															) }
 															value={ value }
 															onChange={ ( newValue ) => {
@@ -809,7 +809,7 @@ const Interface = ( props ) => {
 													rules={ { required: true } }
 													render={ ( { field: { onChange, value } } ) => (
 														<TextControl
-															label={ __( 'Email Subject', 'highlight-and-share' ) }
+															label={ __( 'Email Subject', 'comment-edit-pro' ) }
 															value={ value }
 															onChange={ ( newValue ) => {
 																onChange( newValue );

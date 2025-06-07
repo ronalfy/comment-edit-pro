@@ -13326,7 +13326,7 @@ const Interface = props => {
                         value
                       }
                     }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('To Email Address', 'highlight-and-share'),
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('To Email Address', 'comment-edit-pro'),
                       value: value,
                       onChange: newValue => {
                         if (!(0,_validation_ValidateEmail__WEBPACK_IMPORTED_MODULE_11__["default"])(newValue)) {
@@ -13362,7 +13362,7 @@ const Interface = props => {
                         value
                       }
                     }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email Address', 'highlight-and-share'),
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email Address', 'comment-edit-pro'),
                       value: value,
                       onChange: newValue => {
                         if (!(0,_validation_ValidateEmail__WEBPACK_IMPORTED_MODULE_11__["default"])(newValue)) {
@@ -13398,7 +13398,7 @@ const Interface = props => {
                         value
                       }
                     }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Email Subject', 'highlight-and-share'),
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Email Subject', 'comment-edit-pro'),
                       value: value,
                       onChange: newValue => {
                         onChange(newValue);

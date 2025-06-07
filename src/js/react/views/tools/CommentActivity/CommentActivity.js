@@ -172,7 +172,7 @@ const Interface = ( props ) => {
 												rules={ { required: true } }
 												render={ ( { field: { onChange, value } } ) => (
 													<TextControl
-														label={ __( 'Expiration in Days', 'highlight-and-share' ) }
+														label={ __( 'Expiration in Days', 'comment-edit-pro' ) }
 														value={ value }
 														type="number"
 														onChange={ ( newValue ) => {

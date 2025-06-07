@@ -32,14 +32,15 @@ class Recaptcha {
 		$options = Options::get_options();
 
 		// Let's check that reCAPTCHA is enabled.
-		if ( ! (bool) $options['recaptcha_enabled'] ) {
+		if ( ! (bool) $options['recaptcha_enterprise_enabled'] ) {
 			return;
 		}
 
 		// Let's check that the secret and site key are set.
-		$site_key   = $options['recaptcha_site_key'];
-		$secret_key = $options['recaptcha_secret_key'];
-		if ( empty( $site_key ) || empty( $secret_key ) ) {
+		$site_key   = sanitize_text_field( $options['recaptcha_site_key'] );
+		$api_key    = sanitize_text_field( $options['recaptcha_api_key'] );
+		$project_id = sanitize_text_field( $options['recaptcha_project_id'] );
+		if ( empty( $site_key ) || empty( $api_key ) || empty( $project_id ) ) {
 			return;
 		}
 
@@ -63,48 +64,58 @@ class Recaptcha {
 		add_action( 'pre_comment_on_post', array( $this, 'verify_recaptcha' ), 10, 1 );
 	}
 
-	/**
-	 * Verify the recaptcha response.
-	 *
-	 * @param int $comment_id The comment ID to check.
-	 */
+		/**
+		 * Verify the recaptcha response.
+		 *
+		 * @param int $comment_id The comment ID to check.
+		 */
 	public function verify_recaptcha( $comment_id ) {
-		$options = Options::get_options();
-		if ( ! $options['recaptcha_enabled'] ) {
+		$options              = Options::get_options();
+		$recaptcha_enabled    = (bool) $options['recaptcha_enterprise_enabled'];
+		$recaptcha_project_id = sanitize_text_field( $options['recaptcha_project_id'] );
+		$recaptcha_api_key    = sanitize_text_field( $options['recaptcha_api_key'] );
+		$recaptcha_site_key   = sanitize_text_field( $options['recaptcha_site_key'] );
+		$score_threshold      = (float) $options['recaptcha_score_threshold'];
+		if ( ! $recaptcha_enabled || empty( $recaptcha_project_id ) || empty( $recaptcha_api_key ) || empty( $recaptcha_site_key ) ) {
 			return;
 		}
 		$token = sanitize_text_field( filter_input( INPUT_POST, 'g-recaptcha-response-token', FILTER_DEFAULT ) );
 		if ( ! $token ) {
 			wp_die( esc_html__( 'Could not verify reCAPTCHA.', 'comment-edit-pro' ) );
 		}
-		$secret_key = $options['recaptcha_secret_key'];
-		$url        = 'https://www.google.com/recaptcha/api/siteverify';
-		$data       = array(
-			'secret'   => $secret_key,
-			'response' => $token,
+		// Now get token back from reCAPTCHA.
+		$url      = 'https://recaptchaenterprise.googleapis.com/v1/projects/' . esc_attr( $recaptcha_project_id ) . '/assessments?key=' . esc_attr( $recaptcha_api_key );
+		$data     = array(
+			'event' => array(
+				'token'          => $token,
+				'expectedAction' => 'USER_ACTION',
+				'siteKey'        => $recaptcha_site_key,
+			),
 		);
-		$args       = array(
-			'body'      => $data,
+		$args     = array(
+			'body'      => wp_json_encode( $data ),
 			'method'    => 'POST',
 			'sslverify' => true,
+			'headers'   => array(
+				'Content-Type' => 'application/json',
+			),
 		);
-		$response   = wp_remote_post( esc_url( $url ), $args );
+		$response = wp_remote_post( esc_url_raw( $url ), $args );
 		if ( is_wp_error( $response ) ) {
-			wp_die( esc_html__( 'reCAPTCHA could not be verified.', 'comment-edit-pro' ) );
+			wp_die( esc_html__( 'Error validating reCAPTCHA token.', 'comment-edit-pro' ) );
 		}
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-		if ( ! $body['success'] ) {
+		if ( isset( $body['tokenProperties']['valid'] ) && ! (bool) $body['tokenProperties']['valid'] ) {
 			wp_die( esc_html__( 'reCAPTCHA security challenge has failed.', 'comment-edit-pro' ) );
 		}
 
-		// all is well. Check the threshold.
-		$score_threshold         = (float) $options['recaptcha_score_threshold'];
-		$comment_recaptcha_score = (float) $body['score'];
-		if ( $comment_recaptcha_score < $score_threshold ) {
-			wp_die( esc_html__( 'reCAPTCHA security challenge has failed.', 'comment-edit-pro' ) );
+		// Now check the score with threshold.
+		$recaptcha_score = isset( $body['riskAnalysis']['score'] ) ? (float) $body['riskAnalysis']['score'] : 0;
+		if ( $recaptcha_score < $score_threshold ) {
+			wp_die( esc_html__( 'reCAPTCHA 3 security challenge has failed.', 'comment-edit-pro' ) );
 		}
 
-		// Now silently exit as all is well now.
+		// all is well. Let the comment posting continue.
 	}
 
 	/**
@@ -122,29 +133,37 @@ class Recaptcha {
 	 */
 	public function print_recaptcha_scripts() {
 		$options                            = Options::get_options();
-		$comment_form_id                    = $options['comment_form_id'];
-		$recaptcha_comment_submit_button_id = $options['comment_submit_id'];
-		if ( (bool) $options['recaptcha_enabled'] && $comment_form_id ) {
+		$comment_form_id                    = sanitize_text_field( $options['comment_form_id'] );
+		$recaptcha_comment_submit_button_id = sanitize_text_field( $options['comment_submit_id'] );
+		$recaptcha_site_key                 = sanitize_text_field( $options['recaptcha_site_key'] );
+		if ( (bool) $options['recaptcha_enterprise_enabled'] && $comment_form_id ) {
 			?>
 			<script>
 				const sceRecaptchaAppend = function() {
 					var sceCommentSubmitButton = document.querySelector( '<?php echo esc_js( $recaptcha_comment_submit_button_id ); ?>' );
-					console.log( sceCommentSubmitButton );
 					if ( null !== sceCommentSubmitButton ) {
 						// Change ID and name attribute of button. This is needed for comment submission.
-						grecaptcha.ready(function() {
-						grecaptcha.execute('<?php echo esc_js( $options['recaptcha_site_key'] ); ?>', {action: 'submit'}).then(function(token) {
-							let recaptchaForm = document.querySelector('<?php echo esc_js( $comment_form_id ); ?>');
-							if ( null !== recaptchaForm ) {
-								const recaptchaInput = document.createElement('input');
-								recaptchaInput.setAttribute('type', 'hidden');
-								recaptchaInput.setAttribute('name', 'g-recaptcha-response-token');
-								recaptchaInput.setAttribute('value', token);
-
-								recaptchaForm.appendChild(recaptchaInput);
-							}
-						});
-						});
+						// eslint-disable-next-line no-undef
+						if (
+								typeof grecaptcha !== 'undefined'
+							) {
+								grecaptcha.enterprise.ready( function() {
+									grecaptcha
+										.enterprise.execute( '<?php echo esc_js( $recaptcha_site_key ); ?>', {
+											action: 'submit',
+										} )
+										.then( function( token ) {
+											let recaptchaForm = document.querySelector( '<?php echo esc_js( $comment_form_id ); ?>' );
+											if ( null !== recaptchaForm ) {
+												const recaptchaInput = document.createElement( 'input' );
+												recaptchaInput.setAttribute( 'type', 'hidden' );
+												recaptchaInput.setAttribute( 'name', 'g-recaptcha-response-token' );
+												recaptchaInput.setAttribute( 'value', token );
+												recaptchaForm.appendChild( recaptchaInput );
+											}
+										} );
+								} );
+						}
 					}
 				};
 				window.addEventListener( 'DOMContentLoaded', function() {
@@ -182,12 +201,13 @@ class Recaptcha {
 	 * Load recaptcha if enabled and comments are open.
 	 */
 	public function enqueue_recaptcha_scripts() {
-		$options = Options::get_options();
+		$options            = Options::get_options();
+		$recaptcha_site_key = $options['recaptcha_site_key'] ?? '';
 
-		if ( (bool) $options['recaptcha_enabled'] ) {
+		if ( (bool) $options['recaptcha_enterprise_enabled'] && ! empty( $recaptcha_site_key ) ) {
 			wp_enqueue_script(
-				'sce-recaptcha',
-				esc_url_raw( 'https://www.google.com/recaptcha/api.js?render=' . sanitize_text_field( $options['recaptcha_site_key'] ) ),
+				'sce-enterprise-recaptcha',
+				esc_url_raw( 'https://www.google.com/recaptcha/enterprise.js?render=' . sanitize_text_field( $recaptcha_site_key ) ),
 				array(),
 				Functions::get_plugin_version(),
 				true
@@ -212,9 +232,10 @@ class Recaptcha {
 
 		$options    = Options::get_options();
 		$json_array = array(
-			'recaptchaEnabled'              => (bool) $options['recaptcha_enabled'],
+			'recaptchaEnterpriseEnabled'    => (bool) $options['recaptcha_enterprise_enabled'],
+			'recaptchaProjectId'            => $options['recaptcha_project_id'],
+			'recaptchaApiKey'               => $options['recaptcha_api_key'],
 			'recaptchaSiteKey'              => $options['recaptcha_site_key'],
-			'recaptchaSecretKey'            => $options['recaptcha_secret_key'],
 			'recaptchaLoggedInUsersEnabled' => (bool) $options['recaptcha_logged_in_users_enabled'],
 			'recaptchaScoreThreshold'       => (float) $options['recaptcha_score_threshold'],
 		);
@@ -239,17 +260,19 @@ class Recaptcha {
 		}
 
 		// Nonce passed, let's get post vars.
-		$recaptcha_enabled                 = (bool) filter_input( INPUT_POST, 'recaptchaEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_enterprise_enabled      = (bool) filter_input( INPUT_POST, 'recaptchaEnterpriseEnabled', FILTER_VALIDATE_BOOLEAN );
+		$recaptcha_project_id              = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaProjectId', FILTER_DEFAULT ) );
+		$recaptcha_api_key                 = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaApiKey', FILTER_DEFAULT ) );
 		$recaptcha_site_key                = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSiteKey', FILTER_DEFAULT ) );
-		$recaptcha_secret_key              = sanitize_text_field( filter_input( INPUT_POST, 'recaptchaSecretKey', FILTER_DEFAULT ) );
 		$recaptcha_logged_in_users_enabled = (bool) filter_input( INPUT_POST, 'recaptchaLoggedInUsersEnabled', FILTER_VALIDATE_BOOLEAN );
 		$recaptcha_score_threshold         = (float) filter_input( INPUT_POST, 'recaptchaScoreThreshold', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 
 		// Now let's save options.
 		$options_to_save = array(
-			'recaptcha_enabled'                 => $recaptcha_enabled,
+			'recaptcha_enterprise_enabled'      => $recaptcha_enterprise_enabled,
+			'recaptcha_project_id'              => $recaptcha_project_id,
+			'recaptcha_api_key'                 => $recaptcha_api_key,
 			'recaptcha_site_key'                => $recaptcha_site_key,
-			'recaptcha_secret_key'              => $recaptcha_secret_key,
 			'recaptcha_logged_in_users_enabled' => $recaptcha_logged_in_users_enabled,
 			'recaptcha_score_threshold'         => $recaptcha_score_threshold,
 		);
@@ -280,9 +303,10 @@ class Recaptcha {
 		// Clear options.
 		Options::update_options(
 			array(
-				'recaptcha_enabled'                  => false,
+				'recaptcha_enterprise_enabled'       => false,
+				'recaptcha_project_id'               => '',
+				'recaptcha_api_key'                  => '',
 				'recaptcha_site_key'                 => '',
-				'recaptcha_secret_key'               => '',
 				'recaptcha_logged_in_users_enabled'  => true,
 				'recaptcha_comment_submit_button_id' => 'submit',
 				'recaptcha_score_threshold'          => 0.5,

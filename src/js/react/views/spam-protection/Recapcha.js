@@ -77,8 +77,8 @@ const Interface = ( props ) => {
 	const { turnstileEnabled, setRecaptchaEnabled } = useContext( SpamProtectionContext );
 
 	useEffect( () => {
-		setRecaptchaEnabled( data.recaptchaEnabled );
-	}, [ data.recaptchaEnabled ] );
+		setRecaptchaEnabled( data.recaptchaEnterpriseEnabled );
+	}, [ data.recaptchaEnterpriseEnabled ] );
 
 	const {
 		register,
@@ -90,11 +90,12 @@ const Interface = ( props ) => {
 		setError,
 	} = useForm( {
 		defaultValues: {
-			recaptchaEnabled: data.recaptchaEnabled,
+			recaptchaEnterpriseEnabled: data.recaptchaEnterpriseEnabled,
+			recaptchaProjectId: data.recaptchaProjectId,
+			recaptchaApiKey: data.recaptchaApiKey,
 			recaptchaSiteKey: data.recaptchaSiteKey,
-			recaptchaSecretKey: data.recaptchaSecretKey,
-			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
 			recaptchaScoreThreshold: data.recaptchaScoreThreshold,
+			recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
 		},
 	} );
 
@@ -141,10 +142,13 @@ const Interface = ( props ) => {
 				if ( ajaxSuccess ) {
 					setIsReset( true );
 					reset( {
-						recaptchaEnabled: false,
+						recaptchaEnterpriseEnabled: false,
+						recaptchaProjectId: '',
+						recaptchaApiKey: '',
 						recaptchaSiteKey: '',
 						recaptchaSecretKey: '',
-						recaptchaLoggedInUsersEnabled: true,
+						recaptchaLoggedInUsersEnabled: false,
+						recaptchaScoreThreshold: 0.5,
 					} );
 					setTimeout( () => {
 						setIsReset( false );
@@ -157,10 +161,49 @@ const Interface = ( props ) => {
 			} );
 	};
 
+	const getProjectId = () => {
+		return (
+			<tr>
+				<th scope="row">{ __( 'reCAPTCHA Enterprise Project ID', 'comment-edit-pro' ) }</th>
+				<td>
+					<Controller
+						name="recaptchaProjectId"
+						control={ control }
+						rules={ { required: true } }
+						render={ ( { field } ) => (
+							<TextControl
+								label={ __( 'reCAPTCHA Enterprise Project ID', 'quotes-dlx' ) }
+								{ ...field }
+								className={ classNames( 'sce-admin__text-control', {
+									'has-error': 'required' === errors.recaptchaProjectId?.type,
+									'is-required': true,
+								} ) }
+								help={ __(
+									'Enter your reCAPTCHA Enterprise Project ID',
+									'comment-edit-pro'
+								) }
+								aria-required="true"
+							/>
+						) }
+					/>
+					{ 'required' === errors.recaptchaProjectId?.type && (
+						<Notice
+							message={ __( 'This field is a required field.' ) }
+							status="error"
+							politeness="assertive"
+							inline={ true }
+							icon={ CircularExclamationIcon }
+						/>
+					) }
+				</td>
+			</tr>
+		);
+	};
+
 	const getSiteKey = () => {
 		return (
 			<tr>
-				<th scope="row">{ __( 'Site Key', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'reCAPTCHA Enterprise Site Key', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
 						name="recaptchaSiteKey"
@@ -168,14 +211,14 @@ const Interface = ( props ) => {
 						rules={ { required: true } }
 						render={ ( { field } ) => (
 							<TextControl
-								label={ __( 'Recaptcha 3 Site Key', 'quotes-dlx' ) }
+								label={ __( 'reCAPTCHA Enterprise Site Key', 'quotes-dlx' ) }
 								{ ...field }
 								className={ classNames( 'sce-admin__text-control', {
 									'has-error': 'required' === errors.recaptchaSiteKey?.type,
 									'is-required': true,
 								} ) }
 								help={ __(
-									'Enter your Recaptcha 3 Site Key',
+									'Enter your reCAPTCHA Enterprise Site Key',
 									'comment-edit-pro'
 								) }
 								aria-required="true"
@@ -196,32 +239,32 @@ const Interface = ( props ) => {
 		);
 	};
 
-	const getSecretKey = () => {
+	const getApiKey = () => {
 		return (
 			<tr>
-				<th scope="row">{ __( 'Secret Key', 'comment-edit-pro' ) }</th>
+				<th scope="row">{ __( 'reCAPTCHA Enterprise API Key', 'comment-edit-pro' ) }</th>
 				<td>
 					<Controller
-						name="recaptchaSecretKey"
+						name="recaptchaApiKey"
 						control={ control }
 						rules={ { required: true } }
 						render={ ( { field } ) => (
 							<TextControl
-								label={ __( 'Recaptcha 3 Secret Key', 'quotes-dlx' ) }
+								label={ __( 'reCAPTCHA Enterprise API Key', 'quotes-dlx' ) }
 								{ ...field }
 								className={ classNames( 'sce-admin__text-control', {
-									'has-error': 'required' === errors.recaptchaSiteKey?.type,
+									'has-error': 'required' === errors.recaptchaApiKey?.type,
 									'is-required': true,
 								} ) }
 								help={ __(
-									'Enter your Recaptcha 3 Secret Key',
+									'Enter your reCAPTCHA Enterprise API Key',
 									'comment-edit-pro'
 								) }
 								aria-required="true"
 							/>
 						) }
 					/>
-					{ 'required' === errors.recaptchaSecretKey?.type && (
+					{ 'required' === errors.recaptchaApiKey?.type && (
 						<Notice
 							message={ __( 'This field is a required field.' ) }
 							status="error"
@@ -333,12 +376,23 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Recaptcha', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Recaptcha Enterprise', 'comment-edit-pro' ) }</h2>
 			<p className="description">
 				{ __(
-					'Using Recaptcha 3, you can further protect from bots and spam.',
+					'Using Recaptcha Enterprise, you can further protect from bots and spam.',
 					'comment-edit-pro'
 				) }
+			</p>
+			<p className="description">
+				{
+					<a
+						href="https://dlxplugins.com/how-tos/how-to-retrieve-recaptcha-enterprise-site-and-api-keys/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						({ __( 'Find out how to get your reCAPTCHA Enterprise keys', 'comment-edit-pro' ) })
+					</a>
+				}
 			</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">
@@ -347,11 +401,11 @@ const Interface = ( props ) => {
 							<th scope="row">{ __( 'Recaptcha', 'comment-edit-pro' ) }</th>
 							<td>
 								<Controller
-									name="recaptchaEnabled"
+									name="recaptchaEnterpriseEnabled"
 									control={ control }
 									render={ ( { field: { onChange, value } } ) => (
 										<ToggleControl
-											label={ __( 'Enable Recaptcha 3', 'comment-edit-pro' ) }
+											label={ __( 'Enable Recaptcha Enterprise', 'comment-edit-pro' ) }
 											className="sce-admin__toggle-control"
 											checked={ value }
 											onChange={ ( boolValue ) => {
@@ -359,17 +413,17 @@ const Interface = ( props ) => {
 												onChange( boolValue );
 											} }
 											help={ __(
-												'Enable or disable Recaptcha 3 support.',
+												'Enable or disable Recaptcha Enterprise support.',
 												'comment-edit-pro'
 											) }
 										/>
 									) }
 								/>
-								{ ( turnstileEnabled && getValues( 'recaptchaEnabled' ) ) && (
+								{ ( turnstileEnabled && getValues( 'recaptchaEnterpriseEnabled' ) ) && (
 									<>
 										<Notice
 											message={ __(
-												'It is not recommended to have both reCAPTCHA 3 and Cloudflare Turnstile enabled.',
+												'It is not recommended to have both reCAPTCHA and Cloudflare Turnstile enabled.',
 												'comment-edit-pro'
 											) }
 											status="warning"
@@ -379,10 +433,11 @@ const Interface = ( props ) => {
 								) }
 							</td>
 						</tr>
-						{ getValues( 'recaptchaEnabled' ) && (
+						{ getValues( 'recaptchaEnterpriseEnabled' ) && (
 							<>
+								{ getProjectId() }
+								{ getApiKey() }
 								{ getSiteKey() }
-								{ getSecretKey() }
 								{ getLoggedInToggle() }
 								{ getRecaptchaThreshold() }
 							</>

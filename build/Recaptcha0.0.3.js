@@ -434,8 +434,8 @@ const Interface = props => {
     setRecaptchaEnabled
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context__WEBPACK_IMPORTED_MODULE_11__["default"]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    setRecaptchaEnabled(data.recaptchaEnabled);
-  }, [data.recaptchaEnabled]);
+    setRecaptchaEnabled(data.recaptchaEnterpriseEnabled);
+  }, [data.recaptchaEnterpriseEnabled]);
   const {
     register,
     control,
@@ -446,11 +446,12 @@ const Interface = props => {
     setError
   } = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useForm)({
     defaultValues: {
-      recaptchaEnabled: data.recaptchaEnabled,
+      recaptchaEnterpriseEnabled: data.recaptchaEnterpriseEnabled,
+      recaptchaProjectId: data.recaptchaProjectId,
+      recaptchaApiKey: data.recaptchaApiKey,
       recaptchaSiteKey: data.recaptchaSiteKey,
-      recaptchaSecretKey: data.recaptchaSecretKey,
-      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled,
-      recaptchaScoreThreshold: data.recaptchaScoreThreshold
+      recaptchaScoreThreshold: data.recaptchaScoreThreshold,
+      recaptchaLoggedInUsersEnabled: data.recaptchaLoggedInUsersEnabled
     }
   });
   const formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useWatch)({
@@ -495,10 +496,13 @@ const Interface = props => {
       if (ajaxSuccess) {
         setIsReset(true);
         reset({
-          recaptchaEnabled: false,
+          recaptchaEnterpriseEnabled: false,
+          recaptchaProjectId: '',
+          recaptchaApiKey: '',
           recaptchaSiteKey: '',
           recaptchaSecretKey: '',
-          recaptchaLoggedInUsersEnabled: true
+          recaptchaLoggedInUsersEnabled: false,
+          recaptchaScoreThreshold: 0.5
         });
         setTimeout(() => {
           setIsReset(false);
@@ -508,11 +512,45 @@ const Interface = props => {
       setResetting(false);
     });
   };
+  const getProjectId = () => {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("th", {
+        scope: "row",
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise Project ID', 'comment-edit-pro')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("td", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+          name: "recaptchaProjectId",
+          control: control,
+          rules: {
+            required: true
+          },
+          render: ({
+            field
+          }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise Project ID', 'quotes-dlx'),
+            ...field,
+            className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+              'has-error': 'required' === errors.recaptchaProjectId?.type,
+              'is-required': true
+            }),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your reCAPTCHA Enterprise Project ID', 'comment-edit-pro'),
+            "aria-required": "true"
+          })
+        }), 'required' === errors.recaptchaProjectId?.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
+          status: "error",
+          politeness: "assertive",
+          inline: true,
+          icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_8__["default"]
+        })]
+      })]
+    });
+  };
   const getSiteKey = () => {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("th", {
         scope: "row",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Site Key', 'comment-edit-pro')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise Site Key', 'comment-edit-pro')
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("td", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
           name: "recaptchaSiteKey",
@@ -523,13 +561,13 @@ const Interface = props => {
           render: ({
             field
           }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Site Key', 'quotes-dlx'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise Site Key', 'quotes-dlx'),
             ...field,
             className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
               'has-error': 'required' === errors.recaptchaSiteKey?.type,
               'is-required': true
             }),
-            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Recaptcha 3 Site Key', 'comment-edit-pro'),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your reCAPTCHA Enterprise Site Key', 'comment-edit-pro'),
             "aria-required": "true"
           })
         }), 'required' === errors.recaptchaSiteKey?.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -542,14 +580,14 @@ const Interface = props => {
       })]
     });
   };
-  const getSecretKey = () => {
+  const getApiKey = () => {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("th", {
         scope: "row",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Secret Key', 'comment-edit-pro')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise API Key', 'comment-edit-pro')
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("td", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-          name: "recaptchaSecretKey",
+          name: "recaptchaApiKey",
           control: control,
           rules: {
             required: true
@@ -557,16 +595,16 @@ const Interface = props => {
           render: ({
             field
           }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha 3 Secret Key', 'quotes-dlx'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('reCAPTCHA Enterprise API Key', 'quotes-dlx'),
             ...field,
             className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
-              'has-error': 'required' === errors.recaptchaSiteKey?.type,
+              'has-error': 'required' === errors.recaptchaApiKey?.type,
               'is-required': true
             }),
-            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your Recaptcha 3 Secret Key', 'comment-edit-pro'),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter your reCAPTCHA Enterprise API Key', 'comment-edit-pro'),
             "aria-required": "true"
           })
-        }), 'required' === errors.recaptchaSecretKey?.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        }), 'required' === errors.recaptchaApiKey?.type && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
           message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This field is a required field.'),
           status: "error",
           politeness: "assertive",
@@ -668,17 +706,19 @@ const Interface = props => {
     return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disconnect From Recaptcha', 'quotes-dlx');
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("h2", {
-      children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
-        className: "sce-admin-heading-docs",
-        target: "_blank",
-        rel: "noreferrer",
-        href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support",
-        children: ["(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")"]
-      })]
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha Enterprise', 'comment-edit-pro')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
       className: "description",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Using Recaptcha 3, you can further protect from bots and spam.', 'comment-edit-pro')
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Using Recaptcha Enterprise, you can further protect from bots and spam.', 'comment-edit-pro')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+      className: "description",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
+        href: "https://dlxplugins.com/how-tos/how-to-retrieve-recaptcha-enterprise-site-and-api-keys/",
+        target: "_blank",
+        rel: "noopener noreferrer",
+        children: ["(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Find out how to get your reCAPTCHA Enterprise keys', 'comment-edit-pro'), ")"]
+      })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("form", {
       onSubmit: handleSubmit(onSubmit),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("table", {
@@ -690,7 +730,7 @@ const Interface = props => {
               children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Recaptcha', 'comment-edit-pro')
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("td", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
-                name: "recaptchaEnabled",
+                name: "recaptchaEnterpriseEnabled",
                 control: control,
                 render: ({
                   field: {
@@ -698,25 +738,25 @@ const Interface = props => {
                     value
                   }
                 }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
-                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha 3', 'comment-edit-pro'),
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Recaptcha Enterprise', 'comment-edit-pro'),
                   className: "sce-admin__toggle-control",
                   checked: value,
                   onChange: boolValue => {
                     setRecaptchaEnabled(boolValue);
                     onChange(boolValue);
                   },
-                  help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha 3 support.', 'comment-edit-pro')
+                  help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable or disable Recaptcha Enterprise support.', 'comment-edit-pro')
                 })
-              }), turnstileEnabled && getValues('recaptchaEnabled') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+              }), turnstileEnabled && getValues('recaptchaEnterpriseEnabled') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_9__["default"], {
-                  message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('It is not recommended to have both reCAPTCHA 3 and Cloudflare Turnstile enabled.', 'comment-edit-pro'),
+                  message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('It is not recommended to have both reCAPTCHA and Cloudflare Turnstile enabled.', 'comment-edit-pro'),
                   status: "warning",
                   politeness: "polite"
                 })
               })]
             })]
-          }), getValues('recaptchaEnabled') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-            children: [getSiteKey(), getSecretKey(), getLoggedInToggle(), getRecaptchaThreshold()]
+          }), getValues('recaptchaEnterpriseEnabled') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+            children: [getProjectId(), getApiKey(), getSiteKey(), getLoggedInToggle(), getRecaptchaThreshold()]
           })]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
@@ -787,4 +827,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Recaptcha0.0.3.js.map?ver=04e73c6648529cee0cfd
+//# sourceMappingURL=Recaptcha0.0.3.js.map?ver=92c1b6fed02b3bf54df3

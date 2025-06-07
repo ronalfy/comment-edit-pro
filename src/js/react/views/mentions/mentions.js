@@ -317,7 +317,7 @@ const Interface = ( props ) => {
 											rules={ { required: true } }
 											render={ ( { field: { onChange, value } } ) => (
 												<TextControl
-													label={ __( 'From Email', 'highlight-and-share' ) }
+													label={ __( 'From Email', 'comment-edit-pro' ) }
 													value={ value }
 													onChange={ ( newValue ) => {
 														if ( ! ValidateEmail( newValue ) ) {
@@ -349,7 +349,7 @@ const Interface = ( props ) => {
 											rules={ { required: true } }
 											render={ ( { field: { onChange, value } } ) => (
 												<TextControl
-													label={ __( 'From Name', 'highlight-and-share' ) }
+													label={ __( 'From Name', 'comment-edit-pro' ) }
 													value={ value }
 													onChange={ onChange }
 													className={ classNames( 'sce-admin__text-control', {

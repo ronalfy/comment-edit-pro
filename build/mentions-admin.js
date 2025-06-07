@@ -12969,7 +12969,7 @@ const Interface = props => {
                       value
                     }
                   }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email', 'highlight-and-share'),
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Email', 'comment-edit-pro'),
                     value: value,
                     onChange: newValue => {
                       if (!(0,_validation_ValidateEmail__WEBPACK_IMPORTED_MODULE_4__["default"])(newValue)) {
@@ -13004,7 +13004,7 @@ const Interface = props => {
                       value
                     }
                   }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Name', 'highlight-and-share'),
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('From Name', 'comment-edit-pro'),
                     value: value,
                     onChange: onChange,
                     className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {

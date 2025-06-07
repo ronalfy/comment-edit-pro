@@ -12854,7 +12854,7 @@ const Interface = props => {
                         value
                       }
                     }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Expiration in Days', 'highlight-and-share'),
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Expiration in Days', 'comment-edit-pro'),
                       value: value,
                       type: "number",
                       onChange: newValue => {
