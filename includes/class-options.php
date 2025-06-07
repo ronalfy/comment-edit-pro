@@ -224,8 +224,8 @@ class Options {
 			'require_login_for_editing'         => false,
 			'allow_unlimited_editing'           => false,
 			'allow_front_end_character_limit'   => false,
-			'allow_front_end_editing'           => false,
-			'allow_front_end_moderation_menu'   => false,
+			'allow_front_end_editing'           => true,
+			'allow_front_end_moderation_menu'   => true,
 			'front_end_moderation_menu_theme'   => 'default',
 			'enable_avatars'                    => false,
 			'avatar_size'                       => 90,
@@ -315,7 +315,7 @@ class Options {
 			'comment_strip_urls'                => false,
 			'submit_button_label'               => '',
 			'comment_reply_label'               => '', // This is the comment title heading.
-			'selector_helper_enabled'           => false,
+			'selector_helper_enabled'           => true,
 
 		);
 		return $defaults;
