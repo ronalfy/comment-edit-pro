@@ -39,7 +39,7 @@ class Mentions {
 			'get'    => 'mentions',
 			'action' => 'comment_edit_pro_output_mentions',
 			'url'    => Functions::get_settings_url( 'mentions' ),
-			'label'  => _x( 'Mentions (Beta)', 'Tab label as Main', 'ultimate-auto-updates' ),
+			'label'  => _x( 'Mentions (Deprecated)', 'Tab label as Main', 'ultimate-auto-updates' ),
 			'icon'   => 'at',
 		);
 		return $tabs;

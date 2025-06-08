@@ -12821,13 +12821,18 @@ const Interface = props => {
   const getMentionsHeader = () => {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("h2", {
-        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('@ Mentions (Beta)', 'comment-edit-pro'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("a", {
+        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('@ Mentions (Deprecated)', 'comment-edit-pro'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("a", {
           className: "sce-admin-heading-docs",
           target: "_blank",
           rel: "noreferrer",
           href: "https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/mentions",
           children: ["(", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Docs', 'comment-edit-pro'), ")"]
         })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('@ Mentions is deprecated and will be removed in a future version of Comment Edit Pro. If you still need access to this feature, please contact support.', 'comment-edit-pro'),
+        status: "warning",
+        inline: false,
+        icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_9__["default"]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
         className: "description",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Allow commenters to mention others in their replies.', 'comment-edit-pro')
