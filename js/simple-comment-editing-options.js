@@ -162,34 +162,40 @@ jQuery( document ).ready( function( $ ) {
 
 	// Init the menu system for the email copy button if copying is supported by the browser
 	if ( navigator.clipboard ) {
-		const copyEmailButtons = document.querySelectorAll( '.sce-meatball-menu-item-copy-email' );
-		if ( null !== copyEmailButtons ) {
-			copyEmailButtons.forEach( function( copyEmailButton ) {
-				copyEmailButton.style.display = 'block';
-				// Find the anchor and add a click handler to it.
-				const anchor = copyEmailButton.querySelector( 'a' );
-				if ( null !== anchor ) {
-					anchor.addEventListener( 'click', function( e ) {
-						e.preventDefault();
-						const copyEmailLabel = copyEmailButton.querySelector( '.sce-meatball-menu-label' );
-						if ( null !== copyEmailLabel ) {
-							copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-loading-text' );
-						}
-						$.post( anchor.href, { action: 'sce_copy_email', comment_id: anchor.getAttribute( 'data-cid' ), nonce: anchor.getAttribute( 'data-nonce' ) }, function( response ) {
-							if ( response.success ) {
-								navigator.clipboard.writeText( response.data.email );
-								copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-loading-done' );
-								setTimeout( function() {
-									copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-copy-text' );
-								}, 5000 );
-							} else {
-								console.error( response.data.message );
+		const initCopyEmailButtons = () => {
+			const copyEmailButtons = document.querySelectorAll( '.sce-meatball-menu-item-copy-email' );
+			if ( null !== copyEmailButtons ) {
+				copyEmailButtons.forEach( function( copyEmailButton ) {
+					copyEmailButton.style.display = 'block';
+					// Find the anchor and add a click handler to it.
+					const anchor = copyEmailButton.querySelector( 'a' );
+					if ( null !== anchor ) {
+						anchor.addEventListener( 'click', function( e ) {
+							e.preventDefault();
+							const copyEmailLabel = copyEmailButton.querySelector( '.sce-meatball-menu-label' );
+							if ( null !== copyEmailLabel ) {
+								copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-loading-text' );
 							}
-						}, 'json' );
-					} );
-				}
-			} );
-		}
+							$.post( anchor.href, { action: 'sce_copy_email', comment_id: anchor.getAttribute( 'data-cid' ), nonce: anchor.getAttribute( 'data-nonce' ) }, function( response ) {
+								if ( response.success ) {
+									navigator.clipboard.writeText( response.data.email );
+									copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-loading-done' );
+									setTimeout( function() {
+										copyEmailLabel.innerHTML = copyEmailLabel.getAttribute( 'data-copy-text' );
+									}, 5000 );
+								} else {
+									console.error( response.data.message );
+								}
+							}, 'json' );
+						} );
+					}
+				} );
+			}
+		};
+		document.addEventListener( 'wpacAfterUpdateComments', () => {
+			initCopyEmailButtons();
+		} );
+		initCopyEmailButtons();
 	}
 } );
 function sce_get_comment( e ) {
