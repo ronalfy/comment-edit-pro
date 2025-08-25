@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 use DLXPlugins\CommentEditLite\Functions as LiteFunctions;
 
 /**
@@ -70,8 +70,8 @@ class Avatars {
 		if ( $enable_avatars ) {
 			$can_enqueue = true;
 			// User Avatar override.
-			add_filter( 'get_avatar', array( $this, 'avatar_override' ), 10, 6 );
-			add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 10, 2 );
+			add_filter( 'get_avatar', array( $this, 'avatar_override' ), 100, 6 );
+			add_filter( 'pre_get_avatar_data', array( $this, 'pre_avatar_override' ), 100, 2 );
 
 			// Add avatar to comments field.
 			add_filter( 'comment_form_default_fields', array( $this, 'add_avatar_comment_field' ) );
@@ -542,7 +542,7 @@ class Avatars {
 	 *
 	 * @return string Avatar HTML.
 	 */
-	private function get_avatar( $original_html, $comment_id = 0, $user_id = null, $size = 90 ) {
+	private function get_avatar( $original_html, $comment_id = 0, $user_id = null, $size = 90, $url_only = false ) {
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 		$avatar         = null;
 
@@ -576,9 +576,13 @@ class Avatars {
 		}
 
 		// Return avatar html or blank if avatar is still null.
-		if ( null !== $avatar ) {
+		if ( null !== $avatar && ! $url_only ) {
 			$avatar_html = $this->get_avatar_image_html( $avatar, $comment_id, $user_id, $size );
 			return $avatar_html;
+		}
+
+		if ( null !== $avatar && $url_only ) {
+			return $avatar;
 		}
 
 		return '';
@@ -695,10 +699,8 @@ class Avatars {
 		if ( $can_edit ) {
 			if ( is_user_logged_in() ) {
 				$classes[] = 'sce-can-edit';
-			} else {
-				if ( $can_edit && true === $options['enable_avatars_anonymous'] ) {
+			} elseif ( $can_edit && true === $options['enable_avatars_anonymous'] ) {
 					$classes[] = 'sce-can-edit';
-				}
 			}
 		}
 
@@ -831,7 +833,7 @@ class Avatars {
 			$user = get_user_by( 'id', (int) $id_or_email );
 		} elseif ( is_email( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
-		};
+		}
 
 		// Now get the user ID if it exists.
 		$user_id = $user->ID ?? null;
@@ -853,7 +855,6 @@ class Avatars {
 	 * @return array $args Overridden URL or default if none can be found
 	 **/
 	public function pre_avatar_override( $args, $id_or_email ) {
-
 		$default_avatar = Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' );
 
 		$options                 = Options::get_options();
@@ -870,6 +871,31 @@ class Avatars {
 				$user = get_user_by( 'email', $comment->comment_author_email );
 			}
 			if ( ! $user ) {
+				// Get the latest comment from a user's email.
+				if ( is_email( $comment->comment_author_email ) ) {
+					$maybe_comment_url = wp_cache_get( 'sce-avatar-location-' . $comment->comment_ID, 'sce-avatar-location' );
+					if ( $maybe_comment_url ) {
+						$args['url'] = esc_url( $maybe_comment_url );
+						return $args;
+					}
+					$comment_args = array(
+						'author_email' => $comment->comment_author_email,
+						'meta_key'     => 'sce-avatar-location',
+						'meta_compare' => '!=',
+						'meta_value'   => '',
+					);
+					$comments     = get_comments( $comment_args );
+					$comment      = $comments[0] ?? null;
+					if ( $comment ) {
+						$maybe_custom_avatar = get_comment_meta( $comment->comment_ID, 'sce-avatar-location', true );
+						if ( $maybe_custom_avatar ) {
+							$args['url'] = esc_url( Functions::get_plugin_url( 'images/avatars/' . $maybe_custom_avatar . '.png' ) );
+							wp_cache_set( 'sce-avatar-location-' . $comment->comment_ID, $args['url'], 'sce-avatar-location', 1 * DAY_IN_SECONDS );
+							return $args;
+						}
+					}
+				}
+				$args['url'] = $default_avatar;
 				if ( $fallback_avatar_enabled ) {
 					return $args;
 				} else {
@@ -878,18 +904,21 @@ class Avatars {
 			}
 		} elseif ( is_string( $id_or_email ) ) {
 			$user = get_user_by( 'email', $id_or_email );
-		} else {
-			if ( $fallback_avatar_enabled ) {
+		} elseif ( $fallback_avatar_enabled ) {
 				return $args;
-			} else {
-				$args['url'] = $default_avatar;
-			}
+		} else {
+			$args['url'] = $default_avatar;
 		}
 		if ( ! $user ) {
 			if ( $fallback_avatar_enabled ) {
 				return $args;
 			} else {
 				$args['url'] = $default_avatar;
+			}
+		} else {
+			$maybe_author_avatar = $this->get_avatar( null, 0, $user->ID, $args['size'], true );
+			if ( ! empty( $maybe_author_avatar ) ) {
+				$args['url'] = $maybe_author_avatar;
 			}
 		}
 		return $args;
