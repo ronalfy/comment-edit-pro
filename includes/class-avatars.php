@@ -507,14 +507,17 @@ class Avatars {
 	 */
 	private function get_avatar_comment_field_array() {
 
-		$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) );
+		$options = Options::get_options();
+		$avatar_type = $options['avatar_type'] ?? 'custom';
+
+		$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) ); // todo - get default avatar image from options.
 		$current_avatar = false;
 		if ( is_user_logged_in() ) {
 			global $current_user;
 			$user_id    = $current_user->ID;
 			$avatar_url = get_user_meta( $user_id, 'sce-avatar-location', true );
 			if ( $avatar_url ) {
-				$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' ) );
+				$avatar_html    = $this->get_avatar_image_html( Functions::get_plugin_url( 'images/avatars/' . $avatar_url . '.png' ) ); // todo - if is int, then try to get the image from the media library.
 				$current_avatar = $avatar_url;
 			}
 		}
@@ -526,9 +529,28 @@ class Avatars {
 		} else {
 			$user_nickname = __( 'Choose an Avatar', 'comment-edit-pro' );
 		}
-		$avatar_field = array(
-			'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="' . ( $current_avatar ? esc_attr( $current_avatar ) : '' ) . '" /></section><div id="sce-avatar-form-modal-wrapper" tabindex="-1"><div id="sce-avatar-form-modal"></div></div>',
-		);
+		// Shortcircuit and return custom. todo - remove.
+		$avatar_type = 'custom';
+
+		if ( 'cartoons' === $avatar_type ) {
+			$avatar_field = array(
+				'sce-avatar' => '<section class="comment-form-sce-avatar"><div class="sce-avatar">' . $avatar_html . '</div><div class="sce-modal-exit"></div><div class="avatar-heading"><strong>' . esc_html( $user_nickname ) . '</strong></div><input type="hidden" id="sce-comment-form-avatar" name="sce-comment-form-avatar" value="' . ( $current_avatar ? esc_attr( $current_avatar ) : '' ) . '" /></section><div id="sce-avatar-form-modal-wrapper" tabindex="-1"><div id="sce-avatar-form-modal"></div></div>',
+			);
+		}
+		if ( 'custom' === $avatar_type ) {
+			// TODO: Add custom avatar upload field implementation.
+			$avatar_field = array(
+				'sce-avatar' => '<section class="comment-form-sce-avatar">
+					<div class="sce-avatar">
+						<img src="' . esc_url( Functions::get_plugin_url( 'images/avatars/circle-flat-icons-mystery.png' ) ) . '" alt="Avatar" class="sce-avatar-preview" />
+					</div>
+					<div class="sce-avatar-upload">
+						<label for="sce-custom-avatar-upload">Upload Avatar</label>
+						<input type="file" id="sce-custom-avatar-upload" name="sce-custom-avatar-upload" accept="image/*" />
+					</div>
+				</section>',
+			);
+		}
 		return $avatar_field;
 	}
 

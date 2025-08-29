@@ -48,6 +48,7 @@ class Options {
 				case 'min_comment_length':
 				case 'avatar_size':
 				case 'max_comment_length':
+				case 'default_avatar_image_id':
 					$option = absint( $options[ $key ] );
 					break;
 				case 'require_comment_length':
@@ -159,8 +160,12 @@ class Options {
 			$options = get_option( 'sce_options', array() );
 		}
 
+		// Process deprecated options.
+		$options = self::process_deprecated_options( $options );
+
 		$defaults      = self::get_defaults();
 		$options       = wp_parse_args( $options, $defaults );
+
 		self::$options = $options;
 		return $options;
 	}
@@ -228,11 +233,13 @@ class Options {
 			'allow_front_end_moderation_menu'   => true,
 			'front_end_moderation_menu_theme'   => 'default',
 			'enable_avatars'                    => false,
+			'avatar_type'                       => 'custom',
 			'avatar_size'                       => 90,
 			'enable_avatars_logged_in'          => true,
 			'enable_avatars_anonymous'          => true,
 			'enable_avatars_anonymous_remember' => true,
 			'enable_custom_avatar_size'         => false,
+			'default_avatar_image_id'           => 0,
 			'enable_avatar_gravatar_fallback'   => false,
 			'choose_avatar_text'                => __( 'Choose an Avatar', 'comment-edit-pro' ),
 			'enable_gravatar_protection'        => false,
@@ -320,5 +327,24 @@ class Options {
 
 		);
 		return $defaults;
+	}
+
+	/**
+	 * Process deprecated options.
+	 *
+	 * @param array $options The options array.
+	 * @return array The processed options array.
+	 */
+	private static function process_deprecated_options( $options ) {
+		foreach ( $options as $key => &$value ) {
+			switch ( $key ) {
+				case 'enable_avatars':
+					if ( ! isset( $options['avatar_type'] ) ) {
+						$options['avatar_type'] = 'cartoons';
+					}
+					break;
+			}
+		}
+		return $options;
 	}
 }
