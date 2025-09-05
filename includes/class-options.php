@@ -21,9 +21,16 @@ class Options {
 	/**
 	 * Array holding the options.
 	 *
-	 * @var [type]
+	 * @var array
 	 */
 	protected static $options = false;
+
+	/**
+	 * Array holding the network options.
+	 *
+	 * @var array
+	 */
+	protected static $network_options = false;
 
 	/**
 	 * Update options via sanitization
@@ -133,11 +140,7 @@ class Options {
 			}
 		}
 		$options = wp_parse_args( $options, $current_options );
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_options', $options );
-		} else {
-			update_option( 'sce_options', $options );
-		}
+		update_option( 'sce_options', $options );
 		self::$options = $options;
 		return $options;
 	}
@@ -153,11 +156,7 @@ class Options {
 		if ( is_array( self::$options ) && ! $force ) {
 			return self::$options;
 		}
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options', array() );
-		} else {
-			$options = get_option( 'sce_options', array() );
-		}
+		$options = get_option( 'sce_options', array() );
 
 		$defaults      = self::get_defaults();
 		$options       = wp_parse_args( $options, $defaults );
@@ -318,6 +317,34 @@ class Options {
 			'comment_reply_label'               => '', // This is the comment title heading.
 			'selector_helper_enabled'           => true,
 
+		);
+		return $defaults;
+	}
+
+	/**
+	 * Get defaults for network options.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return array default network options
+	 */
+	public static function get_network_defaults() {
+		$defaults = array(
+			'disable_all_comments'              => false,
+			'hide_comment_section'              => false,
+			'enable_network_wide_slack'         => false,
+			'slack_webhook_url'                 => '',
+			'license_activated'                 => false,
+			'license_valid'                     => '',
+			'license'                           => '',
+			'license_status'                    => '',
+			'item_name'                         => '',
+			'expires'                           => '',
+			'license_limit'                     => '',
+			'site_count'                        => '',
+			'activations_left'                  => '',
+			'beta'                              => false,
 		);
 		return $defaults;
 	}

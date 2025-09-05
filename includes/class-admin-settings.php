@@ -43,6 +43,28 @@ class Admin_Settings {
 	}
 
 	/**
+	 * Registers and outputs placeholder for settings.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function network_settings_page() {
+		?>
+		<?php
+		self::get_settings_header();
+		?>
+		<div class="sce-settings-tabs-wrapper">
+			<div class="sce-settings-tabs">
+				hi
+				<span aria-hidden="true"></span>
+			</div>
+		</div>
+		<?php
+		self::get_settings_footer();
+		?>
+		<?php
+	}
+
+	/**
 	 * Output Generic Settings Place holder for React goodness.
 	 */
 	public static function get_settings_header() {

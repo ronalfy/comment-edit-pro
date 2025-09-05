@@ -75,10 +75,9 @@ class Admin {
 		add_action( $prefix . 'plugin_action_links_' . COMMENTEDITPRO_SLUG, array( $this, 'plugin_settings_link' ) );
 		// Init admin menu.
 		if ( Functions::is_multisite() ) {
-			add_action( 'network_admin_menu', array( $this, 'register_sub_menu' ) );
-		} else {
-			add_action( 'admin_menu', array( $this, 'register_sub_menu' ) );
+			add_action( 'network_admin_menu', array( $this, 'register_network_sub_menu' ) );
 		}
+		add_action( 'admin_menu', array( $this, 'register_sub_menu' ) );
 	}
 
 	/**
@@ -89,26 +88,29 @@ class Admin {
 	 * @see init
 	 */
 	public function register_sub_menu() {
-		$hook = '';
-		if ( Functions::is_multisite() ) {
-			$hook = add_submenu_page(
-				'settings.php',
-				__( 'Comment Edit Pro', 'comment-edit-pro' ),
-				__( 'Comment Edit Pro', 'comment-edit-pro' ),
-				'manage_network',
-				'comment-edit-pro',
-				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
-			);
-		} else {
-			$hook = add_submenu_page(
-				'options-general.php',
-				__( 'Comment Edit Pro', 'comment-edit-pro' ),
-				__( 'Comment Edit Pro', 'comment-edit-pro' ),
-				'manage_options',
-				'comment-edit-pro',
-				array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
-			);
-		}
+		add_submenu_page(
+			'options-general.php',
+			__( 'Comment Edit Pro', 'comment-edit-pro' ),
+			__( 'Comment Edit Pro', 'comment-edit-pro' ),
+			'manage_options',
+			'comment-edit-pro',
+			array( '\CommentEditPro\Includes\Admin_Settings', 'settings_page' )
+		);
+		add_action( 'in_admin_header', array( '\CommentEditPro\Includes\Admin_Settings', 'get_admin_header' ) );
+	}
+
+	/**
+	 * Register the network sub menu.
+	 */
+	public function register_network_sub_menu() {
+		add_submenu_page(
+			'settings.php',
+			__( 'Comment Edit Pro', 'comment-edit-pro' ),
+			__( 'Comment Edit Pro', 'comment-edit-pro' ),
+			'manage_network',
+			'comment-edit-pro',
+			array( '\CommentEditPro\Includes\Admin_Settings', 'network_settings_page' )
+		);
 		add_action( 'in_admin_header', array( '\CommentEditPro\Includes\Admin_Settings', 'get_admin_header' ) );
 	}
 
