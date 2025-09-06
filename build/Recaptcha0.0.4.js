@@ -827,4 +827,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Recaptcha0.0.4.js.map?ver=9345a89473eb04a19f4b
+//# sourceMappingURL=Recaptcha0.0.4.js.map?ver=da000dcadfc713eeb77c

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
 import BeatLoader from 'react-spinners/BeatLoader';
-import isURL from '@wordpress/url';
+import { isURL } from '@wordpress/url';
 
 import {
 	TextControl,

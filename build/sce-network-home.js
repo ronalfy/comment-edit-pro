@@ -12908,7 +12908,7 @@ const Interface = props => {
                     rules: {
                       required: true,
                       validate: value => {
-                        return _wordpress_url__WEBPACK_IMPORTED_MODULE_4___default()(value);
+                        return (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.isURL)(value);
                       }
                     },
                     render: ({

@@ -807,4 +807,4 @@ const Interface = props => {
 /***/ })
 
 }]);
-//# sourceMappingURL=Slack0.0.3.js.map?ver=c5088c9a17d391f8d465
+//# sourceMappingURL=Slack0.0.3.js.map?ver=55f82707f93910cba4fa
