@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Admin_Menu_Output as Admin_Menu_Output;
+use CommentEditPro\Includes\Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Admin_Menu_Output;
 
 /**
  * Admin class for SCE Options.
@@ -56,8 +56,8 @@ class Admin {
 			wp_enqueue_style( 'sce-styles', Functions::get_plugin_url( 'dist/themes.css' ), array(), COMMENTEDITPRO_VERSION, 'all' );
 			wp_enqueue_style( 'sce-styles-admin', Functions::get_plugin_url( 'dist/admin.css' ), array( 'sce-styles' ), COMMENTEDITPRO_VERSION, 'all' );
 
-			wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
-			wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), COMMENTEDITPRO_VERSION, 'all' );
+			wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.js', __DIR__ ), array( 'jquery' ), COMMENTEDITPRO_VERSION, true );
+			wp_enqueue_style( 'fancybox', plugins_url( '/fancybox/jquery.fancybox.min.css', __DIR__ ), array(), COMMENTEDITPRO_VERSION, 'all' );
 		}
 	}
 
@@ -72,7 +72,11 @@ class Admin {
 
 		// Add settings link.
 		$prefix = Functions::is_multisite() ? 'network_admin_' : '';
-		add_action( $prefix . 'plugin_action_links_' . COMMENTEDITPRO_SLUG, array( $this, 'plugin_settings_link' ) );
+		if ( Functions::is_multisite() ) {
+			add_action( 'network_admin_plugin_action_links_' . COMMENTEDITPRO_SLUG, array( $this, 'network_plugin_settings_link' ) );
+		}
+		add_action( 'plugin_action_links_' . COMMENTEDITPRO_SLUG, array( $this, 'plugin_settings_link' ) );
+
 		// Init admin menu.
 		if ( Functions::is_multisite() ) {
 			add_action( 'network_admin_menu', array( $this, 'register_network_sub_menu' ) );
@@ -123,7 +127,7 @@ class Admin {
 	 * @param array $settings Uses $prefix . "plugin_action_links_$plugin_file" action.
 	 * @return array Array of settings
 	 */
-	public function plugin_settings_link( $settings ) {
+	public function network_plugin_settings_link( $settings ) {
 		$admin_anchor = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Settings', 'comment-edit-pro' ) );
 		if ( ! is_array( $settings ) ) {
 			return array( $admin_anchor );
@@ -133,16 +137,35 @@ class Admin {
 	}
 
 	/**
+	 * Add plugin settings link to plugin links in WordPress Dashboard Plugins Page
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @see __construct
+	 * @param array $settings Uses $prefix . "plugin_action_links_$plugin_file" action.
+	 * @return array Array of settings
+	 */
+	public function plugin_settings_link( $settings ) {
+		$site_settings    = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Settings', 'comment-edit-pro' ) );
+		$network_settings = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url( true ) ), esc_html__( 'Network Settings', 'comment-edit-pro' ) );
+		if ( Functions::is_multisite() && current_user_can( 'manage_network' ) ) {
+			return array_merge( array( $site_settings, $network_settings ), $settings );
+		} else {
+			return array_merge( array( $site_settings ), $settings );
+		}
+	}
+
+	/**
 	 * Return the URL to the admin panel page.
 	 *
-	 * Return the URL to the admin panel page.
+	 * @param bool $network Whether to use network admin URL.
 	 *
 	 * @since 5.0.0
 	 * @access static
 	 *
 	 * @return string URL to the admin panel page.
 	 */
-	public static function get_url() {
-		return Functions::get_settings_url();
+	public static function get_url( $network = false ) {
+		return Functions::get_settings_url( '', '', $network );
 	}
 }

@@ -271,7 +271,11 @@ class Network_Home {
 	 */
 	public function add_admin_scripts_styles() {
 		$screen = get_current_screen();
+		$tab    = Functions::get_admin_tab();
 		if ( 'settings_page_comment-edit-pro-network' !== $screen->id ) {
+			return;
+		}
+		if ( null !== $tab && 'home' !== $tab ) {
 			return;
 		}
 		$deps = require_once Functions::get_plugin_dir( 'build/sce-network-home.asset.php' );
