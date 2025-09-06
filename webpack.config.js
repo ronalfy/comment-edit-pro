@@ -22,6 +22,7 @@ module.exports = ( env ) => {
 				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
 				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
 				'sce-advanced': [ './src/js/react/views/Advanced/index.js' ],
+				'sce-network-home': [ './src/js/react/views/network-home/index.js' ],
 				'sce-tools-comment-activity': [ './src/js/react/views/tools/CommentActivity/index.js' ],
 				'sce-tools-post-type-comment-settings': [ './src/js/react/views/tools/PostTypeCommentSettings/index.js' ],
 				'sce-comment-shortcuts-settings': [ './src/js/react/views/tools/CommentShortcuts/index.js' ],

@@ -4,7 +4,7 @@ Plugin Name: Comment Edit Pro
 Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 3.9.1
+Version: 4.0.0
 Requires at least: 5.0
 Author URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Contributors: DLX Plugins
@@ -16,14 +16,14 @@ namespace CommentEditPro;
 
 require_once 'autoloader.php';
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
-use CommentEditPro\Includes\Plugin_Updater as Plugin_Updater;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
+use CommentEditPro\Includes\Plugin_Updater;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '3.9.1' );
+define( 'COMMENTEDITPRO_VERSION', '4.0.0' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );
@@ -368,6 +368,8 @@ class Comment_Edit_Pro {
 		$this->advanced->run();
 		$this->selector_helper = new \CommentEditPro\Includes\Selector_Helper();
 		$this->selector_helper->run();
+		$this->network_home = new \CommentEditPro\Includes\Network_Home();
+		$this->network_home->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );

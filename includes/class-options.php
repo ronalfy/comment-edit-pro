@@ -21,9 +21,16 @@ class Options {
 	/**
 	 * Array holding the options.
 	 *
-	 * @var [type]
+	 * @var array
 	 */
 	protected static $options = false;
+
+	/**
+	 * Array holding the network options.
+	 *
+	 * @var array
+	 */
+	protected static $network_options = false;
 
 	/**
 	 * Update options via sanitization
@@ -133,11 +140,7 @@ class Options {
 			}
 		}
 		$options = wp_parse_args( $options, $current_options );
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_options', $options );
-		} else {
-			update_option( 'sce_options', $options );
-		}
+		update_option( 'sce_options', $options );
 		self::$options = $options;
 		return $options;
 	}
@@ -153,15 +156,67 @@ class Options {
 		if ( is_array( self::$options ) && ! $force ) {
 			return self::$options;
 		}
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options', array() );
-		} else {
-			$options = get_option( 'sce_options', array() );
-		}
+		$options = get_option( 'sce_options', array() );
 
 		$defaults      = self::get_defaults();
 		$options       = wp_parse_args( $options, $defaults );
 		self::$options = $options;
+		return $options;
+	}
+
+	/**
+	 * Return a list of options.
+	 *
+	 * @param bool $force Whether to get options from cache or not.
+	 *
+	 * @return array Array of options.
+	 */
+	public static function get_network_options( $force = false ) {
+		if ( is_array( self::$network_options ) && ! $force ) {
+			return self::$network_options;
+		}
+		$options = get_site_option( 'sce_options_network', array() );
+
+		$defaults              = self::get_network_defaults();
+		$options               = wp_parse_args( $options, $defaults );
+		self::$network_options = $options;
+		return $options;
+	}
+
+	/**
+	 * Update network options via sanitization
+	 *
+	 * @access public
+	 * @param array $options array of options to save.
+	 * @return array
+	 */
+	public static function update_network_options( $options ) {
+		$force           = true;
+		$current_options = self::get_network_options( $force );
+		foreach ( $options as $key => &$option ) {
+			switch ( $key ) {
+				case 'disable_all_comments':
+				case 'hide_comment_section':
+				case 'enable_network_wide_slack':
+				case 'slack_moderation_enabled':
+				case 'slack_edit_comments_enabled':
+					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					break;
+				case 'slack_webhook_url':
+					$option = esc_url( $option );
+					break;
+				default:
+					if ( is_array( $option ) ) {
+						$option = Functions::sanitize_array_recursive( $option );
+					} else {
+						$option = sanitize_text_field( $options[ $key ] );
+					}
+					break;
+			}
+		}
+		$options = wp_parse_args( $options, $current_options );
+		update_site_option( 'sce_options_network', $options );
+		self::$network_options = $options;
 		return $options;
 	}
 
@@ -182,11 +237,11 @@ class Options {
 			'delete_only'                       => false,
 			'button_theme'                      => 'default',
 			'show_icons'                        => false,
-			'click_to_edit_text'                => __( 'Click to Edit', 'comment-edit-pro' ),
+			'click_to_edit_text'                => 'Click to Edit',
 			'show_timer'                        => true,
-			'save_text'                         => __( 'Save', 'comment-edit-pro' ),
-			'cancel_text'                       => __( 'Cancel', 'comment-edit-pro' ),
-			'delete_text'                       => __( 'Delete', 'comment-edit-pro' ),
+			'save_text'                         => 'Save',
+			'cancel_text'                       => 'Cancel',
+			'delete_text'                       => 'Delete',
 			'custom_class'                      => '',
 			'allow_delete_confirmation'         => true,
 			'allow_edit_notification'           => false,
@@ -197,19 +252,19 @@ class Options {
 				'admin_email'
 			),
 			/* Translators: %s is the site name a user has left a comment on */
-			'edit_notification_subject'         => sprintf( __( 'A user has edited a comment on %s', 'comment-edit-pro' ), Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
-			'edit_text'                         => __( 'Click to Edit', 'comment-edit-pro' ),
-			'confirm_delete'                    => __( 'Do you want to delete this comment?', 'comment-edit-pro' ),
-			'comment_deleted'                   => __( 'Your comment has been removed.', 'comment-edit-pro' ),
-			'comment_deleted_error'             => __( 'Your comment could not be deleted', 'comment-edit-pro' ),
-			'comment_empty_error'               => __( 'Your comment appears to be empty.', 'comment-edit-pro' ),
+			'edit_notification_subject'         => sprintf( 'A user has edited a comment on %s', Functions::is_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' ) ),
+			'edit_text'                         => 'Click to Edit',
+			'confirm_delete'                    => 'Do you want to delete this comment?',
+			'comment_deleted'                   => 'Your comment has been removed.',
+			'comment_deleted_error'             => 'Your comment could not be deleted',
+			'comment_empty_error'               => 'Your comment appears to be empty.',
 			'require_comment_length'            => false,
 			'min_comment_length'                => 50,
 			'require_comment_length_max'        => false,
 			'max_comment_length'                => 2000,
 			'allow_comment_logging'             => false,
 			'show_stop_timer'                   => false,
-			'stop_timer_text'                   => __( 'Cancel Timer', 'comment-edit-pro' ),
+			'stop_timer_text'                   => 'Cancel Timer',
 			'timer_appearance'                  => 'words',
 			'license_valid'                     => '',
 			'license'                           => '',
@@ -234,16 +289,16 @@ class Options {
 			'enable_avatars_anonymous_remember' => true,
 			'enable_custom_avatar_size'         => false,
 			'enable_avatar_gravatar_fallback'   => false,
-			'choose_avatar_text'                => __( 'Choose an Avatar', 'comment-edit-pro' ),
+			'choose_avatar_text'                => 'Choose an Avatar',
 			'enable_gravatar_protection'        => false,
-			'gravatar_protection_text'          => __( 'Prevent my avatar from showing next to my comment', 'comment-edit-pro' ),
+			'gravatar_protection_text'          => 'Prevent my avatar from showing next to my comment',
 			'enable_mailchimp'                  => false,
 			'mailchimp_api_key'                 => '',
 			'mailchimp_api_key_valid'           => false,
 			'mailchimp_api_key_server_prefix'   => '',
 			'mailchimp_lists'                   => array(),
 			'mailchimp_selected_list'           => '',
-			'mailchimp_signup_label'            => __( 'Sign Up for Updates', 'comment-edit-pro' ),
+			'mailchimp_signup_label'            => 'Sign Up for Updates',
 			'mailchimp_checkbox_enabled'        => false,
 			'akismet_active'                    => class_exists( 'Akismet' ),
 			'akismet_enabled'                   => true,
@@ -262,7 +317,7 @@ class Options {
 			'mentions_emails_enabled'           => true,
 			'mentions_emails_from_name'         => get_bloginfo( 'name' ),
 			'mentions_emails_from_email'        => get_bloginfo( 'admin_email' ),
-			'mentions_signup_label'             => esc_html__( 'Receive an email when someone mentions you in a comment.', 'comment-edit-pro' ),
+			'mentions_signup_label'             => 'Receive an email when someone mentions you in a comment.',
 			'mentions_checkbox_enabled'         => false,
 			'mentions_comment_textarea_id'      => 'comment',
 			'slack_enabled'                     => false,
@@ -280,7 +335,7 @@ class Options {
 			'convertkit_api_key'                => '',
 			'convertkit_secret_key'             => '',
 			'convertkit_form_or_tag'            => 'tag',
-			'convertkit_signup_label'           => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'convertkit_signup_label'           => 'Please subscribe to our newsletter',
 			'convertkit_checkbox_enabled'       => false,
 			'convertkit_api_valid'              => false,
 			'convertkit_selected_form'          => 0,
@@ -288,14 +343,14 @@ class Options {
 			'flodesk_api_key'                   => '',
 			'flodesk_api_valid'                 => false,
 			'flodesk_form_id'                   => '',
-			'flodesk_signup_label'              => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'flodesk_signup_label'              => 'Please subscribe to our newsletter',
 			'flodesk_checkbox_enabled'          => false,
 			'flodesk_double_optin_enabled'      => false,
 			'enable_mailerlite'                 => false,
 			'enable_mailerlite_classic'         => false,
 			'mailerlite_api_key'                => '',
 			'mailerlite_api_valid'              => false,
-			'mailerlite_signup_label'           => __( 'Please subscribe to our newsletter', 'comment-edit-pro' ),
+			'mailerlite_signup_label'           => 'Please subscribe to our newsletter',
 			'mailerlite_checkbox_enabled'       => false,
 			'mailerlite_double_optin_enabled'   => true,
 			'mailerlite_classic_api_key'        => '',
@@ -315,9 +370,46 @@ class Options {
 			'comment_url_field_enabled'         => true,
 			'comment_strip_urls'                => false,
 			'submit_button_label'               => '',
-			'comment_reply_label'               => '', // This is the comment title heading.
+			'comment_reply_label'               => '',
 			'selector_helper_enabled'           => true,
 
+		);
+		return $defaults;
+	}
+
+	/**
+	 * Get defaults for network options.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return array default network options
+	 */
+	public static function get_network_defaults() {
+		$defaults = array(
+			'disable_all_comments'                => false,
+			'hide_comment_section'                => false,
+			'enable_network_wide_slack'           => false,
+			'slack_webhook_url'                   => '',
+			'slack_moderation_enabled'            => false,
+			'slack_edit_comments_enabled'         => false,
+			'timer'                               => 5,
+			'timer_override'                      => false,
+			'unlimited_editing'                   => false,
+			'delete_behavior'                     => 'default', /* can be trash, delete, default */
+			'spam_behavior'                       => 'default', /* can be spam, delete, default */
+			'override_comment_notification_email' => false,
+			'comment_notification_email'          => '',
+			'license_activated'                   => false,
+			'license_valid'                       => '',
+			'license'                             => '',
+			'license_status'                      => '',
+			'item_name'                           => '',
+			'expires'                             => '',
+			'license_limit'                       => '',
+			'site_count'                          => '',
+			'activations_left'                    => '',
+			'beta'                                => false,
 		);
 		return $defaults;
 	}

@@ -48,11 +48,7 @@ class Options_Tools {
 			}
 		}
 		$options = wp_parse_args( $options, $current_options );
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_options_tools', $options );
-		} else {
-			update_option( 'sce_options_tools', $options );
-		}
+		update_option( 'sce_options_tools', $options );
 		self::$options = $options;
 		return $options;
 	}
@@ -68,11 +64,7 @@ class Options_Tools {
 		if ( is_array( self::$options ) && ! $force ) {
 			return self::$options;
 		}
-		if ( Functions::is_multisite() ) {
-			$options = get_site_option( 'sce_options_tools', array() );
-		} else {
-			$options = get_option( 'sce_options_tools', array() );
-		}
+		$options = get_option( 'sce_options_tools', array() );
 
 		$defaults      = self::get_defaults();
 		$options       = array_replace_recursive( $defaults, $options );

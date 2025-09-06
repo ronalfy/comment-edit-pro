@@ -43,6 +43,28 @@ class Admin_Settings {
 	}
 
 	/**
+	 * Registers and outputs placeholder for settings.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function network_settings_page() {
+		?>
+		<?php
+		self::get_settings_header();
+		?>
+		<div class="sce-settings-tabs-wrapper">
+			<div class="sce-settings-tabs">
+				<?php self::get_settings_tabs(); ?>
+				<span aria-hidden="true"></span>
+			</div>
+		</div>
+		<?php
+		self::get_settings_footer();
+		?>
+		<?php
+	}
+
+	/**
 	 * Output Generic Settings Place holder for React goodness.
 	 */
 	public static function get_settings_header() {
@@ -93,7 +115,7 @@ class Admin_Settings {
 		if ( ! isset( $screen->id ) ) {
 			return;
 		}
-		if ( isset( $screen->base ) && 'settings_page_comment-edit-pro' !== $screen->base ) {
+		if ( isset( $screen->base ) && ( 'settings_page_comment-edit-pro' !== $screen->base && 'settings_page_comment-edit-pro-network' !== $screen->base ) ) {
 			return;
 		}
 		?>
@@ -271,6 +293,9 @@ class Admin_Settings {
 			 * @param array $tabs Associative array of tabs.
 			 */
 			$tabs       = apply_filters( 'comment_edit_pro_admin_tabs', $tabs );
+			if ( Functions::is_multisite( true ) ) {
+				$tabs = apply_filters( 'comment_edit_pro_admin_network_tabs', $tabs );
+			}
 			$tab_html   = '<nav class="sce-admin-options">';
 			$tabs_count = count( $tabs );
 			if ( $tabs && ! empty( $tabs ) && is_array( $tabs ) ) {
@@ -334,6 +359,9 @@ class Admin_Settings {
 				 * @param string Sub Tab
 				 */
 				$sub_tabs = apply_filters( 'comment_edit_pro_admin_sub_tabs', array(), $current_tab, $current_sub_tab );
+				if ( Functions::is_multisite( true ) ) {
+					$sub_tabs = apply_filters( 'comment_edit_pro_admin_network_sub_tabs', array(), $current_tab, $current_sub_tab );
+				}
 
 				// Check to see if no tabs are available for this view.
 				if ( null === $current_tab && null === $current_sub_tab ) {
@@ -398,13 +426,23 @@ class Admin_Settings {
 						 * eff_admin_sub_tab_{current_tab}_{current_sub_tab}
 						 * @param string Sub Tab
 						 */
-						do_action(
-							sprintf( // phpcs:ignore
-								'comment_edit_pro_admin_sub_tab_%s_%s',
-								sanitize_title( $current_tab ),
-								sanitize_title( $current_sub_tab )
-							)
-						);
+						if ( Functions::is_multisite( true ) ) {
+							do_action(
+								sprintf( // phpcs:ignore
+									'comment_edit_pro_admin_network_sub_tab_%s_%s',
+									sanitize_title( $current_tab ),
+									sanitize_title( $current_sub_tab )
+								)
+							);
+						} else {
+							do_action(
+								sprintf( // phpcs:ignore
+									'comment_edit_pro_admin_sub_tab_%s_%s',
+									sanitize_title( $current_tab ),
+									sanitize_title( $current_sub_tab )
+								)
+							);
+						}
 					}
 				}
 				$subtab_content = ob_get_clean();

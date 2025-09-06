@@ -147,11 +147,7 @@ class Flodesk {
 
 		// Get any tags.
 		$segments = array();
-		if ( Functions::is_multisite() ) {
-			$segments = get_site_option( 'sce_flodesk_segments', array() );
-		} else {
-			$segments = get_option( 'sce_flodesk_segments', array() );
-		}
+		$segments = get_option( 'sce_flodesk_segments', array() );
 
 		// Get selected segments.
 		$selected_segments = array();
@@ -163,11 +159,7 @@ class Flodesk {
 
 		// Get any custom fields.
 		$custom_fields = array();
-		if ( Functions::is_multisite() ) {
-			$custom_fields = get_site_option( 'sce_flodesk_custom_fields', array() );
-		} else {
-			$custom_fields = get_option( 'sce_flodesk_custom_fields', array() );
-		}
+		$custom_fields = get_option( 'sce_flodesk_custom_fields', array() );
 
 		// Map custom fields to value.
 		$selected_custom_fields = array();
@@ -286,11 +278,7 @@ class Flodesk {
 		}
 
 		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_flodesk_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw;
@@ -314,11 +302,7 @@ class Flodesk {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -502,13 +486,8 @@ class Flodesk {
 	private function get_flodesk_values_for_return() {
 		$force   = true;
 		$options = Options::get_options( $force );
-		if ( Functions::is_multisite() ) {
-			$segments      = get_site_option( 'sce_flodesk_segments', array() );
-			$custom_fields = get_site_option( 'sce_flodesk_custom_fields', array() );
-		} else {
-			$segments      = get_option( 'sce_flodesk_segments', array() );
-			$custom_fields = get_option( 'sce_flodesk_custom_fields', array() );
-		}
+		$segments      = get_option( 'sce_flodesk_segments', array() );
+		$custom_fields = get_option( 'sce_flodesk_custom_fields', array() );
 
 		$json_array = array(
 			'enableFlodesk'             => (bool) $options['enable_flodesk'],
@@ -536,15 +515,9 @@ class Flodesk {
 			'flodesk_checkbox_enabled' => false,
 			'flodesk_api_valid'        => false,
 		);
-		if ( Functions::is_multisite() ) {
-			delete_site_option( 'sce_flodesk_forms' );
-			delete_site_option( 'sce_flodesk_tags' );
-			delete_site_option( 'sce_flodesk_custom_fields' );
-		} else {
-			delete_option( 'sce_flodesk_forms' );
-			delete_option( 'sce_flodesk_tags' );
-			delete_option( 'sce_flodesk_custom_fields' );
-		}
+		delete_option( 'sce_flodesk_forms' );
+		delete_option( 'sce_flodesk_tags' );
+		delete_option( 'sce_flodesk_custom_fields' );
 
 		Options::update_options( $options_to_save );
 	}
@@ -602,13 +575,8 @@ class Flodesk {
 		Options::update_options( $options_to_save );
 
 		// Save forms, tags, custom fields.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_flodesk_segments', $segments );
-			update_site_option( 'sce_flodesk_custom_fields', $custom_fields );
-		} else {
-			update_option( 'sce_flodesk_segments', $segments );
-			update_option( 'sce_flodesk_custom_fields', $custom_fields );
-		}
+		update_option( 'sce_flodesk_segments', $segments );
+		update_option( 'sce_flodesk_custom_fields', $custom_fields );
 
 		// Return saved form fields.
 		$json_array = $this->get_flodesk_values_for_return();
@@ -686,13 +654,8 @@ class Flodesk {
 		}
 
 		// Save list in option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_flodesk_segments', $sanitized_segment_values );
-			update_site_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_flodesk_segments', $sanitized_segment_values );
-			update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_flodesk_segments', $sanitized_segment_values );
+		update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
 
 		// Save options.
 		$options_to_save['flodesk_api_valid'] = true;
@@ -762,11 +725,7 @@ class Flodesk {
 		$options = Options::get_options();
 		$api_key = sanitize_text_field( $options['flodesk_api_key'] );
 		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_segments = (array) get_site_option( 'sce_convertkit_segments', array() );
-		} else {
-			$existing_segments = (array) get_option( 'sce_convertkit_segments', array() );
-		}
+		$existing_segments = (array) get_option( 'sce_convertkit_segments', array() );
 
 		// Start building up HTTP args.
 		$http_args            = array();
@@ -809,11 +768,7 @@ class Flodesk {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_convertkit_segments', $sanitized_segments_values );
-		} else {
-			update_option( 'sce_convertkit_segments', $sanitized_segments_values );
-		}
+		update_option( 'sce_convertkit_segments', $sanitized_segments_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -864,11 +819,7 @@ class Flodesk {
 		}
 
 		// Get custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_flodesk_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_flodesk_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw;
@@ -892,11 +843,7 @@ class Flodesk {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_flodesk_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(

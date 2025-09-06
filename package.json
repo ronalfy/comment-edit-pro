@@ -38,7 +38,7 @@
     "@wordpress/eslint-plugin": "^12.7.0",
     "@wordpress/i18n": "^4.13.0",
     "@wordpress/scripts": "^30.17.0",
-    "@wordpress/url": "^3.27.0",
+    "@wordpress/url": "^3.59.0",
     "axios": "^1.6.2",
     "babel-loader": "^8.2.5",
     "classnames": "^2.3.1",
