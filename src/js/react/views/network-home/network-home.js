@@ -269,8 +269,8 @@ const Interface = ( props ) => {
 																	clearErrors( 'commentNotificationEmail' );
 																	onChange( newValue );
 																} }
-																onBlur={ ( newValue ) => {
-																	if ( ! isEmail( newValue ) ) {
+																onBlur={ ( e ) => {
+																	if ( ! isEmail( e.target.value ) ) {
 																		setError( 'commentNotificationEmail', {
 																			shouldFocus: true,
 																		} );

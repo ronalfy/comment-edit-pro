@@ -61,6 +61,34 @@ class Network_Home {
 		add_filter( 'sce_unlimited_editing', array( $this, 'maybe_unlimited_editing' ), 15, 2 );
 		add_filter( 'trashed_comment', array( $this, 'maybe_delete_comment' ), 15, 2 );
 		add_filter( 'spammed_comment', array( $this, 'maybe_spam_and_delete_comment' ), 15, 2 );
+
+		// Override comment notification email.
+		add_filter( 'comment_notification_headers', array( $this, 'maybe_override_comment_notification_email' ), 15, 1 );
+		add_filter( 'comment_moderation_headers', array( $this, 'maybe_override_comment_notification_email' ), 15, 1 );
+	}
+
+	/**
+	 * Maybe override comment notification email.
+	 *
+	 * @param array $headers Comment notification headers.
+	 */
+	public function maybe_override_comment_notification_email( $headers ) {
+		$options = Options::get_network_options();
+		if ( isset( $options['override_comment_notification_email'] ) && true === (bool) $options['override_comment_notification_email'] ) {
+			$override_email = $options['comment_notification_email'];
+			if ( ! is_email( $override_email ) ) {
+				return $headers;
+			}
+			$from_name  = 'Comment Edit Pro';
+			$from_email = sanitize_email( $override_email );
+			$reply_to   = sanitize_email( $override_email );
+			$headers    = array(
+				__( 'From:', 'comment-edit-pro' ) . ' ' . sanitize_text_field( $from_name ) . ' <' . sanitize_email( $from_email ) . '>',
+				__( 'Reply-To:', 'comment-edit-pro' ) . ' ' . sanitize_email( $reply_to ),
+				'Content-Type: text/html; charset=UTF-8',
+			);
+		}
+		return $headers;
 	}
 
 	/**

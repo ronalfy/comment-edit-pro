@@ -12926,8 +12926,8 @@ const Interface = props => {
                           clearErrors('commentNotificationEmail');
                           onChange(newValue);
                         },
-                        onBlur: newValue => {
-                          if (!(0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.isEmail)(newValue)) {
+                        onBlur: e => {
+                          if (!(0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.isEmail)(e.target.value)) {
                             setError('commentNotificationEmail', {
                               shouldFocus: true
                             });
