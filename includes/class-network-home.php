@@ -141,25 +141,26 @@ class Network_Home {
 	 * Load scripts and styles in the admin.
 	 */
 	public function add_admin_scripts_styles() {
-		$current_tab = Functions::get_admin_tab();
-		if ( 'home' === $current_tab || null === $current_tab ) {
-			$deps = require_once Functions::get_plugin_dir( 'build/sce-network-home.asset.php' );
-			wp_enqueue_script(
-				'sce-comment-network-home',
-				Functions::get_plugin_url( 'build/sce-network-home.js' ),
-				$deps['dependencies'],
-				$deps['version'],
-				true
-			);
-			wp_localize_script(
-				'sce-comment-network-home',
-				'sceNetworkHome',
-				array(
-					'save_nonce' => wp_create_nonce( 'sce-save-network-home-options' ),
-					'get_nonce'  => wp_create_nonce( 'sce-retrieve-network-home-options' ),
-					'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
-				)
-			);
+		$screen = get_current_screen();
+		if ( 'settings_page_comment-edit-pro-network' !== $screen->id ) {
+			return;
 		}
+		$deps = require_once Functions::get_plugin_dir( 'build/sce-network-home.asset.php' );
+		wp_enqueue_script(
+			'sce-comment-network-home',
+			Functions::get_plugin_url( 'build/sce-network-home.js' ),
+			$deps['dependencies'],
+			$deps['version'],
+			true
+		);
+		wp_localize_script(
+			'sce-comment-network-home',
+			'sceNetworkHome',
+			array(
+				'save_nonce' => wp_create_nonce( 'sce-save-network-home-options' ),
+				'get_nonce'  => wp_create_nonce( 'sce-retrieve-network-home-options' ),
+				'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
+			)
+		);
 	}
 }

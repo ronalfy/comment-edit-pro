@@ -24,7 +24,9 @@ class Init_Tabs {
 			new Comment_Editing();
 			new Comment_Form();
 			new Integrations();
-			new License();
+			if ( ! Functions::is_multisite() ) {
+				new License();
+			}
 			new Mentions();
 			new Spam_Protection();
 			new Tools();

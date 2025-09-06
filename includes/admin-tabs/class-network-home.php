@@ -38,7 +38,7 @@ class Network_Home {
 		$tabs[] = array(
 			'get'    => 'home',
 			'action' => 'comment_edit_pro_output_network_home',
-			'url'    => Functions::get_settings_url( 'home' ),
+			'url'    => Functions::get_settings_url( 'home', '', true ),
 			'label'  => _x( 'Home', 'Tab label as Home', 'ultimate-auto-updates' ),
 			'icon'   => 'home-heart',
 		);

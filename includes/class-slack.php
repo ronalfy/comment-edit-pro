@@ -7,8 +7,8 @@
 
 namespace CommentEditPro\Includes;
 
-use CommentEditPro\Includes\Functions as Functions;
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Functions;
+use CommentEditPro\Includes\Options;
 
 /**
  * Class Slack
@@ -29,14 +29,8 @@ class Slack {
 		add_action( 'wp_ajax_sce_save_slack_options', array( $this, 'ajax_save_slack_options' ) );
 		add_action( 'wp_ajax_sce_reset_slack_options', array( $this, 'ajax_reset_slack_options' ) );
 
-		$options = Options::get_options();
-		if ( ! (bool) $options['slack_enabled'] ) {
-			return;
-		}
 		add_action( 'comment_post', array( $this, 'comment_posted' ), 100, 2 );
-		if ( (bool) $options['slack_edit_comments_enabled'] ) {
-			add_action( 'sce_save_after', array( $this, 'send_edit_slack' ), 10, 4 );
-		}
+		add_action( 'sce_save_after', array( $this, 'send_edit_slack' ), 10, 4 );
 	}
 
 	/**
@@ -51,9 +45,25 @@ class Slack {
 	 * @param array $original_comment The original comment.
 	 */
 	public function send_edit_slack( $saved_comment, $post_id, $comment_id, $original_comment ) {
-		$options = Options::get_options();
-		// Check for webhook.
-		$webhook_url = $options['slack_webhook_url'];
+		if ( Functions::is_multisite() ) {
+			$network_options            = Options::get_network_options();
+			$network_wide_slack_enabled = (bool) $network_options['enable_network_wide_slack'];
+			if ( $network_wide_slack_enabled ) {
+				$webhook_url = $network_options['slack_webhook_url'];
+			} else {
+				$options         = Options::get_options();
+				$webhook_enabled = (bool) $options['slack_enabled'];
+				if ( $webhook_enabled ) {
+					$webhook_url = $options['slack_webhook_url'];
+				}
+			}
+		} else {
+			$options         = Options::get_options();
+			$webhook_enabled = (bool) $options['slack_enabled'];
+			if ( $webhook_enabled ) {
+				$webhook_url = $options['slack_webhook_url'];
+			}
+		}
 		if ( empty( $webhook_url ) ) {
 			return;
 		}
@@ -69,32 +79,16 @@ class Slack {
 		$comment_author_email = $comment['comment_author_email'];
 		$comment_author_url   = $comment['comment_author_url'];
 		$post_id              = $comment['comment_post_ID'];
-		$post = get_post( $post_id );
+		$post                 = get_post( $post_id );
 		$post_title           = stripslashes_deep( $post->post_title );
 
 		// Get comment text.
-		$edited_content = stripslashes_deep( $comment['comment_content'] );
+		$edited_content   = stripslashes_deep( $comment['comment_content'] );
 		$original_content = stripslashes_deep( $original_comment['comment_content'] );
 
 		// Comment action links.
-		$approve_link   = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ),
-			),
-			admin_url( 'comment.php?action=approvecomment&c=' . $comment_id )
-		);
-		$unapprove_link = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ), /* both approve and unapprove use the same nonce */
-			),
-			admin_url( 'comment.php?action=unapprovecomment&c=' . $comment_id )
-		);
-		$spam_link      = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'delete-comment_' . $comment_id ), /* spam uses the delete nonce */
-			),
-			admin_url( 'comment.php?action=spamcomment&c=' . $comment_id )
-		);
+		$view_comment_link = admin_url( 'comment.php?action=editcomment&c=' . $comment_id );
+		$view_post_link    = get_permalink( $post_id );
 
 		// Comment status label.
 		$comment_status = $comment['comment_approved'];
@@ -110,10 +104,11 @@ class Slack {
 		$message_array = array(
 			'text'   => esc_html(
 				sprintf(
-					/* translators: %s: Comment author name. */
-					__( 'There is an edited comment by %1$s on %2$s', 'comment-edit-pro' ),
+					/* translators: %s: Comment author name. %s: Site name. */
+					__( 'There is an edited comment by %1$s on %2$s - From: %3$s', 'comment-edit-pro' ),
 					esc_html( $comment_author ),
-					wp_kses_post( addslashes( $post_title ) )
+					wp_kses_post( addslashes( $post_title ) ),
+					esc_html( get_bloginfo( 'name' ) )
 				)
 			),
 			'blocks' => array(
@@ -123,11 +118,12 @@ class Slack {
 					'text'     => array(
 						'type' => 'mrkdwn',
 						'text' => sprintf(
-							/* translators: %s: Comment author name. */
-								__( '*There is an <%1$s|edited comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
+							/* translators: %s: Comment author name. %s: Site name. */
+							__( '*There is an <%1$s|edited comment> by %2$s on <%4$s|%3$s>* - From: %5$s', 'comment-edit-pro' ),
 							esc_url( get_comment_link( $comment ) ),
 							esc_html( $comment_author ),
-							$post_title,
+							wp_kses_post( addslashes( $post_title ) ),
+							esc_html( get_bloginfo( 'name' ) ),
 							esc_url( get_permalink( $post_id ) )
 						),
 					),
@@ -212,38 +208,25 @@ class Slack {
 							'type'      => 'button',
 							'text'      => array(
 								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Approve', 'comment-edit-pro' ),
+								'text'  => esc_html__( 'View Comment', 'comment-edit-pro' ),
 								'emoji' => true,
 							),
 							'style'     => 'primary',
-							'value'     => 'approve',
-							'action_id' => 'approval',
-							'url'       => esc_url_raw( $approve_link ),
+							'value'     => 'view_comment',
+							'action_id' => 'view_comment',
+							'url'       => esc_url_raw( $view_comment_link ),
 						),
 						array(
 							'type'      => 'button',
 							'text'      => array(
 								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Unapprove', 'comment-edit-pro' ),
+								'text'  => esc_html__( 'View Post', 'comment-edit-pro' ),
 								'emoji' => true,
 							),
-							'value'     => 'unapprove',
-							'action_id' => 'unapprove',
-							'url'       => esc_url_raw( $unapprove_link ),
+							'value'     => 'view',
+							'action_id' => 'view',
+							'url'       => esc_url_raw( $view_post_link ),
 						),
-						array(
-							'type'      => 'button',
-							'text'      => array(
-								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Mark as Spam', 'comment-edit-pro' ),
-								'emoji' => true,
-							),
-							'style'     => 'danger',
-							'value'     => 'spam',
-							'action_id' => 'spam',
-							'url'       => esc_url_raw( $spam_link ),
-						),
-
 					),
 				),
 			),
@@ -354,7 +337,6 @@ class Slack {
 				'message' => __( 'Slack options have been reset to defaults.', 'comment-edit-pro' ),
 			)
 		);
-
 	}
 
 	/**
@@ -364,9 +346,26 @@ class Slack {
 	 * @param bool $maybe_comment_approved Whether the comment is approved or not (1, 0, spam).
 	 */
 	public function comment_posted( $comment_id, $maybe_comment_approved ) {
-		$options = Options::get_options();
-		if ( ! (bool) $options['slack_enabled'] ) {
-			return;
+		if ( Functions::is_multisite() ) {
+			$network_options            = Options::get_network_options();
+			$network_wide_slack_enabled = (bool) $network_options['enable_network_wide_slack'];
+			if ( $network_wide_slack_enabled ) {
+				$webhook_url = $network_options['slack_webhook_url'];
+				$options     = $network_options;
+			} else {
+				$options         = Options::get_options();
+				$webhook_enabled = (bool) $options['slack_enabled'];
+				if ( $webhook_enabled ) {
+					$webhook_url = $options['slack_webhook_url'];
+					$options     = $options;
+				}
+			}
+		} else {
+			$options         = Options::get_options();
+			$webhook_enabled = (bool) $options['slack_enabled'];
+			if ( $webhook_enabled ) {
+				$webhook_url = $options['slack_webhook_url'];
+			}
 		}
 
 		// Check if moderated comment.
@@ -376,7 +375,6 @@ class Slack {
 		}
 
 		// Check for webhook.
-		$webhook_url = $options['slack_webhook_url'];
 		if ( empty( $webhook_url ) ) {
 			return;
 		}
@@ -397,31 +395,15 @@ class Slack {
 		$comment_author_email = $comment->comment_author_email;
 		$comment_author_url   = $comment->comment_author_url;
 		$post_id              = $comment->comment_post_ID;
-		$post = get_post( $post_id );
+		$post                 = get_post( $post_id );
 		$post_title           = stripslashes_deep( $post->post_title ); // Can't escape entities unfortunately.
 
 		// Get comment text.
 		$comment_content = stripslashes_deep( $comment->comment_content );
 
 		// Comment action links.
-		$approve_link   = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ),
-			),
-			admin_url( 'comment.php?action=approvecomment&c=' . $comment_id )
-		);
-		$unapprove_link = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'approve-comment_' . $comment_id ), /* both approve and unapprove use the same nonce */
-			),
-			admin_url( 'comment.php?action=unapprovecomment&c=' . $comment_id )
-		);
-		$spam_link      = add_query_arg(
-			array(
-				'_wpnonce' => wp_create_nonce( 'delete-comment_' . $comment_id ), /* spam uses the delete nonce */
-			),
-			admin_url( 'comment.php?action=spamcomment&c=' . $comment_id )
-		);
+		$view_comment_link = admin_url( 'comment.php?action=editcomment&c=' . $comment_id );
+		$view_post_link    = get_permalink( $post_id );
 
 		// Comment status label.
 		$comment_status = $comment->comment_approved;
@@ -437,10 +419,11 @@ class Slack {
 		$message_array = array(
 			'text'   => esc_html(
 				sprintf(
-					/* translators: %s: Comment author name. */
-					__( 'There is a new comment by %1$s on %2$s', 'comment-edit-pro' ),
+					/* translators: %s: Comment author name. %s: Site name. */
+					__( 'There is a new comment by %1$s on %2$s - From: %3$s', 'comment-edit-pro' ),
 					esc_html( $comment_author ),
-					$post_title
+					$post_title,
+					esc_html( get_bloginfo( 'name' ) )
 				)
 			),
 			'blocks' => array(
@@ -450,11 +433,12 @@ class Slack {
 					'text'     => array(
 						'type' => 'mrkdwn',
 						'text' => sprintf(
-							/* translators: %s: Comment author name. */
-								__( '*There is a <%1$s|new comment> by %2$s on <%4$s|%3$s>*', 'comment-edit-pro' ),
+							/* translators: %s: Comment author name. %s: Site name. */
+							__( '*There is a <%1$s|new comment> by %2$s on <%4$s|%3$s>* - From: %5$s', 'comment-edit-pro' ),
 							esc_url( get_comment_link( $comment ) ),
 							esc_html( $comment_author ),
 							stripslashes_deep( $post_title ),
+							esc_html( get_bloginfo( 'name' ) ),
 							esc_url( get_permalink( $post_id ) )
 						),
 					),
@@ -522,38 +506,25 @@ class Slack {
 							'type'      => 'button',
 							'text'      => array(
 								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Approve', 'comment-edit-pro' ),
+								'text'  => esc_html__( 'View Comment', 'comment-edit-pro' ),
 								'emoji' => true,
 							),
 							'style'     => 'primary',
-							'value'     => 'approve',
-							'action_id' => 'approval',
-							'url'       => esc_url_raw( $approve_link ),
+							'value'     => 'view_comment',
+							'action_id' => 'view_comment',
+							'url'       => esc_url_raw( $view_comment_link ),
 						),
 						array(
 							'type'      => 'button',
 							'text'      => array(
 								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Unapprove', 'comment-edit-pro' ),
+								'text'  => esc_html__( 'View Post', 'comment-edit-pro' ),
 								'emoji' => true,
 							),
-							'value'     => 'unapprove',
-							'action_id' => 'unapprove',
-							'url'       => esc_url_raw( $unapprove_link ),
+							'value'     => 'view',
+							'action_id' => 'view',
+							'url'       => esc_url_raw( $view_post_link ),
 						),
-						array(
-							'type'      => 'button',
-							'text'      => array(
-								'type'  => 'plain_text',
-								'text'  => esc_html__( 'Mark as Spam', 'comment-edit-pro' ),
-								'emoji' => true,
-							),
-							'style'     => 'danger',
-							'value'     => 'spam',
-							'action_id' => 'spam',
-							'url'       => esc_url_raw( $spam_link ),
-						),
-
 					),
 				),
 			),

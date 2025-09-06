@@ -49,11 +49,12 @@ class Functions {
 	 *
 	 * @param string $tab     Tab path to load.
 	 * @param string $sub_tab Subtab path to load.
+	 * @param bool   $network Whether to use network admin URL.
 	 *
 	 * @return string URL to admin screen. Output is not escaped.
 	 */
-	public static function get_settings_url( $tab = '', $sub_tab = '' ) {
-		if ( self::is_multisite() ) {
+	public static function get_settings_url( $tab = '', $sub_tab = '', $network = false ) {
+		if ( self::is_multisite() && $network ) {
 			$options_url = network_admin_url( 'settings.php?page=comment-edit-pro' );
 		} else {
 			$options_url = admin_url( 'options-general.php?page=comment-edit-pro' );

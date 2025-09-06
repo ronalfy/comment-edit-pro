@@ -39,7 +39,7 @@ class Network_License {
 		$tabs[] = array(
 			'get'    => 'license',
 			'action' => 'comment_edit_pro_output_network_license',
-			'url'    => Functions::get_settings_url( 'license' ),
+			'url'    => Functions::get_settings_url( 'license', '', true ),
 			'label'  => _x( 'License', 'Tab label as License', 'ultimate-auto-updates' ),
 			'icon'   => 'file-certificate',
 		);
