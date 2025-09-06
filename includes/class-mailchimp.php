@@ -182,12 +182,7 @@ class Mailchimp {
 		}
 
 		$options = Options::get_options();
-		$lists   = array();
-		if ( Functions::is_multisite() ) {
-			$lists = get_site_option( 'sce_mailchimp_lists', array() );
-		} else {
-			$lists = get_option( 'sce_mailchimp_lists', array() );
-		}
+		$lists = get_option( 'sce_mailchimp_lists', array() );
 
 		$json_array = array(
 			'enableMailchimp'       => (bool) $options['enable_mailchimp'],
@@ -236,13 +231,7 @@ class Mailchimp {
 				'mailchimp_signup_label'          => __( 'Sign Up for Updates', 'comment-edit-pro' ),
 				'mailchimp_checkbox_enabled'      => false,
 			);
-			if ( Functions::is_multisite() ) {
-				delete_site_option( 'sce_mailchimp_lists' );
-			} else {
-				delete_option( 'sce_mailchimp_lists' );
-			}
-
-			// todo: clear mailchimp lists option.
+			delete_option( 'sce_mailchimp_lists' );
 
 			Options::update_options( $options_to_save );
 			wp_send_json_success( array( 'list' => false ) );
@@ -270,11 +259,7 @@ class Mailchimp {
 		// If we don't need to refresh the list, let's not do it.
 		if ( ! $needs_refresh ) {
 			// Exit gracefully.
-			if ( Functions::is_multisite() ) {
-				$mailchimp_lists = get_site_option( 'sce_mailchimp_lists', array() );
-			} else {
-				$mailchimp_lists = get_option( 'sce_mailchimp_lists', array() );
-			}
+			$mailchimp_lists = get_option( 'sce_mailchimp_lists', array() );
 			$options_to_save['lists'] = $mailchimp_lists;
 			wp_send_json_success( $options_to_save );
 			exit;
@@ -316,11 +301,7 @@ class Mailchimp {
 		}
 
 		// Save list in option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailchimp_lists', $sanitized_values );
-		} else {
-			update_option( 'sce_mailchimp_lists', $sanitized_values );
-		}
+		update_option( 'sce_mailchimp_lists', $sanitized_values );
 
 		// When no lists were found, return error.
 		if ( empty( $sanitized_values ) ) {
@@ -352,11 +333,7 @@ class Mailchimp {
 		}
 
 		// Remove list options.
-		if ( Functions::is_multisite() ) {
-			delete_site_option( 'sce_mailchimp_lists' );
-		} else {
-			delete_option( 'sce_mailchimp_lists' );
-		}
+		delete_option( 'sce_mailchimp_lists' );
 
 		// Clear options.
 		Options::update_options(

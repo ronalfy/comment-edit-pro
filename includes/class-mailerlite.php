@@ -270,13 +270,7 @@ class MailerLite {
 		// Get any groups.
 		$groups = array();
 		if ( $is_classic ) {
-			if ( Functions::is_multisite() ) {
-				$groups = get_site_option( 'sce_mailerlite_classic_groups', array() );
-			} else {
-				$groups = get_option( 'sce_mailerlite_classic_groups', array() );
-			}
-		} elseif ( Functions::is_multisite() ) {
-				$groups = get_site_option( 'sce_mailerlite_groups', array() );
+			$groups = get_option( 'sce_mailerlite_classic_groups', array() );
 		} else {
 			$groups = get_option( 'sce_mailerlite_groups', array() );
 		}
@@ -292,13 +286,7 @@ class MailerLite {
 		// Get any custom fields.
 		$custom_fields = array();
 		if ( $is_classic ) {
-			if ( Functions::is_multisite() ) {
-				$custom_fields = get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
-			} else {
-				$custom_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
-			}
-		} elseif ( Functions::is_multisite() ) {
-				$custom_fields = get_site_option( 'sce_mailerlite_custom_fields', array() );
+			$custom_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
 		} else {
 			$custom_fields = get_option( 'sce_mailerlite_custom_fields', array() );
 		}
@@ -569,21 +557,11 @@ class MailerLite {
 	private function get_mailerlite_options_for_return() {
 		$force   = true;
 		$options = Options::get_options( $force );
-		if ( Functions::is_multisite() ) {
-			$groups = get_site_option( 'sce_mailerlite_groups', array() );
-			$fields = get_site_option( 'sce_mailerlite_fields', array() );
-		} else {
-			$groups = get_option( 'sce_mailerlite_groups', array() );
-			$fields = get_option( 'sce_mailerlite_custom_fields', array() );
-		}
+		$groups = get_option( 'sce_mailerlite_groups', array() );
+		$fields = get_option( 'sce_mailerlite_custom_fields', array() );
 		// Get classic groups and fields.
-		if ( Functions::is_multisite() ) {
-			$classic_groups = get_site_option( 'sce_mailerlite_classic_groups', array() );
-			$classic_fields = get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
-		} else {
-			$classic_groups = get_option( 'sce_mailerlite_classic_groups', array() );
-			$classic_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
-		}
+		$classic_groups = get_option( 'sce_mailerlite_classic_groups', array() );
+		$classic_fields = get_option( 'sce_mailerlite_classic_custom_fields', array() );
 
 		$json_array = array(
 			'enableMailerlite'        => (bool) $options['enable_mailerlite'],
@@ -618,17 +596,10 @@ class MailerLite {
 			'mailerlite_classic_api_key'      => '',
 			'mailerlite_classic_api_valid'    => false,
 		);
-		if ( Functions::is_multisite() ) {
-			delete_site_option( 'sce_mailerlite_groups' );
-			delete_site_option( 'sce_mailerlite_custom_fields' );
-			delete_site_option( 'sce_mailerlite_classic_groups' );
-			delete_site_option( 'sce_mailerlite_classic_custom_fields' );
-		} else {
-			delete_option( 'sce_mailerlite_groups' );
-			delete_option( 'sce_mailerlite_custom_fields' );
-			delete_option( 'sce_mailerlite_classic_groups' );
-			delete_option( 'sce_mailerlite_classic_custom_fields' );
-		}
+		delete_option( 'sce_mailerlite_groups' );
+		delete_option( 'sce_mailerlite_custom_fields' );
+		delete_option( 'sce_mailerlite_classic_groups' );
+		delete_option( 'sce_mailerlite_classic_custom_fields' );
 
 		Options::update_options( $options_to_save );
 	}
@@ -691,17 +662,10 @@ class MailerLite {
 		Options::update_options( $options_to_save );
 
 		// Save forms, tags, custom fields.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_groups', $groups );
-			update_site_option( 'sce_mailerlite_classic_groups', $classic_groups );
-			update_site_option( 'sce_mailerlite_custom_fields', $custom_fields );
-			update_site_option( 'sce_mailerlite_classic_custom_fields', $classic_custom_fields );
-		} else {
-			update_option( 'sce_mailerlite_groups', $groups );
-			update_option( 'sce_mailerlite_classic_groups', $classic_groups );
-			update_option( 'sce_mailerlite_custom_fields', $custom_fields );
-			update_option( 'sce_mailerlite_classic_custom_fields', $classic_custom_fields );
-		}
+		update_option( 'sce_mailerlite_groups', $groups );
+		update_option( 'sce_mailerlite_classic_groups', $classic_groups );
+		update_option( 'sce_mailerlite_custom_fields', $custom_fields );
+		update_option( 'sce_mailerlite_classic_custom_fields', $classic_custom_fields );
 
 		// Return saved form fields.
 		$json_array = $this->get_mailerlite_options_for_return();
@@ -766,13 +730,8 @@ class MailerLite {
 		}
 
 		// Save list in option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_groups', $sanitized_group_values );
-			update_site_option( 'sce_mailerlite_custom_fields', $sanitized_field_values );
-		} else {
-			update_option( 'sce_mailerlite_groups', $sanitized_group_values );
-			update_option( 'sce_mailerlite_custom_fields', $sanitized_field_values );
-		}
+		update_option( 'sce_mailerlite_groups', $sanitized_group_values );
+		update_option( 'sce_mailerlite_custom_fields', $sanitized_field_values );
 
 		// Save options.
 		$options_to_save['mailerlite_api_valid'] = true;
@@ -847,13 +806,8 @@ class MailerLite {
 		}
 
 		// Save list in option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-			update_site_option( 'sce_mailerlite_classic_custom_fields', $sanitized_field_values );
-		} else {
-			update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-			update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_field_values );
-		}
+		update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
+		update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_field_values );
 
 		// Save options.
 		$options_to_save['mailerlite_classic_api_valid'] = true;
@@ -931,11 +885,7 @@ class MailerLite {
 		$options = Options::get_options();
 		$api_key = sanitize_text_field( $options['mailerlite_api_key'] );
 		// Get Groups as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_groups = (array) get_site_option( 'sce_mailerlite_groups', array() );
-		} else {
-			$existing_groups = (array) get_option( 'sce_mailerlite_groups', array() );
-		}
+		$existing_groups = (array) get_option( 'sce_mailerlite_groups', array() );
 
 		$groups_api_response = $this->get_mailerlite_groups( $api_key );
 
@@ -968,11 +918,7 @@ class MailerLite {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_groups', $sanitized_group_values );
-		} else {
-			update_option( 'sce_mailerlite_groups', $sanitized_group_values );
-		}
+		update_option( 'sce_mailerlite_groups', $sanitized_group_values );
 
 		// Return groups.
 		wp_send_json_success(
@@ -1024,11 +970,7 @@ class MailerLite {
 		// Now format response from JSON.
 		$groups_raw = json_decode( wp_remote_retrieve_body( $group_api_response ), true );
 		// Get Groups as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_groups = (array) get_site_option( 'sce_mailerlite_classic_groups', array() );
-		} else {
-			$existing_groups = (array) get_option( 'sce_mailerlite_classic_groups', array() );
-		}
+		$existing_groups = (array) get_option( 'sce_mailerlite_classic_groups', array() );
 
 		$groups                 = $groups_raw;
 		$sanitized_group_values = array();
@@ -1055,11 +997,7 @@ class MailerLite {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-		} else {
-			update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-		}
+		update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
 
 		// Return groups.
 		wp_send_json_success(
@@ -1092,11 +1030,7 @@ class MailerLite {
 		$api_key        = sanitize_text_field( $options['mailerlite_api_key'] );
 		$api_secret_key = sanitize_text_field( $options['mailerlite_secret_key'] );
 		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_forms = (array) get_site_option( 'sce_mailerlite_forms', array() );
-		} else {
-			$existing_forms = (array) get_option( 'sce_mailerlite_forms', array() );
-		}
+		$existing_forms = (array) get_option( 'sce_mailerlite_forms', array() );
 
 		// Start building up HTTP args.
 		$http_args            = array();
@@ -1143,11 +1077,7 @@ class MailerLite {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_forms', $sanitized_form_values );
-		} else {
-			update_option( 'sce_mailerlite_forms', $sanitized_form_values );
-		}
+		update_option( 'sce_mailerlite_forms', $sanitized_form_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1195,11 +1125,7 @@ class MailerLite {
 		}
 
 		// Get custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_mailerlite_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_mailerlite_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_mailerlite_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw['data'];
@@ -1224,11 +1150,7 @@ class MailerLite {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1278,11 +1200,7 @@ class MailerLite {
 		}
 
 		// Get custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_mailerlite_classic_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_mailerlite_classic_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw;
@@ -1308,11 +1226,7 @@ class MailerLite {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1363,11 +1277,7 @@ class MailerLite {
 		}
 
 		// Get Groups as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_groups = (array) get_site_option( 'sce_mailerlite_groups', array() );
-		} else {
-			$existing_groups = (array) get_option( 'sce_mailerlite_groups', array() );
-		}
+		$existing_groups = (array) get_option( 'sce_mailerlite_groups', array() );
 
 		$groups                 = $groups_api_response['data'];
 		$sanitized_group_values = array();
@@ -1400,11 +1310,7 @@ class MailerLite {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_groups', $sanitized_group_values );
-		} else {
-			update_option( 'sce_mailerlite_groups', $sanitized_group_values );
-		}
+		update_option( 'sce_mailerlite_groups', $sanitized_group_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1476,11 +1382,7 @@ class MailerLite {
 		$groups_raw = json_decode( wp_remote_retrieve_body( $group_api_response ), true );
 
 		// Get Groups as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_groups = (array) get_site_option( 'sce_mailerlite_classic_groups', array() );
-		} else {
-			$existing_groups = (array) get_option( 'sce_mailerlite_classic_groups', array() );
-		}
+		$existing_groups = (array) get_option( 'sce_mailerlite_classic_groups', array() );
 
 		$groups                 = $groups_raw;
 		$sanitized_group_values = array();
@@ -1513,11 +1415,7 @@ class MailerLite {
 		}
 
 		// Save tags as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-		} else {
-			update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
-		}
+		update_option( 'sce_mailerlite_classic_groups', $sanitized_group_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1591,11 +1489,7 @@ class MailerLite {
 		}
 
 		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_mailerlite_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_mailerlite_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_mailerlite_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw['data'];
@@ -1621,11 +1515,7 @@ class MailerLite {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_mailerlite_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(
@@ -1695,11 +1585,7 @@ class MailerLite {
 		}
 
 		// Get tags as an option.
-		if ( Functions::is_multisite() ) {
-			$existing_custom_fields = (array) get_site_option( 'sce_mailerlite_classic_custom_fields', array() );
-		} else {
-			$existing_custom_fields = (array) get_option( 'sce_mailerlite_classic_custom_fields', array() );
-		}
+		$existing_custom_fields = (array) get_option( 'sce_mailerlite_classic_custom_fields', array() );
 
 		$custom_fields_raw             = json_decode( wp_remote_retrieve_body( $custom_fields_api_response ), true );
 		$custom_fields                 = $custom_fields_raw;
@@ -1725,11 +1611,7 @@ class MailerLite {
 		}
 
 		// Save custom fields as an option.
-		if ( Functions::is_multisite() ) {
-			update_site_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
-		} else {
-			update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
-		}
+		update_option( 'sce_mailerlite_classic_custom_fields', $sanitized_custom_field_values );
 
 		// Return tags.
 		wp_send_json_success(

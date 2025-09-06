@@ -368,6 +368,8 @@ class Comment_Edit_Pro {
 		$this->advanced->run();
 		$this->selector_helper = new \CommentEditPro\Includes\Selector_Helper();
 		$this->selector_helper->run();
+		$this->network_home = new \CommentEditPro\Includes\Network_Home();
+		$this->network_home->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );

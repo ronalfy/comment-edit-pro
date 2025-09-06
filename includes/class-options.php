@@ -165,6 +165,62 @@ class Options {
 	}
 
 	/**
+	 * Return a list of options.
+	 *
+	 * @param bool $force Whether to get options from cache or not.
+	 *
+	 * @return array Array of options.
+	 */
+	public static function get_network_options( $force = false ) {
+		if ( is_array( self::$network_options ) && ! $force ) {
+			return self::$network_options;
+		}
+		$options = get_site_option( 'sce_options_network', array() );
+
+		$defaults              = self::get_network_defaults();
+		$options               = wp_parse_args( $options, $defaults );
+		self::$network_options = $options;
+		return $options;
+	}
+
+	/**
+	 * Update network options via sanitization
+	 *
+	 * @access public
+	 * @param array $options array of options to save.
+	 * @return array
+	 */
+	public static function update_network_options( $options ) {
+		$force           = true;
+		$current_options = self::get_network_options( $force );
+		foreach ( $options as $key => &$option ) {
+			switch ( $key ) {
+				case 'disable_all_comments':
+				case 'hide_comment_section':
+				case 'enable_network_wide_slack':
+				case 'slack_moderation_enabled':
+				case 'slack_edit_comments_enabled':
+					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
+					break;
+				case 'slack_webhook_url':
+					$option = esc_url( $option );
+					break;
+				default:
+					if ( is_array( $option ) ) {
+						$option = Functions::sanitize_array_recursive( $option );
+					} else {
+						$option = sanitize_text_field( $options[ $key ] );
+					}
+					break;
+			}
+		}
+		$options = wp_parse_args( $options, $current_options );
+		update_site_option( 'sce_options_network', $options );
+		self::$network_options = $options;
+		return $options;
+	}
+
+	/**
 	 * Get defaults for SCE options
 	 *
 	 * @since 1.0.0
@@ -331,20 +387,22 @@ class Options {
 	 */
 	public static function get_network_defaults() {
 		$defaults = array(
-			'disable_all_comments'              => false,
-			'hide_comment_section'              => false,
-			'enable_network_wide_slack'         => false,
-			'slack_webhook_url'                 => '',
-			'license_activated'                 => false,
-			'license_valid'                     => '',
-			'license'                           => '',
-			'license_status'                    => '',
-			'item_name'                         => '',
-			'expires'                           => '',
-			'license_limit'                     => '',
-			'site_count'                        => '',
-			'activations_left'                  => '',
-			'beta'                              => false,
+			'disable_all_comments'        => false,
+			'hide_comment_section'        => false,
+			'enable_network_wide_slack'   => false,
+			'slack_webhook_url'           => '',
+			'slack_moderation_enabled'    => false,
+			'slack_edit_comments_enabled' => false,
+			'license_activated'           => false,
+			'license_valid'               => '',
+			'license'                     => '',
+			'license_status'              => '',
+			'item_name'                   => '',
+			'expires'                     => '',
+			'license_limit'               => '',
+			'site_count'                  => '',
+			'activations_left'            => '',
+			'beta'                        => false,
 		);
 		return $defaults;
 	}

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
+use CommentEditPro\Includes\Options;
 /**
  * Class License Check.
  */
@@ -46,6 +46,9 @@ class Plugin_License {
 	public function __construct( string $license = '' ) {
 		if ( empty( $license ) ) {
 			$options = Options::get_options();
+			if ( Functions::is_multisite() ) {
+				$options = Options::get_network_options();
+			}
 			$license = $options['license'] ?? '';
 		}
 		$this->license = sanitize_text_field( $license );
@@ -85,7 +88,10 @@ class Plugin_License {
 	 */
 	private function perform_license_action( string $action, bool $force ) {
 
-		$options        = Options::get_options();
+		$options = Options::get_options();
+		if ( Functions::is_multisite() ) {
+			$options = Options::get_network_options();
+		}
 		$maybe_check    = get_site_transient( 'sce_core_license_check' );
 		$license_status = $options['license_status'] ?? '';
 		$license        = $options['license'] ?? '';
@@ -155,7 +161,11 @@ class Plugin_License {
 					$options
 				);
 			}
-			Options::update_options( $options );
+			if ( Functions::is_multisite() ) {
+				Options::update_network_options( $options );
+			} else {
+				Options::update_options( $options );
+			}
 		}
 
 		// Add query flag for checking the license so we don't ping the API every time.
@@ -299,10 +309,15 @@ class Plugin_License {
 	 * @param bool $activated true if activated, false if not.
 	 */
 	public function set_activated_status( $activated = false ) {
-		$options                      = Options::get_options();
+		$options = Options::get_options();
+		if ( Functions::is_multisite() ) {
+			$options = Options::get_network_options();
+		}
 		$options['license_activated'] = $activated;
-		Options::update_options( $options );
-
+		if ( Functions::is_multisite() ) {
+			Options::update_network_options( $options );
+		} else {
+			Options::update_options( $options );
+		}
 	}
 }
-
