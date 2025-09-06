@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useAsyncResource } from 'use-async-resource';
 import { __, sprintf } from '@wordpress/i18n';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { isURL } from '@wordpress/url';
+import { isURL, isEmail } from '@wordpress/url';
 
 import {
 	TextControl,
@@ -78,6 +78,13 @@ const Interface = ( props ) => {
 			slackWebhookUrl: data.slackWebhookUrl,
 			slackModerationEnabled: data.slackModerationEnabled,
 			slackEditCommentsEnabled: data.slackEditCommentsEnabled,
+			timer: data.timer,
+			timerOverride: data.timerOverride,
+			deleteBehavior: data.deleteBehavior,
+			spamBehavior: data.spamBehavior,
+			overrideCommentNotificationEmail: data.overrideCommentNotificationEmail,
+			commentNotificationEmail: data.commentNotificationEmail,
+			unlimitedEditing: data.unlimitedEditing,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -212,6 +219,214 @@ const Interface = ( props ) => {
 												} }
 												help={ __(
 													'Hide all comments from being shown on the frontend of the network.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="overrideCommentNotificationEmail"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<>
+												<ToggleControl
+													label={ __( 'Override Comment Notification Email', 'comment-edit-pro' ) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Override the comment notification email for the network.',
+														'comment-edit-pro'
+													) }
+												/>
+											</>
+										) }
+									/>
+								</div>
+								{
+									getValues( 'overrideCommentNotificationEmail' ) && (
+										<>
+											<div className="sce-panel-row">
+												<Controller
+													name="commentNotificationEmail"
+													control={ control }
+													rules={ {
+														required: true,
+														validate: ( value ) => {
+															return isEmail( value );
+														},
+													} }
+													render={ ( { field: { onChange, value } } ) => (
+														<>
+															<TextControl
+																label={ __( 'Comment Notification Email', 'comment-edit-pro' ) }
+																value={ value }
+																onChange={ ( newValue ) => {
+																	clearErrors( 'commentNotificationEmail' );
+																	onChange( newValue );
+																} }
+																onBlur={ ( newValue ) => {
+																	if ( ! isEmail( newValue ) ) {
+																		setError( 'commentNotificationEmail', {
+																			shouldFocus: true,
+																		} );
+																	} else {
+																		clearErrors( 'commentNotificationEmail' );
+																	}
+																} }
+																className={ classNames( 'sce-admin__text-control', {
+																	'has-error': 'required' === errors.commentNotificationEmail?.type || 'validate' === errors.commentNotificationEmail?.type,
+																	'is-required': true,
+																} ) }
+																aria-required="true"
+															/>
+															{ errors.commentNotificationEmail && (
+																<Notice
+																	message={ __( 'This does not appear to be a valid email address.', 'comment-edit-pro' ) }
+																	status="error"
+																	politeness="assertive"
+																	inline={ false }
+																	icon={ CircularExclamationIcon }
+																/>
+															) }
+														</>
+													) }
+												/>
+											</div>
+										</>
+									)
+								}
+								<div className="sce-panel-row">
+									<Controller
+										name="timerOverride"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<>
+												<ToggleControl
+													label={ __( 'Override Editing Timer Network-Wide', 'comment-edit-pro' ) }
+													className="sce-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+												/>
+											</>
+										) }
+									/>
+								</div>
+								{
+									getValues( 'timerOverride' ) && (
+										<>
+											<div className="sce-panel-row">
+												<Controller
+													name="timer"
+													control={ control }
+													render={ ( { field: { onChange, value } } ) => (
+														<TextControl
+															label={ __( 'Timer Length (in minutes)', 'comment-edit-pro' ) }
+															value={ value }
+															onChange={ ( newValue ) => {
+																onChange( newValue );
+															} }
+															type="number"
+															className={ classNames( 'sce-admin__text-control', {
+																'has-error': 'required' === errors.timer?.type,
+																'is-required': true,
+															} ) }
+															aria-required="true"
+														/>
+													) }
+												/>
+											</div>
+										</>
+									)
+								}
+								<div className="sce-panel-row">
+									<Controller
+										name="unlimitedEditing"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<ToggleControl
+												label={ __( 'Enable Unlimited Editing Network-Wide', 'comment-edit-pro' ) }
+												className="sce-admin__toggle-control"
+												checked={ value }
+												onChange={ ( boolValue ) => {
+													onChange( boolValue );
+												} }
+												help={ __(
+													'Enabling this will allow unlimited editing for logged-in users across the network.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="deleteBehavior"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<RadioControl
+												label={ __(
+													'How should deleted comments be treated?',
+													'comment-edit-pro'
+												) }
+												selected={ value }
+												options={ [
+													{
+														label: __( 'Default', 'comment-edit-pro' ),
+														value: 'default',
+													},
+													{
+														label: __( 'Send to Trash', 'comment-edit-pro' ),
+														value: 'trash',
+													},
+													{
+														label: __( 'Delete Permanently', 'comment-edit-pro' ),
+														value: 'delete',
+													},
+												] }
+												onChange={ onChange }
+												help={ __(
+													'Choose whether to send deleted comments to the trash or delete them permanently. This affects comments deleted in the admin as well. This can be set per site, or globally here.',
+													'comment-edit-pro'
+												) }
+											/>
+										) }
+									/>
+								</div>
+								<div className="sce-panel-row">
+									<Controller
+										name="spamBehavior"
+										control={ control }
+										render={ ( { field: { onChange, value } } ) => (
+											<RadioControl
+												label={ __(
+													'How should spammed comments be treated?',
+													'comment-edit-pro'
+												) }
+												selected={ value }
+												options={ [
+													{
+														label: __( 'Default', 'comment-edit-pro' ),
+														value: 'default',
+													},
+													{
+														label: __( 'Send to Spam', 'comment-edit-pro' ),
+														value: 'spam',
+													},
+													{
+														label: __( 'Spam and Delete', 'comment-edit-pro' ),
+														value: 'delete',
+													},
+												] }
+												onChange={ onChange }
+												help={ __(
+													'Choose whether to send spammed comments to the trash or delete them permanently. This affects comments marked as spam in the admin as well. This can be set per site, or globally here.',
 													'comment-edit-pro'
 												) }
 											/>

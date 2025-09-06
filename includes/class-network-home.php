@@ -19,6 +19,9 @@ class Network_Home {
 	 * Class runner.
 	 */
 	public function run() {
+		if ( ! Functions::is_multisite() ) {
+			return;
+		}
 
 		/**
 		 * Mailchimp admin panel actions.
@@ -53,6 +56,90 @@ class Network_Home {
 				add_filter( 'comments_array', '__return_empty_array', 9999 );
 			}
 		}
+
+		add_filter( 'sce_comment_time', array( $this, 'modify_timer' ), 15, 2 );
+		add_filter( 'sce_unlimited_editing', array( $this, 'maybe_unlimited_editing' ), 15, 2 );
+		add_filter( 'trashed_comment', array( $this, 'maybe_delete_comment' ), 15, 2 );
+		add_filter( 'spammed_comment', array( $this, 'maybe_spam_and_delete_comment' ), 15, 2 );
+	}
+
+	/**
+	 * Maybe delete a comment permanently if admin setting is on.
+	 *
+	 * @param int        $comment_id The comment ID.
+	 * @param WP_Comment $comment    The comment object.
+	 */
+	public function maybe_delete_comment( $comment_id, $comment ) {
+		$options         = Options::get_network_options();
+		$trash_or_delete = $options['delete_behavior'];
+		if ( 'delete' === $trash_or_delete ) {
+			wp_delete_comment( $comment_id, true );
+		}
+	}
+
+	/**
+	 * Maybe delete a comment permanently after spamming it if admin setting is on.
+	 *
+	 * @param int        $comment_id The comment ID.
+	 * @param WP_Comment $comment    The comment object.
+	 */
+	public function maybe_spam_and_delete_comment( $comment_id, $comment ) {
+		$options      = Options::get_network_options();
+		$maybe_delete = $options['spam_behavior'];
+		if ( 'delete' === $maybe_delete ) {
+			wp_delete_comment( $comment_id, true );
+		}
+	}
+
+	/**
+	 * Maybe allow for unlimited editing.
+	 *
+	 * Maybe allow for unlimited editing.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @param bool   $unlimited Whether to allow unlimited comment editing.
+	 * @param object $comment comment object.
+	 *
+	 * @return bool Whether to allow unlimited editing
+	 */
+	public function maybe_unlimited_editing( $unlimited, $comment ) {
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+		$options = Options::get_network_options();
+		if ( ! isset( $options['unlimited_editing'] ) ) {
+			return false;
+		}
+
+		if ( isset( $options['unlimited_editing'] ) && true === (bool) $options['unlimited_editing'] ) {
+			global $current_user;
+			$user_id = absint( $current_user->ID );
+			if ( absint( $comment->user_id ) === $user_id ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Modify the timer.
+	 *
+	 * @param int $timer Time in minutes to edit the comment.
+	 * @return int New time in minutes
+	 */
+	public function modify_timer( $timer ) {
+		$options        = Options::get_network_options();
+		$override_timer = isset( $options['timer_override'] ) ? (bool) $options['timer_override'] : false;
+		if ( true === $override_timer ) {
+			$new_timer = isset( $options['timer'] ) ? $options['timer'] : false;
+			if ( false === $new_timer ) {
+				return $timer;
+			}
+			return $new_timer;
+		}
+		return $timer;
 	}
 
 	/**
@@ -92,12 +179,19 @@ class Network_Home {
 		$options = Options::get_network_options();
 
 		$json_array = array(
-			'disableAllComments'     => (bool) $options['disable_all_comments'],
-			'hideCommentSection'     => (bool) $options['hide_comment_section'],
-			'enableNetworkWideSlack' => (bool) $options['enable_network_wide_slack'],
-			'slackWebhookUrl'        => $options['slack_webhook_url'],
-			'slackModerationEnabled' => (bool) $options['slack_moderation_enabled'],
-			'slackEditCommentsEnabled' => (bool) $options['slack_edit_comments_enabled'],
+			'disableAllComments'               => (bool) $options['disable_all_comments'],
+			'hideCommentSection'               => (bool) $options['hide_comment_section'],
+			'enableNetworkWideSlack'           => (bool) $options['enable_network_wide_slack'],
+			'slackWebhookUrl'                  => $options['slack_webhook_url'],
+			'slackModerationEnabled'           => (bool) $options['slack_moderation_enabled'],
+			'slackEditCommentsEnabled'         => (bool) $options['slack_edit_comments_enabled'],
+			'timer'                            => $options['timer'],
+			'timerOverride'                    => $options['timer_override'],
+			'deleteBehavior'                   => $options['delete_behavior'],
+			'spamBehavior'                     => $options['spam_behavior'],
+			'overrideCommentNotificationEmail' => (bool) $options['override_comment_notification_email'],
+			'commentNotificationEmail'         => $options['comment_notification_email'],
+			'unlimitedEditing'                 => (bool) $options['unlimited_editing'],
 		);
 
 		// Exit gracefully.
@@ -119,13 +213,20 @@ class Network_Home {
 			);
 		}
 
-		$options                                = array();
-		$options['disable_all_comments']        = (bool) filter_input( INPUT_POST, 'disableAllComments', FILTER_VALIDATE_BOOLEAN );
-		$options['hide_comment_section']        = (bool) filter_input( INPUT_POST, 'hideCommentSection', FILTER_VALIDATE_BOOLEAN );
-		$options['enable_network_wide_slack']   = (bool) filter_input( INPUT_POST, 'enableNetworkWideSlack', FILTER_VALIDATE_BOOLEAN );
-		$options['slack_webhook_url']           = esc_url( filter_input( INPUT_POST, 'slackWebhookUrl', FILTER_VALIDATE_URL ) );
-		$options['slack_moderation_enabled']    = (bool) filter_input( INPUT_POST, 'slackModerationEnabled', FILTER_VALIDATE_BOOLEAN );
-		$options['slack_edit_comments_enabled'] = (bool) filter_input( INPUT_POST, 'slackEditCommentsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$options                                        = array();
+		$options['disable_all_comments']                = (bool) filter_input( INPUT_POST, 'disableAllComments', FILTER_VALIDATE_BOOLEAN );
+		$options['hide_comment_section']                = (bool) filter_input( INPUT_POST, 'hideCommentSection', FILTER_VALIDATE_BOOLEAN );
+		$options['enable_network_wide_slack']           = (bool) filter_input( INPUT_POST, 'enableNetworkWideSlack', FILTER_VALIDATE_BOOLEAN );
+		$options['slack_webhook_url']                   = esc_url( filter_input( INPUT_POST, 'slackWebhookUrl', FILTER_VALIDATE_URL ) );
+		$options['slack_moderation_enabled']            = (bool) filter_input( INPUT_POST, 'slackModerationEnabled', FILTER_VALIDATE_BOOLEAN );
+		$options['slack_edit_comments_enabled']         = (bool) filter_input( INPUT_POST, 'slackEditCommentsEnabled', FILTER_VALIDATE_BOOLEAN );
+		$options['timer']                               = absint( filter_input( INPUT_POST, 'timer', FILTER_DEFAULT ) );
+		$options['timer_override']                      = (bool) filter_input( INPUT_POST, 'timerOverride', FILTER_VALIDATE_BOOLEAN );
+		$options['delete_behavior']                     = sanitize_text_field( filter_input( INPUT_POST, 'deleteBehavior', FILTER_DEFAULT ) );
+		$options['spam_behavior']                       = sanitize_text_field( filter_input( INPUT_POST, 'spamBehavior', FILTER_DEFAULT ) );
+		$options['override_comment_notification_email'] = (bool) filter_input( INPUT_POST, 'overrideCommentNotificationEmail', FILTER_VALIDATE_BOOLEAN );
+		$options['comment_notification_email']          = sanitize_text_field( filter_input( INPUT_POST, 'commentNotificationEmail', FILTER_DEFAULT ) );
+		$options['unlimited_editing']                   = (bool) filter_input( INPUT_POST, 'unlimitedEditing', FILTER_VALIDATE_BOOLEAN );
 		// Save options.
 		Options::update_network_options( $options );
 

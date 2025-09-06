@@ -12741,7 +12741,14 @@ const Interface = props => {
       enableNetworkWideSlack: data.enableNetworkWideSlack,
       slackWebhookUrl: data.slackWebhookUrl,
       slackModerationEnabled: data.slackModerationEnabled,
-      slackEditCommentsEnabled: data.slackEditCommentsEnabled
+      slackEditCommentsEnabled: data.slackEditCommentsEnabled,
+      timer: data.timer,
+      timerOverride: data.timerOverride,
+      deleteBehavior: data.deleteBehavior,
+      spamBehavior: data.spamBehavior,
+      overrideCommentNotificationEmail: data.overrideCommentNotificationEmail,
+      commentNotificationEmail: data.commentNotificationEmail,
+      unlimitedEditing: data.unlimitedEditing
     }
   });
   const formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useWatch)({
@@ -12870,6 +12877,198 @@ const Interface = props => {
                       onChange(boolValue);
                     },
                     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide all comments from being shown on the frontend of the network.', 'comment-edit-pro')
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: "sce-panel-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                  name: "overrideCommentNotificationEmail",
+                  control: control,
+                  render: ({
+                    field: {
+                      onChange,
+                      value
+                    }
+                  }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Override Comment Notification Email', 'comment-edit-pro'),
+                      className: "sce-admin__toggle-control",
+                      checked: value,
+                      onChange: boolValue => {
+                        onChange(boolValue);
+                      },
+                      help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Override the comment notification email for the network.', 'comment-edit-pro')
+                    })
+                  })
+                })
+              }), getValues('overrideCommentNotificationEmail') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                  className: "sce-panel-row",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                    name: "commentNotificationEmail",
+                    control: control,
+                    rules: {
+                      required: true,
+                      validate: value => {
+                        return (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.isEmail)(value);
+                      }
+                    },
+                    render: ({
+                      field: {
+                        onChange,
+                        value
+                      }
+                    }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
+                        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Comment Notification Email', 'comment-edit-pro'),
+                        value: value,
+                        onChange: newValue => {
+                          clearErrors('commentNotificationEmail');
+                          onChange(newValue);
+                        },
+                        onBlur: newValue => {
+                          if (!(0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.isEmail)(newValue)) {
+                            setError('commentNotificationEmail', {
+                              shouldFocus: true
+                            });
+                          } else {
+                            clearErrors('commentNotificationEmail');
+                          }
+                        },
+                        className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+                          'has-error': 'required' === errors.commentNotificationEmail?.type || 'validate' === errors.commentNotificationEmail?.type,
+                          'is-required': true
+                        }),
+                        "aria-required": "true"
+                      }), errors.commentNotificationEmail && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Notice__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('This does not appear to be a valid email address.', 'comment-edit-pro'),
+                        status: "error",
+                        politeness: "assertive",
+                        inline: false,
+                        icon: _components_icons_CircularExplanation__WEBPACK_IMPORTED_MODULE_9__["default"]
+                      })]
+                    })
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: "sce-panel-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                  name: "timerOverride",
+                  control: control,
+                  render: ({
+                    field: {
+                      onChange,
+                      value
+                    }
+                  }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Override Editing Timer Network-Wide', 'comment-edit-pro'),
+                      className: "sce-admin__toggle-control",
+                      checked: value,
+                      onChange: boolValue => {
+                        onChange(boolValue);
+                      }
+                    })
+                  })
+                })
+              }), getValues('timerOverride') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                  className: "sce-panel-row",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                    name: "timer",
+                    control: control,
+                    render: ({
+                      field: {
+                        onChange,
+                        value
+                      }
+                    }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Timer Length (in minutes)', 'comment-edit-pro'),
+                      value: value,
+                      onChange: newValue => {
+                        onChange(newValue);
+                      },
+                      type: "number",
+                      className: classnames__WEBPACK_IMPORTED_MODULE_1___default()('sce-admin__text-control', {
+                        'has-error': 'required' === errors.timer?.type,
+                        'is-required': true
+                      }),
+                      "aria-required": "true"
+                    })
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: "sce-panel-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                  name: "unlimitedEditing",
+                  control: control,
+                  render: ({
+                    field: {
+                      onChange,
+                      value
+                    }
+                  }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enable Unlimited Editing Network-Wide', 'comment-edit-pro'),
+                    className: "sce-admin__toggle-control",
+                    checked: value,
+                    onChange: boolValue => {
+                      onChange(boolValue);
+                    },
+                    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enabling this will allow unlimited editing for logged-in users across the network.', 'comment-edit-pro')
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: "sce-panel-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                  name: "deleteBehavior",
+                  control: control,
+                  render: ({
+                    field: {
+                      onChange,
+                      value
+                    }
+                  }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.RadioControl, {
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('How should deleted comments be treated?', 'comment-edit-pro'),
+                    selected: value,
+                    options: [{
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Default', 'comment-edit-pro'),
+                      value: 'default'
+                    }, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send to Trash', 'comment-edit-pro'),
+                      value: 'trash'
+                    }, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Delete Permanently', 'comment-edit-pro'),
+                      value: 'delete'
+                    }],
+                    onChange: onChange,
+                    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Choose whether to send deleted comments to the trash or delete them permanently. This affects comments deleted in the admin as well. This can be set per site, or globally here.', 'comment-edit-pro')
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: "sce-panel-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+                  name: "spamBehavior",
+                  control: control,
+                  render: ({
+                    field: {
+                      onChange,
+                      value
+                    }
+                  }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.RadioControl, {
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('How should spammed comments be treated?', 'comment-edit-pro'),
+                    selected: value,
+                    options: [{
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Default', 'comment-edit-pro'),
+                      value: 'default'
+                    }, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Send to Spam', 'comment-edit-pro'),
+                      value: 'spam'
+                    }, {
+                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Spam and Delete', 'comment-edit-pro'),
+                      value: 'delete'
+                    }],
+                    onChange: onChange,
+                    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Choose whether to send spammed comments to the trash or delete them permanently. This affects comments marked as spam in the admin as well. This can be set per site, or globally here.', 'comment-edit-pro')
                   })
                 })
               })]

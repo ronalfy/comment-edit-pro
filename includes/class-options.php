@@ -387,22 +387,29 @@ class Options {
 	 */
 	public static function get_network_defaults() {
 		$defaults = array(
-			'disable_all_comments'        => false,
-			'hide_comment_section'        => false,
-			'enable_network_wide_slack'   => false,
-			'slack_webhook_url'           => '',
-			'slack_moderation_enabled'    => false,
-			'slack_edit_comments_enabled' => false,
-			'license_activated'           => false,
-			'license_valid'               => '',
-			'license'                     => '',
-			'license_status'              => '',
-			'item_name'                   => '',
-			'expires'                     => '',
-			'license_limit'               => '',
-			'site_count'                  => '',
-			'activations_left'            => '',
-			'beta'                        => false,
+			'disable_all_comments'                => false,
+			'hide_comment_section'                => false,
+			'enable_network_wide_slack'           => false,
+			'slack_webhook_url'                   => '',
+			'slack_moderation_enabled'            => false,
+			'slack_edit_comments_enabled'         => false,
+			'timer'                               => 5,
+			'timer_override'                      => false,
+			'unlimited_editing'                   => false,
+			'delete_behavior'                     => 'default', /* can be trash, delete, default */
+			'spam_behavior'                       => 'default', /* can be spam, delete, default */
+			'override_comment_notification_email' => false,
+			'comment_notification_email'          => '',
+			'license_activated'                   => false,
+			'license_valid'                       => '',
+			'license'                             => '',
+			'license_status'                      => '',
+			'item_name'                           => '',
+			'expires'                             => '',
+			'license_limit'                       => '',
+			'site_count'                          => '',
+			'activations_left'                    => '',
+			'beta'                                => false,
 		);
 		return $defaults;
 	}
