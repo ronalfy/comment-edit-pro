@@ -47,7 +47,7 @@ class Shortcode {
 		$default_atts = array(
 			/* also support the following attributes: id_form, id_submit, class_container, class_form, class_submit, name_submit */
 			'comment_form_css_target'      => '.comment-respond',
-			'hide_secondary_comment_forms' => true,
+			'hide_secondary_comment_forms' => false,
 		);
 		$atts         = shortcode_atts( $default_atts, $atts, 'sce_comment_form' );
 		$atts         = array_map( 'esc_attr', $atts );
