@@ -370,6 +370,8 @@ class Comment_Edit_Pro {
 		$this->selector_helper->run();
 		$this->network_home = new \CommentEditPro\Includes\Network_Home();
 		$this->network_home->run();
+		$this->shortcode = new \CommentEditPro\Includes\Shortcode();
+		$this->shortcode->run();
 
 		add_action( 'sce_scripts_loaded', array( $this, 'add_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'add_scripts_frontend' ) );
