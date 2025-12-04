@@ -58,7 +58,7 @@ class Shortcode {
 		if ( (bool) $atts['hide_secondary_comment_forms'] ) {
 			?>
 			<style>
-				<?php echo esc_attr( $atts['comment_form_css_target'] ); ?>:last-of-type {
+				body <?php echo esc_attr( $atts['comment_form_css_target'] ); ?>:last-of-type {
 					display: none;
 				}
 			</style>
