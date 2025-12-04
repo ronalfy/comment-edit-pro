@@ -46,7 +46,6 @@ class Shortcode {
 	public function shortcode_comment_form( $atts ) {
 		$default_atts = array(
 			/* also support the following attributes: id_form, id_submit, class_container, class_form, class_submit, name_submit */
-			'comment_form_css_target'      => '.comment-respond',
 			'hide_secondary_comment_forms' => false,
 		);
 		$atts         = shortcode_atts( $default_atts, $atts, 'sce_comment_form' );
@@ -54,17 +53,25 @@ class Shortcode {
 
 		ob_start();
 		comment_form( $atts, get_the_ID() );
-
-		if ( (bool) $atts['hide_secondary_comment_forms'] ) {
-			?>
-			<style>
-				body <?php echo esc_attr( $atts['comment_form_css_target'] ); ?>:last-of-type {
-					display: none;
-				}
-			</style>
-			<?php
-		}
 		$comment_form = ob_get_clean();
+		if ( (bool) $atts['hide_secondary_comment_forms'] ) {
+			add_action(
+				'comment_form_before',
+				function () {
+					ob_start();
+				},
+				1
+			);
+			add_action(
+				'comment_form_after',
+				function () {
+					ob_end_clean();
+					echo '';
+					return null;
+				},
+				100
+			);
+		}
 
 		++self::$num_comment_forms;
 
