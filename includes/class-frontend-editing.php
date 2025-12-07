@@ -321,15 +321,18 @@ class Frontend_Editing {
 			update_comment_meta( $comment_id, 'rating', $rating );
 		}
 
+		$comment_to_return                    = get_comment( $comment_id, OBJECT );
+		$comment_content_to_return = $comment_to_return->comment_content;
 		// Format the comment for returning.
 		if ( function_exists( 'mb_convert_encoding' ) ) {
-			$comment = mb_convert_encoding( $comment, '' . get_option( 'blog_charset' ) . '', mb_detect_encoding( $comment, 'UTF-8, ISO-8859-1, ISO-8859-15', true ) );
+			$comment_content_to_return = mb_convert_encoding( $comment_content_to_return, '' . get_option( 'blog_charset' ) . '', mb_detect_encoding( $comment_content_to_return, 'UTF-8, ISO-8859-1, ISO-8859-15', true ) );
 		}
-		$comment = apply_filters( 'comment_text', apply_filters( 'get_comment_text', $comment, $sce_comment, array() ), $comment, array() );
+		$comment_content_to_return = apply_filters( 'comment_text', apply_filters( 'get_comment_text', $comment_content_to_return, $comment_to_return, array() ), $comment_to_return, array() );
 
+		$comment_content_to_return = stripslashes( $comment_content_to_return );
 		wp_send_json_success(
 			array(
-				'comment' => $comment,
+				'comment' => $comment_content_to_return,
 			)
 		);
 		die( '' );
