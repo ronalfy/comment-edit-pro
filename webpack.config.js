@@ -1,6 +1,7 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const FixStyleOnlyEntriesPlugin = require( 'webpack-fix-style-only-entries' );
+const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 const path = require( 'path' );
 module.exports = ( env ) => {
 	return [
@@ -120,7 +121,7 @@ module.exports = ( env ) => {
 					},
 				],
 			},
-			plugins: [ new FixStyleOnlyEntriesPlugin(), new MiniCssExtractPlugin() ],
+			plugins: [ new FixStyleOnlyEntriesPlugin(), new MiniCssExtractPlugin(), new DependencyExtractionWebpackPlugin() ],
 		},
 	];
 };

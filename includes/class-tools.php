@@ -216,11 +216,12 @@ class Tools {
 			return;
 		}
 
+		$sidebar_deps = require_once Functions::get_plugin_dir( 'dist/sce-comment-activity-sidebar.asset.php' );
 		wp_enqueue_script(
 			'sce-comment-activity-sidebar',
 			Functions::get_plugin_url( 'dist/sce-comment-activity-sidebar.js' ),
-			array( 'wp-edit-post', 'wp-i18n', 'wp-data' ),
-			SCE_VERSION,
+			$sidebar_deps['dependencies'],
+			$sidebar_deps['version'],
 			true
 		);
 	}

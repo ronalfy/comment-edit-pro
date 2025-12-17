@@ -1,1 +1,359 @@
-button.button-reset,button.button-reset:focus,button.button-reset:hover,a.button-reset,a.button-reset:focus,a.button-reset:hover{background:none;color:inherit;border:none;padding:0;cursor:pointer;outline:inherit;text-transform:unset;text-decoration:none}button.button-reset.show-cursor,a.button-reset.show-cursor{cursor:pointer}.button-reset button,.button-reset a,.button-reset:focus button,.button-reset:focus a,.button-reset:hover button,.button-reset:hover a{background:none;color:inherit;border:none;padding:0;cursor:pointer;outline:inherit;text-transform:unset;text-decoration:none}*,*::before,*::after{box-sizing:border-box}*{margin:0}html,body{height:100%}body{line-height:1.5;-webkit-font-smoothing:antialiased;font-family:Verdana,sans-serif}img,picture,video,canvas,svg{display:block;max-width:100%}input,button,textarea,select{font:inherit}p,h1,h2,h3,h4,h5,h6{overflow-wrap:break-word;font-weight:500}#root,#__next{isolation:isolate}.sce-wrapper{padding:2rem}.sce-wrapper h1{margin-bottom:24px}.sce-headling-admin-shortcut{font-size:14px;color:#1c3472}.sce-headling-admin-shortcut a{position:relative;display:inline-block;text-decoration:none;color:#1c3472}.sce-headling-admin-shortcut a:after{content:" ";display:inline-block;position:absolute;bottom:-3px;left:0;width:100%;border-bottom:2px solid hsl(208.2352941176,7.2961373391%,60.6862745098%)}.sce-headling-admin-shortcut a:hover{color:rgb(12.9154929577,23.985915493,52.5845070423);text-decoration:none}.sce-headling-admin-shortcut a:hover:after{border-bottom-color:#1c3472}.sce-form-group-grid{display:grid;grid-template-columns:1fr;row-gap:15px}.sce-form-group-grid-row{display:grid;grid-template-columns:175px 1fr;column-gap:15px}.sce-form-group-grid-row label{font-weight:500}.sce-form-group-grid-row input[type=text],.sce-form-group-grid-row textarea{padding:10px;border:1px solid #ddd;border-radius:4px}.sce-form-button-grid-items{margin-top:1.5em;display:grid;grid-template-columns:1fr;column-gap:15px;row-gap:15px}.sce-form-button-grid-items .empty-div{display:none}@media(min-width: 768px){.sce-form-button-grid-items{grid-template-columns:175px 175px 1fr 175px}.sce-form-button-grid-items .empty-div{display:block}}.sce-delete-comment{align-self:end}@media(min-width: 768px){.sce-delete-comment{max-width:175px}}.sce-button{padding:10px 20px;border-radius:5px;background:#722727;color:#fff;cursor:pointer;border:1px solid #e0e4e9;transition:background-color .5s ease;text-decoration:none;display:inline-block;vertical-align:middle;font-size:14px}.sce-button:hover{color:#fff !important;background:#983434}.sce-button.sce-button-info{background:#6c757d;color:#fff}.sce-button.sce-button-info:hover{background:hsl(208.2352941176,7.2961373391%,55.6862745098%)}.sce-button.sce-button-danger{background:#721c24;color:#fff}.sce-button.sce-button-danger:hover{background:rgb(154.9436619718,38.0563380282,48.9295774648)}.sce-button.sce-button-edit{background:#f8f9fa;color:#000}.sce-button.sce-button-edit:hover{background:#fff}.sce-button.sce-button-delete{background:#721c24;color:#fff}.sce-button.sce-button-delete:hover{background:rgb(154.9436619718,38.0563380282,48.9295774648)}.sce-button.sce-button-lg{padding:20px 30px;font-size:2em}.sce-button.sce-button-save{background:#22721c;color:#fff}.sce-button.sce-button-save:hover{color:#fff;background:rgb(46.2112676056,154.9436619718,38.0563380282)}.sce-button .sce-icon-button{text-align:middle;display:inline-block;width:16px;height:16px}.sce-button svg{width:16px;height:16px;vertical-align:middle}.sce-delete-comments-progress-bar{position:relative;height:20px;background:#333;border-radius:4px;overflow:hidden}.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-inner{position:absolute;top:0;left:0;width:0%;height:100%;background:#721c24}.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-label{position:absolute;top:0;left:0;width:100%;height:100%;text-align:center;line-height:20px;color:#fff;font-size:12px}.sce-block-comments-options{display:flex;flex-direction:column;gap:1.25em;margin-bottom:1.5em}.sce-block-comments-option{display:flex;align-items:center;font-size:1.25em;background:#f9f9f9;border-radius:6px;padding:.75em 1em;box-shadow:0 1px 2px rgba(0,0,0,.03)}.sce-block-comments-option label{display:flex;align-items:center;width:100%;font-weight:500;cursor:pointer}.sce-block-comments-option input[type=checkbox]{margin-right:.75em;width:1.2em;height:1.2em;accent-color:#22721c}.sce-block-comments-value{margin-left:.5em;font-size:.95em;color:#555;font-weight:400;word-break:break-all}.sce-block-comments-form button[type=submit]{margin-top:1.5em;font-size:1.1em;padding:.7em 2em;border-radius:5px;background:#1c3472;color:#fff;border:none;transition:background .2s;font-weight:600;cursor:pointer}.sce-block-comments-form button[type=submit]:hover{background:rgb(38.0563380282,70.676056338,154.9436619718)}
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/resolve-url-loader/index.js!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[3]!./src/scss/frontend-editing.scss ***!
+  \****************************************************************************************************************************************************************************************************************************/
+button.button-reset, button.button-reset:focus, button.button-reset:hover, a.button-reset, a.button-reset:focus, a.button-reset:hover {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+  text-decoration: none;
+}
+button.button-reset.show-cursor, a.button-reset.show-cursor {
+  cursor: pointer;
+}
+
+.button-reset button, .button-reset a,
+.button-reset:focus button,
+.button-reset:focus a,
+.button-reset:hover button,
+.button-reset:hover a {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+  text-decoration: none;
+}
+
+/* Responsive styles - In hindsight, should've used mobile-first */
+/* Mixin from: https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/ */
+/* It's only used here, so no external file for mixin? */
+/* CSS reboot from: https://www.joshwcomeau.com/css/custom-css-reset/ */
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+	2. Remove default margin
+  */
+* {
+  margin: 0;
+}
+
+/*
+	3. Allow percentage-based heights in the application
+  */
+html,
+body {
+  height: 100%;
+}
+
+/*
+	Typographic tweaks!
+	4. Add accessible line-height
+	5. Improve text rendering
+  */
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: Verdana, sans-serif;
+}
+
+/*
+	6. Improve media defaults
+  */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+	7. Remove built-in form typography styles
+  */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+	8. Avoid text overflows
+  */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  font-weight: 500;
+}
+
+/*
+	9. Create a root stacking context
+  */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Frontend editing button styles */
+/* Frontend mobile styles */
+.sce-wrapper {
+  padding: 2rem;
+}
+
+.sce-wrapper h1 {
+  margin-bottom: 24px;
+}
+
+.sce-headling-admin-shortcut {
+  font-size: 14px;
+  color: #1c3472;
+}
+.sce-headling-admin-shortcut a {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: #1c3472;
+}
+.sce-headling-admin-shortcut a:after {
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  border-bottom: 2px solid rgb(147.4356223176, 155.1802575107, 162.0643776824);
+}
+.sce-headling-admin-shortcut a:hover {
+  color: rgb(12.9154929577, 23.985915493, 52.5845070423);
+  text-decoration: none;
+}
+.sce-headling-admin-shortcut a:hover:after {
+  border-bottom-color: #1c3472;
+}
+
+.sce-form-group-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 15px;
+}
+
+.sce-form-group-grid-row {
+  display: grid;
+  grid-template-columns: 175px 1fr;
+  column-gap: 15px;
+}
+.sce-form-group-grid-row label {
+  font-weight: 500;
+}
+.sce-form-group-grid-row input[type=text],
+.sce-form-group-grid-row textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.sce-form-button-grid-items {
+  margin-top: 1.5em;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 15px;
+  row-gap: 15px;
+}
+.sce-form-button-grid-items .empty-div {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sce-form-button-grid-items {
+    grid-template-columns: 175px 175px 1fr 175px;
+  }
+  .sce-form-button-grid-items .empty-div {
+    display: block;
+  }
+}
+
+.sce-delete-comment {
+  align-self: end;
+}
+@media (min-width: 768px) {
+  .sce-delete-comment {
+    max-width: 175px;
+  }
+}
+
+.sce-button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: #722727;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid #e0e4e9;
+  transition: background-color 0.5s ease;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+}
+.sce-button:hover {
+  color: #fff !important;
+  background: #983434;
+}
+.sce-button.sce-button-info {
+  background: #6c757d;
+  color: #fff;
+}
+.sce-button.sce-button-info:hover {
+  background: rgb(133.7553648069, 142.4849785408, 150.2446351931);
+}
+.sce-button.sce-button-danger {
+  background: #721c24;
+  color: #fff;
+}
+.sce-button.sce-button-danger:hover {
+  background: rgb(154.9436619718, 38.0563380282, 48.9295774648);
+}
+.sce-button.sce-button-edit {
+  background: #f8f9fa;
+  color: #000;
+}
+.sce-button.sce-button-edit:hover {
+  background: white;
+}
+.sce-button.sce-button-delete {
+  background: #721c24;
+  color: #fff;
+}
+.sce-button.sce-button-delete:hover {
+  background: rgb(154.9436619718, 38.0563380282, 48.9295774648);
+}
+.sce-button.sce-button-lg {
+  padding: 20px 30px;
+  font-size: 2em;
+}
+.sce-button.sce-button-save {
+  background: #22721c;
+  color: #fff;
+}
+.sce-button.sce-button-save:hover {
+  color: #fff;
+  background: rgb(46.2112676056, 154.9436619718, 38.0563380282);
+}
+.sce-button .sce-icon-button {
+  text-align: middle;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+.sce-button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+/**
+ * SCE Delete post comments progress bar and styles.
+ */
+.sce-delete-comments-progress-bar {
+  position: relative;
+  height: 20px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #721c24;
+}
+.sce-delete-comments-progress-bar .sce-delete-comments-progress-bar-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+  font-size: 12px;
+}
+
+/* Block Comments Form Styles */
+.sce-block-comments-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  margin-bottom: 1.5em;
+}
+
+.sce-block-comments-option {
+  display: flex;
+  align-items: center;
+  font-size: 1.25em;
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 0.75em 1em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.sce-block-comments-option label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sce-block-comments-option input[type=checkbox] {
+  margin-right: 0.75em;
+  width: 1.2em;
+  height: 1.2em;
+  accent-color: #22721c;
+}
+
+.sce-block-comments-value {
+  margin-left: 0.5em;
+  font-size: 0.95em;
+  color: #555;
+  font-weight: 400;
+  word-break: break-all;
+}
+
+.sce-block-comments-form button[type=submit] {
+  margin-top: 1.5em;
+  font-size: 1.1em;
+  padding: 0.7em 2em;
+  border-radius: 5px;
+  background: #1c3472;
+  color: #fff;
+  border: none;
+  transition: background 0.2s;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sce-block-comments-form button[type=submit]:hover {
+  background: rgb(38.0563380282, 70.676056338, 154.9436619718);
+}
+
+/*# sourceMappingURL=sce-frontend-editing.css.map*/

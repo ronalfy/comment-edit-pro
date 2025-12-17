@@ -43,6 +43,139 @@ class Comment_Edit_Pro {
 	 */
 	private static $instance = null;
 
+	/**
+	 * Admin class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Admin Admin instance.
+	 */
+	private $admin = null;
+
+	/**
+	 * Output class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Output Output instance.
+	 */
+	private $output = null;
+
+	/**
+	 * Frontend Editing class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Frontend_Editing Frontend Editing instance.
+	 */
+	private $frontend_editing = null;
+
+	/**
+	 * Avatars class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Avatars Avatars instance.
+	 */
+	private $avatars = null;
+
+	/**
+	 * Integrations class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Integrations Integrations instance.
+	 */
+	private $integrations = null;
+
+	/**
+	 * Comment Mentions class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Mentions Comment Mentions instance.
+	 */
+	private $comment_mentions = null;
+
+	/**
+	 * License Ajax class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Plugin_License_Ajax License Ajax instance.
+	 */
+	private $license_ajax = null;
+
+	/**
+	 * Comment Editing class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Comment_Editing Comment Editing instance.
+	 */
+	private $comment_editing = null;
+
+	/**
+	 * Comment Form class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Comment_Form Comment Form instance.
+	 */
+	private $comment_form = null;
+
+	/**
+	 * Comment Shortcuts class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Comment_Shortcuts Comment Shortcuts instance.
+	 */
+	private $comment_shortcuts = null;
+
+	/**
+	 * Spam Protection class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Spam_Protection Spam Protection instance.
+	 */
+	private $spam_protection = null;
+
+	/**
+	 * Character Control class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Character_Control Character Control instance.
+	 */
+	private $character_control = null;
+
+	/**
+	 * Webhooks class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Webhooks Webhooks instance.
+	 */
+	private $webhooks = null;
+
+	/**
+	 * WP Rocket class instance.
+	 *
+	 * @var \CommentEditPro\Includes\WP_Rocket WP Rocket instance.
+	 */
+	private $wprocket = null;
+
+	/**
+	 * Tools class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Tools Tools instance.
+	 */
+	private $tools = null;
+
+	/**
+	 * Advanced class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Advanced Advanced instance.
+	 */
+	private $advanced = null;
+
+	/**
+	 * Selector Helper class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Selector_Helper Selector Helper instance.
+	 */
+	private $selector_helper = null;
+
+	/**
+	 * Network Home class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Network_Home Network Home instance.
+	 */
+	private $network_home = null;
+
+	/**
+	 * Shortcode class instance.
+	 *
+	 * @var \CommentEditPro\Includes\Shortcode Shortcode instance.
+	 */
+	private $shortcode = null;
+
 	// Minimum PHP version required to run this plugin.
 	const PHP_REQUIRED = '5.6';
 
@@ -152,11 +285,11 @@ class Comment_Edit_Pro {
 	 *
 	 * @param string $title   Title of the warning message.
 	 * @param string $message Warning message in detail.
-	 * @param string $class   Style class name for warning.
+	 * @param string $classname   Style class name for warning.
 	 */
-	private function show_admin_warning( $title = '', $message = '', $class = 'notice-error' ) {
+	private function show_admin_warning( $title = '', $message = '', $classname = 'notice-error' ) {
 		?>
-		<div class="notice is-dismissible <?php echo esc_attr( $class ); ?>">
+		<div class="notice is-dismissible <?php echo esc_attr( $classname ); ?>">
 			<p>
 				<?php if ( ! empty( $title ) ) : ?>
 					<strong>
@@ -476,7 +609,7 @@ class Comment_Edit_Pro {
  *
  * @return Comment_Edit_Pro
  */
-function comment_edit_pro() {
+function comment_edit_pro() { // phpcs:ignore
 	return Comment_Edit_Pro::get_instance();
 }
 comment_edit_pro();
