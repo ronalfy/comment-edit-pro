@@ -47,14 +47,32 @@ class Shortcode {
 		$default_atts = array(
 			/* also support the following attributes: id_form, id_submit, class_container, class_form, class_submit, name_submit */
 			'hide_secondary_comment_forms' => false,
+			'hide_on_comment_pagination'   => false,
+			'hide_all_comment_forms'       => false,
+			'post'                         => null,
 		);
 		$atts         = shortcode_atts( $default_atts, $atts, 'sce_comment_form' );
-		$atts         = array_map( 'esc_attr', $atts );
+		$atts         = Functions::sanitize_array_recursive( $atts );
 
 		ob_start();
-		comment_form( $atts, get_the_ID() );
+		$maybe_comment_page     = get_query_var( 'cpage' );
+		$should_show_first_form = true;
+		// Hide form on subsequent pages.
+		if ( (bool) $atts['hide_on_comment_pagination'] && $maybe_comment_page ) {
+			$should_show_first_form = false;
+		}
+		if ( (bool) $atts['hide_all_comment_forms'] ) {
+			$should_show_first_form = false;
+		}
+		if ( $should_show_first_form ) {
+			if ( null !== $atts['post'] && is_numeric( $atts['post'] ) ) {
+				comment_form( $atts, absint( $atts['post'] ) );
+			} else {
+				comment_form( $atts );
+			}
+		}
 		$comment_form = ob_get_clean();
-		if ( (bool) $atts['hide_secondary_comment_forms'] ) {
+		if ( (bool) $atts['hide_secondary_comment_forms'] || (bool) $atts['hide_all_comment_forms'] ) {
 			add_action(
 				'comment_form_before',
 				function () {
