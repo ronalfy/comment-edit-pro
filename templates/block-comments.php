@@ -32,12 +32,13 @@ wp_register_style(
 	Functions::get_plugin_version(),
 	'all'
 );
+$block_comments_asset = require Functions::get_plugin_dir( 'dist/block-comments-view.asset.php' );
 wp_register_script(
 	'sce-block-comments-js',
-	Functions::get_plugin_url( '/dist/block-comments-view.js' ),
-	array(),
-	Functions::get_plugin_version(),
-	false
+	Functions::get_plugin_url( 'dist/block-comments-view.js' ),
+	$block_comments_asset['dependencies'],
+	$block_comments_asset['version'],
+	true
 );
 wp_localize_script(
 	'sce-block-comments-js',

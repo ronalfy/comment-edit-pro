@@ -32,12 +32,13 @@ wp_register_style(
 	Functions::get_plugin_version(),
 	'all'
 );
+$delete_comments_asset = require Functions::get_plugin_dir( 'dist/delete-post-comments-view.asset.php' );
 wp_register_script(
 	'sce-delete-post-comments-js',
-	Functions::get_plugin_url( '/dist/delete-post-comments-view.js' ),
-	array(),
-	Functions::get_plugin_version(),
-	false
+	Functions::get_plugin_url( 'dist/delete-post-comments-view.js' ),
+	$delete_comments_asset['dependencies'],
+	$delete_comments_asset['version'],
+	true
 );
 wp_localize_script(
 	'sce-delete-post-comments-js',
