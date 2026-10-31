@@ -366,7 +366,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					Swal.fire( {
 						titleText: __( 'Unable to Find All Selectors', 'comment-edit-pro' ),
-						html: __( 'We were unable to find all the required selectors. Please contact support at <a style="color: #FFF;" href="https://dlxplugins.com/support/">dlxplugins.com/support/</a>.', 'comment-edit-pro' ),
+						html: __( 'We were unable to find all the required selectors.', 'comment-edit-pro' ),
 						icon: 'error',
 						confirmButtonText: __( 'OK', 'comment-edit-pro' ),
 						allowOutsideClick: false,

@@ -4,12 +4,10 @@
 
 - [Button & Timer Filters](#button--timer-filters)
 - [Webhook Filters](#webhook-filters)
-- [License Filters](#license-filters)
 - [Output Filters](#output-filters)
 - [Mentions Filters](#mentions-filters)
 - [Integration Filters](#integration-filters)
 - [Avatar Filters](#avatar-filters)
-- [License Actions](#license-actions)
 - [Help Tab Actions](#help-tab-actions)
 - [Mentions Subscribe Actions](#mentions-subscribe-actions)
 - [Mentions Unsubscribe Actions](#mentions-unsubscribe-actions)
@@ -54,34 +52,6 @@ Filter the post type arguments used when registering the webhook post type.
 add_filter( 'sce_webhook_post_type_args', function( $args ) {
     $args['public'] = true;
     return $args;
-} );
-```
-
----
-
-## License Filters
-
-### `sce_core_license_data_{$action}`
-
-Filter the license data response for a specific action. This is a dynamic filter where `{$action}` can be: `check_license`, `activate_license`, or `deactivate_license`.
-
-**Parameters:**
-- `array $response` - Response of the license action.
-
-**Return:** `array` - The filtered license data.
-
-**Example:**
-```php
-// For check_license action
-add_filter( 'sce_core_license_data_check_license', function( $response ) {
-    // Modify the response data
-    return $response;
-} );
-
-// For activate_license action
-add_filter( 'sce_core_license_data_activate_license', function( $response ) {
-    // Modify the response data
-    return $response;
 } );
 ```
 
@@ -386,36 +356,6 @@ Filter the CSS classes applied to the gravatar protection image.
 add_filter( 'sce_gravatar_protection_classes', function( $classes ) {
     $classes[] = 'my-gravatar-class';
     return $classes;
-} );
-```
-
----
-
-## License Actions
-
-### `sce_core_license_{$action}`
-
-Fires when a license action is performed. This is a dynamic action where `{$action}` can be: `check_license`, `activate_license`, or `deactivate_license`.
-
-**Parameters:**
-- `array $response` - Response of the license action.
-
-**Since:** 1.0.0
-
-**Example:**
-```php
-// For check_license action
-add_action( 'sce_core_license_check_license', function( $response ) {
-    // Log the license check response
-    error_log( 'License check: ' . print_r( $response, true ) );
-} );
-
-// For activate_license action
-add_action( 'sce_core_license_activate_license', function( $response ) {
-    // Perform custom action when license is activated
-    if ( isset( $response['success'] ) && $response['success'] ) {
-        // License activated successfully
-    }
 } );
 ```
 

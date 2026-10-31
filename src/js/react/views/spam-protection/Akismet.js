@@ -32,14 +32,6 @@ const Akismet = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load Akismet Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -186,7 +178,7 @@ const Interface = ( props ) => {
 	const getAkismetHeader = () => {
 		return (
 			<>
-				<h2>{ __( 'Akismet', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+				<h2>{ __( 'Akismet', 'comment-edit-pro' ) }</h2>
 				<p className="description">
 					{ __(
 						'Akismet is a highly useful plugin for preventing comment spam.',

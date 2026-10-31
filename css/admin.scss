@@ -457,7 +457,7 @@ h3.sce-panel-heading {
 	.components-range-control__track {
 		color: #8019c4;
 
-		& ~ span {
+		&~span {
 			background-color: #8019c4;
 		}
 	}
@@ -535,6 +535,7 @@ h3.sce-panel-heading {
 			}
 
 			&:hover {
+
 				&:before,
 				&:after {
 					background: #8019c4;
@@ -560,6 +561,7 @@ h3.sce-panel-heading {
 				}
 
 				&:hover {
+
 					&:before,
 					&:after {
 						background: #8019c4;
@@ -608,6 +610,7 @@ h3.sce-panel-heading {
 	nav.sce-sub-links {
 		margin-bottom: 1.3em;
 		font-size: 13px;
+
 		.sce-sub-tab-active {
 			font-weight: 700;
 		}
@@ -658,7 +661,7 @@ h3.sce-panel-heading {
 	.sce-admin-tab-content {
 		order: 3;
 
-		& ~ span {
+		&~span {
 			display: inline-block;
 			order: 2;
 			background: #8019c4;
@@ -731,7 +734,7 @@ h3.sce-panel-heading {
 				color: #005200;
 				border-color: #006400;
 			}
-			
+
 		}
 
 		&.qdlx__btn-secondary {
@@ -851,6 +854,7 @@ h3.sce-panel-heading {
 
 /* Text fields */
 .sce-panel-row {
+
 	p.components-base-control__help,
 	p.components-form-token-field__help {
 		font-size: 13px;
@@ -861,12 +865,16 @@ h3.sce-panel-heading {
 	.components-select-control,
 	.components-radio-control {
 		label {
-			font-weight: 700 !important; /* override core styles */
-			font-size: 0.8125rem !important /* override core styles */
+			font-weight: 700 !important;
+			/* override core styles */
+			font-size: 0.8125rem !important
+				/* override core styles */
 		}
 	}
+
 	.components-select-control {
-		margin-bottom: 25px !important; /* override core styles */
+		margin-bottom: 25px !important;
+		/* override core styles */
 	}
 
 	// Text control styles.
@@ -918,6 +926,7 @@ h3.sce-panel-heading {
 					background: #9949cf;
 					border-color: #9949cf;
 					color: #fff;
+
 					&:before {
 						position: absolute;
 						background-color: #fff;
@@ -1104,121 +1113,6 @@ h3.sce-panel-heading {
 	}
 }
 
-h2 a.sce-admin-heading-docs {
-	color: #007cba;
-	font-size: 16px;
-	font-weight: 500;
-	text-decoration: none;
-}
-
-/* Licenses Screen */
-.sce-admin__license--wrapper {
-	.sce-admin__text-control-license {
-		position: relative;
-
-		label {
-			font-size: 0.8125rem;
-			font-weight: 500;
-		}
-
-		input[type='text'],
-		input[type='password'] {
-			display: flex;
-			align-items: center;
-			max-width: 100%;
-			width: 100%;
-			background-color: #fff;
-			border-radius: 3px;
-			font-family: inherit;
-			font-size: 0.875rem;
-			line-height: 1.25rem;
-			padding: 0.6875rem 1rem;
-			line-height: 2;
-			min-height: 30px;
-			margin: 0;
-			outline-style: none;
-			box-sizing: border-box;
-		}
-	}
-
-	.sce-admin__license--input-wrapper {
-		position: relative;
-	}
-
-	.sce-admin__license--input-preview {
-		position: absolute;
-		width: 40px;
-		height: 40px;
-		overflow: hidden;
-		top: calc(50% - (0.6875rem / 2) - 4px);
-		/* 50% height - padding/2 - bottom margin/2) */
-		right: 0.5rem;
-		line-height: 0;
-		font-size: 0;
-
-		input[type='checkbox'] {
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 100%;
-			left: 0;
-			top: 0;
-			z-index: 2;
-			opacity: 0;
-			margin: 0;
-			padding: 0;
-
-			&:hover {
-				& ~ label {
-					svg path {
-						fill: var(--sce-admin--color-text-link-color--hover);
-					}
-				}
-			}
-		}
-
-		label {
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 100%;
-			left: 0;
-			top: 0;
-			z-index: 1;
-
-			span.sce-license-show-hide--label {
-				display: none;
-			}
-
-			.sce-license-show-hide--icon {
-				position: relative;
-
-				svg {
-					display: block;
-					width: 100%;
-					height: 100%;
-
-					path {
-						fill: var(--sce-admin--color-text-link-color);
-					}
-				}
-			}
-		}
-	}
-}
-
-.sce-admin__license-beta-saving {
-	svg {
-		width: 32px;
-		height: 32px;
-		animation: sce-rotate 1s linear infinite;
-
-		path {
-			fill: $save_button_color;
-		}
-	}
-}
-
 /* Heading with icon styles */
 .sce-admin__tabs--content-heading {
 	h2 {
@@ -1296,6 +1190,7 @@ h2 a.sce-admin-heading-docs {
 		padding-top: 20px;
 	}
 }
+
 .form-table td {
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -1392,6 +1287,7 @@ h2 a.sce-admin-heading-docs {
 		max-height: 0;
 	}
 }
+
 @keyframes sceAdminTableTDFadeOut {
 	from {
 		opacity: 1;
@@ -1403,6 +1299,7 @@ h2 a.sce-admin-heading-docs {
 		padding: 0;
 	}
 }
+
 .sce-panel-webhooks-table__wrapper {
 	margin-top: 35px;
 
@@ -1436,6 +1333,7 @@ h2 a.sce-admin-heading-docs {
 				text-align: right;
 			}
 		}
+
 		tr.sce-delete-row {
 			background: #f8d7da;
 			animation: sceAdminTableRowFadeOut 0.8s;
@@ -1673,7 +1571,7 @@ h2 a.sce-admin-heading-docs {
 		border-bottom-color: #ddd;
 	}
 
-	& + p {
+	&+p {
 		margin-top: 0;
 	}
 }
@@ -1709,14 +1607,14 @@ h2 a.sce-admin-heading-docs {
 	}
 
 	&.is-scrollable:focus-visible {
-		box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus)
-			var(--wp-admin-theme-color);
+		box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
 
 		// Windows High Contrast mode will show this outline, but not the box-shadow.
 		outline: 2px solid transparent;
 		outline-offset: -2px;
 	}
 }
+
 .sce-modal-actions {
 	display: flex;
 	justify-content: flex-end;
@@ -1740,12 +1638,15 @@ h2 a.sce-admin-heading-docs {
 
 	.components-base-control,
 	.components-base-control__field {
-		margin-bottom: 0 !important; /* override core style */
+		margin-bottom: 0 !important;
+		/* override core style */
 	}
+
 	.sce-admin__text-control input[type='text'] {
 		width: 100%;
 		max-width: 100%;
 	}
+
 	.components-button {
 		line-height: 2;
 		font-size: 13px;
@@ -1758,7 +1659,9 @@ h2 a.sce-admin-heading-docs {
 
 /* Checkbox Controls */
 .components-checkbox-control {
-	margin-bottom: 10px !important; /* override core style */
+	margin-bottom: 10px !important;
+
+	/* override core style */
 	.components-base-control__field {
 		display: flex;
 		align-items: center;
@@ -1769,6 +1672,7 @@ h2 a.sce-admin-heading-docs {
 		line-height: normal;
 		font-size: 14px;
 	}
+
 	.components-checkbox-control__input-container {
 		position: relative;
 		display: inline-block;
@@ -1800,16 +1704,18 @@ h2 a.sce-admin-heading-docs {
 		transition: none;
 		transition: border-color 0.1s ease-in-out;
 		vertical-align: top;
+
 		&:before,
 		&:checked:before {
 			display: none;
 		}
+
 		&:checked {
 			background: #8019c4;
 			border-color: #393838;
 		}
 
-		& ~ svg {
+		&~svg {
 			position: absolute;
 			cursor: pointer;
 			pointer-events: none;
@@ -1825,6 +1731,7 @@ h2 a.sce-admin-heading-docs {
 /* Select Control for ConvertKit */
 .sce-convertkit-custom-field {
 	position: relative;
+
 	.components-select-control__input,
 	.components-text-control__input {
 		height: unset !important
@@ -1847,7 +1754,8 @@ h2 a.sce-admin-heading-docs {
 
 /* For Fancybox in the admin */
 .fancybox-container {
-	z-index: 1000000 !important; /* yes, that is super high */
+	z-index: 1000000 !important;
+	/* yes, that is super high */
 }
 
 /* Make radio button label not uppercase */

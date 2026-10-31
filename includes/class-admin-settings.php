@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
 use CommentEditPro\Includes\Functions as Functions;
 
 /**
@@ -68,26 +67,6 @@ class Admin_Settings {
 	 * Output Generic Settings Place holder for React goodness.
 	 */
 	public static function get_settings_header() {
-		$options   = Options::get_options();
-		$user      = wp_get_current_user();
-		$user_id   = $user->ID;
-		$firstname = get_user_meta( $user_id, 'first_name', true );
-		$lastname  = get_user_meta( $user_id, 'last_name', true );
-		$website   = home_url();
-
-		$support_url = add_query_arg(
-			array(
-				'firstname' => $firstname,
-				'lastname'  => $lastname,
-				'site'      => $website,
-				'email'     => $user->data->user_email,
-				'license'   => $options['license'],
-				'product'   => 'Comment Edit Pro',
-				'subject'   => 'Comment Edit Pro support',
-				'support'   => 'Yes',
-			),
-			'https://dlxplugins.com/support/'
-		);
 		?>
 		<header id="comment-edit-pro-header">
 			<div id="comment-edit-pro-header-content">
@@ -96,10 +75,6 @@ class Admin_Settings {
 						<a href="<?php echo esc_url( Functions::get_settings_url() ); ?>" class="sce-admin-logo"><img src="<?php echo esc_url( Functions::get_plugin_logo() ); ?>" alt="Comment Edit Pro" /></a>
 					</h1>
 					<p class="sce-info-text"><?php esc_html_e( 'Supercharge your comment section.', 'comment-edit-pro' ); ?></p>
-				</div>
-				<div class="sce-admin-header-links">
-					<a href="https://docs.dlxplugins.com/v/comment-edit-pro/" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Documentation', 'comment-edit-pro' ); ?></a>
-					<a href="<?php echo esc_url_raw( $support_url ); ?>" target="_blank" class="sce-admin-link" rel="noreferrer"><?php esc_html_e( 'Support', 'comment-edit-pro' ); ?></a>
 				</div>
 			</div>
 		</header>
@@ -207,8 +182,6 @@ class Admin_Settings {
 			<symbol aria-hidden="true" data-prefix="fad" data-icon="hands-helping" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 512" id="hands-helping">
 				<g class="fa-group"><path class="fa-secondary" fill="currentColor" d="M224 248V121.68a31.78 31.78 0 0 1 15-27.1l33.5-20.9A64.48 64.48 0 0 1 306.4 64h102.21L512 4.28A32 32 0 0 1 555.72 16l80 138.6a32 32 0 0 1-11.7 43.7l-80 46.2V216a56 56 0 0 0-56-56H304v88a40 40 0 1 1-80 0z" opacity="0.4"></path><path class="fa-primary" fill="currentColor" d="M4.32 357.38A31.92 31.92 0 0 1 16 313.68l80-46.2v-47.3a63.86 63.86 0 0 1 31.1-54.8l64.89-39V248a72 72 0 1 0 144 0v-56H488a23.94 23.94 0 0 1 24 24v48a23.94 23.94 0 0 1-24 24h-8v64a32 32 0 0 1-32 32h-16a64.06 64.06 0 0 1-64 64H231.41L128 507.68A32 32 0 0 1 84.32 496z"></path></g>
 			</symbol>
-			<symbol aria-hidden="true" data-prefix="fab" data-icon="github" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" id="sce-github-icon">
-				<path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path>
 			</symbol>
 			<symbol aria-hidden="true" data-prefix="fas" data-icon="heart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="sce-heart-icon">
 				<path fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>

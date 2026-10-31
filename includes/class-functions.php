@@ -251,7 +251,7 @@ class Functions {
 		 *
 		 * @param string Plugin Author URI.
 		 */
-		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author_uri', 'https://dlxplugins.com' );
+		$plugin_author = apply_filters( 'comment_edit_pro_plugin_author_uri', '' );
 		return $plugin_author;
 	}
 
@@ -320,7 +320,7 @@ class Functions {
 		 *
 		 * @param string Plugin URI.
 		 */
-		return apply_filters( 'comment_edit_pro_plugin_uri', 'https://dlxplugins.com/plugins/comment-edit-pro' );
+		return apply_filters( 'comment_edit_pro_plugin_uri', '' );
 	}
 
 	/**

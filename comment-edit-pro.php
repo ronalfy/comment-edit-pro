@@ -1,12 +1,10 @@
 <?php // phpcs:ignore
 /* phpcs:ignore
 Plugin Name: Comment Edit Pro
-Plugin URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
 Version: 4.2.0
 Requires at least: 5.0
-Author URI: https://dlxplugins.com/plugins/comment-edit-pro/
 Contributors: DLX Plugins
 Text Domain: comment-edit-pro
 Domain Path: /languages
@@ -18,7 +16,6 @@ require_once 'autoloader.php';
 
 use CommentEditPro\Includes\Functions;
 use CommentEditPro\Includes\Options;
-use CommentEditPro\Includes\Plugin_Updater;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
@@ -84,13 +81,6 @@ class Comment_Edit_Pro {
 	 * @var \CommentEditPro\Includes\Mentions Comment Mentions instance.
 	 */
 	private $comment_mentions = null;
-
-	/**
-	 * License Ajax class instance.
-	 *
-	 * @var \CommentEditPro\Includes\Plugin_License_Ajax License Ajax instance.
-	 */
-	private $license_ajax = null;
 
 	/**
 	 * Comment Editing class instance.
@@ -479,8 +469,6 @@ class Comment_Edit_Pro {
 		$this->integrations->run();
 		$this->comment_mentions = new \CommentEditPro\Includes\Mentions();
 		$this->comment_mentions->run();
-		$this->license_ajax = new \CommentEditPro\Includes\Plugin_License_Ajax();
-		$this->license_ajax->run();
 		$this->comment_editing = new \CommentEditPro\Includes\Comment_Editing();
 		$this->comment_editing->run();
 		$this->comment_form = new \CommentEditPro\Includes\Comment_Form();
@@ -511,40 +499,8 @@ class Comment_Edit_Pro {
 
 		add_action( 'init', array( $this, 'setup_ajax_calls' ) );
 
-		// Auto Update class.
-		add_action( 'admin_init', array( $this, 'sce_plugin_updater' ), 0 );
-
 		// Load text domain.
 		load_plugin_textdomain( 'comment-edit-pro', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-	}
-
-	/**
-	 * Allow for automatic updates.
-	 *
-	 * Allow for automatic updates.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 */
-	public function sce_plugin_updater() {
-		$options = Options::get_options();
-
-		$license_valid = $options['license_valid'] ?? '';
-		if ( isset( $options['license'] ) && 'valid' === $license_valid ) {
-			// setup the updater.
-			$edd_updater = new Plugin_Updater(
-				'https://dlxplugins.com',
-				__FILE__,
-				array(
-					'version' => COMMENTEDITPRO_VERSION,
-					'license' => $options['license'],
-					'item_id' => 882,
-					'author'  => 'Ronald Huereca',
-					'beta'    => true,
-					'url'     => home_url(),
-				)
-			);
-		}
 	}
 
 	/**

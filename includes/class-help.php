@@ -58,21 +58,17 @@ class Help {
 		$show_hide_timer_html  = <<<EOD
 		<h2>Show or Hide the Timer</h2>
 		<p>By default, when leaving a comment, the timer is shown. However, if you don't want to display a timer at all, you can uncheck this option.</p>
-		<p>Please visit the documentation for more information.</p>
-		<a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/appearance-settings#showing-or-hiding-the-timer" target="_blank" class="btn-primary" rel="noopener noreferrer">Documentation</a>
 		EOD;
 		$timer_appearance_html = <<<EOD
 		<h2>Modify the Timer Appearance</h2>
 		<p>By default, the timer will be in words, but you can make it more compact.</p>
 		<p>Changing to compact will show numbers only in a countdown type fashion.</p>
-		<a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/appearance-settings#timer-appearance" target="_blank" class="btn-primary" rel="noopener noreferrer">Documentation</a>
 		EOD;
 		$button_theme_html     = <<<EOD
 		<h2>Modify the Button Appearance</h2>
 		<p>By default, the button appearance is fairly stale and will need to be styled.</p>
 		<p>Adding a button theme will allow a friendly button appearance with no need to be styled further.</p>
 		<p>There is a theme preview when clicking on the various themes.</p>
-		<a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/appearance-settings#themes" target="_blank" class="btn-primary" rel="noopener noreferrer">Documentation</a>
 		EOD;
 		$screen->add_help_tab(
 			array(

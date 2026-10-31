@@ -24,18 +24,13 @@ class Init_Tabs {
 			new Comment_Editing();
 			new Comment_Form();
 			new Integrations();
-			if ( ! Functions::is_multisite() ) {
-				new License();
-			}
 			new Mentions();
 			new Spam_Protection();
 			new Tools();
 			new Webhooks();
-			new Support();
 		}
 		if ( Functions::is_multisite( true ) ) {
 			new Network_Home();
-			new Network_License();
 		}
 	}
 }

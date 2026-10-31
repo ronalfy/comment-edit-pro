@@ -31,14 +31,6 @@ const GravatarProtection = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load Gravatar Protection Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -208,7 +200,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Gravatar Privacy Protection', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/gravatar-privacy-protection">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Gravatar Privacy Protection', 'comment-edit-pro' ) }</h2>
 			<p className="description">
 				{ __( 'Gravatars show up for a user based on their email address. Enabling Privacy Protection will allow a user to opt-out of showing their Gravatar.', 'comment-edit-pro' ) }
 			</p>

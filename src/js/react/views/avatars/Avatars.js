@@ -33,14 +33,6 @@ const Avatars = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load Comment Avatar Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -368,7 +360,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-avatars">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Comment Avatars', 'comment-edit-pro' ) }</h2>
 			<p className="description">{ __( 'Spruce up your comment section and allow some fun and default avatars.', 'comment-edit-pro' ) }</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">

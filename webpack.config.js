@@ -1,6 +1,6 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const FixStyleOnlyEntriesPlugin = require( 'webpack-fix-style-only-entries' );
+const RemoveEmptyScriptsPlugin = require( 'webpack-remove-empty-scripts' );
 const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 const path = require( 'path' );
 module.exports = ( env ) => {
@@ -17,17 +17,16 @@ module.exports = ( env ) => {
 				'avatars-admin': [ './src/js/react/views/avatars/index.js' ],
 				'integrations-admin': [ './src/js/react/views/integrations/index.js' ],
 				'mentions-admin': [ './src/js/react/views/mentions/index.js' ],
-				'sce-license': [ './src/js/react/views/license/index.js' ],
 				'sce-comment-editing': [ './src/js/react/views/comment-editing/index.js' ],
 				'sce-comment-form': [ './src/js/react/views/comment-form/index.js' ],
 				'sce-spam-protection': [ './src/js/react/views/spam-protection/index.js' ],
 				'sce-webhooks-admin': [ './src/js/react/views/webhooks/index.js' ],
-				'sce-advanced': [ './src/js/react/views/Advanced/index.js' ],
+				'sce-advanced': [ './src/js/react/views/advanced/index.js' ],
 				'sce-network-home': [ './src/js/react/views/network-home/index.js' ],
 				'sce-tools-comment-activity': [ './src/js/react/views/tools/CommentActivity/index.js' ],
 				'sce-tools-post-type-comment-settings': [ './src/js/react/views/tools/PostTypeCommentSettings/index.js' ],
 				'sce-comment-shortcuts-settings': [ './src/js/react/views/tools/CommentShortcuts/index.js' ],
-			}
+			},
 		},
 		{
 			mode: env.mode,
@@ -100,6 +99,16 @@ module.exports = ( env ) => {
 								loader: 'sass-loader',
 								options: {
 									sourceMap: true,
+									api: 'modern',
+									sassOptions: {
+										silenceDeprecations: [
+											'import',
+											'global-builtin',
+											'color-functions',
+											'mixed-decls',
+											'legacy-js-api',
+										],
+									},
 								},
 							},
 						],
@@ -116,12 +125,17 @@ module.exports = ( env ) => {
 									sourceMap: true,
 								},
 							},
-							'sass-loader',
 						],
 					},
 				],
 			},
-			plugins: [ new FixStyleOnlyEntriesPlugin(), new MiniCssExtractPlugin(), new DependencyExtractionWebpackPlugin() ],
+			plugins: [
+				new RemoveEmptyScriptsPlugin( {
+					stage: RemoveEmptyScriptsPlugin.STAGE_AFTER_PROCESS_PLUGINS,
+				} ),
+				new MiniCssExtractPlugin(),
+				new DependencyExtractionWebpackPlugin(),
+			],
 		},
 	];
 };

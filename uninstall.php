@@ -12,7 +12,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 delete_site_option( 'sce_options' );
-delete_site_option( 'comment_edit_pro_license_status' );
 delete_site_option( 'sce_table_version' );
 
 // For table removal.

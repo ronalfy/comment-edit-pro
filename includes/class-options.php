@@ -85,7 +85,6 @@ class Options {
 				case 'slack_enabled':
 				case 'slack_moderation_enabled':
 				case 'slack_edit_comments_enabled':
-				case 'license_activated':
 				case 'turnstile_enabled':
 				case 'turnstile_logged_in_users_enabled':
 				case 'enable_comment_editing':
@@ -266,16 +265,6 @@ class Options {
 			'show_stop_timer'                   => false,
 			'stop_timer_text'                   => 'Cancel Timer',
 			'timer_appearance'                  => 'words',
-			'license_valid'                     => '',
-			'license'                           => '',
-			'license_activated'                 => false,
-			'license_status'                    => '',
-			'item_name'                         => '',
-			'expires'                           => '',
-			'license_limit'                     => '',
-			'site_count'                        => '',
-			'activations_left'                  => '',
-			'beta'                              => false,
 			'require_login_for_editing'         => false,
 			'allow_unlimited_editing'           => false,
 			'allow_front_end_character_limit'   => false,
@@ -400,16 +389,6 @@ class Options {
 			'spam_behavior'                       => 'default', /* can be spam, delete, default */
 			'override_comment_notification_email' => false,
 			'comment_notification_email'          => '',
-			'license_activated'                   => false,
-			'license_valid'                       => '',
-			'license'                             => '',
-			'license_status'                      => '',
-			'item_name'                           => '',
-			'expires'                             => '',
-			'license_limit'                       => '',
-			'site_count'                          => '',
-			'activations_left'                    => '',
-			'beta'                                => false,
 		);
 		return $defaults;
 	}

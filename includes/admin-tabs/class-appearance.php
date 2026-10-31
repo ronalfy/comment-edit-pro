@@ -1,6 +1,6 @@
 <?php
 /**
- * Output licenses tab.
+ * Output appearance tab.
  *
  * @package CommentEditPro
  */
@@ -70,7 +70,6 @@ class Appearance {
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'appearance' === $tab ) {
 			if ( empty( $sub_tab ) || 'appearance' === $sub_tab ) {
-				$license_message = '';
 				if ( isset( $_POST['submit'] ) && isset( $_POST['options'] ) ) {
 					check_admin_referer( 'save_sce_options' );
 					$options = Options::get_options();

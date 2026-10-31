@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
 
-use CommentEditPro\Includes\Options as Options;
 use CommentEditPro\Includes\Functions as Functions;
 
 /**
@@ -70,34 +69,11 @@ class Main {
 	public function output_main_content( $tab, $sub_tab = '' ) {
 		if ( 'home' === $tab ) {
 			if ( empty( $sub_tab ) || 'home' === $sub_tab ) {
-				$options = Options::get_options();
-				if ( Functions::is_multisite() ) {
-					$options = Options::get_network_options();
-				}
-				$license_valid = $options['license_valid'];
 				?>
 				<div class="sce-admin-panel-area">
 					<div class="sce-panel-row">
 						<h2><?php esc_html_e( 'Welcome to Comment Edit Pro', 'comment-edit-pro' ); ?></h2>
 						<p><?php esc_html_e( 'Comment Edit Pro is a powerful comment plugin that allows you to edit comments, add avatars, mentions, spam protection, and several useful integrations.', 'comment-edit-pro' ); ?></p>
-						<?php
-						if ( 'valid' === $license_valid ) {
-							?>
-							<div class="sce-admin__notice sce-admin__notice-type--success sce-admin__notice-appearance--block">
-								<p class="components-notice"><?php esc_html_e( 'Thank you for supporting Comment Edit Pro. Your license key is active and you are receiving updates and support.', 'comment-edit-pro' ); ?></p>
-							</div>
-							<?php
-						} else {
-							?>
-							<div class="sce-admin__notice sce-admin__notice-type--warning sce-admin__notice-appearance--block">
-								<div class="components-notice">
-									<p><?php esc_html_e( 'Please enter a license key to receive updates and support for Comment Edit Pro.', 'comment-edit-pro' ); ?></p>
-									<p><a href="<?php echo esc_url( Functions::get_settings_url( 'license' ) ); ?>"><?php esc_html_e( 'View License Settings', 'comment-edit-pro' ); ?></a></p>
-								</div>
-							</div>
-							<?php
-						}
-						?>
 					</div>
 				</div>
 				<div class="sce-admin-panel-cards">

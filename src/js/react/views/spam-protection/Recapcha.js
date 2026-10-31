@@ -33,14 +33,6 @@ const Recaptcha = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load reCAPTCHA 3 Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -382,17 +374,6 @@ const Interface = ( props ) => {
 					'Using Recaptcha Enterprise, you can further protect from bots and spam.',
 					'comment-edit-pro'
 				) }
-			</p>
-			<p className="description">
-				{
-					<a
-						href="https://dlxplugins.com/how-tos/how-to-retrieve-recaptcha-enterprise-site-and-api-keys/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						({ __( 'Find out how to get your reCAPTCHA Enterprise keys', 'comment-edit-pro' ) })
-					</a>
-				}
 			</p>
 			<form onSubmit={ handleSubmit( onSubmit ) }>
 				<table className="form-table">

@@ -162,10 +162,10 @@ const Interface = ( props ) => {
 	const getMentionsHeader = () => {
 		return (
 			<>
-				<h2>{ __( '@ Mentions (Deprecated)', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/mentions">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+				<h2>{ __( '@ Mentions (Deprecated)', 'comment-edit-pro' ) }</h2>
 				<Notice
 					message={ __(
-						'@ Mentions is deprecated and will be removed in a future version of Comment Edit Pro. If you still need access to this feature, please contact support.',
+						'@ Mentions is deprecated and will be removed in a future version of Comment Edit Pro.',
 						'comment-edit-pro'
 					) }
 					status="warning"

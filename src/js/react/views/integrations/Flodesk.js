@@ -39,14 +39,6 @@ const Flodesk = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load FloDesk Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -833,14 +825,6 @@ const Interface = ( props ) => {
 					<span className="sce-admin__heading--text">
 						{ __( 'Flodesk', 'comment-edit-pro' ) }
 					</span>
-					<a
-						className="sce-admin-heading-docs"
-						target="_blank"
-						rel="noreferrer"
-						href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/flodesk-integration"
-					>
-						({ __( 'Docs', 'comment-edit-pro' ) })
-					</a>
 				</h2>
 
 				<p className="description">

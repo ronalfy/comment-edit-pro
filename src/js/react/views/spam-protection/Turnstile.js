@@ -33,14 +33,6 @@ const Turnstile = ( props ) => {
 			fallback={
 				<p>
 					{ __( 'Could not load Turnstile Settings.', 'comment-edit-pro' ) }
-					<br />
-					<a
-						href="https://dlxplugins.com/support/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						DLX Plugins Support
-					</a>
 				</p>
 			}
 		>
@@ -186,7 +178,7 @@ const Interface = ( props ) => {
 
 	return (
 		<>
-			<h2>{ __( 'Cloudflare Turnstile', 'comment-edit-pro' ) } <a className="sce-admin-heading-docs" target="_blank" rel="noreferrer" href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/spam-protection/cloudflare-turnstile">({ __( 'Docs', 'comment-edit-pro' ) })</a></h2>
+			<h2>{ __( 'Cloudflare Turnstile', 'comment-edit-pro' ) }</h2>
 			<p className="description">
 				{ __(
 					'Cloudflare Turnstile is an alternative captcha that is designed for privacy and user experience.',
