@@ -52,7 +52,11 @@ class Comment_Shortcuts {
 		add_action( 'wp_ajax_sce_shortcut_show_comments', array( $this, 'ajax_shortcut_show_comments' ) );
 
 		// Hide or show comments based on post meta.
-		add_filter( 'comments_array', array( $this, 'filter_show_comments' ), 9999 );
+		// Priority 10001 is after post-type "Force Comments: Open", which returns true at 9999.
+		add_filter( 'comments_array', array( $this, 'filter_show_comments' ), 9999, 2 );
+		add_filter( 'comments_pre_query', array( $this, 'hide_comments_from_queries' ), 10, 2 );
+		add_filter( 'comments_open', array( $this, 'filter_comments_open_when_hidden' ), 10001, 2 );
+		add_filter( 'get_comments_number', array( $this, 'filter_comments_number_when_hidden' ), 10, 2 );
 
 		// Add fancybox to frontend if delete comments is enabled.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
@@ -256,21 +260,84 @@ class Comment_Shortcuts {
 	}
 
 	/**
-	 * Hide/show comments via comments_open filter and post meta value.
+	 * Whether this post's comments are hidden from the front end.
 	 *
-	 * @param array $comments array of comments.
+	 * Hide overrides a post type set to force comments open.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	private function are_comments_hidden( $post_id ) {
+		$post_id = absint( $post_id );
+		if ( ! $post_id || is_admin() ) {
+			return false;
+		}
+		return 'true' === get_post_meta( $post_id, '_sce_comments_hidden', true );
+	}
+
+	/**
+	 * Hide comments for classic themes via the comments_array filter.
+	 *
+	 * @param array $comments Array of comments.
+	 * @param int   $post_id  Post ID.
 	 * @return array
 	 */
-	public function filter_show_comments( $comments ) {
-		if ( is_admin() || ( ! is_singular() && ! is_page() ) ) {
-			return $comments;
-		}
-		$post_id         = get_the_ID();
-		$comments_hidden = get_post_meta( $post_id, '_sce_comments_hidden', true );
-		if ( 'true' === $comments_hidden ) {
+	public function filter_show_comments( $comments, $post_id ) {
+		if ( $this->are_comments_hidden( $post_id ) ) {
 			return array();
 		}
 		return $comments;
+	}
+
+	/**
+	 * Hide comments for block themes, which query comments directly.
+	 *
+	 * @param array|int|null    $comments Comment data, or null to run the normal query.
+	 * @param \WP_Comment_Query $query    Comment query.
+	 * @return array|int|null
+	 */
+	public function hide_comments_from_queries( $comments, $query ) {
+		$post_id = isset( $query->query_vars['post_id'] ) ? (int) $query->query_vars['post_id'] : 0;
+		if ( ! $this->are_comments_hidden( $post_id ) ) {
+			return $comments;
+		}
+
+		$query->found_comments = 0;
+		$query->max_num_pages  = 0;
+		if ( ! empty( $query->query_vars['count'] ) ) {
+			return 0;
+		}
+		return array();
+	}
+
+	/**
+	 * Close comments while they are hidden, even if the post type forces them open.
+	 *
+	 * @param bool $open    Whether comments are open.
+	 * @param int  $post_id Post ID.
+	 * @return bool
+	 */
+	public function filter_comments_open_when_hidden( $open, $post_id ) {
+		if ( $this->are_comments_hidden( $post_id ) ) {
+			return false;
+		}
+		return $open;
+	}
+
+	/**
+	 * Report a zero comment count while comments are hidden.
+	 *
+	 * Block themes use this count for the comments heading.
+	 *
+	 * @param string|int $count   Comment count.
+	 * @param int        $post_id Post ID.
+	 * @return string|int
+	 */
+	public function filter_comments_number_when_hidden( $count, $post_id ) {
+		if ( $this->are_comments_hidden( $post_id ) ) {
+			return 0;
+		}
+		return $count;
 	}
 
 	/**
