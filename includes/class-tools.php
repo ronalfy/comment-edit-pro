@@ -40,6 +40,9 @@ class Tools {
 		add_action( 'wp', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the frontend.
 		add_action( 'current_screen', array( $this, 'adjust_post_type_comment_settings' ) ); // runs in the admin.
 		add_filter( 'comments_open', array( $this, 'maybe_open_comments' ), 100, 2 );
+		add_filter( 'comments_array', array( $this, 'hide_post_type_comments_array' ), 9999, 2 );
+		add_filter( 'comments_pre_query', array( $this, 'hide_post_type_comment_query' ), 10, 2 );
+		add_filter( 'get_comments_number', array( $this, 'hide_post_type_comment_count' ), 10, 2 );
 
 		// Modify existing post type args to support comments if enabled in post type comment settings.
 		add_filter( 'register_post_type_args', array( $this, 'modify_post_type_args' ), 9999, 2 );
@@ -467,6 +470,11 @@ class Tools {
 		// Get post type settings.
 		$post_type_settings = $post_type_settings[ $post_type ];
 
+		// Hiding the comment section wins over Force Comments: Open.
+		if ( $this->is_post_type_comment_section_hidden( $post_id ) ) {
+			return false;
+		}
+
 		// If post meta is set, use it. This is set by the menu helper shortcuts and overrides the post type settings.
 		$force_comments_state = get_post_meta( $post_id, '_sce_force_comments_state', true );
 		if ( 'open' === $force_comments_state ) {
@@ -527,8 +535,10 @@ class Tools {
 		// Get post type settings.
 		$post_type_settings = $post_type_settings[ $post_type ];
 
-		// If comments are set, set them.
-		if ( isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
+		// If comments are set, set them. Skip this when the comment section is hidden,
+		// because that filter would force comments open again at priority 9999.
+		$hide_comment_section = $this->is_post_type_comment_section_hidden( $post_id );
+		if ( ! $hide_comment_section && isset( $post_type_settings['force_comments'] ) && 'default' !== $post_type_settings['force_comments'] ) {
 			if ( 'closed' === $post_type_settings['force_comments'] ) {
 				add_filter( 'comments_open', '__return_false', 9999 );
 			} elseif ( 'open' === $post_type_settings['force_comments'] ) {
@@ -553,12 +563,81 @@ class Tools {
 			}
 		}
 
-		// If comments are hidden, hide them.
-		if ( isset( $post_type_settings['hide_comment_section'] ) && true === $post_type_settings['hide_comment_section'] ) {
-			if ( ! is_admin() ) {
-				add_filter( 'comments_array', '__return_empty_array', 9999 );
-			}
+	}
+
+	/**
+	 * Whether this post type hides its front-end comment section.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	private function is_post_type_comment_section_hidden( $post_id ) {
+		$post_id = absint( $post_id );
+		if ( ! $post_id || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return false;
 		}
+
+		$post_type = get_post_type( $post_id );
+		if ( ! $post_type ) {
+			return false;
+		}
+
+		$comment_options    = Options_Tools::get_options();
+		$post_type_settings = $comment_options['comment_post_type_settings'];
+		if ( ! isset( $post_type_settings[ $post_type ]['hide_comment_section'] ) ) {
+			return false;
+		}
+
+		return true === $post_type_settings[ $post_type ]['hide_comment_section'];
+	}
+
+	/**
+	 * Remove comments for post types that hide the comment section.
+	 *
+	 * @param array $comments Comments.
+	 * @param int   $post_id  Post ID.
+	 * @return array
+	 */
+	public function hide_post_type_comments_array( $comments, $post_id ) {
+		if ( $this->is_post_type_comment_section_hidden( $post_id ) ) {
+			return array();
+		}
+		return $comments;
+	}
+
+	/**
+	 * Remove block-theme comment queries for post types that hide the comment section.
+	 *
+	 * @param array|int|null    $comments Comment data, or null to run the normal query.
+	 * @param \WP_Comment_Query $query    Comment query.
+	 * @return array|int|null
+	 */
+	public function hide_post_type_comment_query( $comments, $query ) {
+		$post_id = isset( $query->query_vars['post_id'] ) ? (int) $query->query_vars['post_id'] : 0;
+		if ( ! $this->is_post_type_comment_section_hidden( $post_id ) ) {
+			return $comments;
+		}
+
+		$query->found_comments = 0;
+		$query->max_num_pages  = 0;
+		if ( ! empty( $query->query_vars['count'] ) ) {
+			return 0;
+		}
+		return array();
+	}
+
+	/**
+	 * Zero the visible comment count when a post type hides its comment section.
+	 *
+	 * @param string|int $count   Comment count.
+	 * @param int        $post_id Post ID.
+	 * @return string|int
+	 */
+	public function hide_post_type_comment_count( $count, $post_id ) {
+		if ( $this->is_post_type_comment_section_hidden( $post_id ) ) {
+			return 0;
+		}
+		return $count;
 	}
 
 	/**
