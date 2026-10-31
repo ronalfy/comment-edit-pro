@@ -4,6 +4,9 @@
  *
  * @package CommentEditPro
  */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register Autoloader
@@ -40,7 +43,7 @@ spl_autoload_register(
 		$namespace = strtolower( str_replace( '_', '-', $namespace ) );
 
 		// Get the path to our files.
-		$directory = dirname( __FILE__ );
+		$directory = __DIR__;
 		if ( ! empty( $namespace ) ) {
 			$directory .= DIRECTORY_SEPARATOR . $namespace;
 		}
