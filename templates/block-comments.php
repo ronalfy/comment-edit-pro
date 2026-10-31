@@ -14,11 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 use CommentEditPro\Includes\Options;
 use CommentEditPro\Includes\Functions;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'No direct access.' );
-}
 $comment_id = filter_input( INPUT_GET, 'cid', FILTER_SANITIZE_NUMBER_INT ); // phpcs:ignore
-$nonce      = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+$nonce      = sanitize_text_field( filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT ) );
 if ( ! wp_verify_nonce( $nonce, 'sce-moderation-block-comment-' . $comment_id ) ) {
 	die( 'Nonce verification failed' );
 }

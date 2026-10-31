@@ -1,0 +1,15 @@
+---
+description: Points agents at the Comment Edit Pro handoff docs and the archive constraints
+alwaysApply: true
+---
+
+# Comment Edit Pro handoff
+
+Read `AGENTS.md` before editing. Setup, layout, and takeover notes are in `CONTRIBUTING.md`. Selected public hooks are in `actions.md`.
+
+- This plugin extends Simple Comment Editing (`DLXPlugins\CommentEditLite\Simple_Comment_Editing`). Boot lives in `comment-edit-pro.php`. Feature code lives in `includes/class-*.php` and is loaded by `autoloader.php`.
+- The original maintainer is archiving the repo. Leave `Version`, `COMMENTEDITPRO_VERSION`, and the table version constants unchanged unless the task is a release or a schema change.
+- New PHP and JavaScript strings use text domain `comment-edit-pro`.
+- Keep the edit inside the module you were asked to change.
+- Admin React source is `src/js/react/`. Webpack writes admin bundles to `build/` and the second config to `dist/`. Scripts in `js/` are enqueued as plain files.
+- Settings and moderation AJAX must keep the existing nonce and `current_user_can` check (`manage_options`, `manage_network`, or `moderate_comments`). See the dangerous-areas section in `AGENTS.md`.

@@ -8,6 +8,10 @@
 
 namespace CommentEditPro\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
 use CommentEditPro\Includes\Functions as Functions;
 use CommentEditPro\Includes\Options as Options;
 

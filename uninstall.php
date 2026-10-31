@@ -8,6 +8,10 @@
  * @since 5.0.0
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }

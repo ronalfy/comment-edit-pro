@@ -3,6 +3,56 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const RemoveEmptyScriptsPlugin = require( 'webpack-remove-empty-scripts' );
 const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 const path = require( 'path' );
+
+const ABSPATH_GUARD = "if ( ! defined( 'ABSPATH' ) ) {\n\tdie( 'No direct access.' );\n}\n\n";
+
+/**
+ * DependencyExtractionWebpackPlugin writes `<?php return array(...);`.
+ * outputFormat is only `php` or `json`, so prepend the direct-access guard
+ * after that file is emitted. Runs for both the build/ and dist/ compilers.
+ */
+class AssetPhpGuardPlugin {
+	apply( compiler ) {
+		const { Compilation, sources } = compiler.webpack;
+
+		compiler.hooks.thisCompilation.tap( AssetPhpGuardPlugin.name, ( compilation ) => {
+			compilation.hooks.processAssets.tap(
+				{
+					name: AssetPhpGuardPlugin.name,
+					stage: Compilation.PROCESS_ASSETS_STAGE_REPORT,
+				},
+				() => {
+					for ( const { name, source } of compilation.getAssets() ) {
+						if ( ! name.endsWith( '.asset.php' ) ) {
+							continue;
+						}
+
+						const original = source.source();
+						const contents = typeof original === 'string' ? original : original.toString();
+						if ( contents.includes( "defined( 'ABSPATH' )" ) ) {
+							continue;
+						}
+
+						const guarded = contents.replace(
+							/^<\?php\s+return\s/,
+							`<?php\n${ ABSPATH_GUARD }return `
+						);
+						if ( guarded === contents ) {
+							throw new Error(
+								`AssetPhpGuardPlugin: could not prepend the ABSPATH guard to ${ name }`
+							);
+						}
+
+						compilation.updateAsset( name, new sources.RawSource( guarded ) );
+					}
+				}
+			);
+		} );
+	}
+}
+
+const assetPhpGuardPlugin = new AssetPhpGuardPlugin();
+
 module.exports = ( env ) => {
 	return [
 		{
@@ -13,6 +63,7 @@ module.exports = ( env ) => {
 			},
 			mode: env.mode,
 			devtool: 'production' === env.mode ? false : 'source-map',
+			plugins: [ ...defaultConfig.plugins, assetPhpGuardPlugin ],
 			entry: {
 				'avatars-admin': [ './src/js/react/views/avatars/index.js' ],
 				'integrations-admin': [ './src/js/react/views/integrations/index.js' ],
@@ -135,6 +186,7 @@ module.exports = ( env ) => {
 				} ),
 				new MiniCssExtractPlugin(),
 				new DependencyExtractionWebpackPlugin(),
+				assetPhpGuardPlugin,
 			],
 		},
 	];

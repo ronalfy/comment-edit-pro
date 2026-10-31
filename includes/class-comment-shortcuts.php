@@ -7,6 +7,10 @@
 
 namespace CommentEditPro\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
 use CommentEditPro\Includes\Functions;
 use CommentEditPro\Includes\Options;
 use WP_Comment;

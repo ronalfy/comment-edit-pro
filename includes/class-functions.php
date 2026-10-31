@@ -7,6 +7,10 @@
 
 namespace CommentEditPro\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
 /**
  * Class functions
  */

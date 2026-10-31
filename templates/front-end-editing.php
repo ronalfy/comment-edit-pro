@@ -14,9 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use CommentEditPro\Includes\Options as Options;
 use CommentEditPro\Includes\Functions as Functions;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'No direct access.' );
-}
 if ( ! current_user_can( 'moderate_comments' ) ) {
 	die( 'User must be able to moderate comments' );
 }

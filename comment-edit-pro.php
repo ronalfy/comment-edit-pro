@@ -3,7 +3,7 @@
 Plugin Name: Comment Edit Pro
 Description: Take comment editing to new heights.
 Author: Ronald Huereca
-Version: 4.2.0
+Version: 4.3.0
 Requires at least: 5.0
 Contributors: DLX Plugins
 Text Domain: comment-edit-pro
@@ -20,7 +20,7 @@ use CommentEditPro\Includes\Options;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access.' );
 }
-define( 'COMMENTEDITPRO_VERSION', '4.2.0' );
+define( 'COMMENTEDITPRO_VERSION', '4.3.0' );
 define( 'COMMENTEDITPRO_TABLE_VERSION', '1.0.0' );
 define( 'COMMENTEDITPRO_MENTIONS_TABLE_VERSION', '0.0.9' );
 define( 'COMMENTEDITPRO_SLUG', plugin_basename( __FILE__ ) );

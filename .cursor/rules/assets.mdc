@@ -1,0 +1,16 @@
+---
+description: Where Comment Edit Pro JS and CSS are authored and built
+globs: "{src,css,js}/**/*.{js,jsx,scss}"
+alwaysApply: false
+---
+
+# Assets
+
+Edit source, then build.
+
+- Admin screens: `src/js/react/views/<screen>/`. `npm run build` writes `build/<bundle>.js` and `build/<bundle>.asset.php`. PHP enqueues those files when `Functions::get_admin_tab()` matches the screen.
+- Admin AJAX from React goes through `src/js/SendCommand.js` (`action`, `nonce`, localized `ajaxurl`). Text domain for `__( …, 'comment-edit-pro' )` stays `comment-edit-pro`.
+- The second webpack config writes CSS and front-end bundles to `dist/` and cleans that directory each run. Entries include `css/*.scss`, `src/scss/`, and front-end scripts such as `src/js/avatars.js` and `src/js/mentions/index.js`.
+- `js/simple-comment-editing-options.js`, `js/simple-comment-editing-options-restore.js`, `js/front-end-editing.js`, and `js/comment-character-control.js` are enqueued directly. Webpack's entry list leaves them as shipped files.
+
+The plugin version is `COMMENTEDITPRO_VERSION` in `comment-edit-pro.php`. `package.json` `"version"` is the npm package field.

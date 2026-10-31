@@ -1,4 +1,9 @@
-<?php return array(
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
+return array(
 	'dependencies' => array(
 		'react',
 		'react-dom',

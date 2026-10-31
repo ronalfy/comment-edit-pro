@@ -1,0 +1,39 @@
+---
+description: PHP and WordPress conventions for Comment Edit Pro
+globs: "**/*.php"
+alwaysApply: false
+---
+
+# PHP conventions
+
+Namespace `CommentEditPro\Includes`. The autoloader maps `Comment_Editing` to `includes/class-comment-editing.php` (lowercase, underscores to hyphens). Admin tabs use `CommentEditPro\Includes\Admin_Tabs`.
+
+Start class files the way existing classes do:
+
+```php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+```
+
+New strings use `'comment-edit-pro'`:
+
+```php
+__( 'Comment Edit Pro', 'comment-edit-pro' );
+```
+
+Settings AJAX checks a feature nonce and a capability together:
+
+```php
+if ( ! wp_verify_nonce( $nonce, 'sce-save-advanced-options' ) || ! current_user_can( 'manage_options' ) ) {
+	wp_send_json_error(
+		array(
+			'message' => __( 'Could not verify nonce.', 'comment-edit-pro' ),
+		)
+	);
+}
+```
+
+Network screens use `manage_network`. Comment restore, front-end edit, and moderation use `moderate_comments`. Save options through `Options::update_options()` so `sce_options` stays sanitized. Add admin tabs on `comment_edit_pro_admin_tabs`. Extend the free plugin with the `sce_` prefix. Branding filters use `comment_edit_pro_`.
+
+`Init_Tabs::run()` is the list of tabs that load. `Help`, `Appearance`, and `Comment_Actions` sit outside that method.
